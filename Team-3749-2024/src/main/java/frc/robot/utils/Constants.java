@@ -38,7 +38,7 @@ public class Constants {
         public static final double kSDrivingReal = 0.0;
 
         public static final double kPTurningSim = 4;
-        public static final double kVDrivingSim = 2.5;
+        public static final double kVDrivingSim = 3.19;
         public static final double kSDrivingSim = 0.0;
         public static final double kPDrivingSim = 0.0;
 
@@ -71,7 +71,9 @@ public class Constants {
 
         public static final double realMaxSpeedMetersPerSecond = 5;
         public static final double realMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-
+        public static final double simMaxSpeedMetersPerSecond = 2.655;
+        public static final double simMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
+        public static final double maxSpeedMetersPerSecond = Robot.isReal() ? DriveConstants.realMaxSpeedMetersPerSecond: DriveConstants.simMaxSpeedMetersPerSecond;
 
 
     }

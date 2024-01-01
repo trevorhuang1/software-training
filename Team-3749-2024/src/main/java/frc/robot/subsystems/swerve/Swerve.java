@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.Constants;
@@ -42,6 +43,7 @@ public class Swerve extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             modules[i] = new SwerveModule(i);
         }
+        
         if (Constants.ROBOT_TYPE == RobotType.SIM) {
             gyro = new GyroIO() {
             };
@@ -53,7 +55,7 @@ public class Swerve extends SubsystemBase {
 
         }
 
-        swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kDriveKinematics,
+        swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.driveKinematics,
                 new Rotation2d(0),
                 new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
                         modules[2].getPosition(), modules[3].getPosition() },
@@ -63,7 +65,7 @@ public class Swerve extends SubsystemBase {
 
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
         // 5. Convert chassis speeds to individual module states
-        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(chassisSpeeds);
 
         // 6. Output each module states to wheels
         setModuleStates(moduleStates);
@@ -74,7 +76,7 @@ public class Swerve extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             states[i] = modules[i].getState();
         }
-        return DriveConstants.kDriveKinematics.toChassisSpeeds(states);
+        return DriveConstants.driveKinematics.toChassisSpeeds(states);
     }
 
     public void resetGyro() {
@@ -122,8 +124,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.realMaxSpeedMetersPerSecond);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.maxSpeedMetersPerSecond);
         for (int i = 0; i < 4; i++) {
             modules[i].setDesiredState(desiredStates[i]);
         }
@@ -143,6 +144,7 @@ public class Swerve extends SubsystemBase {
 
         SmartDashboard.putNumberArray("Odometry",
                 new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+
 
         double[] realStates = {
                 modules[0].getState().angle.getDegrees(),
@@ -166,7 +168,7 @@ public class Swerve extends SubsystemBase {
                 modules[3].getDesiredState().angle.getDegrees(),
                 modules[3].getDesiredState().speedMetersPerSecond   
             };
-            
+
         SmartDashboard.putNumberArray("Theoretical States", theoreticalStates);
         SmartDashboard.putNumberArray("Real Staets", realStates);
         SmartDashboard.putNumber("Yaw", getRotation2d().getDegrees());

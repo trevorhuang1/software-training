@@ -7,8 +7,6 @@ package frc.robot.subsystems.example;
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 /***
  * @author Noah Simon

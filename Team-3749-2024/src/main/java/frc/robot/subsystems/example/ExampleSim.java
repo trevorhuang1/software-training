@@ -3,18 +3,14 @@ package frc.robot.subsystems.example;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
-import frc.robot.utils.Constants.ModuleConstants;
 import frc.robot.utils.Constants.Sim;
 
 public class ExampleSim implements ExampleIO {
 
     private FlywheelSim flywheel = new FlywheelSim(DCMotor.getNEO(1),1, 0.01);
-    
-    private double position = 0;
     private double appliedVolts = 0.0;
 
-   public ExampleSim() {
+    public ExampleSim() {
         System.out.println("[Init] Creating ExampleIOSim");
     }
     

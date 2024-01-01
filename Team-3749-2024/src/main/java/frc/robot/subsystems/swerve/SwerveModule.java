@@ -5,6 +5,8 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.Constants;
@@ -26,7 +28,7 @@ public class SwerveModule {
     public SwerveModule(int i) {
         index = i;
 
-        if (Constants.ROBOT_TYPE == RobotType.SIM) {
+        if (Robot.isSimulation()) {
 
             moduleIO = new SwerveModuleSim();
 
@@ -51,8 +53,9 @@ public class SwerveModule {
 
     
     public SwerveModuleState getState() {
+
         return new SwerveModuleState(
-                moduleData.driveVelocityMPerSec * Constants.ModuleConstants.wheelDiameterMeters / 2,
+                moduleData.driveVelocityMPerSec,
                 new Rotation2d(moduleData.turnAbsolutePositionRad));
     }
     
@@ -67,12 +70,12 @@ public class SwerveModule {
 
 
     public void setDesiredState(SwerveModuleState state) {
+
         state = SwerveModuleState.optimize(state, getState().angle);
-        this.desiredState = state;
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-            stop();
-            return;
+            state.speedMetersPerSecond=0;
         }
+        this.desiredState = state;
 
         double drive_volts = drivingFeedFordward.calculate(state.speedMetersPerSecond)
                 + drivingPidController.calculate(moduleData.driveVelocityMPerSec, state.speedMetersPerSecond);
@@ -91,5 +94,9 @@ public class SwerveModule {
     // called within the swerve subsystem's periodic
     public void periodic(){
         moduleIO.updateData(moduleData);
+        
+        SmartDashboard.putNumber(index + " Drive Speed", moduleData.driveVelocityMPerSec);
+        SmartDashboard.putNumber(index + " Drive Volts", moduleData.driveAppliedVolts);
+
     }
 }

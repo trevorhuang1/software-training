@@ -15,8 +15,6 @@ public class Example extends SubsystemBase {
         if (Robot.isReal()){
             exampleIO = new ExampleSim();
         }
-        
-        
     }
 
     // runs every 0.02 sec
