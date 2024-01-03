@@ -18,6 +18,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.RobotType;
 
@@ -39,11 +40,21 @@ public class Swerve extends SubsystemBase {
     // equivilant to a odometer, but also intakes vision
     private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
+    private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>("swerve", "odometry",
+            new Double[] { 0.0, 0.0, 0.0, 0.0 });
+    private ShuffleData<Double[]> realStatesLog = new ShuffleData<Double[]>("swerve", "real states",
+            new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+    private ShuffleData<Double[]> desiredStatesLog = new ShuffleData<Double[]>("swerve", "desired states",
+            new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+    private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
+    private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
+    private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
+
     public Swerve() {
         for (int i = 0; i < 4; i++) {
             modules[i] = new SwerveModule(i);
         }
-        
+
         if (Constants.ROBOT_TYPE == RobotType.SIM) {
             gyro = new GyroIO() {
             };
@@ -106,7 +117,7 @@ public class Swerve extends SubsystemBase {
                 new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
                         modules[2].getPosition(), modules[3].getPosition() },
                 pose);
-        
+
     }
 
     public void updateOdometry() {
@@ -142,38 +153,35 @@ public class Swerve extends SubsystemBase {
             modules[i].periodic();
         }
 
-        SmartDashboard.putNumberArray("Odometry",
-                new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
-
-
-        double[] realStates = {
+        Double[] realStates = {
                 modules[0].getState().angle.getDegrees(),
                 modules[0].getState().speedMetersPerSecond,
                 modules[1].getState().angle.getDegrees(),
-                modules[1].getState().speedMetersPerSecond,                
+                modules[1].getState().speedMetersPerSecond,
                 modules[2].getState().angle.getDegrees(),
-                modules[2].getState().speedMetersPerSecond,                
+                modules[2].getState().speedMetersPerSecond,
                 modules[3].getState().angle.getDegrees(),
                 modules[3].getState().speedMetersPerSecond
-            };
+        };
 
-
-        double[] theoreticalStates = {
+        Double[] desriedStates = {
                 modules[0].getDesiredState().angle.getDegrees(),
                 modules[0].getDesiredState().speedMetersPerSecond,
                 modules[1].getDesiredState().angle.getDegrees(),
-                modules[1].getDesiredState().speedMetersPerSecond,                
+                modules[1].getDesiredState().speedMetersPerSecond,
                 modules[2].getDesiredState().angle.getDegrees(),
-                modules[2].getDesiredState().speedMetersPerSecond,                
+                modules[2].getDesiredState().speedMetersPerSecond,
                 modules[3].getDesiredState().angle.getDegrees(),
-                modules[3].getDesiredState().speedMetersPerSecond   
-            };
+                modules[3].getDesiredState().speedMetersPerSecond
+        };
 
-        SmartDashboard.putNumberArray("Theoretical States", theoreticalStates);
-        SmartDashboard.putNumberArray("Real Staets", realStates);
-        SmartDashboard.putNumber("Yaw", getRotation2d().getDegrees());
-        SmartDashboard.putNumber("Pitch", getVerticalTilt());
-        SmartDashboard.putNumber("Robot Pose X", getPose().getX());
-        SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
+        realStatesLog.set(realStates);
+        desiredStatesLog.set(desriedStates);
+        odometryLog.set(
+                new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+        
+        yawLog.set(gyroData.yaw);
+        pitchLog.set(gyroData.pitch);
+        rollLog.set(gyroData.roll);
     }
 }
