@@ -18,15 +18,13 @@ public class Constants {
     public static enum RobotType {
         REAL,
         SIM
-      }
-    
-    public static final RobotType ROBOT_TYPE = Robot.isReal() ? RobotType.REAL : RobotType.SIM;
-
-
-    public static final class Sim{
-        public static final double loopPeriodSec = 0.02;
     }
 
+    public static final RobotType ROBOT_TYPE = Robot.isReal() ? RobotType.REAL : RobotType.SIM;
+
+    public static final class Sim {
+        public static final double loopPeriodSec = 0.02;
+    }
 
     public static final class ModuleConstants {
         public static final double wheelDiameterMeters = Units.inchesToMeters(3.5);
@@ -42,8 +40,6 @@ public class Constants {
         public static final double kSDrivingSim = 0.0;
         public static final double kPDrivingSim = 0.0;
 
-
-  
     }
 
     public static final class DriveConstants {
@@ -67,21 +63,40 @@ public class Constants {
 
         public static final boolean[] driveAbsoluteEncoderReversed = { false, false, false, false };
 
-        public static final double[] driveAbsoluteEncoderOffsetDeg = {130.34, 107.75, 61.70, 168.75};
+        public static final double[] driveAbsoluteEncoderOffsetDeg = { 130.34, 107.75, 61.70, 168.75 };
 
-        public static final double realMaxSpeedMetersPerSecond = 5;
-        public static final double realMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-        public static final double simMaxSpeedMetersPerSecond = 2.655;
-        public static final double simMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-        public static final double maxSpeedMetersPerSecond = Robot.isReal() ? DriveConstants.realMaxSpeedMetersPerSecond: DriveConstants.simMaxSpeedMetersPerSecond;
+        private static final double realMaxSpeedMetersPerSecond = 5;
+        private static final double realMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
+        private static final double realMaxAccelerationMetersPerSecondSquared = 2.5;
+        private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
+        private static final double simMaxSpeedMetersPerSecond = 2.655;
+        private static final double simMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
+        private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
+        private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+
+
+        public static final double maxSpeedMetersPerSecond = Robot.isReal()
+                ? DriveConstants.realMaxSpeedMetersPerSecond
+                : DriveConstants.simMaxSpeedMetersPerSecond;
+
+        public static final double maxAngularSpeedMetersPerSecond = Robot.isReal()
+                ? DriveConstants.realMaxAngularSpeedRadiansPerSecond
+                : DriveConstants.simMaxAngularSpeedRadiansPerSecond;
+
+        public static final double maxAccelerationMetersPerSecondSquared = Robot.isReal()
+                ? DriveConstants.realMaxAccelerationMetersPerSecondSquared
+                : DriveConstants.simMaxAccelerationMetersPerSecondSquared;
+
+        public static final double maxAngularAccelerationMetersPerSecondSquared = Robot.isReal()
+                ? DriveConstants.realMaxAngularAccelerationRadiansPerSecondSquared
+                : DriveConstants.simMaxAngularAccelerationRadiansPerSecondSquared;
 
     }
 
     public static final class ControllerConstants {
         public static final double deadband = 0.1;
     }
-
 
     public static final class AutoConstants {
         public static final Map<String, Command> eventMap = new HashMap<>();
@@ -119,6 +134,5 @@ public class Constants {
         public static final double apriltag_cam_offset = 3.1;
 
     }
-
 
 }

@@ -87,13 +87,13 @@ public class JoystickIO {
      * "Controls" tab in ShuffleBoard)
      */
     public void noJoystickBindings() {
-        ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
+        // ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
 
-        // Example
-        ShuffleboardLayout armCommands = controlsTab
-                .getLayout("Arm", BuiltInLayouts.kList)
-                .withSize(2, 2)
-                .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
+        // // Example
+        // ShuffleboardLayout armCommands = controlsTab
+        //         .getLayout("Arm", BuiltInLayouts.kList)
+        //         .withSize(2, 2)
+        //         .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
 
 
     }
