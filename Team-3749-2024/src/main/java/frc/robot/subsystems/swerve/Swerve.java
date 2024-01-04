@@ -75,8 +75,10 @@ public class Swerve extends SubsystemBase {
   }
 
   public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
-    // 5. Convert chassis speeds to individual module states
+    // Convert chassis speeds to individual module states
     SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+    // take shortest path to destination
+    SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, Constants.DriveConstants.maxSpeedMetersPerSecond);
 
     // if robot is sim, then use chassisSpeed velocity to calculate rotation
     // otherwise, use real gyro
