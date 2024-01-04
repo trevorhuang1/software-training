@@ -16,7 +16,7 @@ public class RobotContainer {
 
   private Xbox pilot = new Xbox(0);
   private Xbox operator = new Xbox(1);
-    private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
+  private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
 
   public RobotContainer() {
 
@@ -24,11 +24,10 @@ public class RobotContainer {
     DriverStation.removeRefreshedDataEventHandle(44000);
 
     configureBindings();
-  
+
     // DataLogManager.start("logs");
     // DataLogManager.logNetworkTables(true);
     // DriverStation.startDataLog(DataLogManager.getLog(), true);
-
 
     RobotController.setBrownoutVoltage(7.0);
 

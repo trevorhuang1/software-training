@@ -14,8 +14,6 @@ import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.ModuleConstants;
-import frc.robot.utils.Constants.RobotType;
-
 public class SwerveModule {
 
     private double index;
@@ -52,9 +50,9 @@ public class SwerveModule {
             name = "BR Module";
         }
 
-        if (Robot.isSimulation()) {
+    if (Robot.isSimulation()) {
 
-            moduleIO = new SwerveModuleSim();
+      moduleIO = new SwerveModuleSim();
 
             drivingPidController = new PIDController(ModuleConstants.kPDrivingSim, 0, 0);
             drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDrivingSim,
@@ -105,7 +103,7 @@ public class SwerveModule {
         return desiredState;
     }
 
-    public void setDesiredState(SwerveModuleState state) {
+  public void setDesiredState(SwerveModuleState state) {
 
         state = SwerveModuleState.optimize(state, getState().angle);
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
@@ -113,8 +111,8 @@ public class SwerveModule {
         }
         this.desiredState = state;
 
-        double drive_volts = drivingFeedFordward.calculate(state.speedMetersPerSecond)
-                + drivingPidController.calculate(moduleData.driveVelocityMPerSec, state.speedMetersPerSecond);
+    double drive_volts = drivingFeedFordward.calculate(state.speedMetersPerSecond)
+        + drivingPidController.calculate(moduleData.driveVelocityMPerSec, state.speedMetersPerSecond);
 
         double turning_volts = turningPidController.calculate(moduleData.turnAbsolutePositionRad,
                 state.angle.getRadians());
@@ -122,7 +120,7 @@ public class SwerveModule {
         moduleIO.setDriveVoltage(drive_volts);
         moduleIO.setTurnVoltage(turning_volts);
 
-    }
+  }
 
     public void stop() {
         moduleIO.setDriveVoltage(0);
@@ -145,5 +143,5 @@ public class SwerveModule {
         turningVolts.set(moduleData.turnAppliedVolts);
         turningCurrent.set(moduleData.turnCurrentAmps);
 
-    }
+  }
 }

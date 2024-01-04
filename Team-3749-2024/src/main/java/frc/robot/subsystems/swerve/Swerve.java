@@ -20,8 +20,6 @@ import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
-import frc.robot.utils.Constants.RobotType;
-
 /***
  * @author Noah Simon
  * @author Rohin Sood
@@ -33,155 +31,155 @@ import frc.robot.utils.Constants.RobotType;
  *         logging information
  */
 public class Swerve extends SubsystemBase {
-    private SwerveModule[] modules = new SwerveModule[4];
+  private SwerveModule[] modules = new SwerveModule[4];
 
-    private GyroIO gyro;
-    private GyroData gyroData;
-    // equivilant to a odometer, but also intakes vision
-    private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+  private GyroIO gyro;
+  private GyroData gyroData;
+  // equivilant to a odometer, but also intakes vision
+  private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
-    private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>("swerve", "odometry",
-            new Double[] { 0.0, 0.0, 0.0, 0.0 });
-    private ShuffleData<Double[]> realStatesLog = new ShuffleData<Double[]>("swerve", "real states",
-            new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
-    private ShuffleData<Double[]> desiredStatesLog = new ShuffleData<Double[]>("swerve", "desired states",
-            new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
-    private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
-    private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
-    private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
+  private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>("swerve", "odometry",
+      new Double[] { 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<Double[]> realStatesLog = new ShuffleData<Double[]>("swerve", "real states",
+      new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<Double[]> desiredStatesLog = new ShuffleData<Double[]>("swerve", "desired states",
+      new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
+  private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
+  private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
 
-    public Swerve() {
-        for (int i = 0; i < 4; i++) {
-            modules[i] = new SwerveModule(i);
-        }
+  public Swerve() {
+    for (int i = 0; i < 4; i++) {
+      modules[i] = new SwerveModule(i);
+    }
 
-        if (Constants.ROBOT_TYPE == RobotType.SIM) {
-            gyro = new GyroIO() {
-            };
+    if (!Constants.ROBOT_IS_REAL) {
+      gyro = new GyroIO() {
+      };
 
-            gyroData = new GyroData();
+      gyroData = new GyroData();
 
-        } else {
-            // real swerve module instatiation here
-
-        }
-
-        swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.driveKinematics,
-                new Rotation2d(0),
-                new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
-                        modules[2].getPosition(), modules[3].getPosition() },
-                new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
+    } else {
+      // real swerve module instatiation here
 
     }
 
-    public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
-        // 5. Convert chassis speeds to individual module states
-        SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.driveKinematics,
+        new Rotation2d(0),
+        new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
+            modules[2].getPosition(), modules[3].getPosition() },
+        new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
-        // 6. Output each module states to wheels
-        setModuleStates(moduleStates);
+  }
+
+  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+    // 5. Convert chassis speeds to individual module states
+    SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+    // 6. Output each module states to wheels
+    setModuleStates(moduleStates);
+  }
+
+  public ChassisSpeeds getChassisSpeeds() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    for (int i = 0; i < 4; i++) {
+      states[i] = modules[i].getState();
+    }
+    return DriveConstants.driveKinematics.toChassisSpeeds(states);
+  }
+
+  public void resetGyro() {
+    gyro.resetGyro();
+    System.out.println("RESET");
+  }
+
+  public Rotation2d getRotation2d() {
+    return new Rotation2d(gyroData.yaw / 180 * Math.PI);
+  }
+
+  public Pose2d getPose() {
+
+    Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
+
+    return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
+  }
+
+  public SwerveDrivePoseEstimator getPoseEstimator() {
+    return swerveDrivePoseEstimator;
+  }
+
+  // Not sure that this works properly
+  public void resetOdometry(Pose2d pose) {
+
+    swerveDrivePoseEstimator.resetPosition(getRotation2d(),
+        new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
+            modules[2].getPosition(), modules[3].getPosition() },
+        pose);
+
+  }
+
+  public void updateOdometry() {
+
+    swerveDrivePoseEstimator.update(getRotation2d(),
+        new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
+            modules[2].getPosition(), modules[3].getPosition() });
+
+  }
+
+  public void stopModules() {
+    for (SwerveModule module : modules) {
+      module.stop();
+    }
+  }
+
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.maxSpeedMetersPerSecond);
+    for (int i = 0; i < 4; i++) {
+      modules[i].setDesiredState(desiredStates[i]);
+    }
+  }
+
+  public double getVerticalTilt() {
+    return gyroData.pitch;
+  }
+
+  @Override
+  public void periodic() {
+    updateOdometry();
+
+    for (int i = 0; i < 4; i++) {
+      modules[i].periodic();
     }
 
-    public ChassisSpeeds getChassisSpeeds() {
-        SwerveModuleState[] states = new SwerveModuleState[4];
-        for (int i = 0; i < 4; i++) {
-            states[i] = modules[i].getState();
-        }
-        return DriveConstants.driveKinematics.toChassisSpeeds(states);
-    }
+    Double[] realStates = {
+        modules[0].getState().angle.getDegrees(),
+        modules[0].getState().speedMetersPerSecond,
+        modules[1].getState().angle.getDegrees(),
+        modules[1].getState().speedMetersPerSecond,
+        modules[2].getState().angle.getDegrees(),
+        modules[2].getState().speedMetersPerSecond,
+        modules[3].getState().angle.getDegrees(),
+        modules[3].getState().speedMetersPerSecond
+    };
 
-    public void resetGyro() {
-        gyro.resetGyro();
-        System.out.println("RESET");
-    }
+    Double[] desriedStates = {
+        modules[0].getDesiredState().angle.getDegrees(),
+        modules[0].getDesiredState().speedMetersPerSecond,
+        modules[1].getDesiredState().angle.getDegrees(),
+        modules[1].getDesiredState().speedMetersPerSecond,
+        modules[2].getDesiredState().angle.getDegrees(),
+        modules[2].getDesiredState().speedMetersPerSecond,
+        modules[3].getDesiredState().angle.getDegrees(),
+        modules[3].getDesiredState().speedMetersPerSecond
+    };
 
-    public Rotation2d getRotation2d() {
-        return new Rotation2d(gyroData.yaw / 180 * Math.PI);
-    }
+    realStatesLog.set(realStates);
+    desiredStatesLog.set(desriedStates);
+    odometryLog.set(
+        new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
 
-    public Pose2d getPose() {
-
-        Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
-
-        return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
-    }
-
-    public SwerveDrivePoseEstimator getPoseEstimator() {
-        return swerveDrivePoseEstimator;
-    }
-
-    // Not sure that this works properly
-    public void resetOdometry(Pose2d pose) {
-
-        swerveDrivePoseEstimator.resetPosition(getRotation2d(),
-                new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
-                        modules[2].getPosition(), modules[3].getPosition() },
-                pose);
-
-    }
-
-    public void updateOdometry() {
-
-        swerveDrivePoseEstimator.update(getRotation2d(),
-                new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
-                        modules[2].getPosition(), modules[3].getPosition() });
-
-    }
-
-    public void stopModules() {
-        for (SwerveModule module : modules) {
-            module.stop();
-        }
-    }
-
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.maxSpeedMetersPerSecond);
-        for (int i = 0; i < 4; i++) {
-            modules[i].setDesiredState(desiredStates[i]);
-        }
-    }
-
-    public double getVerticalTilt() {
-        return gyroData.pitch;
-    }
-
-    @Override
-    public void periodic() {
-        updateOdometry();
-
-        for (int i = 0; i < 4; i++) {
-            modules[i].periodic();
-        }
-
-        Double[] realStates = {
-                modules[0].getState().angle.getDegrees(),
-                modules[0].getState().speedMetersPerSecond,
-                modules[1].getState().angle.getDegrees(),
-                modules[1].getState().speedMetersPerSecond,
-                modules[2].getState().angle.getDegrees(),
-                modules[2].getState().speedMetersPerSecond,
-                modules[3].getState().angle.getDegrees(),
-                modules[3].getState().speedMetersPerSecond
-        };
-
-        Double[] desriedStates = {
-                modules[0].getDesiredState().angle.getDegrees(),
-                modules[0].getDesiredState().speedMetersPerSecond,
-                modules[1].getDesiredState().angle.getDegrees(),
-                modules[1].getDesiredState().speedMetersPerSecond,
-                modules[2].getDesiredState().angle.getDegrees(),
-                modules[2].getDesiredState().speedMetersPerSecond,
-                modules[3].getDesiredState().angle.getDegrees(),
-                modules[3].getDesiredState().speedMetersPerSecond
-        };
-
-        realStatesLog.set(realStates);
-        desiredStatesLog.set(desriedStates);
-        odometryLog.set(
-                new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
-        
-        yawLog.set(gyroData.yaw);
-        pitchLog.set(gyroData.pitch);
-        rollLog.set(gyroData.roll);
-    }
+    yawLog.set(gyroData.yaw);
+    pitchLog.set(gyroData.pitch);
+    rollLog.set(gyroData.roll);
+  }
 }
