@@ -35,7 +35,7 @@ public class Constants {
     public static final double kSDrivingSim = 0.0;
     public static final double kPDrivingSim = 0.0;
 
-    }
+  }
 
   public static final class DriveConstants {
     // Distance between right and left wheels
@@ -58,40 +58,44 @@ public class Constants {
 
     public static final boolean[] driveAbsoluteEncoderReversed = { false, false, false, false };
 
-    public static final double[] driveAbsoluteEncoderOffsetDeg = {  130.34, 107.75, 61.70, 168.75  };
+    public static final double[] driveAbsoluteEncoderOffsetDeg = { 130.34, 107.75, 61.70, 168.75 };
 
-        private static final double realMaxSpeedMetersPerSecond = 5;
-        private static final double realMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-        private static final double realMaxAccelerationMetersPerSecondSquared = 2.5;
-        private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    private static final double realMaxSpeedMetersPerSecond = 5;
+    private static final double realMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
+    private static final double realMaxAccelerationMetersPerSecondSquared = 2.5;
+    private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
-        private static final double simMaxSpeedMetersPerSecond = 2.655;
-        private static final double simMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-        private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
-        private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    private static final double simMaxSpeedMetersPerSecond = 2.655;
+    private static final double simMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
+    private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
+    private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
+    public static final double maxSpeedMetersPerSecond = Robot.isReal()
+        ? DriveConstants.realMaxSpeedMetersPerSecond
+        : DriveConstants.simMaxSpeedMetersPerSecond;
 
-        public static final double maxSpeedMetersPerSecond = Robot.isReal()
-                ? DriveConstants.realMaxSpeedMetersPerSecond
-                : DriveConstants.simMaxSpeedMetersPerSecond;
+    public static final double maxAngularSpeedMetersPerSecond = Robot.isReal()
+        ? DriveConstants.realMaxAngularSpeedRadiansPerSecond
+        : DriveConstants.simMaxAngularSpeedRadiansPerSecond;
 
-        public static final double maxAngularSpeedMetersPerSecond = Robot.isReal()
-                ? DriveConstants.realMaxAngularSpeedRadiansPerSecond
-                : DriveConstants.simMaxAngularSpeedRadiansPerSecond;
+    public static final double maxAccelerationMetersPerSecondSquared = Robot.isReal()
+        ? DriveConstants.realMaxAccelerationMetersPerSecondSquared
+        : DriveConstants.simMaxAccelerationMetersPerSecondSquared;
 
-        public static final double maxAccelerationMetersPerSecondSquared = Robot.isReal()
-                ? DriveConstants.realMaxAccelerationMetersPerSecondSquared
-                : DriveConstants.simMaxAccelerationMetersPerSecondSquared;
+    public static final double maxAngularAccelerationMetersPerSecondSquared = Robot.isReal()
+        ? DriveConstants.realMaxAngularAccelerationRadiansPerSecondSquared
+        : DriveConstants.simMaxAngularAccelerationRadiansPerSecondSquared;
 
-        public static final double maxAngularAccelerationMetersPerSecondSquared = Robot.isReal()
-                ? DriveConstants.realMaxAngularAccelerationRadiansPerSecondSquared
-                : DriveConstants.simMaxAngularAccelerationRadiansPerSecondSquared;
-
+    // will eventally be easier to change values from here than poke around through
+    // files
+    public static final class PIDValues {
+      public static final double kP_teleopTurn = 1;
+    }
   }
 
-    public static final class ControllerConstants {
-        public static final double deadband = 0.1;
-    }
+  public static final class ControllerConstants {
+    public static final double deadband = 0.1;
+  }
 
   public static final class AutoConstants {
     public static final Map<String, Command> eventMap = new HashMap<>();

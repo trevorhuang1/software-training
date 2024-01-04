@@ -72,14 +72,13 @@ public class JoystickIO {
      */
     public void pilotAndOperatorBindings() {
 
-
     }
 
     /**
      * If only one controller is plugged in (pi)
      */
     public void pilotBindings() {
-        
+
     }
 
     /**
@@ -91,10 +90,10 @@ public class JoystickIO {
 
         // // Example
         // ShuffleboardLayout armCommands = controlsTab
-        //         .getLayout("Arm", BuiltInLayouts.kList)
-        //         .withSize(2, 2)
-        //         .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
-
+        // .getLayout("Arm", BuiltInLayouts.kList)
+        // .withSize(2, 2)
+        // .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for
+        // commands
 
     }
 
@@ -106,7 +105,8 @@ public class JoystickIO {
 
                 () -> -pilot.getLeftY(), // - is up, + is down by default so we invert here
                 () -> -pilot.getLeftX(), // Positive is left, negative is right by default so we invert here
-                () -> -pilot.getRightX())); // Clockwise positive by default, so we invert here
+                () -> -pilot.getRightX(), () -> -pilot.getRightY())); // Clockwise positive by default, so we invert
+                                                                      // here
 
     }
 }
