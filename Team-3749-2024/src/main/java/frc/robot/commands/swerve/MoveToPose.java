@@ -30,7 +30,7 @@ public class MoveToPose extends Command {
   public MoveToPose(Pose2d targetPose) {
     this.targetPose = targetPose;
     addRequirements(swerve);
-    pid_turnController.enableContinuousInput(-Math.PI, Math.PI);
+    pid_turnController.enableContinuousInput(0, 2*Math.PI);
   }
 
   @Override

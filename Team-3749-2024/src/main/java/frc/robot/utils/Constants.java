@@ -96,6 +96,8 @@ public class Constants {
 
     public static final double toleranceM_MoveToPose = 0.02;
     public static final double toleranceRad_MoveToPose = Math.PI / 750;
+
+    public static final double toleranceRad_TurnToAngle = Math.PI / 750;
   }
 
   public static final class ControllerConstants {
