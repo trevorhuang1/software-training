@@ -91,6 +91,9 @@ public class Constants {
     public static final class PIDValues {
       public static final double kP_teleopTurn = 1;
     }
+
+    public static final double toleranceM_MoveToPose = 0.02;
+    public static final double toleranceRad_MoveToPose = Math.PI / 750;
   }
 
   public static final class ControllerConstants {

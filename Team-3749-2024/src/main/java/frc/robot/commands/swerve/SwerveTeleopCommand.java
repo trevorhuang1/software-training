@@ -69,8 +69,8 @@ public class SwerveTeleopCommand extends Command {
     yTurnPos = Math.abs(yTurnPos) > ControllerConstants.deadband ? yTurnPos : 0.0;
 
     // 3. Make the driving smoother with consistent accelerations
-    ySpeed = yLimiter.calculate(ySpeed * DriveConstants.maxSpeedMetersPerSecond);
     xSpeed = xLimiter.calculate(xSpeed * DriveConstants.maxSpeedMetersPerSecond);
+    ySpeed = yLimiter.calculate(ySpeed * DriveConstants.maxSpeedMetersPerSecond);
 
     // do some cool magical trig to find theta and then convert it into unsigned rad
     double desiredRotationRad = Math.atan2(xTurnPos, yTurnPos);
