@@ -12,14 +12,18 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
+import frc.robot.subsystems.swerve.sim.GyroIO;
+import frc.robot.subsystems.swerve.sim.GyroIO.GyroData;
+import frc.robot.subsystems.swerve.sim.GyroSim;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
+
 /***
  * @author Noah Simon
  * @author Rohin Sood
@@ -53,12 +57,10 @@ public class Swerve extends SubsystemBase {
       modules[i] = new SwerveModule(i);
     }
 
-    if (!Constants.ROBOT_IS_REAL) {
-      gyro = new GyroIO() {
-      };
+    if (!Robot.isReal()) {
+      gyro = new GyroSim();
 
       gyroData = new GyroData();
-
     } else {
       // real swerve module instatiation here
 
@@ -73,8 +75,19 @@ public class Swerve extends SubsystemBase {
   }
 
   public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
-    // 5. Convert chassis speeds to individual module states
+    // Convert chassis speeds to individual module states
     SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+    // take shortest path to destination
+    SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, Constants.DriveConstants.maxSpeedMetersPerSecond);
+
+    // if robot is sim, then use chassisSpeed velocity to calculate rotation
+    // otherwise, use real gyro
+    if (!Robot.isReal()) {
+      double rotationDiffRad = chassisSpeeds.omegaRadiansPerSecond * 0.02;
+      gyroData.yawDeg = (gyroData.yawDeg + Units.radiansToDegrees(rotationDiffRad)) % (360);
+    } else {
+
+    }
 
     // 6. Output each module states to wheels
     setModuleStates(moduleStates);
@@ -88,13 +101,17 @@ public class Swerve extends SubsystemBase {
     return DriveConstants.driveKinematics.toChassisSpeeds(states);
   }
 
+  public void updateGyro() {
+    gyro.updateData(gyroData);
+  }
+
   public void resetGyro() {
     gyro.resetGyro();
     System.out.println("RESET");
   }
 
   public Rotation2d getRotation2d() {
-    return new Rotation2d(gyroData.yaw / 180 * Math.PI);
+    return new Rotation2d(gyroData.yawDeg / 180 * Math.PI);
   }
 
   public Pose2d getPose() {
@@ -119,6 +136,7 @@ public class Swerve extends SubsystemBase {
   }
 
   public void updateOdometry() {
+    updateGyro();
 
     swerveDrivePoseEstimator.update(getRotation2d(),
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
@@ -178,7 +196,7 @@ public class Swerve extends SubsystemBase {
     odometryLog.set(
         new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
 
-    yawLog.set(gyroData.yaw);
+    yawLog.set(gyroData.yawDeg);
     pitchLog.set(gyroData.pitch);
     rollLog.set(gyroData.roll);
   }

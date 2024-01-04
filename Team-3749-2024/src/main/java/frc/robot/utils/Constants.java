@@ -90,6 +90,8 @@ public class Constants {
     // files
     public static final class PIDValues {
       public static final double kP_teleopTurn = 1;
+      public static final double kI_teleopTurn = 0;
+      public static final double kD_teleopTurn =-0.32;
     }
 
     public static final double toleranceM_MoveToPose = 0.02;

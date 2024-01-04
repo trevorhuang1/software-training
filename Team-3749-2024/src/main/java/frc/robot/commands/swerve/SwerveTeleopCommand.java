@@ -29,7 +29,7 @@ public class SwerveTeleopCommand extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction, yTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  private final PIDController pid_turnController = new PIDController(DriveConstants.PIDValues.kP_teleopTurn, 0, 0);
+  private final PIDController pid_turnController = new PIDController(DriveConstants.PIDValues.kP_teleopTurn, DriveConstants.PIDValues.kI_teleopTurn, DriveConstants.PIDValues.kD_teleopTurn);
 
   public SwerveTeleopCommand(
       Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction,
@@ -49,7 +49,7 @@ public class SwerveTeleopCommand extends Command {
 
   @Override
   public void initialize() {
-
+    pid_turnController.enableContinuousInput(0, 2 * Math.PI);
   }
 
   @Override
@@ -73,12 +73,13 @@ public class SwerveTeleopCommand extends Command {
     ySpeed = yLimiter.calculate(ySpeed * DriveConstants.maxSpeedMetersPerSecond);
 
     // do some cool magical trig to find theta and then convert it into unsigned rad
+    double currentRotationRad = swerve.getRotation2d().getRadians();
     double desiredRotationRad = Math.atan2(xTurnPos, yTurnPos);
     desiredRotationRad = (desiredRotationRad + 2 * Math.PI) % (2 * Math.PI);
 
     // slowly ramp up speed
     turningSpeed = turningLimiter
-        .calculate(pid_turnController.calculate(swerve.getRotation2d().getRadians(), desiredRotationRad));
+        .calculate(pid_turnController.calculate(currentRotationRad, desiredRotationRad));
 
     // 4. Construct desired chassis speeds relative to the field
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
