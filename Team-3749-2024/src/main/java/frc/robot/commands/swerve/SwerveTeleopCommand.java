@@ -5,6 +5,9 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -12,9 +15,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
+import frc.robot.utils.PIDTuner;
 import frc.robot.utils.Constants.ControllerConstants;
 import frc.robot.utils.Constants.DriveConstants;
-import frc.robot.utils.Constants.DriveConstants.PIDValues;;
+import frc.robot.utils.Constants.Sim.PIDValues;;
 
 /***
  * @author Noah Simon
@@ -29,8 +33,8 @@ public class SwerveTeleopCommand extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction, yTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  private final PIDController pid_turnController = new PIDController(DriveConstants.PIDValues.kP_teleopTurn,
-      DriveConstants.PIDValues.kI_teleopTurn, DriveConstants.PIDValues.kD_teleopTurn);
+  private final PIDController pid_turnController = new PIDController(PIDValues.kP_teleopTurn, 0,
+      PIDValues.kD_teleopTurn);
 
   public SwerveTeleopCommand(
       Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction,
@@ -84,6 +88,13 @@ public class SwerveTeleopCommand extends Command {
     // 4. Construct desired chassis speeds relative to the field
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
+
+    if (Robot.isSimulation()) {
+      PIDValues.kP_MiscTurn = PIDTuner.update(PIDValues.kP_MiscTurn, 0.005,
+          new TurnToAngle(new Rotation2d(Math.PI)));
+    } else {
+      throw new Error("TeleopCommand@93 -- DID NOT REMOVE PID TUNER");
+    }
 
     // set chassis speeds
     swerve.setChassisSpeeds(chassisSpeeds);

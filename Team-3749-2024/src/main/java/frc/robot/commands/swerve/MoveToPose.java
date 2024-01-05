@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
+import frc.robot.utils.Constants.Sim.PIDValues;
 import frc.robot.Robot;
 
 /***
@@ -18,9 +19,12 @@ public class MoveToPose extends Command {
   private final Swerve swerve = Robot.swerve;
   private Pose2d targetPose = swerve.getPose();
 
-  private final PIDController pid_driveXController = new PIDController(1, 0, 0);
-  private final PIDController pid_driveYController = new PIDController(1, 0, 0);
-  private final PIDController pid_turnController = new PIDController(1, 0, 0);
+  private final PIDController pid_driveXController = new PIDController(PIDValues.kP_MiscDrive, 0,
+      PIDValues.kD_MiscDrive);
+  private final PIDController pid_driveYController = new PIDController(PIDValues.kP_MiscDrive, 0,
+      PIDValues.kD_MiscDrive);
+  private final PIDController pid_turnController = new PIDController(PIDValues.kP_MiscTurn, 0,
+      PIDValues.kD_MiscTurn);
 
   private final SlewRateLimiter slewLimit_x = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
   private final SlewRateLimiter slewLimit_y = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
@@ -30,7 +34,7 @@ public class MoveToPose extends Command {
   public MoveToPose(Pose2d targetPose) {
     this.targetPose = targetPose;
     addRequirements(swerve);
-    pid_turnController.enableContinuousInput(0, 2*Math.PI);
+    pid_turnController.enableContinuousInput(0, 2 * Math.PI);
   }
 
   @Override
@@ -65,8 +69,7 @@ public class MoveToPose extends Command {
     driveYVeloM = slewLimit_x.calculate(driveYVeloM * DriveConstants.maxSpeedMetersPerSecond);
     turnVelo = slewLimit_turn.calculate(turnVelo * DriveConstants.maxAngularSpeedMetersPerSecond);
 
-
-    //set chassis speeds
+    // set chassis speeds
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveXVeloM, driveYVeloM, turnVelo,
         swerve.getRotation2d());
 

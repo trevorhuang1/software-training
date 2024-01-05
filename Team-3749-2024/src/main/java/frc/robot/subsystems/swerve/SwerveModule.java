@@ -15,6 +15,7 @@ import frc.robot.subsystems.swerve.sim.GyroIO.GyroData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.ModuleConstants;
+
 public class SwerveModule {
 
     private double index;
@@ -39,7 +40,7 @@ public class SwerveModule {
     private ShuffleData<Double> turningVolts;
     private ShuffleData<Double> turningCurrent;
 
-    public SwerveModule(int i) {
+    public SwerveModule(int i, SwerveModuleIO SwerveModule) {
         index = i;
         if (index == 0) {
             name = "FL Module";
@@ -51,9 +52,9 @@ public class SwerveModule {
             name = "BR Module";
         }
 
-    if (Robot.isSimulation()) {
+        if (Robot.isSimulation()) {
 
-      moduleIO = new SwerveModuleSim();
+            moduleIO = SwerveModule;
 
             drivingPidController = new PIDController(ModuleConstants.kPDrivingSim, 0, 0);
             drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDrivingSim,
@@ -62,7 +63,7 @@ public class SwerveModule {
             turningPidController.enableContinuousInput(0, 2 * Math.PI);
 
         } else {
-            // real swerve module instatiation here
+            moduleIO = SwerveModule;
 
             drivingPidController = new PIDController(ModuleConstants.kPDrivingReal, 0, 0);
             drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDrivingReal,
@@ -72,17 +73,18 @@ public class SwerveModule {
 
         }
         // Tab, name, data
-        driveSpeed = new ShuffleData<>("swerve/"+name, name + " driver speed", moduleData.driveVelocityMPerSec);
-        drivePosition = new ShuffleData<>("swerve/"+name, name + " drive position", moduleData.driveVelocityMPerSec);
-        driveTemp = new ShuffleData<>("swerve/"+name, name + " drive temp", moduleData.driveVelocityMPerSec);
-        driveVolts = new ShuffleData<>("swerve/"+name, name + " drive volts", moduleData.driveVelocityMPerSec);
-        driveCurrent = new ShuffleData<>("swerve/"+name, name + " drive current", moduleData.driveVelocityMPerSec);
+        driveSpeed = new ShuffleData<>("swerve/" + name, name + " driver speed", moduleData.driveVelocityMPerSec);
+        drivePosition = new ShuffleData<>("swerve/" + name, name + " drive position", moduleData.driveVelocityMPerSec);
+        driveTemp = new ShuffleData<>("swerve/" + name, name + " drive temp", moduleData.driveVelocityMPerSec);
+        driveVolts = new ShuffleData<>("swerve/" + name, name + " drive volts", moduleData.driveVelocityMPerSec);
+        driveCurrent = new ShuffleData<>("swerve/" + name, name + " drive current", moduleData.driveVelocityMPerSec);
 
-        turningSpeed = new ShuffleData<>("swerve/"+name, name + " turning speed", moduleData.driveVelocityMPerSec);
-        turningPosition = new ShuffleData<>("swerve/"+name, name + " turning position", moduleData.driveVelocityMPerSec);
-        turningTemp = new ShuffleData<>("swerve/"+name, name + " turning temp", moduleData.driveVelocityMPerSec);
-        turningVolts = new ShuffleData<>("swerve/"+name, name + " turning volts", moduleData.driveVelocityMPerSec);
-        turningCurrent = new ShuffleData<>("swerve/"+name, name + " turning current", moduleData.turnCurrentAmps);
+        turningSpeed = new ShuffleData<>("swerve/" + name, name + " turning speed", moduleData.driveVelocityMPerSec);
+        turningPosition = new ShuffleData<>("swerve/" + name, name + " turning position",
+                moduleData.driveVelocityMPerSec);
+        turningTemp = new ShuffleData<>("swerve/" + name, name + " turning temp", moduleData.driveVelocityMPerSec);
+        turningVolts = new ShuffleData<>("swerve/" + name, name + " turning volts", moduleData.driveVelocityMPerSec);
+        turningCurrent = new ShuffleData<>("swerve/" + name, name + " turning current", moduleData.turnCurrentAmps);
     }
 
     public String getName() {
@@ -104,7 +106,7 @@ public class SwerveModule {
         return desiredState;
     }
 
-  public void setDesiredState(SwerveModuleState state) {
+    public void setDesiredState(SwerveModuleState state) {
 
         state = SwerveModuleState.optimize(state, getState().angle);
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
@@ -112,8 +114,8 @@ public class SwerveModule {
         }
         this.desiredState = state;
 
-    double drive_volts = drivingFeedFordward.calculate(state.speedMetersPerSecond)
-        + drivingPidController.calculate(moduleData.driveVelocityMPerSec, state.speedMetersPerSecond);
+        double drive_volts = drivingFeedFordward.calculate(state.speedMetersPerSecond)
+                + drivingPidController.calculate(moduleData.driveVelocityMPerSec, state.speedMetersPerSecond);
 
         double turning_volts = turningPidController.calculate(moduleData.turnAbsolutePositionRad,
                 state.angle.getRadians());
@@ -121,7 +123,7 @@ public class SwerveModule {
         moduleIO.setDriveVoltage(drive_volts);
         moduleIO.setTurnVoltage(turning_volts);
 
-  }
+    }
 
     public void stop() {
         moduleIO.setDriveVoltage(0);
@@ -144,5 +146,5 @@ public class SwerveModule {
         turningVolts.set(moduleData.turnAppliedVolts);
         turningCurrent.set(moduleData.turnCurrentAmps);
 
-  }
+    }
 }

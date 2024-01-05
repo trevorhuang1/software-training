@@ -19,6 +19,16 @@ public class Constants {
 
   public static final class Sim {
     public static final double loopPeriodSec = 0.02;
+
+    public static final class PIDValues {
+      public static double kP_teleopTurn = 1;
+      public static double kD_teleopTurn = -0.32;
+
+      public static double kP_MiscDrive = 0.590;
+      public static double kD_MiscDrive = 0;
+      public static double kP_MiscTurn = 0.245;
+      public static double kD_MiscTurn = 0;
+    }
   }
 
   public static final class ModuleConstants {
@@ -88,11 +98,6 @@ public class Constants {
 
     // will eventally be easier to change values from here than poke around through
     // files
-    public static final class PIDValues {
-      public static final double kP_teleopTurn = 1;
-      public static final double kI_teleopTurn = 0;
-      public static final double kD_teleopTurn =-0.32;
-    }
 
     public static final double toleranceM_MoveToPose = 0.02;
     public static final double toleranceRad_MoveToPose = Math.PI / 750;

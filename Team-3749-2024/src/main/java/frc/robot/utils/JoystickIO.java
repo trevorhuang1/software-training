@@ -27,8 +27,8 @@ import frc.robot.subsystems.swerve.Swerve;
 public class JoystickIO {
     private static String[] lastJoystickNames = new String[] { "", "", "", "", "", "" };
 
-    private Xbox pilot;
-    private Xbox operator;
+    public Xbox pilot;
+    public Xbox operator;
 
     private Swerve swerve;
 

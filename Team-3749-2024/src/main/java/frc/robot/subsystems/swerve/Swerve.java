@@ -20,6 +20,7 @@ import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.subsystems.swerve.sim.GyroIO;
 import frc.robot.subsystems.swerve.sim.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.sim.GyroSim;
+import frc.robot.subsystems.swerve.sim.SwerveModuleSim;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
@@ -52,15 +53,16 @@ public class Swerve extends SubsystemBase {
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
 
   public Swerve() {
-    for (int i = 0; i < 4; i++) {
-      modules[i] = new SwerveModule(i);
-    }
-
     if (!Robot.isReal()) {
       gyro = new GyroSim();
+      for (int i = 0; i < 4; i++) {
+        modules[i] = new SwerveModule(i, new SwerveModuleSim());
+      }
     } else {
       // real swerve module instatiation here
-
+      for (int i = 0; i < 4; i++) {
+        // modules[i] = new SwerveModule(i, new <REAL SWERVE MODULE>());
+      }
     }
 
     swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.driveKinematics,
@@ -91,7 +93,7 @@ public class Swerve extends SubsystemBase {
 
   public void resetGyro() {
     gyro.resetGyro();
-    System.out.println("RESET");
+    System.out.println("GYRO RESET");
   }
 
   public Rotation2d getRotation2d() {
@@ -111,29 +113,20 @@ public class Swerve extends SubsystemBase {
 
   // Not sure that this works properly
   public void resetOdometry(Pose2d pose) {
+    gyro.resetGyro();
 
     swerveDrivePoseEstimator.resetPosition(getRotation2d(),
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() },
         pose);
-
   }
 
   public void updateOdometry() {
-    Rotation2d gyroDiff = new Rotation2d(0);
-    if (!Robot.isReal()) {
-      double angleDiffRad = getChassisSpeeds().omegaRadiansPerSecond * 0.02;
-      gyroDiff = new Rotation2d(angleDiffRad);
-    } else {
-      // real diff stuff
-    }
-
-    gyro.updateGyroYaw(gyroDiff);
+    gyro.updateGyroYaw();
 
     swerveDrivePoseEstimator.update(getRotation2d(),
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() });
-
   }
 
   public void stopModules() {
@@ -147,6 +140,7 @@ public class Swerve extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       modules[i].setDesiredState(desiredStates[i]);
     }
+
   }
 
   public double getVerticalTilt() {

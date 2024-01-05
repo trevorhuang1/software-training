@@ -1,6 +1,7 @@
 package frc.robot.subsystems.swerve.sim;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Robot;
 
 public class GyroSim implements GyroIO {
   public GyroData gyroData = new GyroData();
@@ -9,7 +10,10 @@ public class GyroSim implements GyroIO {
     gyroData = data;
   }
 
-  public void updateGyroYaw(Rotation2d currentRotationDiff) {
+  public void updateGyroYaw() {
+    double angleDiffRad = Robot.swerve.getChassisSpeeds().omegaRadiansPerSecond * 0.02;
+    Rotation2d currentRotationDiff = new Rotation2d(angleDiffRad);
+
     gyroData.yawDeg = (gyroData.yawDeg + currentRotationDiff.getDegrees()) % 360;
   }
 
