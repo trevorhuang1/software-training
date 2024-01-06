@@ -74,22 +74,19 @@ public class SwerveTeleopCommand extends Command {
     xTurnPos = Math.abs(xTurnPos) > ControllerConstants.deadband ? xTurnPos : 0.0;
     yTurnPos = Math.abs(yTurnPos) > ControllerConstants.deadband ? yTurnPos : 0.0;
 
-    if (xSpeed == 0 && ySpeed == 0 && xTurnPos == 0 && yTurnPos == 0) {
-      return;
-    }
-
     xSpeed = xLimiter.calculate(xSpeed * DriveConstants.maxSpeedMetersPerSecond);
     ySpeed = yLimiter.calculate(ySpeed * DriveConstants.maxSpeedMetersPerSecond);
 
-    // do some cool magical trig to find theta
+    // do some cool magical trig to find theta and convert it to unsigned rad
     double currentRotationRad = swerve.getRotation2d().getRadians();
     double desiredRotationRad = Math.atan2(xTurnPos, yTurnPos);
+    desiredRotationRad = (desiredRotationRad + (4 * Math.PI)) % (2 * Math.PI);
 
     turningSpeed = turningLimiter
         .calculate(pid_turnController.calculate(currentRotationRad, desiredRotationRad));
 
-    SmartDashboard.putNumber("data", currentRotationRad);
-    SmartDashboard.putNumber("data2", desiredRotationRad);
+    SmartDashboard.putNumber("teleop_curRot", currentRotationRad);
+    SmartDashboard.putNumber("teleop_desRot", desiredRotationRad);
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());

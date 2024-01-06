@@ -74,7 +74,8 @@ public class Swerve extends SubsystemBase {
         new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
     if (Robot.isSimulation()) {
-      // resetOdometry(new Pose2d(new Translation2d(1, 1), new Rotation2d(Units.degreesToRadians(90))));
+      // resetOdometry(new Pose2d(new Translation2d(1, 1), new
+      // Rotation2d(Units.degreesToRadians(90))));
     }
   }
 
@@ -116,12 +117,11 @@ public class Swerve extends SubsystemBase {
 
   // Not sure that this works properly
   public void resetOdometry(Pose2d pose) {
-    gyro.resetGyro();
+    if(Robot.isSimulation())
 
     swerveDrivePoseEstimator.resetPosition(getRotation2d(),
-        new SwerveModulePosition[] { new SwerveModulePosition(0, new Rotation2d(0)),
-            new SwerveModulePosition(0, new Rotation2d(0)),
-            new SwerveModulePosition(0, new Rotation2d(0)), new SwerveModulePosition(0, new Rotation2d(0)) },
+        new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
+            modules[2].getPosition(), modules[3].getPosition() },
         pose);
   }
 
