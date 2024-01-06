@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.subsystems.swerve.sim.SwerveModuleSim;
-import frc.robot.subsystems.swerve.sim.GyroIO.GyroData;
+import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.ModuleConstants;

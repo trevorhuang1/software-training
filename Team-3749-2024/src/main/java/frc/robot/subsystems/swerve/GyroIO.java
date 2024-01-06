@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swerve.sim;
+package frc.robot.subsystems.swerve;
 
 public interface GyroIO {
   public class GyroData {
