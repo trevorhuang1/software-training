@@ -44,6 +44,8 @@ public class Swerve extends SubsystemBase {
 
   private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>("swerve", "odometry",
       new Double[] { 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<Double[]> desiredOdometryLog = new ShuffleData<Double[]>("swerve", "desiredOdometry",
+      new Double[] { 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> realStatesLog = new ShuffleData<Double[]>("swerve", "real states",
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> desiredStatesLog = new ShuffleData<Double[]>("swerve", "desired states",
@@ -78,7 +80,6 @@ public class Swerve extends SubsystemBase {
     SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(chassisSpeeds);
     // take shortest path to destination
     SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, Constants.DriveConstants.maxSpeedMetersPerSecond);
-
     // 6. Output each module states to wheels
     setModuleStates(moduleStates);
   }
@@ -101,7 +102,6 @@ public class Swerve extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-
     Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
 
     return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
@@ -119,6 +119,10 @@ public class Swerve extends SubsystemBase {
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() },
         pose);
+  }
+
+  public void setDesiredOdometry(Rotation2d robotRotation, SwerveModulePosition[] modules) {
+    swerveDrivePoseEstimator.update(robotRotation, modules);
   }
 
   public void updateOdometry() {
@@ -141,6 +145,7 @@ public class Swerve extends SubsystemBase {
       modules[i].setDesiredState(desiredStates[i]);
     }
 
+    updateOdometry();
   }
 
   public double getVerticalTilt() {

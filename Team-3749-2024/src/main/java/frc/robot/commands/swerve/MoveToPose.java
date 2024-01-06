@@ -34,15 +34,16 @@ public class MoveToPose extends Command {
   public MoveToPose(Pose2d targetPose) {
     this.targetPose = targetPose;
     addRequirements(swerve);
-    pid_turnController.enableContinuousInput(0, 2 * Math.PI);
   }
 
   @Override
   public void initialize() {
+    pid_turnController.enableContinuousInput(0, 2 * Math.PI);
+
     // set tolerances to prevent endless command
-    pid_turnController.setTolerance(Constants.DriveConstants.toleranceRad_MoveToPose);
-    pid_driveXController.setTolerance(Constants.DriveConstants.toleranceM_MoveToPose);
-    pid_driveYController.setTolerance(Constants.DriveConstants.toleranceM_MoveToPose);
+    pid_turnController.setTolerance(Constants.DriveConstants.toleranceRad_Misc);
+    pid_driveXController.setTolerance(Constants.DriveConstants.toleranceM_Misc);
+    pid_driveYController.setTolerance(Constants.DriveConstants.toleranceM_Misc);
 
     // set target pose so command finishes when robot is within tolerances (see
     // isFinished())
@@ -83,11 +84,6 @@ public class MoveToPose extends Command {
 
   @Override
   public boolean isFinished() {
-    return atGoal();
-  }
-
-  /** Checks if the robot is stopped at the final pose. */
-  public boolean atGoal() {
     return pid_driveXController.atSetpoint() && pid_driveYController.atSetpoint() && pid_turnController.atSetpoint();
   }
 }

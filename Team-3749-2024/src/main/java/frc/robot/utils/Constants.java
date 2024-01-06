@@ -21,13 +21,15 @@ public class Constants {
     public static final double loopPeriodSec = 0.02;
 
     public static final class PIDValues {
-      public static double kP_teleopTurn = 1;
-      public static double kD_teleopTurn = -0.32;
+      public static double kP_teleopTurn = 4.9;
+      public static double kD_teleopTurn = 1.3;
 
       public static double kP_MiscDrive = 0.590;
       public static double kD_MiscDrive = 0;
       public static double kP_MiscTurn = 0.245;
       public static double kD_MiscTurn = 0;
+
+      public static double kP_TurnToAngle = 0.245;
     }
   }
 
@@ -99,10 +101,8 @@ public class Constants {
     // will eventally be easier to change values from here than poke around through
     // files
 
-    public static final double toleranceM_MoveToPose = 0.02;
-    public static final double toleranceRad_MoveToPose = Math.PI / 750;
-
-    public static final double toleranceRad_TurnToAngle = Math.PI / 750;
+    public static final double toleranceM_Misc = 0.02;
+    public static final double toleranceRad_Misc = Math.PI / 750;
   }
 
   public static final class ControllerConstants {

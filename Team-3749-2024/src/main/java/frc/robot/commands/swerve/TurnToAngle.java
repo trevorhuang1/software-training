@@ -1,6 +1,5 @@
 package frc.robot.commands.swerve;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,7 +18,9 @@ public class TurnToAngle extends Command {
   private Rotation2d desiredRotation = new Rotation2d(0);
   private boolean preserveVelocity = false;
 
-  private final PIDController pid_turnController = new PIDController(PIDValues.kP_MiscTurn, 0, PIDValues.kD_MiscTurn);
+  private final PIDController pid_turnController = new PIDController(PIDValues.kP_TurnToAngle, 0, PIDValues.kD_MiscTurn);
+  private final SlewRateLimiter slewLimit_turn = new SlewRateLimiter(
+      DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
 
   /***
    * @param Rotation2d desiredRotation
@@ -42,7 +43,7 @@ public class TurnToAngle extends Command {
   @Override
   public void initialize() {
     pid_turnController.setSetpoint(desiredRotation.getRadians());
-    pid_turnController.setTolerance(Constants.DriveConstants.toleranceRad_TurnToAngle);
+    pid_turnController.setTolerance(Constants.DriveConstants.toleranceRad_Misc);
     pid_turnController.enableContinuousInput(0, 2 * Math.PI);
   }
 
@@ -50,20 +51,19 @@ public class TurnToAngle extends Command {
   public void execute() {
     // calculate the turning speed and clamp the output to the maximum speed that
     // the motor can turn
-    double turningSpeed = pid_turnController.calculate(swerve.getRotation2d().getRadians(),
+    double turnVelo = pid_turnController.calculate(swerve.getRotation2d().getRadians(),
         desiredRotation.getRadians());
+    turnVelo = slewLimit_turn.calculate(turnVelo * DriveConstants.maxAngularSpeedMetersPerSecond);
 
-    // create new ChassisSpeeds with the current x/y speeds to prevent interfering
-    // with other things that are happening;
     ChassisSpeeds newChassisSpeeds;
     if (preserveVelocity) {
       ChassisSpeeds currentChassisSpeeds = swerve.getChassisSpeeds();
       newChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           currentChassisSpeeds.vxMetersPerSecond,
-          currentChassisSpeeds.vyMetersPerSecond, turningSpeed,
+          currentChassisSpeeds.vyMetersPerSecond, turnVelo,
           swerve.getRotation2d());
     } else {
-      newChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, turningSpeed,
+      newChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, turnVelo,
           swerve.getRotation2d());
     }
 
@@ -72,7 +72,6 @@ public class TurnToAngle extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    swerve.stopModules();
   }
 
   @Override
