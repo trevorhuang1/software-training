@@ -21,15 +21,16 @@ public class Constants {
     public static final double loopPeriodSec = 0.02;
 
     public static final class PIDValues {
-      public static double kP_teleopTurn = 4.9;
-      public static double kD_teleopTurn = 1.3;
+      public static double kP_teleopTurn = 1.59;
+      public static double kD_teleopTurn = 0.005;
 
       public static double kP_MiscDrive = 0.55;
       public static double kD_MiscDrive = 0;
       public static double kP_MiscTurn = 0.245;
       public static double kD_MiscTurn = 0;
 
-      public static double kP_TurnToAngle = 0.245;
+      public static double kP_TurnToAngle = 1.59;
+      public static double kD_TurnToAngle = 0.005;
     }
   }
 

@@ -41,6 +41,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new MoveToPose(new Pose2d(new Translation2d(5, 8), new Rotation2d(Units.degreesToRadians(270))));
+    return new TurnToAngle(new Rotation2d(Math.PI));
   }
 }

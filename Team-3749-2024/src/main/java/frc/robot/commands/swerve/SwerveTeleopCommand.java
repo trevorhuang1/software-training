@@ -2,6 +2,8 @@ package frc.robot.commands.swerve;
 
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -85,8 +87,8 @@ public class SwerveTeleopCommand extends Command {
     turningSpeed = turningLimiter
         .calculate(pid_turnController.calculate(currentRotationRad, desiredRotationRad));
 
-    SmartDashboard.putNumber("teleop_curRot", currentRotationRad);
-    SmartDashboard.putNumber("teleop_desRot", desiredRotationRad);
+    SmartDashboard.putNumber("teleopcurRot", currentRotationRad);
+    SmartDashboard.putNumber("teleopdesRot", desiredRotationRad);
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());

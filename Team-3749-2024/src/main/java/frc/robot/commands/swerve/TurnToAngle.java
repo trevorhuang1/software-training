@@ -18,7 +18,7 @@ public class TurnToAngle extends Command {
   private Rotation2d desiredRotation = new Rotation2d(0);
   private boolean preserveVelocity = false;
 
-  private final PIDController pid_turnController = new PIDController(PIDValues.kP_TurnToAngle, 0, PIDValues.kD_MiscTurn);
+  private final PIDController pid_turnController = new PIDController(PIDValues.kP_TurnToAngle, 0, PIDValues.kD_TurnToAngle);
   private final SlewRateLimiter slewLimit_turn = new SlewRateLimiter(
       DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
 

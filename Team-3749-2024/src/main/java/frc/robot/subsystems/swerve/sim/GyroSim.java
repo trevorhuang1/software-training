@@ -17,8 +17,7 @@ public class GyroSim implements GyroIO {
     double angleDiffRad = Robot.swerve.getChassisSpeeds().omegaRadiansPerSecond * 0.02;
     Rotation2d currentRotationDiff = new Rotation2d(angleDiffRad);
 
-    gyroData.yawDeg = (gyroData.yawDeg + currentRotationDiff.getDegrees()) % 360;
-    gyroData.yawDeg = (gyroData.yawDeg + 720) % 360;
+    gyroData.yawDeg = (gyroData.yawDeg + currentRotationDiff.getDegrees() + 360) % 360;
   }
 
   @Override
