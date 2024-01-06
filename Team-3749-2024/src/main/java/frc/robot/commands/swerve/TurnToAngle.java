@@ -28,6 +28,7 @@ public class TurnToAngle extends Command {
   public TurnToAngle(Rotation2d desiredRotation) {
     this.swerve = Robot.swerve;
     this.desiredRotation = desiredRotation;
+    addRequirements(swerve);
   }
 
   /***
@@ -38,6 +39,8 @@ public class TurnToAngle extends Command {
     this.swerve = Robot.swerve;
     this.desiredRotation = desiredRotation;
     this.preserveVelocity = preserveVelocity;
+    addRequirements(swerve);
+
   }
 
   @Override
