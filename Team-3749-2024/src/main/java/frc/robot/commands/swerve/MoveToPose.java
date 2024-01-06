@@ -3,6 +3,9 @@ package frc.robot.commands.swerve;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,7 +52,6 @@ public class MoveToPose extends Command {
     // isFinished())
     pid_driveXController.setSetpoint(targetPose.getX());
     pid_driveYController.setSetpoint(targetPose.getY());
-    pid_turnController.setSetpoint(targetPose.getRotation().getRadians());
   }
 
   @Override
@@ -70,20 +72,23 @@ public class MoveToPose extends Command {
     driveYVeloM = slewLimit_x.calculate(driveYVeloM * DriveConstants.maxSpeedMetersPerSecond);
     turnVelo = slewLimit_turn.calculate(turnVelo * DriveConstants.maxAngularSpeedMetersPerSecond);
 
-    // set chassis speeds
-    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveXVeloM, driveYVeloM, turnVelo,
-        swerve.getRotation2d());
+    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveXVeloM,
+        driveYVeloM, turnVelo, swerve.getRotation2d());
 
     swerve.setChassisSpeeds(chassisSpeeds);
   }
 
   @Override
   public void end(boolean interrupted) {
-
+    SmartDashboard.putNumber("ended", 0);
   }
 
   @Override
   public boolean isFinished() {
     return pid_driveXController.atSetpoint() && pid_driveYController.atSetpoint() && pid_turnController.atSetpoint();
+  }
+
+  public static Transform2d translationToTransform(double x, double y) {
+    return new Transform2d(new Translation2d(x, y), new Rotation2d());
   }
 }

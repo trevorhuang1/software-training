@@ -73,6 +73,9 @@ public class Swerve extends SubsystemBase {
             modules[2].getPosition(), modules[3].getPosition() },
         new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
 
+    if (Robot.isSimulation()) {
+      // resetOdometry(new Pose2d(new Translation2d(1, 1), new Rotation2d(Units.degreesToRadians(90))));
+    }
   }
 
   public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
@@ -116,8 +119,9 @@ public class Swerve extends SubsystemBase {
     gyro.resetGyro();
 
     swerveDrivePoseEstimator.resetPosition(getRotation2d(),
-        new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
-            modules[2].getPosition(), modules[3].getPosition() },
+        new SwerveModulePosition[] { new SwerveModulePosition(0, new Rotation2d(0)),
+            new SwerveModulePosition(0, new Rotation2d(0)),
+            new SwerveModulePosition(0, new Rotation2d(0)), new SwerveModulePosition(0, new Rotation2d(0)) },
         pose);
   }
 

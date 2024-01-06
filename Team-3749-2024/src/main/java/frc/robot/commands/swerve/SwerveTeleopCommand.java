@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
@@ -56,12 +57,11 @@ public class SwerveTeleopCommand extends Command {
 
   @Override
   public void initialize() {
-    pid_turnController.enableContinuousInput(-Math.PI, Math.PI);
+    pid_turnController.enableContinuousInput(0, 2 * Math.PI);
   }
 
   @Override
   public void execute() {
-    // 1. Get real-time joystick inputs
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = 0;
@@ -69,33 +69,36 @@ public class SwerveTeleopCommand extends Command {
     double xTurnPos = xTurningSpdFunction.get();
     double yTurnPos = yTurningSpdFunction.get();
 
-    // 2. Apply deadband
     xSpeed = Math.abs(xSpeed) > ControllerConstants.deadband ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > ControllerConstants.deadband ? ySpeed : 0.0;
     xTurnPos = Math.abs(xTurnPos) > ControllerConstants.deadband ? xTurnPos : 0.0;
     yTurnPos = Math.abs(yTurnPos) > ControllerConstants.deadband ? yTurnPos : 0.0;
 
-    // 3. Make the driving smoother with consistent accelerations
+    if (xSpeed == 0 && ySpeed == 0 && xTurnPos == 0 && yTurnPos == 0) {
+      return;
+    }
+
     xSpeed = xLimiter.calculate(xSpeed * DriveConstants.maxSpeedMetersPerSecond);
     ySpeed = yLimiter.calculate(ySpeed * DriveConstants.maxSpeedMetersPerSecond);
 
-    // do some cool magical trig to find theta and then convert it into unsigned rad
-    double currentRotationRad = MathUtil.angleModulus(swerve.getRotation2d().getRadians());
+    // do some cool magical trig to find theta
+    double currentRotationRad = swerve.getRotation2d().getRadians();
     double desiredRotationRad = Math.atan2(xTurnPos, yTurnPos);
 
-    // slowly ramp up speed
     turningSpeed = turningLimiter
         .calculate(pid_turnController.calculate(currentRotationRad, desiredRotationRad));
 
-    // 4. Construct desired chassis speeds relative to the field
+    SmartDashboard.putNumber("data", currentRotationRad);
+    SmartDashboard.putNumber("data2", desiredRotationRad);
+
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
 
     // if (Robot.isSimulation()) {
-    //   PIDValues.kP_teleopTurn = PIDTuner.update(PIDValues.kP_teleopTurn, 0.005,
-    //       new TurnToAngle(new Rotation2d(Math.PI)));
+    // PIDValues.kP_teleopTurn = PIDTuner.update(PIDValues.kP_teleopTurn, 0.005,
+    // new TurnToAngle(new Rotation2d(Math.PI)));
     // } else {
-    //   throw new Error("TeleopCommand@93 -- DID NOT REMOVE PID TUNER");
+    // throw new Error("TeleopCommand -- DID NOT REMOVE PID TUNER");
     // }
 
     // set chassis speeds

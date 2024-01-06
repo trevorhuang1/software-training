@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve.sim;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -16,10 +17,16 @@ public class GyroSim implements GyroIO {
     Rotation2d currentRotationDiff = new Rotation2d(angleDiffRad);
 
     gyroData.yawDeg = (gyroData.yawDeg + currentRotationDiff.getDegrees()) % 360;
+    gyroData.yawDeg = (gyroData.yawDeg + 720) % 360;
   }
 
   @Override
   public void resetGyro() {
-    gyroData = new GyroData();
+    GyroData newData = new GyroData();
+
+    // set all gyroData values to newData values
+    gyroData.pitch = newData.pitch;
+    gyroData.roll = newData.roll;
+    gyroData.yawDeg = newData.yawDeg;
   }
 }

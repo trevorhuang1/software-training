@@ -123,6 +123,5 @@ public class JoystickIO {
         () -> -pilot.getRightX(),
         () -> -pilot.getRightY())); // Clockwise positive by default, so we invert
     // here
-
   }
 }

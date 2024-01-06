@@ -23,7 +23,6 @@ public class RobotContainer {
   private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
 
   public RobotContainer() {
-
     DriverStation.silenceJoystickConnectionWarning(true);
     DriverStation.removeRefreshedDataEventHandle(44000);
 
@@ -34,7 +33,6 @@ public class RobotContainer {
     // DriverStation.startDataLog(DataLogManager.getLog(), true);
 
     RobotController.setBrownoutVoltage(7.0);
-
   }
 
   private void configureBindings() {
@@ -43,6 +41,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new MoveToPose(new Pose2d(new Translation2d(3, 3), new Rotation2d(Math.PI)));
+    return new MoveToPose(new Pose2d(new Translation2d(5, 8), new Rotation2d(Units.degreesToRadians(270))));
   }
 }
