@@ -80,6 +80,7 @@ public class MoveToPose extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    swerve.stopModules();
     SmartDashboard.putNumber("ended", 0);
   }
 
