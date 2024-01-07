@@ -24,13 +24,13 @@ public class Constants {
       public static double kP_teleopTurn = 1.3;
       public static double kD_teleopTurn = 0.0;
 
-      public static double kP_MiscDrive = 0.55;
-      public static double kD_MiscDrive = 0;
-      public static double kP_MiscTurn = 0.245;
-      public static double kD_MiscTurn = 0;
+      public static double kP_MiscDrive = 0.42;
+      public static double kD_MiscDrive = 0.02;
+      public static double kP_MiscTurn = 0.15;
+      public static double kD_MiscTurn = 0.003;
 
-      public static double kP_TurnToAngle = 0.1;
-      public static double kD_TurnToAngle = 0.0;
+      public static double kP_TurnToAngle = 0.15;
+      public static double kD_TurnToAngle = 0.008;
     }
   }
 

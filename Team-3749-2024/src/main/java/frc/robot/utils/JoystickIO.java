@@ -16,7 +16,8 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.swerve.MoveToPose;
-import frc.robot.commands.swerve.SwerveTeleopCommand;
+import frc.robot.commands.swerve.Teleop;
+import frc.robot.commands.swerve.TeleopJoystickRelative;
 import frc.robot.subsystems.swerve.Swerve;
 
 /**
@@ -116,7 +117,7 @@ public class JoystickIO {
    * Sets the default commands
    */
   public void setDefaultCommands() {
-    swerve.setDefaultCommand(new SwerveTeleopCommand(
+    swerve.setDefaultCommand(new TeleopJoystickRelative(
 
         () -> -pilot.getLeftY(), // - is up, + is down by default so we invert here
         () -> -pilot.getLeftX(), // Positive is left, negative is right by default so we invert here

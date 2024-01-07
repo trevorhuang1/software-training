@@ -32,8 +32,7 @@ import frc.robot.utils.Constants.Sim.PIDValues;;
  *         Default command to control the SwervedriveSubsystem with joysticks
  */
 
-public class SwerveTeleopCommand extends Command {
-
+public class Teleop extends Command {
   private final Swerve swerve;
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction, yTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
@@ -41,7 +40,7 @@ public class SwerveTeleopCommand extends Command {
   private final PIDController pid_turnController = new PIDController(PIDValues.kP_teleopTurn, 0,
       PIDValues.kD_teleopTurn);
 
-  public SwerveTeleopCommand(
+  public Teleop(
       Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction,
       Supplier<Double> yTurningSpdFunction) {
     this.swerve = Robot.swerve;
@@ -66,26 +65,16 @@ public class SwerveTeleopCommand extends Command {
   public void execute() {
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
-    double turningSpeed = 0;
-
-    double xTurnPos = xTurningSpdFunction.get();
-    double yTurnPos = yTurningSpdFunction.get();
+    double turningSpeed = xTurningSpdFunction.get();
 
     xSpeed = Math.abs(xSpeed) > ControllerConstants.deadband ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > ControllerConstants.deadband ? ySpeed : 0.0;
-    xTurnPos = Math.abs(xTurnPos) > ControllerConstants.deadband ? xTurnPos : 0.0;
-    yTurnPos = Math.abs(yTurnPos) > ControllerConstants.deadband ? yTurnPos : 0.0;
+    turningSpeed = Math.abs(turningSpeed) > ControllerConstants.deadband ? turningSpeed : 0.0;
 
     xSpeed = xLimiter.calculate(xSpeed * DriveConstants.maxSpeedMetersPerSecond);
     ySpeed = yLimiter.calculate(ySpeed * DriveConstants.maxSpeedMetersPerSecond);
 
-    // do some cool magical trig to find theta and convert it to unsigned rad
-    double currentRotationRad = swerve.getRotation2d().getRadians();
-    double desiredRotationRad = Math.atan2(xTurnPos, yTurnPos);
-    desiredRotationRad = (desiredRotationRad + (4 * Math.PI)) % (2 * Math.PI);
-
-    turningSpeed = turningLimiter
-        .calculate(pid_turnController.calculate(currentRotationRad, desiredRotationRad));
+    turningSpeed = turningLimiter.calculate(turningSpeed * DriveConstants.maxAngularSpeedMetersPerSecond);
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
