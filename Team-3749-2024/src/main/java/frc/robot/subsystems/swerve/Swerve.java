@@ -115,8 +115,6 @@ public class Swerve extends SubsystemBase {
 
   // Not sure that this works properly
   public void resetOdometry(Pose2d pose) {
-    if(Robot.isSimulation())
-
     swerveDrivePoseEstimator.resetPosition(getRotation2d(),
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() },
