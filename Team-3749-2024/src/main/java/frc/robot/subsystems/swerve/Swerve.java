@@ -48,6 +48,7 @@ public class Swerve extends SubsystemBase {
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> desiredStatesLog = new ShuffleData<Double[]>("swerve", "desired states",
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<Double> estimatorAngleLog = new ShuffleData<Double>("swerve", "angle", 0.0);
   private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
   private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
@@ -196,6 +197,7 @@ public class Swerve extends SubsystemBase {
     desiredStatesLog.set(desiredStates);
     odometryLog.set(
         new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+    estimatorAngleLog.set(swerveDrivePoseEstimator.getEstimatedPosition().getRotation().getDegrees());
     yawLog.set(gyro.gyroData.yawDeg);
     pitchLog.set(gyro.gyroData.pitch);
     rollLog.set(gyro.gyroData.roll);
