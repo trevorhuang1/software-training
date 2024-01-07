@@ -180,6 +180,9 @@ public class Swerve extends SubsystemBase {
         modules[3].getDesiredState().speedMetersPerSecond
     };
 
+    SmartDashboard.putNumber("rotation/s",
+        Units.radiansPerSecondToRotationsPerMinute(getChassisSpeeds().omegaRadiansPerSecond));
+
     realStatesLog.set(realStates);
     desiredStatesLog.set(desiredStates);
     odometryLog.set(

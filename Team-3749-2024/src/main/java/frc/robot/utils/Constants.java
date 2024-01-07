@@ -21,6 +21,9 @@ public class Constants {
     public static final double loopPeriodSec = 0.02;
 
     public static final class PIDValues {
+      // will eventally be easier to change values from here than poke around through
+      // files
+
       public static double kP_teleopTurn = 1.3;
       public static double kD_teleopTurn = 0.0;
 
@@ -98,9 +101,6 @@ public class Constants {
     public static final double maxAngularAccelerationMetersPerSecondSquared = Robot.isReal()
         ? DriveConstants.realMaxAngularAccelerationRadiansPerSecondSquared
         : DriveConstants.simMaxAngularAccelerationRadiansPerSecondSquared;
-
-    // will eventally be easier to change values from here than poke around through
-    // files
 
     public static final double toleranceM_Misc = 0.02;
     public static final double toleranceRad_Misc = Math.PI / 750;
