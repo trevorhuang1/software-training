@@ -7,17 +7,22 @@ import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO;
 
 public class GyroSim implements GyroIO {
-  public GyroData gyroData = new GyroData();
 
+private double yaw = 0;  
+private double pitch = 0;
+private double roll = 0;
+
+  
+
+  @Override
   public void updateData(GyroData data) {
-    gyroData = data;
-  }
+  
 
-  public void updateGyroYaw() {
     double angleDiffRad = Robot.swerve.getChassisSpeeds().omegaRadiansPerSecond * 0.02;
     Rotation2d currentRotationDiff = new Rotation2d(angleDiffRad);
-
-    gyroData.yawDeg = (gyroData.yawDeg + currentRotationDiff.getDegrees() + 360) % 360;
+    
+    yaw = (yaw + currentRotationDiff.getDegrees() + 360) % 360;
+    data.yawDeg = yaw;
   }
 
   @Override
@@ -25,8 +30,8 @@ public class GyroSim implements GyroIO {
     GyroData newData = new GyroData();
 
     // set all gyroData values to newData values
-    gyroData.pitch = newData.pitch;
-    gyroData.roll = newData.roll;
-    gyroData.yawDeg = newData.yawDeg;
+    pitch = newData.pitchDeg;
+    roll = newData.rollDeg;
+    yaw = newData.yawDeg;
   }
 }

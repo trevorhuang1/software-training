@@ -75,7 +75,7 @@ public class TurnToAngle extends Command {
     }
 
     swerve.setChassisSpeeds(newChassisSpeeds);
-    swerve.setDesiredOdometry(new Pose2d(swerve.getPose().getX(), swerve.getPose().getY(), desiredRotation));
+    swerve.logDesiredOdometry(new Pose2d(swerve.getPose().getX(), swerve.getPose().getY(), desiredRotation));
   }
 
   @Override

@@ -16,6 +16,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.subsystems.swerve.sim.GyroSim;
 import frc.robot.subsystems.swerve.sim.SwerveModuleSim;
@@ -36,7 +37,8 @@ import frc.robot.utils.Constants.DriveConstants;
 public class Swerve extends SubsystemBase {
   private SwerveModule[] modules = new SwerveModule[4];
 
-  private GyroSim gyro;
+  private GyroIO gyro;
+  private GyroData gyroData;
   // equivilant to a odometer, but also intakes vision
   private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
@@ -100,7 +102,7 @@ public class Swerve extends SubsystemBase {
   }
 
   public Rotation2d getRotation2d() {
-    return new Rotation2d(Units.degreesToRadians(gyro.gyroData.yawDeg));
+    return new Rotation2d(Units.degreesToRadians(gyroData.yawDeg));
   }
 
   public Pose2d getPose() {
@@ -128,17 +130,22 @@ public class Swerve extends SubsystemBase {
         .setDefault(new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
 
-  public void setDesiredOdometry(Pose2d odometry) {
-    desiredOdometryLog.set(new Double[] { odometry.getX(), odometry.getY(), odometry.getRotation().getDegrees() });
-  }
+
+
 
   public void updateOdometry() {
-    gyro.updateGyroYaw();
 
     swerveDrivePoseEstimator.update(getRotation2d(),
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() });
   }
+
+
+
+  public void logDesiredOdometry(Pose2d odometry) {
+    desiredOdometryLog.set(new Double[] { odometry.getX(), odometry.getY(), odometry.getRotation().getDegrees() });
+  }
+
 
   public void stopModules() {
     for (SwerveModule module : modules) {
@@ -156,12 +163,13 @@ public class Swerve extends SubsystemBase {
   }
 
   public double getVerticalTilt() {
-    return gyro.gyroData.pitch;
+    return gyroData.pitchDeg;
   }
 
   @Override
   public void periodic() {
     updateOdometry();
+    gyro.updateData(gyroData);
 
     for (int i = 0; i < 4; i++) {
       modules[i].periodic();
@@ -196,8 +204,8 @@ public class Swerve extends SubsystemBase {
     desiredStatesLog.set(desiredStates);
     odometryLog.set(
         new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
-    yawLog.set(gyro.gyroData.yawDeg);
-    pitchLog.set(gyro.gyroData.pitch);
-    rollLog.set(gyro.gyroData.roll);
+    yawLog.set(gyroData.yawDeg);
+    pitchLog.set(gyroData.pitchDeg);
+    rollLog.set(gyroData.rollDeg);
   }
 }
