@@ -33,7 +33,7 @@ public class RobotContainer {
     // DriverStation.startDataLog(DataLogManager.getLog(), true);
 
     RobotController.setBrownoutVoltage(7.0);
-    // Robot.swerve.resetOdometry(new Pose2d(1, 1, Rotation2d.fromDegrees(90)));
+    Robot.swerve.resetOdometry(new Pose2d(1, 1, Rotation2d.fromDegrees(90)));
   }
 
   private void configureBindings() {
