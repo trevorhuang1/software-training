@@ -40,7 +40,6 @@ public class TurnToAngle extends Command {
     this.desiredRotation = desiredRotation;
     this.preserveVelocity = preserveVelocity;
     addRequirements(swerve);
-
   }
 
   @Override
@@ -57,6 +56,9 @@ public class TurnToAngle extends Command {
     double turnVelo = pid_turnController.calculate(swerve.getRotation2d().getRadians(),
         desiredRotation.getRadians());
     turnVelo = slewLimit_turn.calculate(turnVelo * DriveConstants.maxAngularSpeedMetersPerSecond);
+
+    SmartDashboard.putNumber("cmdcurRot", swerve.getRotation2d().getRadians());
+    SmartDashboard.putNumber("cmddesRot", desiredRotation.getRadians());
 
     ChassisSpeeds newChassisSpeeds;
     if (preserveVelocity) {
@@ -75,6 +77,7 @@ public class TurnToAngle extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    swerve.stopModules();
   }
 
   @Override

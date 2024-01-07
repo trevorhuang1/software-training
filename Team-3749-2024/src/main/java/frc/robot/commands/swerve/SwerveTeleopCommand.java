@@ -87,9 +87,6 @@ public class SwerveTeleopCommand extends Command {
     turningSpeed = turningLimiter
         .calculate(pid_turnController.calculate(currentRotationRad, desiredRotationRad));
 
-    SmartDashboard.putNumber("teleopcurRot", currentRotationRad);
-    SmartDashboard.putNumber("teleopdesRot", desiredRotationRad);
-
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
 

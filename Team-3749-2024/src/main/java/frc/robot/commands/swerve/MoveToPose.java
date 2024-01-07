@@ -72,9 +72,6 @@ public class MoveToPose extends Command {
     driveYVeloM = slewLimit_x.calculate(driveYVeloM * DriveConstants.maxSpeedMetersPerSecond);
     turnVelo = slewLimit_turn.calculate(turnVelo * DriveConstants.maxAngularSpeedMetersPerSecond);
 
-    SmartDashboard.putNumber("cmdcurRot", swerve.getRotation2d().getRadians());
-    SmartDashboard.putNumber("cmddesRot", targetPose.getRotation().getRadians());
-
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveXVeloM,
         driveYVeloM, turnVelo, swerve.getRotation2d());
 
