@@ -76,6 +76,7 @@ public class MoveToPose extends Command {
         driveYVeloM, turnVelo, swerve.getRotation2d());
 
     swerve.setChassisSpeeds(chassisSpeeds);
+    swerve.setDesiredOdometry(targetPose);
   }
 
   @Override

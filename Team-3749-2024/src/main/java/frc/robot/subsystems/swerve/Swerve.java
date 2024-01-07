@@ -42,6 +42,8 @@ public class Swerve extends SubsystemBase {
 
   private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>("swerve", "odometry",
       new Double[] { 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<Double[]> desiredOdometryLog = new ShuffleData<Double[]>("swerve", "desiredOdometry",
+      new Double[] { 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> realStatesLog = new ShuffleData<Double[]>("swerve", "real states",
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> desiredStatesLog = new ShuffleData<Double[]>("swerve", "desired states",
@@ -117,10 +119,13 @@ public class Swerve extends SubsystemBase {
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() },
         pose);
+
+    desiredOdometryLog
+        .setDefault(new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
 
-  public void setDesiredOdometry(Rotation2d robotRotation, SwerveModulePosition[] modules) {
-    swerveDrivePoseEstimator.update(robotRotation, modules);
+  public void setDesiredOdometry(Pose2d odometry) {
+    desiredOdometryLog.set(new Double[] { odometry.getX(), odometry.getY(), odometry.getRotation().getDegrees() });
   }
 
   public void updateOdometry() {
@@ -187,7 +192,6 @@ public class Swerve extends SubsystemBase {
     desiredStatesLog.set(desiredStates);
     odometryLog.set(
         new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
-
     yawLog.set(gyro.gyroData.yawDeg);
     pitchLog.set(gyro.gyroData.pitch);
     rollLog.set(gyro.gyroData.roll);

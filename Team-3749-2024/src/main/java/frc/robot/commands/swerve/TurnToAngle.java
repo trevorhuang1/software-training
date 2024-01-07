@@ -2,6 +2,7 @@ package frc.robot.commands.swerve;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +19,8 @@ public class TurnToAngle extends Command {
   private Rotation2d desiredRotation = new Rotation2d(0);
   private boolean preserveVelocity = false;
 
-  private final PIDController pid_turnController = new PIDController(PIDValues.kP_TurnToAngle, 0, PIDValues.kD_TurnToAngle);
+  private final PIDController pid_turnController = new PIDController(PIDValues.kP_TurnToAngle, 0,
+      PIDValues.kD_TurnToAngle);
   private final SlewRateLimiter slewLimit_turn = new SlewRateLimiter(
       DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
 
@@ -73,6 +75,7 @@ public class TurnToAngle extends Command {
     }
 
     swerve.setChassisSpeeds(newChassisSpeeds);
+    swerve.setDesiredOdometry(new Pose2d(swerve.getPose().getX(), swerve.getPose().getY(), desiredRotation));
   }
 
   @Override
