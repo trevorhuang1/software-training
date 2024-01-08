@@ -34,10 +34,10 @@ public class Constants {
       public static double kP_TurnToAngle = 0.15;
       public static double kD_TurnToAngle = 0.008;
 
-      public static double kP_PathPlannerDrive = 22;
+      public static double kP_PathPlannerDrive = 5.2;
       public static double kD_PathPlannerDrive = 0.01;
 
-      public static double kP_PathPlannerTurn = 18;
+      public static double kP_PathPlannerTurn = 3.9;
       public static double kD_PathPlannerTurn = 0.0;
     }
   }
