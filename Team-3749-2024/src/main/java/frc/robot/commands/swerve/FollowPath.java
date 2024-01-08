@@ -25,7 +25,7 @@ import frc.robot.utils.Constants.Sim.PIDValues;
 
 public class FollowPath {
   private static Swerve swerve = Robot.swerve;
-  public static Consumer<Pose2d> pathTargetPose = pose -> swerve.setDesiredOdometry(pose);
+  public static Consumer<Pose2d> pathTargetPose = pose -> swerve.logDesiredOdometry(pose);
 
   /***
    * @param swerve      the subsystem object. Do not make a new instance
