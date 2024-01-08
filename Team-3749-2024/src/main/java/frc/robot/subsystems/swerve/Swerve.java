@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.proto.Rotation2dProto;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -75,10 +77,10 @@ public class Swerve extends SubsystemBase {
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() },
         new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
-    
 
     if (Robot.isSimulation()) {
-      // resetOdometry(new Pose2d(new Translation2d(1, 1), new Rotation2d(Units.degreesToRadians(270))));
+      // resetOdometry(new Pose2d(new Translation2d(1, 1), new
+      // Rotation2d(Units.degreesToRadians(270))));
     }
   }
 
@@ -104,15 +106,15 @@ public class Swerve extends SubsystemBase {
   }
 
   public Rotation2d getRotation2d() {
-    
+
     Rotation2d rotation = swerveDrivePoseEstimator.getEstimatedPosition().getRotation();
     // return rotation;
     double heading = rotation.getDegrees();
 
-    if (heading<0){
-      heading+= 360;
+    if (heading < 0) {
+      heading += 360;
     }
-    return new Rotation2d(heading/180 *Math.PI);
+    return new Rotation2d(heading / 180 * Math.PI);
   }
 
   public Pose2d getPose() {
@@ -133,14 +135,14 @@ public class Swerve extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     // convert to -pi to pi
-    Rotation2d gyroHeading = new Rotation2d(gyroData.yawDeg/180*Math.PI);
+    Rotation2d gyroHeading = new Rotation2d(gyroData.yawDeg / 180 * Math.PI);
     // if (gyroData.yawDeg>180){
-    //   gyroHeading = new Rotation2d((gyroData.yawDeg-360)/180 * Math.PI);
+    // gyroHeading = new Rotation2d((gyroData.yawDeg-360)/180 * Math.PI);
     // }
     // else{
-    //   gyroHeading = new Rotation2d(gyroData.yawDeg/180 * Math.PI);
+    // gyroHeading = new Rotation2d(gyroData.yawDeg/180 * Math.PI);
     // }
-    
+
     swerveDrivePoseEstimator.resetPosition(gyroHeading,
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() },
@@ -153,13 +155,7 @@ public class Swerve extends SubsystemBase {
 
   public void updateOdometry() {
     // convert to -pi to pi
-    Rotation2d gyroHeading = new Rotation2d(gyroData.yawDeg/180*Math.PI);
-    if (gyroData.yawDeg>180){
-      gyroHeading = new Rotation2d((gyroData.yawDeg-360)/180 * Math.PI);
-    }
-    else{
-      gyroHeading = new Rotation2d(gyroData.yawDeg/180 * Math.PI);
-    }
+    Rotation2d gyroHeading = Rotation2d.fromRadians(MathUtil.angleModulus(Units.degreesToRadians(gyroData.yawDeg)));
 
     swerveDrivePoseEstimator.update(gyroHeading,
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
