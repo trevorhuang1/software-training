@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -38,7 +39,7 @@ public class Swerve extends SubsystemBase {
   private SwerveModule[] modules = new SwerveModule[4];
 
   private GyroIO gyro;
-  private GyroData gyroData;
+  private GyroData gyroData = new GyroData();
   // equivilant to a odometer, but also intakes vision
   private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
@@ -53,6 +54,7 @@ public class Swerve extends SubsystemBase {
   private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
   private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
+  private ShuffleData<Double> headingLog = new ShuffleData<Double>("swerve", "heading", 0.0);
 
   public Swerve() {
     if (!Robot.isReal()) {
@@ -71,11 +73,11 @@ public class Swerve extends SubsystemBase {
         new Rotation2d(0),
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() },
-        new Pose2d(new Translation2d(0, 0), new Rotation2d(0, 0)));
+        new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+    
 
     if (Robot.isSimulation()) {
-      // resetOdometry(new Pose2d(new Translation2d(1, 1), new
-      // Rotation2d(Units.degreesToRadians(90))));
+      // resetOdometry(new Pose2d(new Translation2d(1, 1), new Rotation2d(Units.degreesToRadians(270))));
     }
   }
 
@@ -98,11 +100,18 @@ public class Swerve extends SubsystemBase {
 
   public void resetGyro() {
     gyro.resetGyro();
-    System.out.println("GYRO RESET");
   }
 
   public Rotation2d getRotation2d() {
-    return new Rotation2d(Units.degreesToRadians(gyroData.yawDeg));
+    
+    Rotation2d rotation = swerveDrivePoseEstimator.getEstimatedPosition().getRotation();
+    // return rotation;
+    double heading = rotation.getDegrees();
+
+    if (heading<0){
+      heading+= 360;
+    }
+    return new Rotation2d(heading/180 *Math.PI);
   }
 
   public Pose2d getPose() {
@@ -116,36 +125,50 @@ public class Swerve extends SubsystemBase {
   }
 
   // Not sure that this works properly
-  /* 
-    Note from Neel: it doesn't ;( any commands that rely on setChassisSpeeds() work relative to the new rotation 
-    and go the correct direction
-  */
+  /*
+   * Note from Neel: it doesn't ;( any commands that rely on setChassisSpeeds()
+   * work relative to the new rotation
+   * and go the correct direction
+   */
   public void resetOdometry(Pose2d pose) {
-    swerveDrivePoseEstimator.resetPosition(getRotation2d(),
+    // convert to -pi to pi
+    Rotation2d gyroHeading = new Rotation2d(gyroData.yawDeg/180*Math.PI);
+    // if (gyroData.yawDeg>180){
+    //   gyroHeading = new Rotation2d((gyroData.yawDeg-360)/180 * Math.PI);
+    // }
+    // else{
+    //   gyroHeading = new Rotation2d(gyroData.yawDeg/180 * Math.PI);
+    // }
+    
+    swerveDrivePoseEstimator.resetPosition(gyroHeading,
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() },
         pose);
 
+    // Not sure that this is needed
     desiredOdometryLog
         .setDefault(new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
 
-
-
-
   public void updateOdometry() {
+    // convert to -pi to pi
+    Rotation2d gyroHeading = new Rotation2d(gyroData.yawDeg/180*Math.PI);
+    if (gyroData.yawDeg>180){
+      gyroHeading = new Rotation2d((gyroData.yawDeg-360)/180 * Math.PI);
+    }
+    else{
+      gyroHeading = new Rotation2d(gyroData.yawDeg/180 * Math.PI);
+    }
 
-    swerveDrivePoseEstimator.update(getRotation2d(),
+    swerveDrivePoseEstimator.update(gyroHeading,
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() });
+
   }
-
-
 
   public void logDesiredOdometry(Pose2d odometry) {
     desiredOdometryLog.set(new Double[] { odometry.getX(), odometry.getY(), odometry.getRotation().getDegrees() });
   }
-
 
   public void stopModules() {
     for (SwerveModule module : modules) {
@@ -168,6 +191,7 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     updateOdometry();
     gyro.updateData(gyroData);
 
@@ -207,5 +231,6 @@ public class Swerve extends SubsystemBase {
     yawLog.set(gyroData.yawDeg);
     pitchLog.set(gyroData.pitchDeg);
     rollLog.set(gyroData.rollDeg);
+    headingLog.set(getRotation2d().getDegrees());
   }
 }

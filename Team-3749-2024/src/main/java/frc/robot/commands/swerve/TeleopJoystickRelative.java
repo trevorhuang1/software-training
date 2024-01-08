@@ -71,6 +71,8 @@ public class TeleopJoystickRelative extends Command {
     double xTurnPos = xTurningSpdFunction.get();
     double yTurnPos = yTurningSpdFunction.get();
 
+
+
     xSpeed = Math.abs(xSpeed) > ControllerConstants.deadband ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > ControllerConstants.deadband ? ySpeed : 0.0;
     xTurnPos = Math.abs(xTurnPos) > ControllerConstants.deadband ? xTurnPos : 0.0;
@@ -82,14 +84,18 @@ public class TeleopJoystickRelative extends Command {
     // do some cool magical trig to find theta and convert it to unsigned rad
     double currentRotationRad = swerve.getRotation2d().getRadians();
     double desiredRotationRad = Math.atan2(xTurnPos, yTurnPos);
+
     desiredRotationRad = (desiredRotationRad + (4 * Math.PI)) % (2 * Math.PI);
 
-    if (xTurnPos < 0.1 && yTurnPos < 0.1) {
+
+    if (Math.abs(xTurnPos )< ControllerConstants.deadband && Math.abs(yTurnPos) < ControllerConstants.deadband) {
       turningSpeed = 0;
     } else {
       turningSpeed = turningLimiter
           .calculate(pid_turnController.calculate(currentRotationRad, desiredRotationRad));
     }
+
+
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());

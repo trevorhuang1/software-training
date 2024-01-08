@@ -33,7 +33,7 @@ public class RobotContainer {
     // DriverStation.startDataLog(DataLogManager.getLog(), true);
 
     RobotController.setBrownoutVoltage(7.0);
-    Robot.swerve.resetOdometry(new Pose2d(1, 1, Rotation2d.fromDegrees(90)));
+    Robot.swerve.resetOdometry(new Pose2d(1, 1, new Rotation2d(Math.PI * 11/6)));
   }
 
   private void configureBindings() {
@@ -44,7 +44,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     
 
-    Command command = new MoveToPose(new Pose2d(5, 7, new Rotation2d(Math.PI / 2)));
+    Command command = new MoveToPose(new Pose2d(2, 2, new Rotation2d(11/6 *Math.PI)));
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
     return command;
   }

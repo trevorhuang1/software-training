@@ -40,7 +40,7 @@ public class PIDTuner {
     Trigger runCMD = controller.triangle();
     runCMD.onTrue(command);
 
-    Robot.swerve.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+    // Robot.swerve.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
 
     return newVal;
   }
