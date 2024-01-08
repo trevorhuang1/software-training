@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.swerve.FollowPath;
 import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.TurnToAngle;
 import frc.robot.utils.JoystickIO;
@@ -42,10 +43,11 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    
 
-    Command command = new MoveToPose(new Pose2d(2, 2, new Rotation2d(11/6 *Math.PI)));
+    // Command command = new MoveToPose(new Pose2d(5, 7, new Rotation2d(Math.PI /
+    // 2)));
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
+    Command command = FollowPath.followPath("CirclePath");
     return command;
   }
 }

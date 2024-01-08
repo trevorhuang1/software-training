@@ -51,6 +51,7 @@ public class Swerve extends SubsystemBase {
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> desiredStatesLog = new ShuffleData<Double[]>("swerve", "desired states",
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<Double> estimatorAngleLog = new ShuffleData<Double>("swerve", "angle", 0.0);
   private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
   private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);

@@ -23,7 +23,6 @@ public class Constants {
     public static final class PIDValues {
       // will eventally be easier to change values from here than poke around through
       // files
-
       public static double kP_teleopTurn = 1.3;
       public static double kD_teleopTurn = 0.0;
 
@@ -34,6 +33,12 @@ public class Constants {
 
       public static double kP_TurnToAngle = 0.15;
       public static double kD_TurnToAngle = 0.008;
+
+      public static double kP_PathPlannerDrive = 22;
+      public static double kD_PathPlannerDrive = 0.01;
+
+      public static double kP_PathPlannerTurn = 18;
+      public static double kD_PathPlannerTurn = 0.0;
     }
   }
 
