@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -19,15 +21,23 @@ import frc.robot.RobotContainer;
  */
 
 public class PIDTuner {
-  private static CommandPS5Controller controller = new CommandPS5Controller(4);
-  
+  static boolean shouldRun = false;
+
   public PIDTuner() {
   }
 
-  public static double update(double currentVal, double interval, Command command) {
-    boolean dec = controller.getHID().getL1Button();
-    boolean inc = controller.getHID().getR1Button();
-    
+  public static double update(double currentVal, double interval, Command command, double error,
+      double okErr) {
+    boolean inc = false, dec = false;
+
+    if (okErr < 0) {
+      inc = true;
+    } else if (error > okErr) {
+      dec = true;
+    } else {
+      return currentVal;
+    }
+
     double newVal = currentVal;
     if (dec) {
       newVal = currentVal - interval;
@@ -37,10 +47,16 @@ public class PIDTuner {
 
     SmartDashboard.putNumber("PIDTuner-newVal", newVal);
 
-    Trigger runCMD = controller.triangle();
-    runCMD.onTrue(command);
+    shouldRun = !shouldRun;
+    Trigger newTrig = new Trigger(() -> shouldRun);
 
-    // Robot.swerve.resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+    newTrig.onTrue(command);
+    command.andThen(() -> {
+      Robot.swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+    });
+
+    // Robot.swerve.resetOdometry(new Pose2d(new Translation2d(0, 0), new
+    // Rotation2d(0)));
 
     return newVal;
   }

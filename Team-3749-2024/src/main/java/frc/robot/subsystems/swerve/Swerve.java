@@ -53,11 +53,12 @@ public class Swerve extends SubsystemBase {
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> desiredStatesLog = new ShuffleData<Double[]>("swerve", "desired states",
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
-  private ShuffleData<Double> estimatorAngleLog = new ShuffleData<Double>("swerve", "angle", 0.0);
   private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
   private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
   private ShuffleData<Double> headingLog = new ShuffleData<Double>("swerve", "heading", 0.0);
+
+  public Pose2d desiredPose = new Pose2d(0, 0, getRotation2d());
 
   public Swerve() {
     if (!Robot.isReal()) {
@@ -164,6 +165,7 @@ public class Swerve extends SubsystemBase {
   }
 
   public void logDesiredOdometry(Pose2d odometry) {
+    desiredPose = odometry;
     desiredOdometryLog.set(new Double[] { odometry.getX(), odometry.getY(), odometry.getRotation().getDegrees() });
   }
 
@@ -218,7 +220,7 @@ public class Swerve extends SubsystemBase {
         modules[3].getDesiredState().speedMetersPerSecond
     };
 
-    SmartDashboard.putNumber("rotation/s",
+    SmartDashboard.putNumber("rotation per s",
         Units.radiansPerSecondToRotationsPerMinute(getChassisSpeeds().omegaRadiansPerSecond));
 
     realStatesLog.set(realStates);

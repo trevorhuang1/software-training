@@ -71,8 +71,6 @@ public class TeleopJoystickRelative extends Command {
     double xTurnPos = xTurningSpdFunction.get();
     double yTurnPos = yTurningSpdFunction.get();
 
-
-
     xSpeed = Math.abs(xSpeed) > ControllerConstants.deadband ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > ControllerConstants.deadband ? ySpeed : 0.0;
     xTurnPos = Math.abs(xTurnPos) > ControllerConstants.deadband ? xTurnPos : 0.0;
@@ -87,24 +85,20 @@ public class TeleopJoystickRelative extends Command {
 
     desiredRotationRad = (desiredRotationRad + (4 * Math.PI)) % (2 * Math.PI);
 
-
-    if (Math.abs(xTurnPos )< ControllerConstants.deadband && Math.abs(yTurnPos) < ControllerConstants.deadband) {
+    if (Math.abs(xTurnPos) < ControllerConstants.deadband && Math.abs(yTurnPos) < ControllerConstants.deadband) {
       turningSpeed = 0;
     } else {
       turningSpeed = turningLimiter
           .calculate(pid_turnController.calculate(currentRotationRad, desiredRotationRad));
     }
 
-
-
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
 
     // if (Robot.isSimulation()) {
-    // PIDValues.kP_teleopTurn = PIDTuner.update(PIDValues.kP_teleopTurn, 0.005,
-    // new TurnToAngle(new Rotation2d(Math.PI)));
-    // } else {
-    // throw new Error("TeleopCommand -- DID NOT REMOVE PID TUNER");
+    //   PIDValues.kP_PathPlannerDrive = PIDTuner.update(PIDValues.kP_PathPlannerDrive, 0.1,
+    //       FollowPath.followPath("circlePath"),
+    //       swerve.desiredOdometry[0] - swerve.getPose().getX(), 0.1);
     // }
 
     // set chassis speeds

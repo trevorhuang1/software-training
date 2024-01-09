@@ -43,8 +43,8 @@ public class FollowPath {
         new InstantCommand(() -> {
           // Reset odometry for the first path you run during auto
           if (isFirstPath) {
-            // swerve.resetGyro();
-            // swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
+
+            swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
           }
         }),
         new FollowPathWithEvents(
@@ -56,9 +56,12 @@ public class FollowPath {
                 // ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live
                     // in your Constants class
-                    new PIDConstants(PIDValues.kP_PathPlannerDrive, 0.0, PIDValues.kD_PathPlannerDrive), // Translation PID constants
-                    new PIDConstants(PIDValues.kP_PathPlannerTurn, 0.0, PIDValues.kD_PathPlannerTurn), // Rotation PID constants
-                    5, // Max module speed, in m/s
+                    new PIDConstants(PIDValues.kP_PathPlannerDrive, 0.0, PIDValues.kD_PathPlannerDrive), // Translation
+                                                                                                         // PID
+                                                                                                         // constants
+                    new PIDConstants(PIDValues.kP_PathPlannerTurn, 0.0, PIDValues.kD_PathPlannerTurn), // Rotation PID
+                                                                                                       // constants
+                    Constants.DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s
                     Math.sqrt(2 * (DriveConstants.trackWidth * DriveConstants.trackWidth)), // Drivetrain radius
                     new ReplanningConfig() // Default path replanning config. See the API for the
                 // options here
