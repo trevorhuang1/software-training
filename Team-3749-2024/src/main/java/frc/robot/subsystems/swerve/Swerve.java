@@ -58,7 +58,7 @@ public class Swerve extends SubsystemBase {
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
   private ShuffleData<Double> headingLog = new ShuffleData<Double>("swerve", "heading", 0.0);
 
-  public Pose2d desiredPose = new Pose2d(0, 0, getRotation2d());
+  public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 
   public Swerve() {
     if (!Robot.isReal()) {

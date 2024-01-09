@@ -47,7 +47,7 @@ public class RobotContainer {
     // Command command = new MoveToPose(new Pose2d(5, 7, new Rotation2d(Math.PI /
     // 2)));
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
-    Command command = FollowPath.followPath("CirclePath");
+    Command command = FollowPath.followPathSequential(new String[] {"CirclePath", "SquigglyPath"});
     return command;
   }
 }

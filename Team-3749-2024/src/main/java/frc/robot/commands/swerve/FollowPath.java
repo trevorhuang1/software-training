@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -26,6 +27,7 @@ import frc.robot.utils.Constants.Sim.PIDValues;
 public class FollowPath {
   private static Swerve swerve = Robot.swerve;
   public static Consumer<Pose2d> pathTargetPose = pose -> swerve.logDesiredOdometry(pose);
+  static boolean isFirstPath = true;
 
   /***
    * @param swerve      the subsystem object. Do not make a new instance
@@ -36,48 +38,70 @@ public class FollowPath {
    * @return a SwerveControllerCommand based on the trajectory
    * @summary takes a trajectory and moves on it
    */
-  private static Command followTrajectoryCommand(PathPlannerPath path, boolean isFirstPath) {
+
+  public static Command followPath(String pathName) {
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
 
     return new SequentialCommandGroup(
         new InstantCommand(() -> {
           // Reset odometry for the first path you run during auto
           if (isFirstPath) {
-
             swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
+            isFirstPath = !isFirstPath;
           }
         }),
-        new FollowPathWithEvents(
-            new FollowPathHolonomic(
-                path,
-                swerve::getPose, // Robot pose supplier
-                swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                swerve::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE
-                // ChassisSpeeds
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live
-                    // in your Constants class
-                    new PIDConstants(PIDValues.kP_PathPlannerDrive, 0.0, PIDValues.kD_PathPlannerDrive), // Translation
-                                                                                                         // PID
-                                                                                                         // constants
-                    new PIDConstants(PIDValues.kP_PathPlannerTurn, 0.0, PIDValues.kD_PathPlannerTurn), // Rotation PID
-                                                                                                       // constants
-                    Constants.DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s
-                    Math.sqrt(2 * (DriveConstants.trackWidth * DriveConstants.trackWidth)), // Drivetrain radius
-                    new ReplanningConfig() // Default path replanning config. See the API for the
-                // options here
-                ),
-                swerve // Reference to this subsystem to set requirements
+        getPath(path));
+  }
+
+  public static SequentialCommandGroup followPathSequential(String[] pathNames) {
+    SequentialCommandGroup sequentialCommand = new SequentialCommandGroup();
+
+    for (int i = 0; i < pathNames.length; i++) {
+      PathPlannerPath path = PathPlannerPath.fromPathFile(pathNames[i]);
+      PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
+
+      if (i == 0) {
+        sequentialCommand = sequentialCommand.andThen(new InstantCommand(() -> {
+          // Reset odometry for the first path you run during auto
+          if (isFirstPath) {
+            swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
+            isFirstPath = !isFirstPath;
+          }
+
+        }));
+      } else {
+        sequentialCommand = sequentialCommand.andThen(getPath(path));
+      }
+    }
+
+    return sequentialCommand;
+  }
+
+  static FollowPathWithEvents getPath(PathPlannerPath path) {
+    return new FollowPathWithEvents(
+        new FollowPathHolonomic(
+            path,
+            swerve::getPose, // Robot pose supplier
+            swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            swerve::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE
+            // ChassisSpeeds
+            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live
+                // in your Constants class
+                new PIDConstants(PIDValues.kP_PathPlannerDrive, 0.0, PIDValues.kD_PathPlannerDrive), // Translation
+                                                                                                     // PID
+                                                                                                     // constants
+                new PIDConstants(PIDValues.kP_PathPlannerTurn, 0.0, PIDValues.kD_PathPlannerTurn), // Rotation PID
+                                                                                                   // constants
+                Constants.DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s
+                Math.sqrt(2 * (DriveConstants.trackWidth * DriveConstants.trackWidth)), // Drivetrain radius
+                new ReplanningConfig() // Default path replanning config. See the API for the
+            // options here
             ),
-            path, // FollowPathWithEvents also requires the path
-            swerve::getPose // FollowPathWithEvents also requires the robot pose supplier
-        ));
-
+            swerve // Reference to this subsystem to set requirements
+        ),
+        path, // FollowPathWithEvents also requires the path
+        swerve::getPose // FollowPathWithEvents also requires the robot pose supplier
+    );
   }
-
-  public static Command followPath(String pathName) {
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-
-    return followTrajectoryCommand(path, true);
-  }
-
 }
