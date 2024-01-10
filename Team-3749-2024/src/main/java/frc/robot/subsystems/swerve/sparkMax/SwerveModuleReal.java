@@ -29,13 +29,12 @@ public class SwerveModuleReal implements SwerveModuleIO {
     private double turnAppliedVolts = 0.0;
 
     public SwerveModuleReal() {
-        // System.out.println("[Init] Creating ModuleIOSim");
+        System.out.println("[Init] Creating ModuleIOSim");
     }
 
     @Override
     public void updateData(ModuleData data) {
         // update sim values
-
         // how far have we turned in the previous loop?
         double driveRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(driveReal.getEncoder().getVelocity()); 
         double turnRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(turnReal.getEncoder().getVelocity());
