@@ -13,14 +13,14 @@ public class Shooter extends SubsystemBase {
     // Constructor
     public Shooter(){
         if (Robot.isReal()){
-            shooterIO = new ShooterSim();
+            //shooterIO = new ShooterSim();
         }
     }
 
     // runs every 0.02 sec
     @Override
     public void periodic(){
-
+        
     }
     
 }
