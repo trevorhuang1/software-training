@@ -101,12 +101,15 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        pilot.rightTriggerWhileHeld(Commands.run(() -> Robot.shooterSim.setDesiredVoltage(2))); //i'm not sure our team's design
-        //but the point is that we're going to set different velocities for amp/speaker (more speec = speaker), obviously this is all 
-        //temporary, buttons must be changed 
-        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.shooterSim.stop()));
-        pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(4)));
-        pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.shooterSim.stop()));
+        //Command scoreAmp = Commands.parallel(() -> Robot.shooterSim.setDesiredVoltage(2), () -> Robot.intakeSim.setOuttakeVolts());
+        pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(2))); //Amp
+        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(0)));
+
+        pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(4))); //Speaker
+        pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(0)));
+
+        pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.intakeSim.setIntakeVolts(2))); //intake
+        pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.intakeSim.setIntakeVolts(0)));
     }
         
 }
