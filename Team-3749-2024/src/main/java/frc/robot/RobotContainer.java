@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -11,7 +13,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.swerve.FollowPath;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import frc.robot.commands.swerve.PathPlannerUtils;
 import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.TurnToAngle;
 import frc.robot.utils.JoystickIO;
@@ -26,6 +29,8 @@ public class RobotContainer {
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);
     DriverStation.removeRefreshedDataEventHandle(44000);
+
+    NamedCommands.registerCommand("PrintCMD-hello", new PrintCommand("hello"));
 
     configureBindings();
 
@@ -47,11 +52,9 @@ public class RobotContainer {
     // Command command = new MoveToPose(new Pose2d(5, 7, new Rotation2d(Math.PI /
     // 2)));
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
-    String[] strList = { "CirclePath", "SquigglyPath" };
+    // Command command = PathPlannerUtils.followPathSequential(new String[] { "CirclePath", "SquigglyPath" });
 
-    Command command = FollowPath.followPathSequential(strList);
-
-    // Command command = FollowPath.followPath("CirclePath").andThen(FollowPath.followPath("SquigglyPath"));
+    Command command = PathPlannerUtils.followPath(new String[] {"CirclePath", "SquigglyPath"});
     return command;
   }
 }
