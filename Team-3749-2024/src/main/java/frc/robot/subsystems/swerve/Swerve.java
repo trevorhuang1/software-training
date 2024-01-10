@@ -166,9 +166,9 @@ public class Swerve extends SubsystemBase {
 
   }
 
-  public void logDesiredOdometry(Pose2d odometry) {
-    desiredPose = odometry;
-    desiredOdometryLog.set(new Double[] { odometry.getX(), odometry.getY(), odometry.getRotation().getDegrees() });
+  public void logDesiredOdometry(Pose2d desiredPose) {
+    this.desiredPose = desiredPose;
+    desiredOdometryLog.set(new Double[] { desiredPose.getX(), desiredPose.getY(), desiredPose.getRotation().getDegrees() });
   }
 
   public void stopModules() {
