@@ -53,7 +53,7 @@ public class PathPlannerUtils {
             isFirstPath = !isFirstPath;
           }
         }),
-        new FollowPathWithEvents(getHolonomicPath(path), path, swerve::getPose));
+        new FollowPathWithEvents(getHolonomicPathCommand(path), path, swerve::getPose));
   }
 
   public static SequentialCommandGroup followPath(String[] pathNames) {
@@ -71,13 +71,13 @@ public class PathPlannerUtils {
       PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
 
       sequentialCommand = sequentialCommand
-          .andThen(new FollowPathWithEvents(getHolonomicPath(path), path, swerve::getPose));
+          .andThen(new FollowPathWithEvents(getHolonomicPathCommand(path), path, swerve::getPose));
     }
 
     return sequentialCommand;
   }
 
-  static Command getHolonomicPath(PathPlannerPath path) {
+  private static Command getHolonomicPathCommand(PathPlannerPath path) {
     return new FollowPathHolonomic(
         path,
         swerve::getPose, // Robot pose supplier
