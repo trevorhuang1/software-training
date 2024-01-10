@@ -55,24 +55,20 @@ public class FollowPath {
   }
 
   public static SequentialCommandGroup followPathSequential(String[] pathNames) {
-    SequentialCommandGroup sequentialCommand = new SequentialCommandGroup();
+    SequentialCommandGroup sequentialCommand = new SequentialCommandGroup(new InstantCommand(() -> {
+      // Reset odometry for the first path you run during auto
+      if (isFirstPath) {
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathNames[0]);
+        swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
+        isFirstPath = !isFirstPath;
+      }
+    }));
 
     for (int i = 0; i < pathNames.length; i++) {
       PathPlannerPath path = PathPlannerPath.fromPathFile(pathNames[i]);
       PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
 
-      if (i == 0) {
-        sequentialCommand = sequentialCommand.andThen(new InstantCommand(() -> {
-          // Reset odometry for the first path you run during auto
-          if (isFirstPath) {
-            swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
-            isFirstPath = !isFirstPath;
-          }
-
-        }));
-      } else {
-        sequentialCommand = sequentialCommand.andThen(getPath(path));
-      }
+      sequentialCommand = sequentialCommand.andThen(getPath(path));
     }
 
     return sequentialCommand;
