@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.swerve;
 
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.subsystems.swerve.sim.GyroSim;
 import frc.robot.subsystems.swerve.sim.SwerveModuleSim;
+import frc.robot.subsystems.swerve.sparkMax.SwerveModuleReal;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
@@ -69,7 +71,7 @@ public class Swerve extends SubsystemBase {
     } else {
       // real swerve module instatiation here
       for (int i = 0; i < 4; i++) {
-        // modules[i] = new SwerveModule(i, new <REAL SWERVE MODULE>());
+        modules[i] = new SwerveModule(i, new SwerveModuleReal());
       }
     }
 
