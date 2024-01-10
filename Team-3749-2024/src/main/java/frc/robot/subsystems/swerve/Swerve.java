@@ -24,7 +24,7 @@ import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.subsystems.swerve.sim.GyroSim;
 import frc.robot.subsystems.swerve.sim.SwerveModuleSim;
-import frc.robot.subsystems.swerve.sparkMax.SwerveModuleReal;
+import frc.robot.subsystems.swerve.real.SwerveModuleSparkMax;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
@@ -71,7 +71,7 @@ public class Swerve extends SubsystemBase {
     } else {
       // real swerve module instatiation here
       for (int i = 0; i < 4; i++) {
-        modules[i] = new SwerveModule(i, new SwerveModuleReal());
+        modules[i] = new SwerveModule(i, new SwerveModuleSparkMax());
       }
     }
 
@@ -166,9 +166,9 @@ public class Swerve extends SubsystemBase {
 
   }
 
-  public void logDesiredOdometry(Pose2d odometry) {
-    desiredPose = odometry;
-    desiredOdometryLog.set(new Double[] { odometry.getX(), odometry.getY(), odometry.getRotation().getDegrees() });
+  public void logDesiredOdometry(Pose2d desiredPose) {
+    this.desiredPose = desiredPose;
+    desiredOdometryLog.set(new Double[] { desiredPose.getX(), desiredPose.getY(), desiredPose.getRotation().getDegrees() });
   }
 
   public void stopModules() {

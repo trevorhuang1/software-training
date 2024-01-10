@@ -1,5 +1,4 @@
-package frc.robot.subsystems.swerve.sparkMax;
-
+package frc.robot.subsystems.swerve.real;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -21,14 +20,14 @@ import frc.robot.utils.Constants.Sim;
 Very closely inspired by 6328's Swerve Sim code,
  https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/drive/ModuleIOSim.java
 */
-public class SwerveModuleReal implements SwerveModuleIO {
+public class SwerveModuleSparkMax implements SwerveModuleIO {
     private CANSparkMax driveReal = new CANSparkMax(0, CANSparkMax.MotorType.kBrushless);
     private CANSparkMax turnReal = new CANSparkMax(0, CANSparkMax.MotorType.kBrushless);
     private double turnPositionRad = 0;
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
 
-    public SwerveModuleReal() {
+    public SwerveModuleSparkMax() {
         System.out.println("[Init] Creating ModuleIOSim");
     }
 
