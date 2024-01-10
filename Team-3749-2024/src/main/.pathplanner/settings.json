@@ -1,13 +1,14 @@
 {
-  "robotWidth": 0.445,
-  "robotLength": 0.4445,
+  "robotWidth": 0.44,
+  "robotLength": 0.44,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Linked Waypoints"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 2.655,
   "defaultMaxAccel": 2.5,
   "defaultMaxAngVel": 720.0,
   "defaultMaxAngAccel": 360.0,
-  "maxModuleSpeed": 2.655,
-  "choreoProjectPath": null
+  "maxModuleSpeed": 2.655
 }

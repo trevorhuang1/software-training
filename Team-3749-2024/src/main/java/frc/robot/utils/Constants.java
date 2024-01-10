@@ -3,6 +3,10 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -39,7 +43,17 @@ public class Constants {
 
       public static double kP_PathPlannerTurn = 4.2;
       public static double kD_PathPlannerTurn = 0.0;
-    }
+    };
+
+    public static HolonomicPathFollowerConfig cfg_HolonomicFollower = new HolonomicPathFollowerConfig(
+        // in your Constants class
+        new PIDConstants(PIDValues.kP_PathPlannerDrive, 0.0, PIDValues.kD_PathPlannerDrive),
+        new PIDConstants(PIDValues.kP_PathPlannerTurn, 0.0, PIDValues.kD_PathPlannerTurn),
+        Constants.DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s
+        Math.sqrt(2 * (DriveConstants.trackWidth * DriveConstants.trackWidth)), // Drivetrain radius
+        new ReplanningConfig() // Default path replanning config. See the API for the
+    // options here
+    );
   }
 
   public static final class ModuleConstants {
