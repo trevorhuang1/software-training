@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.swerve.SwerveTeleopCommand;
-import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.shooter.Shooter;
 
 /**
  * Util class for button bindings
@@ -26,12 +25,12 @@ public class JoystickIO {
     private Xbox pilot;
     private Xbox operator;
 
-    private Swerve swerve;
+    private Shooter shooter;
 
     public JoystickIO(Xbox pilot, Xbox operator) {
         this.pilot = pilot;
         this.operator = operator;
-        this.swerve = Robot.swerve;
+        this.shooter = Robot.shooter;
     }
 
     public static boolean didJoysticksChange() {
@@ -102,11 +101,12 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        swerve.setDefaultCommand(new SwerveTeleopCommand(
-
-                () -> -pilot.getLeftY(), // - is up, + is down by default so we invert here
-                () -> -pilot.getLeftX(), // Positive is left, negative is right by default so we invert here
-                () -> -pilot.getRightX())); // Clockwise positive by default, so we invert here
-
+        pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(2))); //i'm not sure our team's design
+        //but the point is that we're going to set different velocities for amp/speaker (more speec = speaker), obviously this is all 
+        //temporary, buttons must be changed 
+        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.shooterSim.stop()));
+        pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(4)));
+        pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.shooterSim.stop()));
     }
+        
 }
