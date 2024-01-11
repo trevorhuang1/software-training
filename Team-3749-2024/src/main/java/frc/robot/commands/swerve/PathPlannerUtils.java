@@ -18,6 +18,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -111,4 +112,34 @@ public class PathPlannerUtils {
     );
     return pathfindingCommand;
   }
+  public static Command getPathFindToPreplannedCommand(String pathName, PathConstraints constraints) {
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+    Translation2d targetPose = path.getPoint(0).position;
+    Command pathfindingCommand = AutoBuilder.pathfindToPose(
+      new Pose2d(targetPose.getX(), targetPose.getY(), targetPose.getAngle()),
+      constraints,
+      0
+    );
+    SequentialCommandGroup commandGroup = new SequentialCommandGroup(
+      pathfindingCommand,
+      new FollowPathWithEvents(getHolonomicPathCommand(path), path, swerve::getPose)
+      );
+    return commandGroup;
+  }
 }
+
+/*
+  public static Command followPath(String pathName) {
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> {
+          // Reset odometry for the first path you run during auto
+          if (isFirstPath) {
+            swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
+            isFirstPath = !isFirstPath;
+          }
+        }),
+        new FollowPathWithEvents(getHolonomicPathCommand(path), path, swerve::getPose));
+
+        */

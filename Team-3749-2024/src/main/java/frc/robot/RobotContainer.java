@@ -7,6 +7,7 @@ package frc.robot;
 import java.nio.file.Path;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -55,8 +56,8 @@ public class RobotContainer {
     // Command command = PathPlannerUtils.followPathSequential(new String[] {
     // "CirclePath", "SquigglyPath" });
     // Command command = PathPlannerUtils.getAutoPath();
-    Command command = PathPlannerUtils.getPathFindCommand(
-        new Pose2d(15, 6, new Rotation2d(0)),
+    Command command = PathPlannerUtils.getPathFindToPreplannedCommand(
+        "CirclePath",
         DriveConstants.pathFinderConstraints);
 
     return command;
