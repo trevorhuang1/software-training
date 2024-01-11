@@ -8,6 +8,7 @@ import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.EventMarker;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -17,6 +18,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -99,5 +101,19 @@ public class PathPlannerUtils {
         Constants.Sim.cfg_HolonomicFollower,
         swerve // Reference to this subsystem to set requirements
     );
+  }
+  public static Command getPathFindCommand(Pose2d targetPose, double maxVelocityMps, double maxAccelerationMpsSq, double maxAngularVelocityDps, double maxAngularAccelerationDpsSq) {
+    PathConstraints constraints = new PathConstraints(
+      maxVelocityMps, 
+      maxAccelerationMpsSq, 
+      Units.degreesToRadians(maxAngularVelocityDps),
+      Units.degreesToRadians(maxAngularAccelerationDpsSq)
+      );
+    Command pathfindingCommand = AutoBuilder.pathfindToPose(
+      targetPose,
+      constraints,
+      0
+    );
+    return pathfindingCommand;
   }
 }
