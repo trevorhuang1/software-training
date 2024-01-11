@@ -22,16 +22,16 @@ Very closely inspired by 6328's Swerve Sim code,
 */
 public class SwerveModuleSparkMax implements SwerveModuleIO {
     private CANSparkMax[] driveMotors = {
-        new CANSparkMax(Constants.DriveConstants.driveMotorPorts[0], CANSparkMax.MotorType.kBrushless), // FL, FR, BL, BR
-        new CANSparkMax(Constants.DriveConstants.driveMotorPorts[1], CANSparkMax.MotorType.kBrushless), // FL, FR, BL, BR
-        new CANSparkMax(Constants.DriveConstants.driveMotorPorts[2], CANSparkMax.MotorType.kBrushless), // FL, FR, BL, BR
-        new CANSparkMax(Constants.DriveConstants.driveMotorPorts[3], CANSparkMax.MotorType.kBrushless)  // FL, FR, BL, BR
+        new CANSparkMax(Constants.DriveConstants.driveMotorPorts[0], CANSparkMax.MotorType.kBrushless), // FL
+        new CANSparkMax(Constants.DriveConstants.driveMotorPorts[1], CANSparkMax.MotorType.kBrushless), // FR
+        new CANSparkMax(Constants.DriveConstants.driveMotorPorts[2], CANSparkMax.MotorType.kBrushless), // BL
+        new CANSparkMax(Constants.DriveConstants.driveMotorPorts[3], CANSparkMax.MotorType.kBrushless)  // BR
     };
     private CANSparkMax[] turnMotors = {
-        new CANSparkMax(Constants.DriveConstants.turningMotorPorts[0], CANSparkMax.MotorType.kBrushless), // FL, FR, BL, BR
-        new CANSparkMax(Constants.DriveConstants.turningMotorPorts[1], CANSparkMax.MotorType.kBrushless), // FL, FR, BL, BR
-        new CANSparkMax(Constants.DriveConstants.turningMotorPorts[2], CANSparkMax.MotorType.kBrushless), // FL, FR, BL, BR
-        new CANSparkMax(Constants.DriveConstants.turningMotorPorts[3], CANSparkMax.MotorType.kBrushless)  // FL, FR, BL, BR
+        new CANSparkMax(Constants.DriveConstants.turningMotorPorts[0], CANSparkMax.MotorType.kBrushless), // FL
+        new CANSparkMax(Constants.DriveConstants.turningMotorPorts[1], CANSparkMax.MotorType.kBrushless), // FR
+        new CANSparkMax(Constants.DriveConstants.turningMotorPorts[2], CANSparkMax.MotorType.kBrushless), // BL
+        new CANSparkMax(Constants.DriveConstants.turningMotorPorts[3], CANSparkMax.MotorType.kBrushless)  // BR
     };
     private CANSparkMax driveMotor = new CANSparkMax(0, CANSparkMax.MotorType.kBrushless);
     private CANSparkMax turnMotor = new CANSparkMax(0, CANSparkMax.MotorType.kBrushless);
