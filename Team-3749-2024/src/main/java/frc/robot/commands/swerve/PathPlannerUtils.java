@@ -61,7 +61,7 @@ public class PathPlannerUtils {
             isFirstPath = !isFirstPath;
           }
         }),
-        new FollowPathWithEvents(getHolonomicPath(path), path, swerve::getPose));
+        new FollowPathWithEvents(getHolonomicPathCommand(path), path, swerve::getPose));
   }
 
   public static Command followPath(String[] pathNames) {
@@ -91,7 +91,7 @@ public class PathPlannerUtils {
     return autoChooser.getSelected();
   }
 
-  static Command getHolonomicPath(PathPlannerPath path) {
+  private static Command getHolonomicPathCommand(PathPlannerPath path) {
     return new FollowPathHolonomic(
         path,
         swerve::getPose, // Robot pose supplier
