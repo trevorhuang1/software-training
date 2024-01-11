@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.nio.file.Path;
+
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -31,12 +33,9 @@ public class RobotContainer {
     DriverStation.removeRefreshedDataEventHandle(44000);
 
     NamedCommands.registerCommand("PrintCMD-hello", new PrintCommand("hello"));
+    PathPlannerUtils.init_PathPlannerUtils();
 
     configureBindings();
-
-    // DataLogManager.start("logs");
-    // DataLogManager.logNetworkTables(true);
-    // DriverStation.startDataLog(DataLogManager.getLog(), true);
 
     RobotController.setBrownoutVoltage(7.0);
     // Robot.swerve.resetOdometry(new Pose2d(1, 1, new Rotation2d(Math.PI * 11/6)));
@@ -53,8 +52,15 @@ public class RobotContainer {
     // 2)));
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
     // Command command = PathPlannerUtils.followPathSequential(new String[] { "CirclePath", "SquigglyPath" });
+    // Command command = PathPlannerUtils.getAutoPath();
+    Command command = PathPlannerUtils.getPathFindCommand(
+      new Pose2d(15, 6, new Rotation2d(0)),
+      3.0,
+      4.0,
+      540,
+      720
+      );
 
-    Command command = PathPlannerUtils.followPath(new String[] {"CirclePath", "SquigglyPath"});
     return command;
   }
 }
