@@ -39,11 +39,11 @@ public class PathPlannerUtils {
   static boolean isFirstPath = true;
   public static Consumer<Pose2d> pathTargetPose = pose -> swerve.logDesiredOdometry(pose);
 
-  public static void init_PathPlannerUtils() {
+  public static void initPathPlannerUtils() {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
     AutoBuilder.configureHolonomic(swerve::getPose, swerve::resetOdometry, swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
-        Constants.Sim.cfg_HolonomicFollower, swerve);
+        Constants.PathPlannerConstants.cfg_HolonomicFollower, swerve);
 
     autoChooser = AutoBuilder.buildAutoChooser("TestAuto");
 
@@ -98,17 +98,12 @@ public class PathPlannerUtils {
         swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         swerve::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE
         // ChassisSpeeds
-        Constants.Sim.cfg_HolonomicFollower,
+        Constants.PathPlannerConstants.cfg_HolonomicFollower,
         swerve // Reference to this subsystem to set requirements
     );
   }
-  public static Command getPathFindCommand(Pose2d targetPose, double maxVelocityMps, double maxAccelerationMpsSq, double maxAngularVelocityDps, double maxAngularAccelerationDpsSq) {
-    PathConstraints constraints = new PathConstraints(
-      maxVelocityMps, 
-      maxAccelerationMpsSq, 
-      Units.degreesToRadians(maxAngularVelocityDps),
-      Units.degreesToRadians(maxAngularAccelerationDpsSq)
-      );
+  public static Command getPathFindCommand(Pose2d targetPose, PathConstraints constraints) {
+
     Command pathfindingCommand = AutoBuilder.pathfindToPose(
       targetPose,
       constraints,

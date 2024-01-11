@@ -21,6 +21,7 @@ import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.TurnToAngle;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
+import frc.robot.utils.Constants.DriveConstants;
 
 public class RobotContainer {
 
@@ -33,7 +34,7 @@ public class RobotContainer {
     DriverStation.removeRefreshedDataEventHandle(44000);
 
     NamedCommands.registerCommand("PrintCMD-hello", new PrintCommand("hello"));
-    PathPlannerUtils.init_PathPlannerUtils();
+    PathPlannerUtils.initPathPlannerUtils();
 
     configureBindings();
 
@@ -51,15 +52,12 @@ public class RobotContainer {
     // Command command = new MoveToPose(new Pose2d(5, 7, new Rotation2d(Math.PI /
     // 2)));
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
-    // Command command = PathPlannerUtils.followPathSequential(new String[] { "CirclePath", "SquigglyPath" });
+    // Command command = PathPlannerUtils.followPathSequential(new String[] {
+    // "CirclePath", "SquigglyPath" });
     // Command command = PathPlannerUtils.getAutoPath();
     Command command = PathPlannerUtils.getPathFindCommand(
-      new Pose2d(15, 6, new Rotation2d(0)),
-      3.0,
-      4.0,
-      540,
-      720
-      );
+        new Pose2d(15, 6, new Rotation2d(0)),
+        DriveConstants.pathFinderConstraints);
 
     return command;
   }
