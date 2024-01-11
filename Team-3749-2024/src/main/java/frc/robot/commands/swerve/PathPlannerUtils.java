@@ -114,17 +114,12 @@ public class PathPlannerUtils {
   }
   public static Command getPathFindToPreplannedCommand(String pathName, PathConstraints constraints) {
     PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-    Translation2d targetPose = path.getPoint(0).position;
-    Command pathfindingCommand = AutoBuilder.pathfindToPose(
-      new Pose2d(targetPose.getX(), targetPose.getY(), targetPose.getAngle()),
+    Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+      path,
       constraints,
-      0
+      3.0
     );
-    SequentialCommandGroup commandGroup = new SequentialCommandGroup(
-      pathfindingCommand,
-      new FollowPathWithEvents(getHolonomicPathCommand(path), path, swerve::getPose)
-      );
-    return commandGroup;
+    return pathfindingCommand;
   }
 }
 
