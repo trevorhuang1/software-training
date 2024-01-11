@@ -25,7 +25,7 @@ public class RobotContainer {
 
     configureBindings();
   
-    DataLogManager.start("logs");
+    DataLogManager.start(".wpilog");
     DataLogManager.logNetworkTables(true);
     DriverStation.startDataLog(DataLogManager.getLog(), true);
 

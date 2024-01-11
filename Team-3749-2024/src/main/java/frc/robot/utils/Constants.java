@@ -82,6 +82,12 @@ public class Constants {
         public static final double deadband = 0.1;
     }
 
+    public static final class IntakeConstants
+    {
+        public static final double groundSetpoint = 0;
+        public static final double shooterSetpoint = 180; //DO NOT LEAVE IT LIKE THIS!!! (thakns)
+    }
+
 
     public static final class AutoConstants {
         public static final Map<String, Command> eventMap = new HashMap<>();

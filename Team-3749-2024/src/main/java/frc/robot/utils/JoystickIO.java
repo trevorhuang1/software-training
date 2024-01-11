@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.subsystems.shooter.Shooter;
 
 /**
  * Util class for button bindings
@@ -25,12 +24,9 @@ public class JoystickIO {
     private Xbox pilot;
     private Xbox operator;
 
-    private Shooter shooter;
-
     public JoystickIO(Xbox pilot, Xbox operator) {
         this.pilot = pilot;
         this.operator = operator;
-        this.shooter = Robot.shooter;
     }
 
     public static boolean didJoysticksChange() {
@@ -102,7 +98,8 @@ public class JoystickIO {
      */
     public void setDefaultCommands() {
         //Command scoreAmp = Commands.parallel(() -> Robot.shooterSim.setDesiredVoltage(2), () -> Robot.intakeSim.setOuttakeVolts());
-        pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(2))); //Amp
+        pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(2)));
+         //Amp
         pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(0)));
 
         pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(4))); //Speaker
@@ -110,6 +107,8 @@ public class JoystickIO {
 
         pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.intakeSim.setIntakeVolts(2))); //intake
         pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.intakeSim.setIntakeVolts(0)));
+
+        pilot.a().onTrue(Commands.runOnce(() -> Robot.intakeSpark.toggleWristSetpoint()));
     }
         
 }

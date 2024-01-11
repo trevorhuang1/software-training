@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.intake.IntakeSim;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.intake.IntakeSparkMax;
 import frc.robot.subsystems.shooter.ShooterSim;
 public class Robot extends TimedRobot {
 
-  public static final Shooter shooter = new Shooter();
   public static final ShooterSim shooterSim = new ShooterSim();
   public static final IntakeSim intakeSim = new IntakeSim();
+  public static final IntakeSparkMax intakeSpark = new IntakeSparkMax();
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;

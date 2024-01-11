@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,16 +20,18 @@ public class ShooterSim extends SubsystemBase {
     {
         voltageGoal = volts;
     }
-/* 
+
     public void stop()
     {
+        voltageGoal = 0;
         //shooterMotor.setInputVoltage(0);
         //SmartDashboard.putNumber("shooterVolts",shooterMotor.getCurrentDrawAmps());
     }
-*/
+
     @Override
     public void periodic()
     {
+        voltageGoal = MathUtil.clamp(voltageGoal, -8, 8);
         shooterMotor.setInputVoltage(voltageGoal);
         SmartDashboard.putNumber("shooterVolts", shooterMotor.getCurrentDrawAmps());
     }
