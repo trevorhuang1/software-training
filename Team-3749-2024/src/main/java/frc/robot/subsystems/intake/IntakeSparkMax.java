@@ -21,7 +21,7 @@ public class IntakeSparkMax extends SubsystemBase {
     private RelativeEncoder wristEncoder = wristMotor.getEncoder();
     private SimpleMotorFeedforward wristFF = new SimpleMotorFeedforward(0, 0);
     private double intakeVoltage = 0;
-    private double wristVoltage = 0;
+    private double wristVoltage = Constants.IntakeConstants.groundSetpoint;
     private boolean isGroundSetpoint = true; // lets make a better way to do this
 
     public IntakeSparkMax() {
@@ -57,6 +57,7 @@ public class IntakeSparkMax extends SubsystemBase {
     intakeMotor.setVoltage(intakeVoltage);
     wristMotor.setVoltage(wristFF.calculate(wristVoltage) + wristController.calculate(wristEncoder.getPosition(),wristVoltage));
     SmartDashboard.putNumber("intakeVolts",intakeMotor.getBusVoltage());
+    SmartDashboard.putNumber("intakeWristVotor", wristMotor.getBusVoltage());
    }
 
 }
