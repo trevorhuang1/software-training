@@ -44,7 +44,7 @@ public class PathPlannerUtils {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
     AutoBuilder.configureHolonomic(swerve::getPose, swerve::resetOdometry, swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
-        Constants.PathPlannerConstants.cfg_HolonomicFollower, swerve);
+        Constants.PathPlannerConstants.cfgHolonomicFollower, swerve);
 
     autoChooser = AutoBuilder.buildAutoChooser("TestAuto");
 
@@ -99,7 +99,7 @@ public class PathPlannerUtils {
         swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         swerve::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE
         // ChassisSpeeds
-        Constants.PathPlannerConstants.cfg_HolonomicFollower,
+        Constants.PathPlannerConstants.cfgHolonomicFollower,
         swerve // Reference to this subsystem to set requirements
     );
   }

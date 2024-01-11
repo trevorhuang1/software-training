@@ -122,7 +122,7 @@ public class Constants {
   }
 
   public static final class PathPlannerConstants {
-      public static HolonomicPathFollowerConfig cfg_HolonomicFollower = new HolonomicPathFollowerConfig(
+      public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
         // in your Constants class
         new PIDConstants(Sim.PIDValues.kP_PathPlannerDrive, 0.0, Sim.PIDValues.kD_PathPlannerDrive),
         new PIDConstants(Sim.PIDValues.kP_PathPlannerTurn, 0.0, Sim.PIDValues.kD_PathPlannerTurn),
