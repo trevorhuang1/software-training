@@ -53,7 +53,13 @@ public class RobotContainer {
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
     // Command command = PathPlannerUtils.followPathSequential(new String[] { "CirclePath", "SquigglyPath" });
     // Command command = PathPlannerUtils.getAutoPath();
-    Command command = PathPlannerUtils.getPathFindCommand(new Pose2d(15, 6, new Rotation2d(0)), 3.0, 4.0, 540, 720);
+    Command command = PathPlannerUtils.getPathFindCommand(
+      new Pose2d(15, 6, new Rotation2d(0)),
+      3.0,
+      4.0,
+      540,
+      720
+      );
 
     return command;
   }
