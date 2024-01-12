@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.nio.file.Path;
+import java.util.HashMap;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -17,8 +18,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.commands.swerve.PathPlannerUtils;
+import frc.robot.commands.swerve.PPUtils;
 import frc.robot.commands.swerve.MoveToPose;
+import frc.robot.commands.swerve.PPPaths;
 import frc.robot.commands.swerve.TurnToAngle;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
@@ -34,8 +36,12 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     DriverStation.removeRefreshedDataEventHandle(44000);
 
-    NamedCommands.registerCommand("PrintCMD-hello", new PrintCommand("hello"));
-    PathPlannerUtils.initPathPlannerUtils();
+    HashMap<String, Command> commandList = new HashMap<String, Command>();
+
+    commandList.put("PrintCMD-hello", new PrintCommand("hello"));
+
+    PPPaths.init_pathCommands(commandList);
+    PPUtils.initPPUtils();
 
     configureBindings();
 
@@ -49,16 +55,18 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-
+    Command command;
     // Command command = new MoveToPose(new Pose2d(5, 7, new Rotation2d(Math.PI /
     // 2)));
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
-    // Command command = PathPlannerUtils.followPathSequential(new String[] {
+    // Command command = PPUtils.followPathSequential(new String[] {
     // "CirclePath", "SquigglyPath" });
-    // Command command = PathPlannerUtils.getAutoPath();
-    Command command = PathPlannerUtils.getPathFindToPreplannedCommand(
-        "CirclePath",
-        DriveConstants.pathFinderConstraints);
+    // Command command = PPUtils.getAutoPath();
+    // command = PPUtils.getPathFindToPreplannedCommand(
+    //     "CirclePath",
+    //     DriveConstants.pathFinderConstraints);
+
+    command = PPUtils.getPathFindToPoseCommand(new Pose2d(null, null, null))
 
     return command;
   }

@@ -33,14 +33,14 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.Sim.PIDValues;
 
-public class PathPlannerUtils {
+public class PPUtils {
   private static Swerve swerve = Robot.swerve;
   static SendableChooser<Command> autoChooser;
 
   static boolean isFirstPath = true;
   public static Consumer<Pose2d> pathTargetPose = pose -> swerve.logDesiredOdometry(pose);
 
-  public static void initPathPlannerUtils() {
+  public static void initPPUtils() {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
     AutoBuilder.configureHolonomic(swerve::getPose, swerve::resetOdometry, swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
@@ -103,38 +103,44 @@ public class PathPlannerUtils {
         swerve // Reference to this subsystem to set requirements
     );
   }
+
+  public static Command getPathFindToPoseCommand(Pose2d pose, PathConstraints constraints) {
+    return AutoBuilder.pathfindToPose(pose, constraints);
+  }
+
   public static Command getPathFindCommand(Pose2d targetPose, PathConstraints constraints) {
 
     Command pathfindingCommand = AutoBuilder.pathfindToPose(
-      targetPose,
-      constraints,
-      0
-    );
+        targetPose,
+        constraints,
+        0);
+
     return pathfindingCommand;
   }
+
   public static Command getPathFindToPreplannedCommand(String pathName, PathConstraints constraints) {
     PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
     Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-      path,
-      constraints,
-      3.0
-    );
+        path,
+        constraints,
+        3.0);
     return pathfindingCommand;
   }
 }
 
 /*
-  public static Command followPath(String pathName) {
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-
-    return new SequentialCommandGroup(
-        new InstantCommand(() -> {
-          // Reset odometry for the first path you run during auto
-          if (isFirstPath) {
-            swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
-            isFirstPath = !isFirstPath;
-          }
-        }),
-        new FollowPathWithEvents(getHolonomicPathCommand(path), path, swerve::getPose));
-
-        */
+ * public static Command followPath(String pathName) {
+ * PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+ * 
+ * return new SequentialCommandGroup(
+ * new InstantCommand(() -> {
+ * // Reset odometry for the first path you run during auto
+ * if (isFirstPath) {
+ * swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
+ * isFirstPath = !isFirstPath;
+ * }
+ * }),
+ * new FollowPathWithEvents(getHolonomicPathCommand(path), path,
+ * swerve::getPose));
+ * 
+ */
