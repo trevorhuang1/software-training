@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.swerve.PPUtils;
 import frc.robot.commands.swerve.MoveToPose;
-import frc.robot.commands.swerve.PPPaths;
 import frc.robot.commands.swerve.TurnToAngle;
+import frc.robot.utils.Constants;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.DriveConstants;
@@ -40,7 +41,7 @@ public class RobotContainer {
 
     commandList.put("PrintCMD-hello", new PrintCommand("hello"));
 
-    PPPaths.init_pathCommands(commandList);
+    PPUtils.initPathCommands(commandList);
     PPUtils.initPPUtils();
 
     configureBindings();
@@ -56,6 +57,11 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     Command command;
+    PathConstraints defaultPathConstraints = new PathConstraints(
+        Constants.DriveConstants.maxSpeedMetersPerSecond,
+        Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
+        Constants.DriveConstants.maxAngularSpeedMetersPerSecond,
+        Constants.DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
     // Command command = new MoveToPose(new Pose2d(5, 7, new Rotation2d(Math.PI /
     // 2)));
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
@@ -63,10 +69,10 @@ public class RobotContainer {
     // "CirclePath", "SquigglyPath" });
     // Command command = PPUtils.getAutoPath();
     // command = PPUtils.getPathFindToPreplannedCommand(
-    //     "CirclePath",
-    //     DriveConstants.pathFinderConstraints);
+    // "CirclePath",
+    // DriveConstants.pathFinderConstraints);
 
-    command = PPUtils.getPathFindToPoseCommand(new Pose2d(null, null, null))
+    command = PPUtils.getPathFindToPoseCommand(new Pose2d(5, 5, Rotation2d.fromDegrees(180)), defaultPathConstraints);
 
     return command;
   }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -49,6 +50,12 @@ public class PPUtils {
     autoChooser = AutoBuilder.buildAutoChooser("TestAuto");
 
     SmartDashboard.putData("Choose Auto", autoChooser);
+  }
+
+  public static void initPathCommands(HashMap<String, Command> commandList) {
+    commandList.forEach((String cmdName, Command cmd) -> {
+      NamedCommands.registerCommand(cmdName, cmd);
+    });
   }
 
   public static Command followPath(String pathName) {
