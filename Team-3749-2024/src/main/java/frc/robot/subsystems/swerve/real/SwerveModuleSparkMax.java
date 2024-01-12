@@ -35,8 +35,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
 
     public SwerveModuleSparkMax(int drivePort, int turnPort) { // taken from drive constants
         
-        driveMotor = new CANSparkMax(Constants.DriveConstants.driveMotorPorts[drivePort], CANSparkMax.MotorType.kBrushless);
-        turnMotor = new CANSparkMax(Constants.DriveConstants.turningMotorPorts[turnPort], CANSparkMax.MotorType.kBrushless);
+        driveMotor = new CANSparkMax(drivePort, CANSparkMax.MotorType.kBrushless);
+        turnMotor = new CANSparkMax(turnPort, CANSparkMax.MotorType.kBrushless);
 
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
