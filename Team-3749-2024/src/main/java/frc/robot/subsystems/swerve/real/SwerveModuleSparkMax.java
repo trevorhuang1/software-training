@@ -19,10 +19,6 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.ModuleConstants;
 import frc.robot.utils.Constants.Sim;
 
-/* 
-Very closely inspired by 6328's Swerve Sim code,
- https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/drive/ModuleIOSim.java
-*/
 public class SwerveModuleSparkMax implements SwerveModuleIO {
 
     private CANSparkMax driveMotor;
@@ -37,7 +33,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
 
-    public SwerveModuleSparkMax(int drivePort, int turnPort) {
+    public SwerveModuleSparkMax(int drivePort, int turnPort) { // taken from drive constants
+        
         driveMotor = new CANSparkMax(Constants.DriveConstants.driveMotorPorts[drivePort], CANSparkMax.MotorType.kBrushless);
         turnMotor = new CANSparkMax(Constants.DriveConstants.turningMotorPorts[turnPort], CANSparkMax.MotorType.kBrushless);
 
