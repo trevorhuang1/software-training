@@ -60,7 +60,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    Command command = new PrintCommand("Ran Autonomous");
 
     PathPlannerPath path = PathPlannerPath.fromPathFile("Straight line");
     Robot.swerve.resetOdometry(path.getPreviewStartingHolonomicPose());

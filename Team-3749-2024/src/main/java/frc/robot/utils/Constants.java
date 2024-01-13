@@ -137,6 +137,8 @@ public class Constants {
         new ReplanningConfig() // Default path replanning config. See the API for the
     // options here
     );
+
+    
     public static PathConstraints defaultPathConstraints = new PathConstraints(
         Constants.DriveConstants.maxSpeedMetersPerSecond,
         Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,

@@ -72,8 +72,8 @@ public class Swerve extends SubsystemBase {
       // real swerve module instatiation here
       for (int i = 0; i < 4; i++) {
         modules[i] = new SwerveModule(i,
-        new SwerveModuleSparkMax(Constants.DriveConstants.driveMotorPorts[i], Constants.DriveConstants.turningMotorPorts[i])
-        );
+            new SwerveModuleSparkMax(Constants.DriveConstants.driveMotorPorts[i],
+                Constants.DriveConstants.turningMotorPorts[i]));
       }
     }
 
@@ -103,7 +103,9 @@ public class Swerve extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       states[i] = modules[i].getState();
     }
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(DriveConstants.driveKinematics.toChassisSpeeds(states), getRotation2d());
+    ChassisSpeeds speeds = 
+        ChassisSpeeds.fromFieldRelativeSpeeds(DriveConstants.driveKinematics.toChassisSpeeds(states), 
+        getRotation2d());
     return speeds;
   }
 
@@ -141,13 +143,6 @@ public class Swerve extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     // convert to -pi to pi
     Rotation2d gyroHeading = new Rotation2d(gyroData.yawDeg / 180 * Math.PI);
-    // if (gyroData.yawDeg>180){
-    // gyroHeading = new Rotation2d((gyroData.yawDeg-360)/180 * Math.PI);
-    // }
-    // else{
-    // gyroHeading = new Rotation2d(gyroData.yawDeg/180 * Math.PI);
-    // }
-
     swerveDrivePoseEstimator.resetPosition(gyroHeading,
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() },
@@ -170,7 +165,8 @@ public class Swerve extends SubsystemBase {
 
   public void logDesiredOdometry(Pose2d desiredPose) {
     this.desiredPose = desiredPose;
-    desiredOdometryLog.set(new Double[] { desiredPose.getX(), desiredPose.getY(), desiredPose.getRotation().getDegrees() });
+    desiredOdometryLog
+        .set(new Double[] { desiredPose.getX(), desiredPose.getY(), desiredPose.getRotation().getDegrees() });
   }
 
   public void stopModules() {
