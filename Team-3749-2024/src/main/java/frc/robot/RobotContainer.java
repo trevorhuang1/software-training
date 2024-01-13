@@ -37,13 +37,7 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     DriverStation.removeRefreshedDataEventHandle(44000);
 
-    HashMap<String, Command> commandList = new HashMap<String, Command>();
-
-    commandList.put("PrintCMD-hello", new PrintCommand("hello"));
-
-    PPUtils.initPathCommands(commandList);
-    PPUtils.initPPUtils();
-
+    initAuto();
     configureBindings();
 
     RobotController.setBrownoutVoltage(7.0);
@@ -62,18 +56,19 @@ public class RobotContainer {
         Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
         Constants.DriveConstants.maxAngularSpeedMetersPerSecond,
         Constants.DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
-    // Command command = new MoveToPose(new Pose2d(5, 7, new Rotation2d(Math.PI /
-    // 2)));
-    // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
-    // Command command = PPUtils.followPathSequential(new String[] {
-    // "CirclePath", "SquigglyPath" });
-    // Command command = PPUtils.getAutoPath();
-    // command = PPUtils.getPathFindToPreplannedCommand(
-    // "CirclePath",
-    // DriveConstants.pathFinderConstraints);
 
     command = PPUtils.getPathFindToPoseCommand(new Pose2d(5, 5, Rotation2d.fromDegrees(180)), defaultPathConstraints);
 
     return command;
+  }
+
+  public void initAuto(){
+    HashMap<String, Command> commandList = new HashMap<String, Command>();
+
+    commandList.put("PrintCMD-hello", new PrintCommand("hello"));
+
+    PPUtils.initPathCommands(commandList);
+    PPUtils.initPPUtils();
+
   }
 }
