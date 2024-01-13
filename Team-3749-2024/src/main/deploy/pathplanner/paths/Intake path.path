@@ -93,7 +93,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.65,
+    "maxVelocity": 1.75,
     "maxAcceleration": 2.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 360.0
@@ -106,5 +106,5 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

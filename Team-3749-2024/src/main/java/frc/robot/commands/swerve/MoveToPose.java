@@ -32,7 +32,7 @@ public class MoveToPose extends Command {
   private final SlewRateLimiter slewLimit_x = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
   private final SlewRateLimiter slewLimit_y = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
   private final SlewRateLimiter slewLimit_turn = new SlewRateLimiter(
-      DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
+      DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
 
   public MoveToPose(Pose2d targetPose) {
     this.targetPose = targetPose;
@@ -70,7 +70,7 @@ public class MoveToPose extends Command {
 
     driveXVeloM = slewLimit_y.calculate(driveXVeloM * DriveConstants.maxSpeedMetersPerSecond);
     driveYVeloM = slewLimit_x.calculate(driveYVeloM * DriveConstants.maxSpeedMetersPerSecond);
-    turnVelo = slewLimit_turn.calculate(turnVelo * DriveConstants.maxAngularSpeedMetersPerSecond);
+    turnVelo = slewLimit_turn.calculate(turnVelo * DriveConstants.maxAngularSpeedRadiansPerSecond);
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveXVeloM,
         driveYVeloM, turnVelo, swerve.getRotation2d());

@@ -41,7 +41,6 @@ public class RobotContainer {
 
     RobotController.setBrownoutVoltage(7.0);
     Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
-    Robot.swerve.logDesiredOdometry(DriveConstants.fieldStartingPose);
   }
 
   private void configureBindings() {
@@ -61,12 +60,11 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command command = new PrintCommand("Ran Autonomous");
 
-    // // Testing if navgrid.json is decent enough (pathpalnner avoids obstacles.)
-    command = PPUtils.getPathFindToPoseCommand(new Pose2d(10, 3,
-    Rotation2d.fromDegrees(180)), 0);
+    // command = PPUtils.getPathFindToPoseCommand(new Pose2d(10, 3,
+    // Rotation2d.fromDegrees(180)), 0);
 
-    // command = PPUtils.getPathFindThenFollowPathCommand("Intake path",
-    //     Constants.PathPlannerConstants.defaultPathConstraints);
+    command = PPUtils.getPathFindThenFollowPathCommand("Intake path",
+        Constants.PathPlannerConstants.defaultPathConstraints);
 
     return command;
   }

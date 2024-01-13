@@ -22,7 +22,7 @@ public class TurnToAngle extends Command {
   private final PIDController pid_turnController = new PIDController(PIDValues.kP_TurnToAngle, 0,
       PIDValues.kD_TurnToAngle);
   private final SlewRateLimiter slewLimit_turn = new SlewRateLimiter(
-      DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
+      DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
 
   /***
    * @param Rotation2d desiredRotation
@@ -57,7 +57,7 @@ public class TurnToAngle extends Command {
     // the motor can turn
     double turnVelo = pid_turnController.calculate(swerve.getRotation2d().getRadians(),
         desiredRotation.getRadians());
-    turnVelo = slewLimit_turn.calculate(turnVelo * DriveConstants.maxAngularSpeedMetersPerSecond);
+    turnVelo = slewLimit_turn.calculate(turnVelo * DriveConstants.maxAngularSpeedRadiansPerSecond);
 
     SmartDashboard.putNumber("cmdcurRot", swerve.getRotation2d().getRadians());
     SmartDashboard.putNumber("cmddesRot", desiredRotation.getRadians());

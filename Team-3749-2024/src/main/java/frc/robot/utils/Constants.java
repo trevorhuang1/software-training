@@ -44,7 +44,7 @@ public class Constants {
       public static double kP_PathPlannerDrive = 9;
       public static double kD_PathPlannerDrive = 0.01;
 
-      public static double kP_PathPlannerTurn = 0;
+      public static double kP_PathPlannerTurn = 1.8;
       public static double kD_PathPlannerTurn = 0.003;
     };
 
@@ -103,7 +103,7 @@ public class Constants {
         ? DriveConstants.realMaxSpeedMetersPerSecond
         : DriveConstants.simMaxSpeedMetersPerSecond;
 
-    public static final double maxAngularSpeedMetersPerSecond = Robot.isReal()
+    public static final double maxAngularSpeedRadiansPerSecond = Robot.isReal()
         ? DriveConstants.realMaxAngularSpeedRadiansPerSecond
         : DriveConstants.simMaxAngularSpeedRadiansPerSecond;
 
@@ -111,7 +111,7 @@ public class Constants {
         ? DriveConstants.realMaxAccelerationMetersPerSecondSquared
         : DriveConstants.simMaxAccelerationMetersPerSecondSquared;
 
-    public static final double maxAngularAccelerationMetersPerSecondSquared = Robot.isReal()
+    public static final double maxAngularAccelerationRadiansPerSecondSquared = Robot.isReal()
         ? DriveConstants.realMaxAngularAccelerationRadiansPerSecondSquared
         : DriveConstants.simMaxAngularAccelerationRadiansPerSecondSquared;
 
@@ -119,12 +119,14 @@ public class Constants {
     public static final double toleranceRad_Misc = Math.PI / 750;
 
     public static final PathConstraints pathFinderConstraints = new PathConstraints(maxSpeedMetersPerSecond,
-        maxAccelerationMetersPerSecondSquared, maxAngularSpeedMetersPerSecond,
-        maxAngularAccelerationMetersPerSecondSquared);
+        maxAccelerationMetersPerSecondSquared, maxAngularSpeedRadiansPerSecond,
+        maxAngularAccelerationRadiansPerSecondSquared);
 
     public static final Pose2d fieldStartingPose = new Pose2d(1, 7, Rotation2d.fromDegrees(0));
-    // public static final Pose2d fieldStartingPose = new Pose2d(1, 3, Rotation2d.fromDegrees(0));
-    // public static final Pose2d fieldStartingPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    // public static final Pose2d fieldStartingPose = new Pose2d(1, 3,
+    // Rotation2d.fromDegrees(0));
+    // public static final Pose2d fieldStartingPose = new Pose2d(0, 0,
+    // Rotation2d.fromDegrees(0));
   }
 
   public static final class PathPlannerConstants {
@@ -137,11 +139,20 @@ public class Constants {
         new ReplanningConfig() // Default path replanning config. See the API for the
     // options here
     );
-    public static PathConstraints defaultPathConstraints = new PathConstraints(
+
+    public static PathConstraints sim = new PathConstraints(
+        1.5,
+        Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
+        Constants.DriveConstants.maxAngularSpeedRadiansPerSecond,
+        Constants.DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
+
+    public static PathConstraints real = new PathConstraints(
         Constants.DriveConstants.maxSpeedMetersPerSecond,
         Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
-        Constants.DriveConstants.maxAngularSpeedMetersPerSecond,
-        Constants.DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
+        Constants.DriveConstants.maxAngularSpeedRadiansPerSecond,
+        Constants.DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
+
+    public static PathConstraints defaultPathConstraints = Robot.isReal() ? real : sim;
   }
 
   public static final class ControllerConstants {

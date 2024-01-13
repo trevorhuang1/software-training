@@ -72,8 +72,8 @@ public class Swerve extends SubsystemBase {
       // real swerve module instatiation here
       for (int i = 0; i < 4; i++) {
         modules[i] = new SwerveModule(i,
-        new SwerveModuleSparkMax(Constants.DriveConstants.driveMotorPorts[i], Constants.DriveConstants.turningMotorPorts[i])
-        );
+            new SwerveModuleSparkMax(Constants.DriveConstants.driveMotorPorts[i],
+                Constants.DriveConstants.turningMotorPorts[i]));
       }
     }
 
@@ -153,9 +153,8 @@ public class Swerve extends SubsystemBase {
             modules[2].getPosition(), modules[3].getPosition() },
         pose);
 
-    // Not sure that this is needed
     desiredOdometryLog
-        .setDefault(new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+        .set(new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
 
   public void updateOdometry() {
@@ -170,7 +169,8 @@ public class Swerve extends SubsystemBase {
 
   public void logDesiredOdometry(Pose2d desiredPose) {
     this.desiredPose = desiredPose;
-    desiredOdometryLog.set(new Double[] { desiredPose.getX(), desiredPose.getY(), desiredPose.getRotation().getDegrees() });
+    desiredOdometryLog
+        .set(new Double[] { desiredPose.getX(), desiredPose.getY(), desiredPose.getRotation().getDegrees() });
   }
 
   public void stopModules() {
