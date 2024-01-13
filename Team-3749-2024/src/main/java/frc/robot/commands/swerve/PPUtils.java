@@ -27,15 +27,18 @@ import frc.robot.utils.Constants;
 public class PPUtils {
   private static Swerve swerve = Robot.swerve;
   static SendableChooser<Command> autoChooser;
-
   static boolean isFirstPath = true;
   public static Consumer<Pose2d> pathTargetPose = pose -> swerve.logDesiredOdometry(pose);
 
   public static void initPPUtils() {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
-    AutoBuilder.configureHolonomic(swerve::getPose, swerve::resetOdometry, swerve::getChassisSpeeds,
+    AutoBuilder.configureHolonomic(
+        swerve::getPose, 
+        swerve::resetOdometry, 
+        swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
-        Constants.PathPlannerConstants.cfgHolonomicFollower, swerve);
+        Constants.PathPlannerConstants.cfgHolonomicFollower, 
+        swerve);
 
     autoChooser = AutoBuilder.buildAutoChooser("TestAuto");
 

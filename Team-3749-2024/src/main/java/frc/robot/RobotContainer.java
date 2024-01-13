@@ -7,6 +7,7 @@ package frc.robot;
 import java.nio.file.Path;
 import java.util.HashMap;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -61,14 +62,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command command = new PrintCommand("Ran Autonomous");
 
-    // // Testing if navgrid.json is decent enough (pathpalnner avoids obstacles.)
-    command = PPUtils.getPathFindToPoseCommand(new Pose2d(10, 3,
-    Rotation2d.fromDegrees(180)), 0);
-
-    // command = PPUtils.getPathFindThenFollowPathCommand("Intake path",
-    //     Constants.PathPlannerConstants.defaultPathConstraints);
-
-    return command;
+    PathPlannerPath path = PathPlannerPath.fromPathFile("Straight line");
+    Robot.swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
+    return AutoBuilder.followPathWithEvents(path);
   }
 
 }

@@ -103,7 +103,8 @@ public class Swerve extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       states[i] = modules[i].getState();
     }
-    return DriveConstants.driveKinematics.toChassisSpeeds(states);
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(DriveConstants.driveKinematics.toChassisSpeeds(states), getRotation2d());
+    return speeds;
   }
 
   public void resetGyro() {
@@ -124,7 +125,6 @@ public class Swerve extends SubsystemBase {
 
   public Pose2d getPose() {
     Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
-
     return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
   }
 

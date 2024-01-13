@@ -44,7 +44,7 @@ public class Constants {
       public static double kP_PathPlannerDrive = 9;
       public static double kD_PathPlannerDrive = 0.01;
 
-      public static double kP_PathPlannerTurn = 0;
+      public static double kP_PathPlannerTurn = 4.2;
       public static double kD_PathPlannerTurn = 0.003;
     };
 
