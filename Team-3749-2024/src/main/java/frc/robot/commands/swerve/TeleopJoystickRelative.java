@@ -53,7 +53,7 @@ public class TeleopJoystickRelative extends Command {
     // This should be max Acceleration! I think.
     this.xLimiter = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
     this.yLimiter = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
-    this.turningLimiter = new SlewRateLimiter(DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
+    this.turningLimiter = new SlewRateLimiter(DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
     addRequirements(swerve);
   }
 
@@ -96,9 +96,10 @@ public class TeleopJoystickRelative extends Command {
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
 
     // if (Robot.isSimulation()) {
-    //   PIDValues.kP_PathPlannerDrive = PIDTuner.update(PIDValues.kP_PathPlannerDrive, 0.1,
-    //       FollowPath.followPath("circlePath"),
-    //       swerve.desiredOdometry[0] - swerve.getPose().getX(), 0.1);
+    // PIDValues.kP_PathPlannerDrive =
+    // PIDTuner.update(PIDValues.kP_PathPlannerDrive, 0.1,
+    // FollowPath.followPath("circlePath"),
+    // swerve.desiredOdometry[0] - swerve.getPose().getX(), 0.1);
     // }
 
     // set chassis speeds

@@ -42,7 +42,6 @@ public class RobotContainer {
 
     RobotController.setBrownoutVoltage(7.0);
     Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
-    Robot.swerve.logDesiredOdometry(DriveConstants.fieldStartingPose);
   }
 
   private void configureBindings() {
@@ -61,9 +60,13 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
-    PathPlannerPath path = PathPlannerPath.fromPathFile("Straight line");
-    Robot.swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
-    return AutoBuilder.followPath(path);
+    // command = PPUtils.getPathFindToPoseCommand(new Pose2d(10, 3,
+    // Rotation2d.fromDegrees(180)), 0);
+
+    Command command = PPUtils.getPathFindThenFollowPathCommand("Intake path",
+        Constants.PathPlannerConstants.defaultPathConstraints);
+
+    return command;
   }
 
 }

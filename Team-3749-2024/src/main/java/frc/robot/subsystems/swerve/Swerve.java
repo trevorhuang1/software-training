@@ -148,9 +148,8 @@ public class Swerve extends SubsystemBase {
             modules[2].getPosition(), modules[3].getPosition() },
         pose);
 
-    // Not sure that this is needed
     desiredOdometryLog
-        .setDefault(new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+        .set(new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
 
   public void updateOdometry() {

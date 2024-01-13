@@ -52,7 +52,7 @@ public class Teleop extends Command {
     // This should be max Acceleration! I think.
     this.xLimiter = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
     this.yLimiter = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
-    this.turningLimiter = new SlewRateLimiter(DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
+    this.turningLimiter = new SlewRateLimiter(DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
     addRequirements(swerve);
   }
 
@@ -74,7 +74,7 @@ public class Teleop extends Command {
     xSpeed = xLimiter.calculate(xSpeed * DriveConstants.maxSpeedMetersPerSecond);
     ySpeed = yLimiter.calculate(ySpeed * DriveConstants.maxSpeedMetersPerSecond);
 
-    turningSpeed = turningLimiter.calculate(turningSpeed * DriveConstants.maxAngularSpeedMetersPerSecond);
+    turningSpeed = turningLimiter.calculate(turningSpeed * DriveConstants.maxAngularSpeedRadiansPerSecond);
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
