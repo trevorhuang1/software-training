@@ -64,7 +64,7 @@ public class RobotContainer {
 
     PathPlannerPath path = PathPlannerPath.fromPathFile("Straight line");
     Robot.swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
-    return AutoBuilder.followPathWithEvents(path);
+    return AutoBuilder.followPath(path);
   }
 
 }

@@ -38,6 +38,7 @@ public class PPUtils {
         swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
         Constants.PathPlannerConstants.cfgHolonomicFollower, 
+        ()->false,
         swerve);
 
     autoChooser = AutoBuilder.buildAutoChooser("TestAuto");
@@ -51,36 +52,36 @@ public class PPUtils {
     });
   }
 
-  public static Command followPath(String pathName) {
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+  // public static Command followPath(String pathName) {
+  //   PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
-    return new SequentialCommandGroup(
-        new InstantCommand(() -> {
-          // Reset odometry for the first path you run during auto
-          if (isFirstPath) {
-            swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
-            isFirstPath = !isFirstPath;
-          }
-        }),
-        new FollowPathWithEvents(getHolonomicPathCommand(path), path, swerve::getPose));
-  }
+  //   return new SequentialCommandGroup(
+  //       new InstantCommand(() -> {
+  //         // Reset odometry for the first path you run during auto
+  //         if (isFirstPath) {
+  //           swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
+  //           isFirstPath = !isFirstPath;
+  //         }
+  //       }),
+  //       new FollowPathWithEvents(getHolonomicPathCommand(path), path, swerve::getPose));
+  // }
 
   public static Command getAutoPath() {
     return autoChooser.getSelected();
   }
 
-  private static Command getHolonomicPathCommand(PathPlannerPath path) {
+  // private static Command getHolonomicPathCommand(PathPlannerPath path) {
 
-    return new FollowPathHolonomic(
-        path,
-        swerve::getPose, // Robot pose supplier
-        swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        swerve::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE
-        // ChassisSpeeds
-        Constants.PathPlannerConstants.cfgHolonomicFollower,
-        swerve// Reference to this subsystem to set requirements
-    );
-  }
+  //   return new FollowPathHolonomic(
+  //       path,
+  //       swerve::getPose, // Robot pose supplier
+  //       swerve::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+  //       swerve::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE
+  //       // ChassisSpeeds
+  //       Constants.PathPlannerConstants.cfgHolonomicFollower,
+  //       swerve// Reference to this subsystem to set requirements
+  //   );
+  // }
 
   public static Command getPathFindToPoseCommand(Pose2d pose, PathConstraints constraints) {
     return AutoBuilder.pathfindToPose(pose, constraints);
@@ -109,18 +110,18 @@ public class PPUtils {
     return pathfindingCommand;
   }
 
-  class Paths {
-    public static Command getPathFindToPosesCommand(List<Pose2d> desiredPoses, PathConstraints constraints,
-        GoalEndState endState) {
-      Command command = new SequentialCommandGroup();
+  // class Paths {
+  //   public static Command getPathFindToPosesCommand(List<Pose2d> desiredPoses, PathConstraints constraints,
+  //       GoalEndState endState) {
+  //     Command command = new SequentialCommandGroup();
 
-      PathPlannerPath path = new PathPlannerPath(PathPlannerPath.bezierFromPoses(desiredPoses), constraints, endState);
+  //     PathPlannerPath path = new PathPlannerPath(PathPlannerPath.bezierFromPoses(desiredPoses), constraints, endState);
 
-      getHolonomicPathCommand(path);
+  //     getHolonomicPathCommand(path);
 
-      return command;
-    }
-  }
+  //     return command;
+  //   }
+  // }
 }
 
 /*
