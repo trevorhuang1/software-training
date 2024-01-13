@@ -28,7 +28,6 @@ import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.DriveConstants;
 
 public class RobotContainer {
-
   private Xbox pilot = new Xbox(0);
   private Xbox operator = new Xbox(1);
   private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
@@ -41,7 +40,8 @@ public class RobotContainer {
     configureBindings();
 
     RobotController.setBrownoutVoltage(7.0);
-    // Robot.swerve.resetOdometry(new Pose2d(1, 1, new Rotation2d(Math.PI * 11/6)));
+    Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
+    Robot.swerve.logDesiredOdometry(DriveConstants.fieldStartingPose);
   }
 
   private void configureBindings() {
@@ -56,13 +56,17 @@ public class RobotContainer {
 
     PPUtils.initPathCommands(commandList);
     PPUtils.initPPUtils();
-
   }
 
   public Command getAutonomousCommand() {
-    Command command;
-  
-    command = PPUtils.getPathFindToPathCommand("Intake path", Constants.PathPlannerConstants.defaultPathConstraints);
+    Command command = new PrintCommand("Ran Autonomous");
+
+    // // Testing if navgrid.json is decent enough (pathpalnner avoids obstacles.)
+    command = PPUtils.getPathFindToPoseCommand(new Pose2d(10, 3,
+    Rotation2d.fromDegrees(180)), 0);
+
+    // command = PPUtils.getPathFindThenFollowPathCommand("Intake path",
+    //     Constants.PathPlannerConstants.defaultPathConstraints);
 
     return command;
   }

@@ -8,6 +8,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -42,8 +44,8 @@ public class Constants {
       public static double kP_PathPlannerDrive = 9;
       public static double kD_PathPlannerDrive = 0.01;
 
-      public static double kP_PathPlannerTurn = 4.2;
-      public static double kD_PathPlannerTurn = 0.0;
+      public static double kP_PathPlannerTurn = 0;
+      public static double kD_PathPlannerTurn = 0.003;
     };
 
   }
@@ -119,10 +121,14 @@ public class Constants {
     public static final PathConstraints pathFinderConstraints = new PathConstraints(maxSpeedMetersPerSecond,
         maxAccelerationMetersPerSecondSquared, maxAngularSpeedMetersPerSecond,
         maxAngularAccelerationMetersPerSecondSquared);
+
+    public static final Pose2d fieldStartingPose = new Pose2d(1, 7, Rotation2d.fromDegrees(0));
+    // public static final Pose2d fieldStartingPose = new Pose2d(1, 3, Rotation2d.fromDegrees(0));
+    // public static final Pose2d fieldStartingPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
   }
 
   public static final class PathPlannerConstants {
-      public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
+    public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
         // in your Constants class
         new PIDConstants(Sim.PIDValues.kP_PathPlannerDrive, 0.0, Sim.PIDValues.kD_PathPlannerDrive),
         new PIDConstants(Sim.PIDValues.kP_PathPlannerTurn, 0.0, Sim.PIDValues.kD_PathPlannerTurn),
@@ -132,10 +138,10 @@ public class Constants {
     // options here
     );
     public static PathConstraints defaultPathConstraints = new PathConstraints(
-      Constants.DriveConstants.maxSpeedMetersPerSecond,
-      Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
-      Constants.DriveConstants.maxAngularSpeedMetersPerSecond,
-      Constants.DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
+        Constants.DriveConstants.maxSpeedMetersPerSecond,
+        Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
+        Constants.DriveConstants.maxAngularSpeedMetersPerSecond,
+        Constants.DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
   }
 
   public static final class ControllerConstants {
