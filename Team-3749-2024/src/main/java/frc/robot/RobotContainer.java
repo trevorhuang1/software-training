@@ -49,20 +49,7 @@ public class RobotContainer {
 
   }
 
-  public Command getAutonomousCommand() {
-    Command command;
-    PathConstraints defaultPathConstraints = new PathConstraints(
-        Constants.DriveConstants.maxSpeedMetersPerSecond,
-        Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
-        Constants.DriveConstants.maxAngularSpeedMetersPerSecond,
-        Constants.DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
-
-    command = PPUtils.getPathFindToPoseCommand(new Pose2d(5, 5, Rotation2d.fromDegrees(180)), defaultPathConstraints);
-
-    return command;
-  }
-
-  public void initAuto(){
+  public void initAuto() {
     HashMap<String, Command> commandList = new HashMap<String, Command>();
 
     commandList.put("PrintCMD-hello", new PrintCommand("hello"));
@@ -71,4 +58,13 @@ public class RobotContainer {
     PPUtils.initPPUtils();
 
   }
+
+  public Command getAutonomousCommand() {
+    Command command;
+  
+    command = PPUtils.getPathFindToPathCommand("Intake path", Constants.PathPlannerConstants.defaultPathConstraints);
+
+    return command;
+  }
+
 }

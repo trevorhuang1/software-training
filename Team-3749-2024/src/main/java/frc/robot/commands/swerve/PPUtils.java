@@ -115,17 +115,17 @@ public class PPUtils {
     return AutoBuilder.pathfindToPose(pose, constraints);
   }
 
-  public static Command getPathFindCommand(Pose2d targetPose, PathConstraints constraints) {
+  public static Command getPathFindToPoseCommand(Pose2d targetPose, PathConstraints constraints, double endingVelocity) {
 
     Command pathfindingCommand = AutoBuilder.pathfindToPose(
         targetPose,
         constraints,
-        0);
+        endingVelocity);
 
     return pathfindingCommand;
   }
 
-  public static Command getPathFindToPreplannedCommand(String pathName, PathConstraints constraints) {
+  public static Command getPathFindToPathCommand(String pathName, PathConstraints constraints) {
     PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
     Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
         path,

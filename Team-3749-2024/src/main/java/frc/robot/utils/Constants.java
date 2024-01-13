@@ -131,17 +131,15 @@ public class Constants {
         new ReplanningConfig() // Default path replanning config. See the API for the
     // options here
     );
+    public static PathConstraints defaultPathConstraints = new PathConstraints(
+      Constants.DriveConstants.maxSpeedMetersPerSecond,
+      Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
+      Constants.DriveConstants.maxAngularSpeedMetersPerSecond,
+      Constants.DriveConstants.maxAngularAccelerationMetersPerSecondSquared);
   }
 
   public static final class ControllerConstants {
     public static final double deadband = 0.1;
-  }
-
-  public static final class AutoConstants {
-    public static final Map<String, Command> eventMap = new HashMap<>();
-
-    public static final SendableChooser<Command> autoChooser = new SendableChooser<>();
-
   }
 
   public static class VisionConstants {
