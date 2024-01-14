@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -19,10 +20,11 @@ public class IntakeSparkMax extends SubsystemBase {
     private CANSparkMax wristMotor = new CANSparkMax(1,MotorType.kBrushless);
     private PIDController wristController = new PIDController(1, 0, 0);
     private RelativeEncoder wristEncoder = wristMotor.getEncoder();
-    private SimpleMotorFeedforward wristFF = new SimpleMotorFeedforward(0, 0);
+    private ArmFeedforward wristFF = new ArmFeedforward(0, 0, 0);
     private double intakeVoltage = 0;
     private double wristVoltage = Constants.IntakeConstants.groundSetpoint;
     private boolean isGroundSetpoint = true; // lets make a better way to do this
+    private double wristOffset = 0;
 
     public IntakeSparkMax() {
         System.out.println("[Init] Creating ExampleIOSim");
@@ -55,7 +57,7 @@ public class IntakeSparkMax extends SubsystemBase {
    public void periodic()
    {
     intakeMotor.setVoltage(intakeVoltage);
-    wristMotor.setVoltage(wristFF.calculate(wristVoltage) + wristController.calculate(wristEncoder.getPosition(),wristVoltage));
+    wristMotor.setVoltage(wristFF.calculate(wristVoltage+wristOffset,1) + wristController.calculate(wristEncoder.getPosition(),wristVoltage));
     SmartDashboard.putNumber("intakeVolts",intakeMotor.getBusVoltage());
     SmartDashboard.putNumber("intakeWristVotor", wristMotor.getBusVoltage());
    }
