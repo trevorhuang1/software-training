@@ -79,13 +79,6 @@ public class Teleop extends Command {
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
 
-    // if (Robot.isSimulation()) {
-    // PIDValues.kP_teleopTurn = PIDTuner.update(PIDValues.kP_teleopTurn, 0.005,
-    // new TurnToAngle(new Rotation2d(Math.PI)));
-    // } else {
-    // throw new Error("TeleopCommand -- DID NOT REMOVE PID TUNER");
-    // }
-
     // set chassis speeds
     swerve.setChassisSpeeds(chassisSpeeds);
   }

@@ -117,7 +117,7 @@ public class JoystickIO {
    * Sets the default commands
    */
   public void setDefaultCommands() {
-    swerve.setDefaultCommand(new TeleopJoystickRelative(
+    swerve.setDefaultCommand(new Teleop(
 
         () -> -pilot.getLeftY(), // - is up, + is down by default so we invert here
         () -> -pilot.getLeftX(), // Positive is left, negative is right by default so we invert here

@@ -59,12 +59,14 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-
+    Command command;
     // command = PPUtils.getPathFindToPoseCommand(new Pose2d(10, 3,
     // Rotation2d.fromDegrees(180)), 0);
 
-    Command command = PPUtils.getPathFindThenFollowPathCommand("Intake path",
-        Constants.PathPlannerConstants.defaultPathConstraints);
+    // command = PPUtils.getPathFindThenFollowPathCommand("CirclePath",
+    // Constants.PathPlannerConstants.defaultPathConstraints);
+
+    command = PPUtils.getAutoPath("Straight Line");
 
     return command;
   }
