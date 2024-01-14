@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
@@ -12,11 +13,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
 
+
 public class RobotContainer {
 
   private Xbox pilot = new Xbox(0);
   private Xbox operator = new Xbox(1);
-    private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
+  private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
 
   public RobotContainer() {
 
@@ -40,6 +42,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(45)));
   }
 }
