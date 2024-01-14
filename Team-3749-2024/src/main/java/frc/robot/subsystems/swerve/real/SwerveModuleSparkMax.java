@@ -1,5 +1,7 @@
 package frc.robot.subsystems.swerve.real;
 
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -22,7 +24,9 @@ import frc.robot.utils.Constants.Sim;
 public class SwerveModuleSparkMax implements SwerveModuleIO {
 
     private CANSparkMax driveMotor;
-    private CANSparkMax turnMotor;
+    private CANSparkMax turnMotor; 
+
+    private CANcoder absoluteEncoder;
 
     private RelativeEncoder driveEncoder;
     private RelativeEncoder turnEncoder;
@@ -30,13 +34,17 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     private double drivePositionRad;
     private double turnPositionRad;
 
-    private double driveAppliedVolts = 0.0;
-    private double turnAppliedVolts = 0.0;
+    private double driveAppliedVolts;
+    private double turnAppliedVolts;
 
-    public SwerveModuleSparkMax(int drivePort, int turnPort) { // taken from drive constants
+    public SwerveModuleSparkMax(int driveID, int turnID, int absoluteEncoderID) { // taken from drive constants
         
-        driveMotor = new CANSparkMax(drivePort, CANSparkMax.MotorType.kBrushless);
-        turnMotor = new CANSparkMax(turnPort, CANSparkMax.MotorType.kBrushless);
+        driveMotor = new CANSparkMax(driveID, CANSparkMax.MotorType.kBrushless);
+        turnMotor = new CANSparkMax(turnID, CANSparkMax.MotorType.kBrushless);
+
+        absoluteEncoder = new CANcoder(absoluteEncoderID);
+        turnPositionRad = Units.rotationsToRadians(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        /* absoluteEncoder.configMagnetOffset(absoluteEncoderOffset); */ //deprecated in phoenixv6
 
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
@@ -60,6 +68,9 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
 
         drivePositionRad = driveEncoder.getPosition();
         turnPositionRad = turnEncoder.getPosition();
+
+        driveAppliedVolts = driveMotor.getBusVoltage();
+        turnAppliedVolts = turnMotor.getBusVoltage();
   
         data.drivePositionM = data.drivePositionM + (turnRadPerSec * 0.02 * ModuleConstants.wheelDiameterMeters) / 2;
         data.driveVelocityMPerSec = driveRadPerSec * ModuleConstants.wheelDiameterMeters / 2;
@@ -84,5 +95,34 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     public void setTurnVoltage(double volts) {
         turnAppliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
         turnMotor.setVoltage(turnAppliedVolts);
+    };
+
+    public void stopMotors() {
+        driveMotor.setVoltage(0);
+        turnMotor.setVoltage(0);
+    };
+
+    public double getDrivePosition() {
+        return driveEncoder.getPosition();
+    };
+
+    public double getTurningPosition() {
+        return turnEncoder.getPosition();
+    };
+
+    public double getDriveVelocity() {
+        return driveEncoder.getVelocity();
+    };
+
+    public double getTurningVelocity() {
+        return turnEncoder.getVelocity();
+    };
+
+    public double getAbsoluteEncoderRad() {
+        return turnPositionRad;
+    };
+    public void resetEncoders() {
+        driveEncoder.setPosition(0);
+        turnEncoder.setPosition(getAbsoluteEncoderRad());
     };
 }
