@@ -50,7 +50,7 @@ public class PPUtils {
         () -> {
           Alliance robotAlliance = allianceChooser.getSelected();
           robotAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : robotAlliance;
-
+          System.out.println();
           if (robotAlliance == Alliance.Red) {
             return true;
           } else {
