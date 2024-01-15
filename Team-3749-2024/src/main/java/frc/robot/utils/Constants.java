@@ -37,8 +37,11 @@ public class Constants {
     private static final PIDConstants realPID = new PIDConstants(0, 0, 0);
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
-    private static final double simkS = 0.3;
-    private static final double simkG= 0.9825;
+    // private static final double simkS = 0.3;
+    // private static final double simkG= 0.9825;
+    
+    private static final double simkS = 0.0;
+    private static final double simkG= 0.0;
     private static final double simkV= 0;
     private static final double realkS = 0;
     private static final double realkG = 0;

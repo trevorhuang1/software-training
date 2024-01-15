@@ -32,7 +32,7 @@ public class Arm extends SubsystemBase {
 
     private Mechanism2d mechanism = new Mechanism2d(2.5,2);
     private MechanismRoot2d mechanismArmPivot= mechanism.getRoot("mechanism arm pivot", 1, 0.5);
-    private MechanismLigament2d mechanismArm = mechanismArmPivot.append(new MechanismLigament2d("mechanism arm", 3, 0));
+    private MechanismLigament2d mechanismArm = mechanismArmPivot.append(new MechanismLigament2d("mechanism arm", 3, 90));
    
     private ShuffleData<Double> positionLog = new ShuffleData<Double>("arm", "position",
             0.0);
@@ -75,13 +75,17 @@ public class Arm extends SubsystemBase {
         armIO.setVoltage(feedback + feedforward);
     }
 
+    private void setVoltage(double volts){
+        armIO.setVoltage(volts);
+    }
+
     // runs every 0.02 sec
     @Override
     public void periodic() {
         armIO.updateData(data);
         mechanismArm.setAngle(getRotation2d());
-
-        moveToSetpoint();
+        setVoltage(-0.1);
+        // moveToSetpoint();
 
         positionLog.set(getRotation2d().getDegrees());
         velocityLog.set(data.velocityRadPerSec * 180 / Math.PI);
