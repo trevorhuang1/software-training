@@ -49,6 +49,11 @@ public class Arm extends SubsystemBase {
             0.0);
     private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>("arm", "setpoint velocity",
             0.0);
+    private ShuffleData<Double> setpointAccelerationLog = new ShuffleData<Double>("arm", "setpoint acceleration", 0.0);
+
+    private State setpoint = new State();
+    private double prevSetpointVelocity = 0;
+
 
     public Arm() {
         if (Robot.isSimulation()) {
@@ -74,20 +79,27 @@ public class Arm extends SubsystemBase {
     }
 
     private void moveToSetpoint() {
-        State setpoint = profiledFeedbackController.getSetpoint();
-        
+
+        setpoint = profiledFeedbackController.getSetpoint();
+        double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
+        setpointAccelerationLog.set(accelerationSetpoint);
+        prevSetpointVelocity = setpoint.velocity;
+
+
+
         double feedback = profiledFeedbackController.calculate(data.positionRad);
         // using data for one and setpoint for the other feels wrong, but it doesn't
         // work if kg isn't relative to its actual position
-        double feedforward = feedForwardController.calculate(data.positionRad, setpoint.velocity);
+        double feedforward = feedForwardController.calculate(data.positionRad, setpoint.velocity, accelerationSetpoint);
         setVoltage(feedforward + feedback);
+
+
     }
 
-    public void setVoltage(double volts){
+    public void setVoltage(double volts) {
         armIO.setVoltage(volts);
 
     }
-
 
     // runs every 0.02 sec
     @Override
