@@ -33,7 +33,7 @@ public class Arm extends SubsystemBase {
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
     private MechanismLigament2d mechanismArm = mechanismArmPivot
-            .append(new MechanismLigament2d("mechanism arm", .93, 45));
+            .append(new MechanismLigament2d("mechanism arm", .93, -90));
 
     private ShuffleData<Double> positionLog = new ShuffleData<Double>("arm", "position",
             0.0);
@@ -54,6 +54,7 @@ public class Arm extends SubsystemBase {
         if (Robot.isSimulation()) {
             armIO = new ArmSim();
         }
+        // profiledFeedbackController.setGoal(Units.degreesToRadians(-90));
     }
 
     public Rotation2d getRotation2d() {
@@ -74,6 +75,7 @@ public class Arm extends SubsystemBase {
 
     private void moveToSetpoint() {
         State setpoint = profiledFeedbackController.getSetpoint();
+        
         double feedback = profiledFeedbackController.calculate(data.positionRad);
         // using data for one and setpoint for the other feels wrong, but it doesn't
         // work if kg isn't relative to its actual position
@@ -81,7 +83,7 @@ public class Arm extends SubsystemBase {
         setVoltage(feedforward + feedback);
     }
 
-    private void setVoltage(double volts){
+    public void setVoltage(double volts){
         armIO.setVoltage(volts);
 
     }
@@ -91,8 +93,7 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         armIO.updateData(data);
-        // moveToSetpoint();
-        armIO.setVoltage(8);
+        moveToSetpoint();
 
         positionLog.set(getRotation2d().getRadians());
         velocityLog.set(data.velocityRadPerSec);

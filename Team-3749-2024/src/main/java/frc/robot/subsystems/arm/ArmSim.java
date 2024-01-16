@@ -15,7 +15,7 @@ public class ArmSim implements ArmIO {
         .93, 
         Units.degreesToRadians(-170),
         Units.degreesToRadians(170),
-        false,
+        true,
         Units.degreesToRadians(-90));
 
     private double appliedVolts = 0;

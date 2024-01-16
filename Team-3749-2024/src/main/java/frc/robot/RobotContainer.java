@@ -42,6 +42,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    // return Commands.run(() -> Robot.arm.setVoltage(8-0.973));
     return Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(90)));
   }
 }
