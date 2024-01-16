@@ -20,20 +20,28 @@ import frc.robot.Robot;
 
 public class Constants {
 
-  public static enum RobotState {
-    STOW,
-    SPEAKER,
-    AMP,
-    CLIMB;
 
-  }
 
   public static final class Sim {
     public static final double loopPeriodSec = 0.02;
   }
 
+  public static enum RobotState{
+      STOW(0,0),
+      SPEAKER(30,0),
+      AMP(80,0);
+      
+      public double armPosRad;
+      public double shintakePosRad;
+      
+      private RobotState(double armPosRad, double shintakePosRad){
+        this.armPosRad = armPosRad;
+        this.shintakePosRad = shintakePosRad;
+      }
+    }
+
   public static final class ArmConstants {
-    private static final PIDConstants simPID = new PIDConstants(1, 0, 0);
+    private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 10,0,0
     private static final PIDConstants realPID = new PIDConstants(0, 0, 0);
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
@@ -41,8 +49,8 @@ public class Constants {
     // private static final double simkG= 0.9825;
     
     private static final double simkS = 0.0;
-    private static final double simkG= 0.0;
-    private static final double simkV= 0;
+    private static final double simkG= 0.973;
+    private static final double simkV= 2;
     private static final double realkS = 0;
     private static final double realkG = 0;
     private static final double realkV = 0;
@@ -54,6 +62,8 @@ public class Constants {
     private static final Constraints simConstraints = new Constraints(Math.PI, 2 * Math.PI);
     private static final Constraints realConstraints = new Constraints(Math.PI, 2 * Math.PI);
     public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
+
+
 
   }
 

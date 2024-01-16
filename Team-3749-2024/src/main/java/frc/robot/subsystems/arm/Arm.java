@@ -30,10 +30,11 @@ public class Arm extends SubsystemBase {
             ArmConstants.kG,
             ArmConstants.kV);
 
-    private Mechanism2d mechanism = new Mechanism2d(2.5,2);
-    private MechanismRoot2d mechanismArmPivot= mechanism.getRoot("mechanism arm pivot", 1, 0.5);
-    private MechanismLigament2d mechanismArm = mechanismArmPivot.append(new MechanismLigament2d("mechanism arm", 3, 90));
-   
+    private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
+    private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
+    private MechanismLigament2d mechanismArm = mechanismArmPivot
+            .append(new MechanismLigament2d("mechanism arm", .93, 45));
+
     private ShuffleData<Double> positionLog = new ShuffleData<Double>("arm", "position",
             0.0);
     private ShuffleData<Double> velocityLog = new ShuffleData<Double>("arm", "velocity",
@@ -46,13 +47,14 @@ public class Arm extends SubsystemBase {
             0.0);
     private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>("arm", "setpoint velocity",
             0.0);
+
     public Arm() {
         if (Robot.isSimulation()) {
             armIO = new ArmSim();
         }
     }
 
-    public Rotation2d getRotation2d(){
+    public Rotation2d getRotation2d() {
         return new Rotation2d(data.positionRad);
     }
 
@@ -70,29 +72,27 @@ public class Arm extends SubsystemBase {
 
     private void moveToSetpoint() {
         State setpoint = profiledFeedbackController.getSetpoint();
-        double feedback = profiledFeedbackController.calculate(setpoint.position);
-        double feedforward = feedForwardController.calculate(setpoint.position, setpoint.velocity);
+        double feedback = profiledFeedbackController.calculate(data.positionRad);
+        // using data for one and setpoint for the other feels wrong, but it doesn't
+        // work if kg isn't relative to its actual position
+        double feedforward = feedForwardController.calculate(data.positionRad, setpoint.velocity);
         armIO.setVoltage(feedback + feedforward);
-    }
-
-    private void setVoltage(double volts){
-        armIO.setVoltage(volts);
     }
 
     // runs every 0.02 sec
     @Override
     public void periodic() {
         armIO.updateData(data);
-        mechanismArm.setAngle(getRotation2d());
-        setVoltage(-0.1);
-        // moveToSetpoint();
+        moveToSetpoint();
 
-        positionLog.set(getRotation2d().getDegrees());
-        velocityLog.set(data.velocityRadPerSec * 180 / Math.PI);
+        positionLog.set(getRotation2d().getRadians());
+        velocityLog.set(profiledFeedbackController.getSetpoint().velocity- data.velocityRadPerSec);
         voltageLog.set(data.appliedVolts);
         goalLog.set(profiledFeedbackController.getGoal().position);
         setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
         setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
+
+        mechanismArm.setAngle(getRotation2d());
         SmartDashboard.putData("mech", mechanism);
     }
 

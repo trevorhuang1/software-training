@@ -42,6 +42,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(45)));
+    return Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(90)));
   }
 }
