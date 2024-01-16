@@ -39,6 +39,8 @@ public class Arm extends SubsystemBase {
             0.0);
     private ShuffleData<Double> velocityLog = new ShuffleData<Double>("arm", "velocity",
             0.0);
+    private ShuffleData<Double> accelerationLog = new ShuffleData<Double>("arm", "acceleration",
+            0.0);
     private ShuffleData<Double> voltageLog = new ShuffleData<Double>("arm", "voltage",
             0.0);
     private ShuffleData<Double> goalLog = new ShuffleData<Double>("arm", "goal",
@@ -76,17 +78,25 @@ public class Arm extends SubsystemBase {
         // using data for one and setpoint for the other feels wrong, but it doesn't
         // work if kg isn't relative to its actual position
         double feedforward = feedForwardController.calculate(data.positionRad, setpoint.velocity);
-        armIO.setVoltage(feedback + feedforward);
+        setVoltage(feedforward + feedback);
     }
+
+    private void setVoltage(double volts){
+        armIO.setVoltage(volts);
+
+    }
+
 
     // runs every 0.02 sec
     @Override
     public void periodic() {
         armIO.updateData(data);
-        moveToSetpoint();
+        // moveToSetpoint();
+        armIO.setVoltage(8);
 
         positionLog.set(getRotation2d().getRadians());
-        velocityLog.set(profiledFeedbackController.getSetpoint().velocity- data.velocityRadPerSec);
+        velocityLog.set(data.velocityRadPerSec);
+        accelerationLog.set(data.accelerationRadPerSecSquared);
         voltageLog.set(data.appliedVolts);
         goalLog.set(profiledFeedbackController.getGoal().position);
         setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);

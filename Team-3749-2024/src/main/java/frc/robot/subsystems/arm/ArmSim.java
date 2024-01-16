@@ -13,12 +13,13 @@ public class ArmSim implements ArmIO {
         150,
         4,
         .93, 
-        Units.degreesToRadians(-10),
-        Units.degreesToRadians(100),
-        true,
-        Units.degreesToRadians(0));
+        Units.degreesToRadians(-170),
+        Units.degreesToRadians(170),
+        false,
+        Units.degreesToRadians(-90));
 
     private double appliedVolts = 0;
+    private double previousVelocity = 0;
 
     public ArmSim() {
         System.out.println("[Init] Creating ExampleIOSim");
@@ -26,6 +27,7 @@ public class ArmSim implements ArmIO {
 
     @Override
     public void updateData(ArmData data) {
+        previousVelocity = data.velocityRadPerSec;
 
         // update sim values every 0.02 sec
         armSim.update(Sim.loopPeriodSec);
@@ -34,6 +36,9 @@ public class ArmSim implements ArmIO {
         data.positionRad = armSim.getAngleRads();
 
         data.velocityRadPerSec =armSim.getVelocityRadPerSec();
+
+        data.accelerationRadPerSecSquared = (armSim.getVelocityRadPerSec() - previousVelocity)/Sim.loopPeriodSec;
+
         data.appliedVolts = appliedVolts;
         // System.out.println(appliedVolts);
 

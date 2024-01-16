@@ -19,6 +19,7 @@ public interface ArmIO {
         // each of these for each motor
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
+        public double accelerationRadPerSecSquared = 0.0;
         public double appliedVolts = 0.0;
         public double currentAmps = 0.0;
         public double tempCelcius = 0.0;
