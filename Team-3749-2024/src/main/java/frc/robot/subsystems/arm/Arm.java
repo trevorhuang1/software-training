@@ -33,7 +33,8 @@ public class Arm extends SubsystemBase {
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
     private MechanismLigament2d mechanismArm = mechanismArmPivot
-            .append(new MechanismLigament2d("mechanism arm", .93, -90));
+            .append(new MechanismLigament2d("mechanism arm", .93, 0));
+
 
     private ShuffleData<Double> positionLog = new ShuffleData<Double>("arm", "position",
             0.0);
@@ -50,15 +51,22 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>("arm", "setpoint velocity",
             0.0);
     private ShuffleData<Double> setpointAccelerationLog = new ShuffleData<Double>("arm", "setpoint acceleration", 0.0);
+    private ShuffleData<Double> errorPositionLog = new ShuffleData<Double>("arm", "error position",
+            0.0);
+    private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>("arm", "error velocity",
+            0.0);
+    private ShuffleData<Double> errorAccelerationLog = new ShuffleData<Double>("arm", "error acceleration", 0.0);
+
 
     private State setpoint = new State();
     private double prevSetpointVelocity = 0;
-
+    private double accelerationSetpoint = 0;
 
     public Arm() {
         if (Robot.isSimulation()) {
             armIO = new ArmSim();
         }
+        // setGoal(-Math.PI/2);
         // profiledFeedbackController.setGoal(Units.degreesToRadians(-90));
     }
 
@@ -81,8 +89,7 @@ public class Arm extends SubsystemBase {
     private void moveToSetpoint() {
 
         setpoint = profiledFeedbackController.getSetpoint();
-        double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
-        setpointAccelerationLog.set(accelerationSetpoint);
+        accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
         prevSetpointVelocity = setpoint.velocity;
 
 
@@ -114,7 +121,11 @@ public class Arm extends SubsystemBase {
         goalLog.set(profiledFeedbackController.getGoal().position);
         setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
         setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
-
+        setpointAccelerationLog.set(accelerationSetpoint);
+        errorPositionLog.set(profiledFeedbackController.getSetpoint().position-data.positionRad);
+        errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity-data.velocityRadPerSec);
+        errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
+        
         mechanismArm.setAngle(getRotation2d());
         SmartDashboard.putData("mech", mechanism);
     }
