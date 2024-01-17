@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.wrist;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
-public class IntakeSparkMax extends SubsystemBase {
+public class WristSparkMax extends SubsystemBase {
 
     private CANSparkMax intakeMotor = new CANSparkMax(0, MotorType.kBrushless);
     private CANSparkMax wristMotor = new CANSparkMax(1,MotorType.kBrushless);
@@ -25,9 +25,7 @@ public class IntakeSparkMax extends SubsystemBase {
     private double wristVoltage = 0;
     private boolean isGroundSetpoint = true; // lets make a better way to do this
     private double wristOffset = 90;
-    private double currentSetpoint = Constants.IntakeConstants.stowSetpoint;
-
-    public IntakeSparkMax() {
+    public WristSparkMax() {
         System.out.println("[Init] Creating ExampleIOSim");
     }
     
