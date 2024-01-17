@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
+import frc.robot.commands.shooter.wristAngleChange;
 
 /**
  * Util class for button bindings
@@ -21,7 +22,7 @@ import frc.robot.Robot;
 public class JoystickIO {
     private static String[] lastJoystickNames = new String[] { "", "", "", "", "", "" };
 
-    private Xbox pilot;
+    private Xbox pilot; 
     private Xbox operator;
 
     public JoystickIO(Xbox pilot, Xbox operator) {
@@ -109,6 +110,10 @@ public class JoystickIO {
         pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.intakeSim.setIntakeVolts(0)));
 
         pilot.a().onTrue(Commands.runOnce(() -> Robot.intakeSpark.toggleWristSetpoint()));
+
+        Robot.intakeSim.setDefaultCommand(new wristAngleChange(() -> -pilot.getLeftY()));
+
+        
     }
         
 }

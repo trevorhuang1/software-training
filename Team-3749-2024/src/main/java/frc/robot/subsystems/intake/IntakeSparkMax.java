@@ -20,11 +20,12 @@ public class IntakeSparkMax extends SubsystemBase {
     private CANSparkMax wristMotor = new CANSparkMax(1,MotorType.kBrushless);
     private PIDController wristController = new PIDController(1, 0, 0);
     private RelativeEncoder wristEncoder = wristMotor.getEncoder();
-    private ArmFeedforward wristFF = new ArmFeedforward(0, 0, 0);
+    private SimpleMotorFeedforward wristFF = new SimpleMotorFeedforward(1, 0);
     private double intakeVoltage = 0;
-    private double wristVoltage = Constants.IntakeConstants.groundSetpoint;
+    private double wristVoltage = 0;
     private boolean isGroundSetpoint = true; // lets make a better way to do this
-    private double wristOffset = 0;
+    private double wristOffset = 90;
+    private double currentSetpoint = Constants.IntakeConstants.stowSetpoint;
 
     public IntakeSparkMax() {
         System.out.println("[Init] Creating ExampleIOSim");
@@ -49,7 +50,7 @@ public class IntakeSparkMax extends SubsystemBase {
         wristVoltage = Constants.IntakeConstants.groundSetpoint;
         return;
     }
-    wristVoltage = Constants.IntakeConstants.shooterSetpoint;
+    wristVoltage = Constants.IntakeConstants.stowSetpoint;
     
    }
 
@@ -57,7 +58,7 @@ public class IntakeSparkMax extends SubsystemBase {
    public void periodic()
    {
     intakeMotor.setVoltage(intakeVoltage);
-    wristMotor.setVoltage(wristFF.calculate(wristVoltage+wristOffset,1) + wristController.calculate(wristEncoder.getPosition(),wristVoltage));
+    wristMotor.setVoltage(wristFF.calculate(wristVoltage) + wristController.calculate(wristEncoder.getPosition()+wristOffset,wristVoltage));
     SmartDashboard.putNumber("intakeVolts",intakeMotor.getBusVoltage());
     SmartDashboard.putNumber("intakeWristVotor", wristMotor.getBusVoltage());
    }
