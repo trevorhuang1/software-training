@@ -94,6 +94,11 @@ public class Constants {
     private static final double realMaxAccelerationMetersPerSecondSquared = 2.5;
     private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
+    public static final int driveMotorStallLimit = 30;
+    public static final int driveMotorFreeLimit = 60;
+    public static final int turnMotorStallLimit = 30;
+    public static final int turnMotorFreeLimit = 60;
+
     private static final double simMaxSpeedMetersPerSecond = 2.655;
     private static final double simMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
     private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;

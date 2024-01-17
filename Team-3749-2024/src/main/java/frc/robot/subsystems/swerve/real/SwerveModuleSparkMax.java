@@ -37,10 +37,13 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     private double driveAppliedVolts;
     private double turnAppliedVolts;
 
-    public SwerveModuleSparkMax(int driveID, int turnID, int absoluteEncoderID) { // taken from drive constants
+    public SwerveModuleSparkMax(int driveID, int turnID, int absoluteEncoderID, boolean isDriveMotorReversed, boolean isTurnMotorReversed) { // taken from drive constants
         
         driveMotor = new CANSparkMax(driveID, CANSparkMax.MotorType.kBrushless);
         turnMotor = new CANSparkMax(turnID, CANSparkMax.MotorType.kBrushless);
+
+        driveMotor.setInverted(isDriveMotorReversed);
+        turnMotor.setInverted(isTurnMotorReversed);
 
         absoluteEncoder = new CANcoder(absoluteEncoderID);
         turnPositionRad = Units.rotationsToRadians(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
@@ -52,8 +55,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         drivePositionRad = Units.rotationsToRadians(driveEncoder.getPosition());
         turnPositionRad = Units.rotationsToRadians(turnEncoder.getPosition());
 
-        driveMotor.setSmartCurrentLimit(30, 60);
-        turnMotor.setSmartCurrentLimit(30, 60);
+        driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit, Constants.DriveConstants.driveMotorFreeLimit);
+        turnMotor.setSmartCurrentLimit(Constants.DriveConstants.turnMotorStallLimit, Constants.DriveConstants.turnMotorFreeLimit);
 
     };
 
