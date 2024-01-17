@@ -80,8 +80,8 @@ public class Constants {
     public static final int[] driveMotorPorts = { 1, 3, 7, 5 }; // FL, FR, BL, BR
     public static final int[] turningMotorPorts = { 2, 4, 8, 6 }; // FL, FR, BL, BR
 
-    public static final boolean[] turningEncoderReversed = { false, false, false, false };
     public static final boolean[] driveEncoderReversed = { true, false, true, false };
+    public static final boolean[] turningEncoderReversed = { false, false, false, false };
 
     public static final int[] absoluteEncoderPorts = { 9, 10, 11, 12 };
 

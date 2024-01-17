@@ -4,7 +4,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -31,33 +30,29 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     private RelativeEncoder driveEncoder;
     private RelativeEncoder turnEncoder;
 
-    private double drivePositionRad;
     private double turnPositionRad;
 
     private double driveAppliedVolts;
     private double turnAppliedVolts;
 
-    public SwerveModuleSparkMax(int driveID, int turnID, int absoluteEncoderID, boolean isDriveMotorReversed, boolean isTurnMotorReversed) { // taken from drive constants
+    public SwerveModuleSparkMax(int index) {
         
-        driveMotor = new CANSparkMax(driveID, CANSparkMax.MotorType.kBrushless);
-        turnMotor = new CANSparkMax(turnID, CANSparkMax.MotorType.kBrushless);
-
-        driveMotor.setInverted(isDriveMotorReversed);
-        turnMotor.setInverted(isTurnMotorReversed);
-
-        absoluteEncoder = new CANcoder(absoluteEncoderID);
-        turnPositionRad = Units.rotationsToRadians(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
-        /* absoluteEncoder.configMagnetOffset(absoluteEncoderOffset); */ //deprecated in phoenixv6
-
+        driveMotor = new CANSparkMax(Constants.DriveConstants.driveMotorPorts[index], CANSparkMax.MotorType.kBrushless);
+        turnMotor = new CANSparkMax(Constants.DriveConstants.turningMotorPorts[index], CANSparkMax.MotorType.kBrushless);
+    
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
 
-        drivePositionRad = Units.rotationsToRadians(driveEncoder.getPosition());
-        turnPositionRad = Units.rotationsToRadians(turnEncoder.getPosition());
+        driveEncoder.setInverted(Constants.DriveConstants.driveEncoderReversed[index]);
+        turnEncoder.setInverted(Constants.DriveConstants.turningEncoderReversed[index]);
 
         driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit, Constants.DriveConstants.driveMotorFreeLimit);
         turnMotor.setSmartCurrentLimit(Constants.DriveConstants.turnMotorStallLimit, Constants.DriveConstants.turnMotorFreeLimit);
 
+        absoluteEncoder = new CANcoder(Constants.DriveConstants.absoluteEncoderPorts[index]);
+        turnPositionRad = Units.rotationsToRadians(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        // absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
+        // ^^ deprecated in phoenixv6 ^^
     };
 
     @Override
@@ -69,7 +64,6 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
 
-        drivePositionRad = driveEncoder.getPosition();
         turnPositionRad = turnEncoder.getPosition();
 
         driveAppliedVolts = driveMotor.getBusVoltage();
@@ -79,12 +73,13 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         data.driveVelocityMPerSec = driveRadPerSec * ModuleConstants.wheelDiameterMeters / 2;
         data.driveAppliedVolts = driveAppliedVolts;
         data.driveCurrentAmps = Math.abs(driveMotor.getOutputCurrent());
-        data.driveTempCelcius = 0;
+        data.driveTempCelcius = driveMotor.getMotorTemperature();
+        
         data.turnAbsolutePositionRad = turnPositionRad;
         data.turnVelocityRadPerSec = turnRadPerSec;
         data.turnAppliedVolts = turnAppliedVolts;
         data.turnCurrentAmps = Math.abs(turnMotor.getOutputCurrent());
-        data.turnTempCelcius = 0;
+        data.turnTempCelcius = turnMotor.getMotorTemperature();
 
     };
 
@@ -121,11 +116,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         return turnEncoder.getVelocity();
     };
 
-    public double getAbsoluteEncoderRad() {
-        return turnPositionRad;
-    };
     public void resetEncoders() {
         driveEncoder.setPosition(0);
-        turnEncoder.setPosition(getAbsoluteEncoderRad());
+        turnEncoder.setPosition(turnPositionRad);
     };
 }

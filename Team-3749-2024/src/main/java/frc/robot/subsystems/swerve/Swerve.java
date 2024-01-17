@@ -71,13 +71,7 @@ public class Swerve extends SubsystemBase {
     } else {
       // real swerve module instatiation here
       for (int i = 0; i < 4; i++) {
-        modules[i] = new SwerveModule(i,
-            new SwerveModuleSparkMax(
-              Constants.DriveConstants.driveMotorPorts[i],
-              Constants.DriveConstants.turningMotorPorts[i],
-              Constants.DriveConstants.absoluteEncoderPorts[i],
-                         
-              ));
+        modules[i] = new SwerveModule(i, new SwerveModuleSparkMax(i));
       }
     }
 
