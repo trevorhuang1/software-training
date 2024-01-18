@@ -48,7 +48,6 @@ public class WristSparkMax extends SubsystemBase {
    @Override
    public void periodic()
    {
-    wristMotor.setVoltage(wristFF.calculate(currentSetpoint) + wristController.calculate(wristEncoder.getPosition()+wristOffset,currentSetpoint));
     SmartDashboard.putNumber("WristVolts", wristMotor.getBusVoltage());
     SmartDashboard.putNumber("WristAngle", wristEncoder.getPosition());
    }

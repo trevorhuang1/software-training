@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
+import frc.robot.commands.WristCommand;
 
 /**
  * Util class for button bindings
@@ -94,8 +95,9 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-       pilot.a().onTrue(Commands.runOnce(() -> Robot.wristSpark.toggleWristSetpoint()));
        
+       pilot.a().onTrue(new WristCommand());
+
        pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.intakeSpark.setIntakeVolts(Constants.ShintakeConstants.outtakeVoltage)));
        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intakeSpark.setIntakeVolts(Constants.ShintakeConstants.idleVoltage)));
 

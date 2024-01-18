@@ -1,8 +1,11 @@
 package frc.robot.subsystems.shintake;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -10,15 +13,19 @@ import frc.robot.utils.Constants;
 public class IntakeSparkMax extends SubsystemBase {
 
     private CANSparkMax intakeMotor = new CANSparkMax(0, MotorType.kBrushless);
-    private double intakeVoltage = Constants.ShintakeConstants.idleVoltage;
+    private RelativeEncoder intakEncoder = intakeMotor.getEncoder();
+    private PIDController intakeController = new PIDController(1, 0, 0);
+    private SimpleMotorFeedforward intakeFF = new SimpleMotorFeedforward(1, 0);
+    private double intakeVelocity = Constants.ShintakeConstants.idleVoltage;
 
-    public IntakeSparkMax() {
+    public IntakeSparkMax() 
+    {
 
     }
     
-   public void setIntakeVolts(double volts)
+   public void setIntakeVolts(double velocity)
    {
-    this.intakeVoltage = volts;
+    this.intakeVelocity = velocity;
    }
 
    public void stop()
@@ -29,7 +36,10 @@ public class IntakeSparkMax extends SubsystemBase {
    @Override
    public void periodic()
    {
-    intakeMotor.setVoltage(intakeVoltage);
+    intakeMotor.setVoltage(
+        intakeFF.calculate(intakeVelocity) + 
+        intakeController.calculate(intakEncoder.getVelocity(),intakeVelocity)
+    );
     SmartDashboard.putNumber("intakeVolts",intakeMotor.getBusVoltage());
    }
 
