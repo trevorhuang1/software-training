@@ -7,12 +7,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.shintake.wristAngleChange;
 
 /**
  * Util class for button bindings
@@ -98,21 +94,13 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        //Command scoreAmp = Commands.parallel(() -> Robot.shooterSim.setDesiredVoltage(2), () -> Robot.intakeSim.setOuttakeVolts());
-        pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(2)));
-         //Amp
-        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(0)));
+       pilot.a().onTrue(Commands.runOnce(() -> Robot.wristSpark.toggleWristSetpoint()));
+       
+       pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.intakeSpark.setIntakeVolts(Constants.ShintakeConstants.outtakeVoltage)));
+       pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intakeSpark.setIntakeVolts(Constants.ShintakeConstants.idleVoltage)));
 
-        pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(4))); //Speaker
-        pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.shooterSim.setDesiredVoltage(0)));
-
-        pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.intakeSim.setIntakeVolts(2))); //intake
-        pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.intakeSim.setIntakeVolts(0)));
-
-        pilot.a().onTrue(Commands.runOnce(() -> Robot.intakeSpark.toggleWristSetpoint()));
-
-        Robot.intakeSim.setDefaultCommand(new wristAngleChange(() -> -pilot.getLeftY()));
-
+       pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.intakeSpark.setIntakeVolts(Constants.ShintakeConstants.intakeVoltage)));
+       pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intakeSpark.setIntakeVolts(Constants.ShintakeConstants.idleVoltage)));
         
     }
         
