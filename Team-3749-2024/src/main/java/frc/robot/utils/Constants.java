@@ -84,15 +84,16 @@ public class Constants {
 
     public static final class WristConstants
     {
-        public static final double groundSetpoint = 90;
-        public static final double stowSetpoint = 0;
+        public static final double groundSetpoint = 50;
+        public static final double stowSetpoint = 90;
     }
 
     public static final class ShintakeConstants
     {
-        public static final double idleVoltage = 1;
-        public static final double intakeVoltage = 2;
-        public static final double outtakeVoltage = -2;
+        public static final double intakeIdleVoltage = 1;
+        public static final double shooterIdleVoltage = 1;
+        public static final double intakeVelocity = 2;
+        public static final double shooterVelocity = -2;
     }
 
 

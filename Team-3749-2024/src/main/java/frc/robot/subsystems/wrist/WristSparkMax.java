@@ -26,7 +26,7 @@ public class WristSparkMax extends SubsystemBase {
     private SimpleMotorFeedforward wristFF = new SimpleMotorFeedforward(1, 0);
     private double currentSetpoint = Constants.WristConstants.stowSetpoint; //always start it here!!!!!!! please!!!
     private boolean isGroundSetpoint = false;
-    private double wristOffset = 90;
+    private double wristOffset = 40;
     public WristSparkMax() 
     {
 
