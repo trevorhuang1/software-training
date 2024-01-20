@@ -86,18 +86,11 @@ public class Arm extends SubsystemBase {
         return profiledFeedbackController.getSetpoint();
     }
 
-    private void moveToSetpoint() {
-
-        setpoint = profiledFeedbackController.getSetpoint();
-        accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
-        prevSetpointVelocity = setpoint.velocity;
-
+    public void setState(double position, double velocity, double acceleration) {
 
 
         double feedback = profiledFeedbackController.calculate(data.positionRad);
-        // using data for one and setpoint for the other feels wrong, but it doesn't
-        // work if kg isn't relative to its actual position
-        double feedforward = feedForwardController.calculate(data.positionRad, setpoint.velocity, accelerationSetpoint);
+        double feedforward = feedForwardController.calculate(data.positionRad, velocity, acceleration);
         setVoltage(feedforward + feedback);
 
 
@@ -112,7 +105,6 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         armIO.updateData(data);
-        moveToSetpoint();
 
         positionLog.set(getRotation2d().getRadians());
         velocityLog.set(data.velocityRadPerSec);
