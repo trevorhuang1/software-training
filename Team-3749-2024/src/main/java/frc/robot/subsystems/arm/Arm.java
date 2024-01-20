@@ -58,8 +58,6 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> errorAccelerationLog = new ShuffleData<Double>("arm", "error acceleration", 0.0);
 
 
-    private State setpoint = new State();
-    private double prevSetpointVelocity = 0;
     private double accelerationSetpoint = 0;
 
     public Arm() {
@@ -87,7 +85,8 @@ public class Arm extends SubsystemBase {
     }
 
     public void setState(double position, double velocity, double acceleration) {
-
+        // update for logging
+        accelerationSetpoint = acceleration;
 
         double feedback = profiledFeedbackController.calculate(data.positionRad);
         double feedforward = feedForwardController.calculate(data.positionRad, velocity, acceleration);
