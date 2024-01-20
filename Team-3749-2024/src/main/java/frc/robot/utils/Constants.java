@@ -20,58 +20,55 @@ import frc.robot.Robot;
 
 public class Constants {
 
-
-
   public static final class Sim {
     public static final double loopPeriodSec = 0.02;
   }
 
-  public static enum RobotState{
-      STOW(0,0),
-      SPEAKER(30,0),
-      AMP(80,0);
-      
-      public double armPosRad;
-      public double shintakePosRad;
-      
-      private RobotState(double armPosRad, double shintakePosRad){
-        this.armPosRad = armPosRad;
-        this.shintakePosRad = shintakePosRad;
-      }
+  public static enum RobotState {
+    STOW(0, 0),
+    SPEAKER(30, 0),
+    AMP(80, 0);
+
+    public double armPosRad;
+    public double shintakePosRad;
+
+    private RobotState(double armPosRad, double shintakePosRad) {
+      this.armPosRad = armPosRad;
+      this.shintakePosRad = shintakePosRad;
     }
+  }
 
   public static final class ArmConstants {
     private static final PIDConstants simPID = new PIDConstants(2.2, 0, 0); // 10,0,0
     private static final PIDConstants realPID = new PIDConstants(0, 0, 0);
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
-    // private static final double simkS = 0.3;
-    // private static final double simkG= 0.9825;
-    
-    private static final double simkS = 0.0;
-    private static final double simkG= 0.973;// stick arm at 0 degrees, tune till it doesnt move
-    // private static final double simkG= 0.0;
-    private static final double simkV= 2.977; // max volts - kG / max velocity
+    public static final int leftID = 0;
+    public static final int rightID = 1;
+    // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
+    public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2; 
+    public static final int encoderID = 2;
+    public static final double encoderOffsetRad = 0;
 
-    // not integrated with the trapezoid profile - make our own? 
+    // Control - PID, FF, and Trapezoidal Constraints
+    private static final double simkS = 0.0;
+    private static final double simkG = 0.973;// stick arm at 0 degrees, tune till it doesnt move
+    private static final double simkV = 2.977; // max volts - kG / max velocity
     private static final double simkA = 0.0386; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
-    
+
     private static final double realkS = 0;
     private static final double realkG = 0;
     private static final double realkV = 0;
     private static final double realkA = 0;
 
-    public static final double kS = Robot.isReal() ? realkS : simkS; 
-    public static final double kG = Robot.isReal() ? realkG : simkG; 
-    public static final double kV = Robot.isReal() ? realkV : simkV; 
-    public static final double kA = Robot.isReal() ? realkA : simkA; 
+    public static final double kS = Robot.isReal() ? realkS : simkS;
+    public static final double kG = Robot.isReal() ? realkG : simkG;
+    public static final double kV = Robot.isReal() ? realkV : simkV;
+    public static final double kA = Robot.isReal() ? realkA : simkA;
 
-
-    private static final Constraints simConstraints = new Constraints(2.36,71.58);
+    private static final Constraints simConstraints = new Constraints(2.36, 71.58);
     private static final Constraints realConstraints = new Constraints(Math.PI, 2 * Math.PI);
     public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
-
-
 
   }
 

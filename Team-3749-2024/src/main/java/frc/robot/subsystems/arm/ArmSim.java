@@ -42,9 +42,11 @@ public class ArmSim implements ArmIO {
         data.appliedVolts = appliedVolts;
         // System.out.println(appliedVolts);
 
-        data.currentAmps = Math.abs(armSim.getCurrentDrawAmps());
+        data.leftCurrentAmps = Math.abs(armSim.getCurrentDrawAmps());
+        data.rightCurrentAmps = Math.abs(armSim.getCurrentDrawAmps());
 
-        data.tempCelcius = 0;
+        data.leftTempCelcius = 0;
+        data.rightTempCelcius = 0;
     }
 
     @Override
