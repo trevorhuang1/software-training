@@ -20,8 +20,8 @@ Very closely inspired by 6328's Swerve Sim code,
  https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/drive/ModuleIOSim.java
 */
 public class SwerveModuleSim implements SwerveModuleIO {
-    private FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), Constants.DriveConstants.gearRatio, 0.000013742);
-    private FlywheelSim turnSim = new FlywheelSim(DCMotor.getNEO(1), Constants.DriveConstants.gearRatio, 0.000013742);
+    private FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), Constants.DriveConstants.gearRatio, 0.025);
+    private FlywheelSim turnSim = new FlywheelSim(DCMotor.getNEO(1), Constants.DriveConstants.gearRatio, 0.04);
 
     private double turnPositionRad = 0;
     private double driveAppliedVolts = 0.0;
