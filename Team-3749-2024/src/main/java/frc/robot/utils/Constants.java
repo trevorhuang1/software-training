@@ -84,8 +84,9 @@ public class Constants {
 
     public static final class WristConstants
     {
-        public static final double groundSetpoint = 50;
-        public static final double stowSetpoint = 90;
+        public static final double groundSetpoint = 40;
+        public static final double stowSetpoint = 0;
+        public static final double wristOffset = 0;
     }
 
     public static final class ShintakeConstants

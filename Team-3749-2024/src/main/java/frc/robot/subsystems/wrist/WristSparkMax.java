@@ -20,34 +20,34 @@ import frc.robot.utils.Constants;
 
 public class WristSparkMax extends SubsystemBase {
 
-    private CANSparkMax wristMotor = new CANSparkMax(1,MotorType.kBrushless);
+    private CANSparkMax wristMotor = new CANSparkMax(3,MotorType.kBrushless);
     private PIDController wristController = new PIDController(1, 0, 0);
     private RelativeEncoder wristEncoder = wristMotor.getEncoder();
     private SimpleMotorFeedforward wristFF = new SimpleMotorFeedforward(1, 0);
-    private double currentSetpoint = Constants.WristConstants.stowSetpoint; //always start it here!!!!!!! please!!!
-    private boolean isGroundSetpoint = false;
-    private double wristOffset = 40;
+    private double targetAngle = Constants.WristConstants.stowSetpoint;
+
     public WristSparkMax() 
     {
-
+        wristEncoder.setPosition(Constants.WristConstants.wristOffset); 
     }
 
-   public void toggleWristSetpoint()
+   public void setWristAngle(double angle)
    {
-    isGroundSetpoint = !isGroundSetpoint;
+    this.targetAngle = angle;
+   }
 
-    if(isGroundSetpoint)
-    {
-        currentSetpoint = Constants.WristConstants.groundSetpoint;
-        return;
-    }
-    currentSetpoint = Constants.WristConstants.stowSetpoint;
-    
+   public void moveWristAngle()
+   {
+    wristMotor.setVoltage(
+        wristController.calculate(wristEncoder.getPosition(),targetAngle) + 
+        wristFF.calculate(targetAngle)
+    );
    }
 
    @Override
    public void periodic()
    {
+    moveWristAngle();
     SmartDashboard.putNumber("WristVolts", wristMotor.getBusVoltage());
     SmartDashboard.putNumber("WristAngle", wristEncoder.getPosition());
    }
