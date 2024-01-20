@@ -3,6 +3,8 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -84,6 +86,10 @@ public class Constants {
 
     public static final class WristConstants
     {
+        private static final PIDConstants simPID = new PIDConstants(1,0,0);
+        private static final PIDConstants realPID = new PIDConstants(1,0,0);
+        public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
+
         public static final double groundSetpoint = 40;
         public static final double stowSetpoint = 0;
         public static final double wristOffset = 0;

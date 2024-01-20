@@ -20,7 +20,7 @@ public class WristCommand extends Command{
     public void execute()
     {
         this.isGroundSetpoint = !isGroundSetpoint;
-        Robot.wristSpark.setWristAngle(setpointToggle.get(this.isGroundSetpoint));
+        Robot.wrist.setWristAngle(setpointToggle.get(this.isGroundSetpoint));
     }
     @Override
     public boolean isFinished() {

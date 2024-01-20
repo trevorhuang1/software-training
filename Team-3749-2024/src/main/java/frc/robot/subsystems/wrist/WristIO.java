@@ -16,10 +16,10 @@ package frc.robot.subsystems.wrist;
  */
 public interface WristIO {
     public static class WristData { 
-        public double wristAngle = 0.0;
         public double wristVoltage = 0.0;
         public double tempCelcius = 0.0;
-        public double targetAngle = 0.0;
+        public double motorRPM = 0.0;
+        public double appliedVolts = 0.0;
     }
     /** Updates the set of loggable inputs. */
     public default void updateData(WristData data) {
@@ -31,8 +31,9 @@ public interface WristIO {
         
     }
 
-    /** Enable or disable brake mode on the drive motor. */
-    public default void setBrakeMode(boolean enable) {
+    public default double getEncoderValue() //please have mercy noah
+    {
+        return 0;
     }
 
 }
