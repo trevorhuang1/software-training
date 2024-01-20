@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.commands.swerve.PPUtils;
+import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.TurnToAngle;
 import frc.robot.utils.Constants;
@@ -54,19 +54,14 @@ public class RobotContainer {
 
     commandList.put("PrintCMD-hello", new PrintCommand("hello"));
 
-    PPUtils.initPathCommands(commandList);
-    PPUtils.initPPUtils();
+    AutoUtils.initPathCommands(commandList);
+    AutoUtils.initPPUtils();
   }
 
   public Command getAutonomousCommand() {
     Command command;
-    // command = PPUtils.getPathFindToPoseCommand(new Pose2d(10, 3,
-    // Rotation2d.fromDegrees(180)), 0);
 
-    // command = PPUtils.getPathFindThenFollowPathCommand("CirclePath",
-    // Constants.PathPlannerConstants.defaultPathConstraints);
-
-    command = PPUtils.getAutoPath("Straight Line");
+    command = AutoUtils.getAutoPath("TestAuto");
 
     return command;
   }

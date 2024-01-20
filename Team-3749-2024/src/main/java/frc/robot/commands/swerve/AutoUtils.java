@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
+import com.choreo.lib.ChoreoTrajectoryState;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
@@ -17,6 +20,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -30,14 +35,12 @@ import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
 
-public class PPUtils {
+public class AutoUtils {
   private static Swerve swerve = Robot.swerve;
   public static Consumer<Pose2d> pathTargetPose = pose -> swerve.logDesiredOdometry(pose);
 
   static SendableChooser<Command> autoChooser;
   static SendableChooser<Alliance> allianceChooser;
-
-  static boolean isFirstPath = true;
 
   public static void initPPUtils() {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
@@ -45,14 +48,14 @@ public class PPUtils {
     allianceChooser = new SendableChooser<>();
     allianceChooser.addOption("Blue Alliance", Alliance.Blue);
     allianceChooser.addOption("Red Alliance", Alliance.Red);
-    allianceChooser.setDefaultOption("Red Alliance", Alliance.Red);
+    allianceChooser.setDefaultOption("Blue Alliance", Alliance.Blue);
 
     AutoBuilder.configureHolonomic(
         swerve::getPose,
         swerve::resetOdometry,
         swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
-        Constants.PathPlannerConstants.cfgHolonomicFollower,
+        Constants.AutoConstants.cfgHolonomicFollower,
         () -> {
           Alliance robotAlliance = allianceChooser.getSelected();
           robotAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : robotAlliance;
@@ -77,30 +80,28 @@ public class PPUtils {
     });
   }
 
-  public static void checkIsFirstPath(PathPlannerPath path) {
-    if (isFirstPath) {
-      swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
-      isFirstPath = !isFirstPath;
-    }
-  };
-
   public static Command getAutoPath() {
     return autoChooser.getSelected();
   }
 
   public static Command getAutoPath(String autoPathName) {
-
     return AutoBuilder.buildAuto(autoPathName);
   }
 
-  public static Command getPathFindToPoseCommand(Pose2d pose, PathConstraints constraints) {
-    return AutoBuilder.pathfindToPose(pose, constraints);
-  }
+  public static Command followPathCommand(PathPlannerPath path) {
+    return new FollowPathHolonomic(path, swerve::getPose,
+        swerve::getChassisSpeeds, swerve::setChassisSpeeds,
+        Constants.AutoConstants.cfgHolonomicFollower, () -> {
+          Alliance robotAlliance = allianceChooser.getSelected();
+          robotAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get()
+              : robotAlliance;
 
-  public static Command getPathFindToPoseCommand(Pose2d targetPose, double endingVelocity) {
-
-    return AutoBuilder.pathfindToPose(targetPose, Constants.PathPlannerConstants.defaultPathConstraints,
-        endingVelocity);
+          if (robotAlliance == Alliance.Red) {
+            return true;
+          } else {
+            return false;
+          }
+        }, swerve);
   }
 
   public static Command getPathFindToPoseCommand(Pose2d targetPose, PathConstraints constraints,
@@ -109,46 +110,36 @@ public class PPUtils {
     return AutoBuilder.pathfindToPose(targetPose, constraints, endingVelocity);
   }
 
-  public static Command getPathFindThenFollowPathCommand(String pathName, PathConstraints constraints) {
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-    Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-        path,
-        constraints, 0);
-    return pathfindingCommand;
+  public static Command pathFindToThenFollowTraj(String trajName, PathConstraints constraints) {
+    ChoreoTrajectory traj = ChoreoUtils.getTraj(trajName);
+    PathPlannerPath ppPath = PathPlannerPath.fromChoreoTrajectory(trajName);
+
+    ChoreoTrajectoryState initalState = traj.getInitialState();
+    double endingVel = 0;
+
+    // Note from Neel --
+    // Should I try to find the direction the robot is heading in and
+    // calculate the deltas so that the ending velocity passed into pathFind will
+    // be exactly what the inital state will sxet the speeds to.
+
+    Command returnCommand = getPathFindToPoseCommand(initalState.getPose(),
+        constraints, endingVel);
+
+    returnCommand = returnCommand.andThen(followPathCommand(ppPath));
+
+    return returnCommand;
   }
 
+  class ChoreoUtils {
+    public static ChoreoTrajectory getTraj(String trajName) {
+      return Choreo.getTrajectory(trajName);
+    }
 
-  //?????????????????????????????????????????????????????????????????????????????????????????????????????
-  //  What is the point of follow subsequent paths when we can make an auto and have PP do it for us  ???
-  //?????????????????????????????????????????????????????????????????????????????????????????????????????
+    // More to come.. I have ideas for this... dont delete
+  }
 
-  // public static Command followPathCommand(PathPlannerPath path) {
-  //   return new FollowPathHolonomic(path, swerve::getPose, swerve::getChassisSpeeds, swerve::setChassisSpeeds,
-  //       Constants.PathPlannerConstants.cfgHolonomicFollower, () -> {
-  //         Alliance robotAlliance = allianceChooser.getSelected();
-  //         robotAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get()
-  //             : robotAlliance;
-
-  //         if (robotAlliance == Alliance.Red) {
-  //           return true;
-  //         } else {
-  //           return false;
-  //         }
-  //       }, swerve);
-  // }
-
-  // public static Command followMultiplePathsCommand(String... pathNames) {
-  //   Command commandToFollow = new SequentialCommandGroup();
-
-  //   for (String name : pathNames) {
-  //     PathPlannerPath path = PathPlannerPath.fromPathFile(name);
-
-  //     path.getAllPathPoints().get(-1);
-  //     //do something to edit the desired velocity maybe
-
-  //     commandToFollow = commandToFollow.andThen(followPathCommand(path));
-  //   }
-
-  //   return commandToFollow;
-  // }
+  // ?????????????????????????????????????????????????????????????????????????????????????????????????????
+  // What is the point of follow subsequent paths when we can make an auto and
+  // have PP do it for us ???
+  // ?????????????????????????????????????????????????????????????????????????????????????????????????????
 }

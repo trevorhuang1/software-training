@@ -132,12 +132,6 @@ public class Swerve extends SubsystemBase {
     return swerveDrivePoseEstimator;
   }
 
-  // Not sure that this works properly
-  /*
-   * Note from Neel: it doesn't ;( any commands that rely on setChassisSpeeds()
-   * work relative to the new rotation
-   * and go the correct direction
-   */
   public void resetOdometry(Pose2d pose) {
     // convert to -pi to pi
     Rotation2d gyroHeading = new Rotation2d(gyroData.yawDeg / 180 * Math.PI);
