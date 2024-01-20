@@ -18,12 +18,12 @@ public class ArmTeleop extends Command {
 
     }
     @Override
-    public void end(){
-        
+    public void end(boolean interupted){
+
     }
 
     @Override 
-    public boolean isFinished(){
+    public boolean isFinished( ){
 
     }
 }
