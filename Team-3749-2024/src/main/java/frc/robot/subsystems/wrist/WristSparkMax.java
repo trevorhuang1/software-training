@@ -8,6 +8,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.Constants;
 
 
@@ -18,7 +20,8 @@ import frc.robot.utils.Constants;
  * if you do not i will be very sad (and it also might destory itself)
  */
 
-public class WristSparkMax extends SubsystemBase {
+public class WristSparkMax implements WristIO {
+    
 
     private CANSparkMax wristMotor = new CANSparkMax(3,MotorType.kBrushless);
     private PIDController wristController = new PIDController(1, 0, 0);
@@ -45,11 +48,18 @@ public class WristSparkMax extends SubsystemBase {
    }
 
    @Override
+   public void updateData(WristData data) 
+   {
+    data.tempCelcius = wristMotor.getMotorTemperature();
+    data.wristAngle = wristEncoder.getPosition();
+    data.targetAngle = this.targetAngle;
+    data.wristVoltage = wristMotor.getBusVoltage();
+   }
+
+   //called by Wrist Subsystem's periodic : notice the lack of override
    public void periodic()
    {
     moveWristAngle();
-    SmartDashboard.putNumber("WristVolts", wristMotor.getBusVoltage());
-    SmartDashboard.putNumber("WristAngle", wristEncoder.getPosition());
    }
 
 }

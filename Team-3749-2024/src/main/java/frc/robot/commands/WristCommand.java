@@ -13,7 +13,7 @@ public class WristCommand extends Command{
     {
         setpointToggle.put(true,Constants.WristConstants.groundSetpoint);
         setpointToggle.put(false,Constants.WristConstants.stowSetpoint);
-        addRequirements(Robot.wristSpark);
+        addRequirements(Robot.wrist);
     }
 
     @Override

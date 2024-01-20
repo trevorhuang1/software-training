@@ -15,17 +15,14 @@ package frc.robot.subsystems.wrist;
  *         logging, easy simulation, and future advantage kit implementation
  */
 public interface WristIO {
-    public static class ExampleData {
-        // each of these for each motor
-        public double positionRad = 0.0;
-        public double velocityRadPerSec = 0.0;
-        public double appliedVolts = 0.0;
-        public double currentAmps = 0.0;
+    public static class WristData { 
+        public double wristAngle = 0.0;
+        public double wristVoltage = 0.0;
         public double tempCelcius = 0.0;
-        
+        public double targetAngle = 0.0;
     }
     /** Updates the set of loggable inputs. */
-    public default void updateData(ExampleData data) {
+    public default void updateData(WristData data) {
 
     }
 
