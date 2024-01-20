@@ -47,8 +47,8 @@ public class Constants {
 
   public static final class ModuleConstants {
     public static final double wheelDiameterMeters = Units.inchesToMeters(3.5);
-    public static final double driveMotorGearRatio = 1.0 / 6.75;
-    public static final double turningMotorGearRatio = 1.0 / 12.8;
+    public static final double driveMotorGearRatio = 6.75;
+    public static final double turnMotorGearRatio = 12.8;
     public static final double kPTurningReal = 2.25;
     public static final double kPDrivingReal = 0.0;
     public static final double kVDrivingReal = 1.5;
@@ -105,10 +105,7 @@ public class Constants {
     // private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
     // private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 2 * 2 * Math.PI;
 
-    private static final double simGearRatio = 150 / 7;
-    private static final double realGearRatio = 150 / 7;
 
-    public static final double gearRatio = Robot.isReal() ? realGearRatio : simGearRatio;
 
     public static final double maxSpeedMetersPerSecond = Robot.isReal()
         ? DriveConstants.realMaxSpeedMetersPerSecond
