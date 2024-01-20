@@ -97,8 +97,13 @@ public class Constants {
 
     private static final double simMaxSpeedMetersPerSecond = 3.707;
     private static final double simMaxAngularSpeedRadiansPerSecond = 11.795;
-    private static final double simMaxAccelerationMetersPerSecondSquared = 7.800;
+    private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
     private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 30.273;
+
+    // private static final double simMaxSpeedMetersPerSecond = 2.65;
+    // private static final double simMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
+    // private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
+    // private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 2 * 2 * Math.PI;
 
     private static final double simGearRatio = 150 / 7;
     private static final double realGearRatio = 150 / 7;
@@ -124,7 +129,7 @@ public class Constants {
     public static final double toleranceM_Misc = 0.02;
     public static final double toleranceRad_Misc = Math.PI / 750;
 
-    public static final Pose2d fieldStartingPose = new Pose2d(0.83, 3.10, Rotation2d.fromDegrees(0));
+    public static final Pose2d fieldStartingPose = new Pose2d(1, 7, Rotation2d.fromDegrees(0));
   }
 
   public static final class AutoConstants {
@@ -134,8 +139,10 @@ public class Constants {
     public static double kP_PathPlannerTurn = 1.8;
     public static double kD_PathPlannerTurn = 0;
 
-    public static PIDConstants driveConstants = new PIDConstants(kP_PathPlannerTurn, 0, kP_PathPlannerDrive);
-    public static PIDConstants turnConstants = new PIDConstants(kP_PathPlannerTurn, 0, kP_PathPlannerDrive);
+    public static PIDConstants driveConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerDrive, 0,
+        Constants.AutoConstants.kD_PathPlannerDrive);
+    public static PIDConstants turnConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerTurn, 0,
+        Constants.AutoConstants.kD_PathPlannerTurn);
 
     public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
         // in your Constants class
