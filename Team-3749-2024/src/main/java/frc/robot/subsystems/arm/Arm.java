@@ -60,6 +60,8 @@ public class Arm extends SubsystemBase {
 
     private double accelerationSetpoint = 0;
 
+    private boolean isKilled = false;
+
     public Arm() {
         if (Robot.isSimulation()) {
             armIO = new ArmSim();
@@ -96,8 +98,17 @@ public class Arm extends SubsystemBase {
     }
 
     public void setVoltage(double volts) {
-        armIO.setVoltage(volts);
+        if (isKilled){
+                armIO.setVoltage(0);
+        }
+        else{
+                armIO.setVoltage(volts);
+        }
 
+    }
+
+    public void toggleKill(){
+        isKilled = !isKilled;
     }
 
     // runs every 0.02 sec
