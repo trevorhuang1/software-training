@@ -59,6 +59,7 @@ public class Swerve extends SubsystemBase {
   private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
   private ShuffleData<Double> headingLog = new ShuffleData<Double>("swerve", "heading", 0.0);
+  private ShuffleData<Double> rotationalVelocityLog = new ShuffleData<Double>("swerve", "rotational velocity", 0.0);
 
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 
@@ -210,11 +211,9 @@ public class Swerve extends SubsystemBase {
         modules[3].getDesiredState().speedMetersPerSecond
     };
 
-    SmartDashboard.putNumber("rotation per s",
-        Units.radiansPerSecondToRotationsPerMinute(getChassisSpeeds().omegaRadiansPerSecond));
-
     realStatesLog.set(realStates);
     desiredStatesLog.set(desiredStates);
+    rotationalVelocityLog.set(Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond));
     odometryLog.set(
         new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
     yawLog.set(gyroData.yawDeg);
