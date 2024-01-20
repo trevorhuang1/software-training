@@ -20,7 +20,7 @@ public interface ArmIO {
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
         public double accelerationRadPerSecSquared = 0.0;
-        
+
         public double appliedVolts = 0.0;
 
         public double leftCurrentAmps = 0.0;
@@ -40,8 +40,5 @@ public interface ArmIO {
         
     }
 
-    /** Enable or disable brake mode on the drive motor. */
-    public default void setBrakeMode(boolean enable) {
-    }
 
 }

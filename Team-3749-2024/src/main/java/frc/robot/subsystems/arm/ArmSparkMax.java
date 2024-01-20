@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -31,6 +32,8 @@ public class ArmSparkMax implements ArmIO {
         absoluteEncoder.setDistancePerRotation(Math.PI * 2);
         leftEncoder.setVelocityConversionFactor(ArmConstants.relativeEncoderVelocityConversionFactor);
         rightEncoder.setVelocityConversionFactor(ArmConstants.relativeEncoderVelocityConversionFactor);
+        leftMotor.setIdleMode(IdleMode.kBrake);
+        rightMotor.setIdleMode(IdleMode.kBrake);
 
     }
 
