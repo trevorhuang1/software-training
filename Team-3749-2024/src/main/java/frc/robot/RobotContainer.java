@@ -61,7 +61,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command command;
 
-    command = AutoUtils.pathFindToThenFollowTraj("PleaseWork", Constants.AutoConstants.defaultPathConstraints);
+    command = AutoUtils.getAutoPath("ChoreoTestAuto");
+    // command = AutoUtils.getAutoPath("Straight Line");
 
     return command;
   }

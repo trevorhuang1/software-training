@@ -103,9 +103,14 @@ public class Constants {
     // private static final double simMaxSpeedMetersPerSecond = 2.65;
     // private static final double simMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
     // private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
-    // private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 2 * 2 * Math.PI;
+    // private static final double simMaxAngularAccelerationRadiansPerSecondSquared
+    // = 2 * 2 * Math.PI;
 
+    private static final double simMaxMotorVoltage = 12.0;
+    private static final double realMaxMotorVoltage = 12.0;
 
+    public static final double maxMotorVolts = Robot.isReal() ? DriveConstants.realMaxMotorVoltage
+        : DriveConstants.simMaxMotorVoltage;
 
     public static final double maxSpeedMetersPerSecond = Robot.isReal()
         ? DriveConstants.realMaxSpeedMetersPerSecond
@@ -126,14 +131,14 @@ public class Constants {
     public static final double toleranceM_Misc = 0.02;
     public static final double toleranceRad_Misc = Math.PI / 750;
 
-    public static final Pose2d fieldStartingPose = new Pose2d(1, 7, Rotation2d.fromDegrees(0));
+    public static final Pose2d fieldStartingPose = new Pose2d(1, 1, Rotation2d.fromDegrees(0));
   }
 
   public static final class AutoConstants {
-    public static double kP_PathPlannerDrive = 10;
+    public static double kP_PathPlannerDrive = 9.8;
     public static double kD_PathPlannerDrive = 0;
 
-    public static double kP_PathPlannerTurn = 1.8;
+    public static double kP_PathPlannerTurn = 0.9;
     public static double kD_PathPlannerTurn = 0;
 
     public static PIDConstants driveConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerDrive, 0,
