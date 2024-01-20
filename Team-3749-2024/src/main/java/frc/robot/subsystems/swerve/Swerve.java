@@ -94,6 +94,9 @@ public class Swerve extends SubsystemBase {
     // take shortest path to destination
     SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, Constants.DriveConstants.maxSpeedMetersPerSecond);
     // 6. Output each module states to wheels
+
+    SmartDashboard.putNumber("chassisSpeeds updates", moduleStates[1].speedMetersPerSecond);
+
     setModuleStates(moduleStates);
   }
 

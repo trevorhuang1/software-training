@@ -114,20 +114,16 @@ public class AutoUtils {
     ChoreoTrajectory traj = ChoreoUtils.getTraj(trajName);
     PathPlannerPath ppPath = PathPlannerPath.fromChoreoTrajectory(trajName);
 
-    ChoreoTrajectoryState initalState = traj.getInitialState();
-    double endingVel = 0;
-
     // Note from Neel --
     // Should I try to find the direction the robot is heading in and
     // calculate the deltas so that the ending velocity passed into pathFind will
     // be exactly what the inital state will sxet the speeds to.
 
-    Command returnCommand = getPathFindToPoseCommand(initalState.getPose(),
-        constraints, endingVel);
+    Command returnCommand = getPathFindToPoseCommand(traj.getInitialPose(),
+        constraints, 0);
+    Command pathCommand = followPathCommand(ppPath);
 
-    returnCommand = returnCommand.andThen(followPathCommand(ppPath));
-
-    return returnCommand;
+    return returnCommand.andThen(pathCommand);
   }
 
   class ChoreoUtils {

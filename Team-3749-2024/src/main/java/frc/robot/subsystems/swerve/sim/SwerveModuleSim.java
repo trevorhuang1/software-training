@@ -62,14 +62,13 @@ public class SwerveModuleSim implements SwerveModuleIO {
         data.turnCurrentAmps = Math.abs(turnSim.getCurrentDrawAmps());
         data.turnTempCelcius = 0;
 
-    }
 
+    }
     @Override
     public void setDriveVoltage(double volts) {
         driveAppliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
         driveSim.setInputVoltage(driveAppliedVolts);
     }
-
     @Override
     public void setTurnVoltage(double volts) {
         turnAppliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
