@@ -8,6 +8,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -40,12 +41,6 @@ public class Constants {
 
       public static double kP_TurnToAngle = 0.15;
       public static double kD_TurnToAngle = 0.008;
-
-      public static double kP_PathPlannerDrive = 9;
-      public static double kD_PathPlannerDrive = 0.01;
-
-      public static double kP_PathPlannerTurn = 1.8;
-      public static double kD_PathPlannerTurn = 0.003;
     };
 
   }
@@ -67,6 +62,7 @@ public class Constants {
   }
 
   public static final class DriveConstants {
+
     // Distance between right and left wheels
     public static final double trackWidth = Units.inchesToMeters(17.5);
     // Distance between front and back wheels
@@ -89,20 +85,25 @@ public class Constants {
 
     public static final double[] driveAbsoluteEncoderOffsetDeg = { 130.34, 107.75, 61.70, 168.75 };
 
-    private static final double realMaxSpeedMetersPerSecond = 5;
-    private static final double realMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-    private static final double realMaxAccelerationMetersPerSecondSquared = 2.5;
-    private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    private static final double realMaxSpeedMetersPerSecond = 3.707;
+    private static final double realMaxAngularSpeedRadiansPerSecond = 11.795;
+    private static final double realMaxAccelerationMetersPerSecondSquared = 7.800;
+    private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 30.273;
 
     public static final int driveMotorStallLimit = 30;
     public static final int driveMotorFreeLimit = 60;
     public static final int turnMotorStallLimit = 30;
     public static final int turnMotorFreeLimit = 60;
 
-    private static final double simMaxSpeedMetersPerSecond = 2.655;
-    private static final double simMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-    private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
-    private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    private static final double simMaxSpeedMetersPerSecond = 3.707;
+    private static final double simMaxAngularSpeedRadiansPerSecond = 11.795;
+    private static final double simMaxAccelerationMetersPerSecondSquared = 7.800;
+    private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 30.273;
+
+    private static final double simGearRatio = 150 / 7;
+    private static final double realGearRatio = 150 / 7;
+
+    public static final double gearRatio = Robot.isReal() ? realGearRatio : simGearRatio;
 
     public static final double maxSpeedMetersPerSecond = Robot.isReal()
         ? DriveConstants.realMaxSpeedMetersPerSecond
@@ -123,35 +124,36 @@ public class Constants {
     public static final double toleranceM_Misc = 0.02;
     public static final double toleranceRad_Misc = Math.PI / 750;
 
-    public static final PathConstraints pathFinderConstraints = new PathConstraints(maxSpeedMetersPerSecond,
-        maxAccelerationMetersPerSecondSquared, maxAngularSpeedRadiansPerSecond,
-        maxAngularAccelerationRadiansPerSecondSquared);
-
-    public static final Pose2d fieldStartingPose = new Pose2d(1, 7, Rotation2d.fromDegrees(0));
-    // public static final Pose2d fieldStartingPose = new Pose2d(1, 3,
-    // Rotation2d.fromDegrees(0));
-    // public static final Pose2d fieldStartingPose = new Pose2d(0, 0,
-    // Rotation2d.fromDegrees(0));
+    public static final Pose2d fieldStartingPose = new Pose2d(0.83, 3.10, Rotation2d.fromDegrees(0));
   }
 
-  public static final class PathPlannerConstants {
+  public static final class AutoConstants {
+    public static double kP_PathPlannerDrive = 10;
+    public static double kD_PathPlannerDrive = 0;
+
+    public static double kP_PathPlannerTurn = 1.8;
+    public static double kD_PathPlannerTurn = 0;
+
+    public static PIDConstants driveConstants = new PIDConstants(kP_PathPlannerTurn, 0, kP_PathPlannerDrive);
+    public static PIDConstants turnConstants = new PIDConstants(kP_PathPlannerTurn, 0, kP_PathPlannerDrive);
+
     public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
         // in your Constants class
-        new PIDConstants(Sim.PIDValues.kP_PathPlannerDrive, 0.0, Sim.PIDValues.kD_PathPlannerDrive),
-        new PIDConstants(Sim.PIDValues.kP_PathPlannerTurn, 0.0, Sim.PIDValues.kD_PathPlannerTurn),
+        driveConstants,
+        turnConstants,
         Constants.DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s
         Math.sqrt(2 * (DriveConstants.trackWidth * DriveConstants.trackWidth)), // Drivetrain radius
         new ReplanningConfig() // Default path replanning config. See the API for the
     // options here
     );
 
-    public static PathConstraints sim = new PathConstraints(
+    private static PathConstraints sim = new PathConstraints(
         1.5,
         Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
         Constants.DriveConstants.maxAngularSpeedRadiansPerSecond,
         Constants.DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
 
-    public static PathConstraints real = new PathConstraints(
+    private static PathConstraints real = new PathConstraints(
         Constants.DriveConstants.maxSpeedMetersPerSecond,
         Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
         Constants.DriveConstants.maxAngularSpeedRadiansPerSecond,
@@ -163,35 +165,4 @@ public class Constants {
   public static final class ControllerConstants {
     public static final double deadband = 0.1;
   }
-
-  public static class VisionConstants {
-    // See
-    // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
-    // page 208
-    public static final double targetWidth = Units.inchesToMeters(41.30) - Units.inchesToMeters(6.70); // meters
-
-    // See
-    // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
-    // page 197
-    public static final double targetHeight = Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
-
-    public static final Transform3d cam_to_robot = new Transform3d(
-        new Translation3d(0, 0, -Units.inchesToMeters(15.25)), new Rotation3d());
-
-    public static final Transform3d robot_to_cam = cam_to_robot.inverse();
-
-    public static final int reflective_tape_pipeline_index = 0;
-    public static final int apriltag_pipeline_index = 1;
-
-    public static final double camera_height = Units.inchesToMeters(20); // meters
-    public static final double camera_yaw = 0;
-    public static final double camera_pitch = 0;
-    public static final double camera_roll = 0;
-
-    // msg from Noah: I forget what these do
-    public static final double retro_cam_offset = 0.56;
-    public static final double apriltag_cam_offset = 3.1;
-
-  }
-
 }
