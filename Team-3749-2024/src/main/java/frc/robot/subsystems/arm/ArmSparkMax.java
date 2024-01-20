@@ -1,5 +1,7 @@
 package frc.robot.subsystems.arm;
 
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -9,14 +11,9 @@ import frc.robot.utils.Constants.Sim;
 
 public class ArmSparkMax implements ArmIO {
 
-    private SingleJointedArmSim armSim = new SingleJointedArmSim(DCMotor.getNEO(2),
-        150,
-        4,
-        .93, 
-        Units.degreesToRadians(-170),
-        Units.degreesToRadians(170),
-        true,
-        Units.degreesToRadians(0));
+    private CANSparkMax leftMotor = new CANSparkMax(0, MotorType.kBrushless);
+    private CANSparkMax rightMotor = new CANSparkMax(1);
+
 
     private double appliedVolts = 0;
     private double previousVelocity = 0;
