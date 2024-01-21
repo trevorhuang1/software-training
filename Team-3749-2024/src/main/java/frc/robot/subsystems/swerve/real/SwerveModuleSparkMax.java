@@ -21,14 +21,11 @@ import frc.robot.utils.Constants.ModuleConstants;
 import frc.robot.utils.Constants.Sim;
 
 public class SwerveModuleSparkMax implements SwerveModuleIO {
-
     private CANSparkMax driveMotor;
-    private CANSparkMax turnMotor; 
-
-    private CANcoder absoluteEncoder;
+    private CANSparkMax turnMotor;
 
     private RelativeEncoder driveEncoder;
-    private RelativeEncoder turnEncoder;
+    private CANcoder turnEncoder;
 
     private double turnPositionRad;
 
@@ -36,62 +33,58 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     private double turnAppliedVolts;
 
     public SwerveModuleSparkMax(int index) {
-        
         driveMotor = new CANSparkMax(Constants.DriveConstants.driveMotorPorts[index], CANSparkMax.MotorType.kBrushless);
-        turnMotor = new CANSparkMax(Constants.DriveConstants.turningMotorPorts[index], CANSparkMax.MotorType.kBrushless);
-    
+        turnMotor = new CANSparkMax(Constants.DriveConstants.turningMotorPorts[index],
+                CANSparkMax.MotorType.kBrushless);
+
         driveEncoder = driveMotor.getEncoder();
-        turnEncoder = turnMotor.getEncoder();
+        turnEncoder = new CANcoder(Constants.DriveConstants.absoluteEncoderPorts[index]);
 
+        driveMotor.setInverted(Constants.DriveConstants.driveEncoderReversed[index]);
         driveEncoder.setInverted(Constants.DriveConstants.driveEncoderReversed[index]);
-        turnEncoder.setInverted(Constants.DriveConstants.turningEncoderReversed[index]);
 
-        driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit, Constants.DriveConstants.driveMotorFreeLimit);
-        turnMotor.setSmartCurrentLimit(Constants.DriveConstants.turnMotorStallLimit, Constants.DriveConstants.turnMotorFreeLimit);
+        turnMotor.setInverted(Constants.DriveConstants.turningEncoderReversed[index]);
 
-        absoluteEncoder = new CANcoder(Constants.DriveConstants.absoluteEncoderPorts[index]);
-        turnPositionRad = Units.rotationsToRadians(absoluteEncoder.getAbsolutePosition().getValueAsDouble());
-        // absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
-        // ^^ deprecated in phoenixv6 ^^
+        driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit,
+                Constants.DriveConstants.driveMotorFreeLimit);
+        turnMotor.setSmartCurrentLimit(Constants.DriveConstants.turnMotorStallLimit,
+                Constants.DriveConstants.turnMotorFreeLimit);
+
+        turnPositionRad = Units.rotationsToRadians(turnEncoder.getAbsolutePosition().getValueAsDouble());
     };
 
     @Override
     public void updateData(ModuleData data) {
-
         double driveRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(driveEncoder.getVelocity());
-        double turnRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(turnEncoder.getVelocity());
-
-        driveEncoder = driveMotor.getEncoder();
-        turnEncoder = turnMotor.getEncoder();
-
-        turnPositionRad = turnEncoder.getPosition();
+        turnPositionRad = Units.rotationsToRadians(turnEncoder.getPosition().getValueAsDouble());
 
         driveAppliedVolts = driveMotor.getBusVoltage();
         turnAppliedVolts = turnMotor.getBusVoltage();
-  
-        data.drivePositionM = data.drivePositionM + (turnRadPerSec * 0.02 * ModuleConstants.wheelDiameterMeters) / 2;
+
+        data.drivePositionM = turnPositionRad * (ModuleConstants.wheelDiameterMeters * Math.PI);
         data.driveVelocityMPerSec = driveRadPerSec * ModuleConstants.wheelDiameterMeters / 2;
         data.driveAppliedVolts = driveAppliedVolts;
         data.driveCurrentAmps = Math.abs(driveMotor.getOutputCurrent());
         data.driveTempCelcius = driveMotor.getMotorTemperature();
-        
+
         data.turnAbsolutePositionRad = turnPositionRad;
-        data.turnVelocityRadPerSec = turnRadPerSec;
+        data.turnVelocityRadPerSec = Units.rotationsToRadians(turnEncoder.getVelocity().getValueAsDouble());
         data.turnAppliedVolts = turnAppliedVolts;
         data.turnCurrentAmps = Math.abs(turnMotor.getOutputCurrent());
         data.turnTempCelcius = turnMotor.getMotorTemperature();
-
     };
 
     @Override
     public void setDriveVoltage(double volts) {
-        driveAppliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
+        driveAppliedVolts = MathUtil.clamp(volts, -Constants.DriveConstants.maxMotorVolts,
+                Constants.DriveConstants.maxMotorVolts);
         driveMotor.setVoltage(driveAppliedVolts);
     };
 
     @Override
     public void setTurnVoltage(double volts) {
-        turnAppliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
+        turnAppliedVolts = MathUtil.clamp(volts, -Constants.DriveConstants.maxMotorVolts,
+                Constants.DriveConstants.maxMotorVolts);
         turnMotor.setVoltage(turnAppliedVolts);
     };
 
@@ -105,7 +98,7 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     };
 
     public double getTurningPosition() {
-        return turnEncoder.getPosition();
+        return turnEncoder.getPosition().getValueAsDouble();
     };
 
     public double getDriveVelocity() {
@@ -113,11 +106,11 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     };
 
     public double getTurningVelocity() {
-        return turnEncoder.getVelocity();
+        return turnEncoder.getVelocity().getValueAsDouble();
     };
 
     public void resetEncoders() {
         driveEncoder.setPosition(0);
-        turnEncoder.setPosition(turnPositionRad);
+        turnEncoder.setPosition(0);
     };
 }
