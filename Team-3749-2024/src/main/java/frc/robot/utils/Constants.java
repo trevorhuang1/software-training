@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -88,10 +89,14 @@ public class Constants {
     {
         private static final PIDConstants simPID = new PIDConstants(1,0,0);
         private static final PIDConstants realPID = new PIDConstants(1,0,0);
+
+        private static final Constraints simConstraint = new Constraints(2.36,71.58); //we stealing from arm with this one
+        private static final Constraints realConstraint = new Constraints(Math.PI,2*Math.PI);
+        public static final Constraints trapezoidConstraint = Robot.isReal() ? realConstraint : simConstraint;
         public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
-        public static final double groundSetpoint = 40;
-        public static final double stowSetpoint = 0;
+        public static final double groundGoal = 40;
+        public static final double stowGoal = 0;
         public static final double wristOffset = 0;
     }
 

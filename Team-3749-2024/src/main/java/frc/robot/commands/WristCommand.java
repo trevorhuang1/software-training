@@ -7,21 +7,31 @@ import frc.robot.Robot;
 import frc.robot.utils.Constants;
 
 public class WristCommand extends Command{
-    private boolean isGroundSetpoint = false;
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean,Double>();
+    private boolean isGroundIntake = false;
     public WristCommand()
     {
-        setpointToggle.put(true,Constants.WristConstants.groundSetpoint);
-        setpointToggle.put(false,Constants.WristConstants.stowSetpoint);
+        setpointToggle.put(true,Constants.WristConstants.groundGoal);
+        setpointToggle.put(false,Constants.WristConstants.stowGoal);
         addRequirements(Robot.wrist);
+    }
+
+
+    @Override
+    public void initialize()
+    { 
+        
+    //    this.isGroundIntake = !this.isGroundIntake;
+    //    Robot.wrist.setWristGoal(setpointToggle.get(isGroundIntake));
     }
 
     @Override
     public void execute()
-    {
-        this.isGroundSetpoint = !isGroundSetpoint;
-        Robot.wrist.setWristAngle(setpointToggle.get(this.isGroundSetpoint));
+    { 
+        Robot.wrist.moveWristToAngle();
+
     }
+
     @Override
     public boolean isFinished() {
         return true;
