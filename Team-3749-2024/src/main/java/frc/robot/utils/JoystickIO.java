@@ -95,9 +95,9 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-       
-       pilot.a().onTrue(new WristCommand());
-
+        
+       Robot.wrist.setDefaultCommand(new WristCommand());
+       pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
        pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.shintakeSpark.setShooterVelocity(Constants.ShintakeConstants.shooterVelocity)));
        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.shintakeSpark.setShooterVelocity(Constants.ShintakeConstants.shooterIdleVoltage)));
 
