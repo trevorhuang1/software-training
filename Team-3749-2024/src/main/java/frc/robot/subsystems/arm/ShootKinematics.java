@@ -6,17 +6,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
-public class ShootPoseCalculator {
+public class ShootKinematics {
     private static final Translation2d redSpeakerPosition = new Translation2d(0, 265.8); // rounded need to change
     private static final Translation2d blueSpeakerPosition = new Translation2d(1659.1, 265.8); // rounded need to change
 
     public static Pose2d ShootingPose2DCalculate(Pose2d currentPose2d){
-
-        
-        return null;
-    }
-
-    private static boolean isInRange(Pose2d currentPose2d){
         Translation2d distanceVector;
         Rotation2d angle;
 
@@ -28,11 +22,15 @@ public class ShootPoseCalculator {
 
         angle = new Rotation2d(Math.PI/2 - Math.atan2(Math.abs(distanceVector.getY()), Math.abs(distanceVector.getX())));
 
-        // TODO: ROHAN JUNEJA do the damn csv reading
+        // TODO: ROHAN JUNEJA do the damn csv reading & angle reading
         if (angle.getDegrees() > 42.109 && distanceVector.getNorm() < 100){ 
-            return true;
+            return changeRotation(currentPose2d, distanceVector);
         }
+        
+        return null;
+    }
 
-        return false;
+    private static Pose2d changeRotation(Pose2d currentPose2d, Translation2d distanceVector){
+        return new Pose2d(currentPose2d.getTranslation(), distanceVector.getAngle().plus(new Rotation2d(Math.PI)));
     }
 }
