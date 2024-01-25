@@ -44,6 +44,10 @@ public class ArmAngleCalculator {
         PrintWriter pw = new PrintWriter("src/main/java/frc/robot/subsystems/arm/angles.csv");
         pw.print(csv);
         pw.close();
+
+        PrintWriter pw2 = new PrintWriter("src/main/deploy/angles.csv");
+        pw2.print(csv);
+        pw2.close();
     }
 
     public static double calculateAngle(double x_dist) throws Exception {
