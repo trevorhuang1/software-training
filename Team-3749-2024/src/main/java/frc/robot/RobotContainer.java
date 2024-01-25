@@ -4,12 +4,16 @@
 
 package frc.robot;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.arm.ShootKinematics;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
 
@@ -33,6 +37,16 @@ public class RobotContainer {
 
 
     RobotController.setBrownoutVoltage(7.0);
+
+    try {
+        ShootKinematics.loadDistCSV();
+    } catch (FileNotFoundException e) {
+        System.out.println("Shoot Kinematics File Not Found!");
+        e.printStackTrace();
+    } catch (IOException e) {
+        System.out.println("Shoot Kinematics File I/O Exception!");
+        e.printStackTrace();
+    }
 
   }
 
