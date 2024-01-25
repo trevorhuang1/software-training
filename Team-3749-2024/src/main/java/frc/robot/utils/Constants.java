@@ -5,8 +5,6 @@ import java.util.Map;
 
 import com.pathplanner.lib.util.PIDConstants;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -71,6 +69,15 @@ public class Constants {
     private static final Constraints realConstraints = new Constraints(Math.PI, 2 * Math.PI);
     public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
 
+    // Field Parameters
+    public static final double armHeightOffset = 0.0; // how high up the arm is, NOTE: need to find
+    public static final double armLength = 0.93;
+    public static final double shooterVelocity = 10.0; // NOTE: likely will vary, might need to pass as parameter
+
+    // NOTE: Not percise
+    // Field Parameters
+    public static final double speakerHeight = 2.05;
+    public static final double minDistance = 0.9;
   }
 
   public static final class ModuleConstants {
@@ -119,6 +126,7 @@ public class Constants {
     public static final double maxSpeedMetersPerSecond = Robot.isReal() ? DriveConstants.realMaxSpeedMetersPerSecond
         : DriveConstants.simMaxSpeedMetersPerSecond;
 
+    
   }
 
   public static final class ControllerConstants {
