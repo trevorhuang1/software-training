@@ -1,22 +1,30 @@
 package frc.robot.subsystems.arm;
 
 import java.util.*;
+
+import frc.robot.utils.Constants;
+
 import java.io.*;
 
 public class ArmAngleCalculator {
-    // Translate to Constants.java
-    public static double y_speaker = 2.05;
-    public static double y_arm = 0.0; // how high up the arm is
-    public static double v_initial = 10.0;
-    public static double arm_length = 0.635;
-    public static double g = 9.8;
+    public static double y_speaker = Constants.ArmConstants.speakerHeight;
+    public static double y_arm = Constants.ArmConstants.armHeightOffset; // how high up the arm is
+    public static double v_initial = Constants.ArmConstants.shooterVelocity;
 
-    public static double initial_angle = 140.0;
-    public static double final_angle = 0.0;
-    public static double angle_increment = 0.01;
-    public static double dist_increment = 0.01;
-    public static double margin_of_error = 0.001;
+    public static double arm_length = Constants.ArmConstants.armLength;
+
+    // Gravity
+    public static final double g = 9.8;
+
+    // Range of Angles & Minimum Shooting Distance
+    public static final double initial_angle = 140.0;
+    public static final double final_angle = 0.0;
     public static double min_distance = 0.9;
+
+    // Differentials & Margins of Error
+    public static final double angle_increment = 0.01;
+    public static final double dist_increment = 0.01;
+    public static final double margin_of_error = 0.001;
 
     public static void main(String[] args) throws IOException, Exception {
         double previous_angle = 0;
