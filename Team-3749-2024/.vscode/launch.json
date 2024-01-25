@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ShootKinematics",
+      "request": "launch",
+      "mainClass": "frc.robot.subsystems.arm.ShootKinematics",
+      "projectName": "Team-3749-2024"
+    },
+    {
+      "type": "java",
       "name": "ArmAngleCalculator",
       "request": "launch",
       "mainClass": "frc.robot.subsystems.arm.ArmAngleCalculator",
