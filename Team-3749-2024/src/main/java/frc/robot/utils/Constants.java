@@ -104,7 +104,7 @@ public class Constants {
     {
        public static final double intakeVelocity = 2;
        public static final double outtakeVelocity = -1;
-       public static final double shootervelocity = 2;
+       public static final double shooterVelocity = 2;
 
         private static final PIDConstants simShooterPID = new PIDConstants(1,0,0);
         private static final PIDConstants realShooterPID = new PIDConstants(1,0,0);

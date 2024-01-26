@@ -98,6 +98,16 @@ public class JoystickIO {
         
        Robot.wrist.setDefaultCommand(new WristCommand());
        Robot.shintake.setDefaultCommand(Commands.runOnce(() -> Robot.shintake.moveShintake()));
+
+       pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.shintake.setIntakeVelocity(Constants.ShintakeConstants.intakeVelocity)));
+       pilot.leftTrigger().onFalse(Commands.run(() -> Robot.shintake.setIntakeVelocity(0)));
+
+       pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.shintake.setIntakeVelocity(Constants.ShintakeConstants.outtakeVelocity)));
+       pilot.rightTrigger().onFalse(Commands.run(() -> Robot.shintake.setIntakeVelocity(0)));
+
+       pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.shintake.setShooterVelocity(Constants.ShintakeConstants.shooterVelocity)));
+       pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.shintake.setShooterVelocity(0)));
+
        pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
     }
