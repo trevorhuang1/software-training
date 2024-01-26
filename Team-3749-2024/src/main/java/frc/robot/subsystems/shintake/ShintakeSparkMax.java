@@ -4,13 +4,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants;
 
-public class ShintakeSparkMax extends SubsystemBase {
+public class ShintakeSparkMax implements ShintakeIO {
 
     private CANSparkMax intakeMotor = new CANSparkMax(0, MotorType.kBrushless);
     private CANSparkMax leftShooter = new CANSparkMax(1,MotorType.kBrushless);
@@ -21,58 +18,54 @@ public class ShintakeSparkMax extends SubsystemBase {
     private RelativeEncoder leftEncoder = leftShooter.getEncoder();
     private RelativeEncoder rightEncoder = rightShooter.getEncoder();
 
-    private PIDController intakeController = new PIDController(1, 0, 0);
-    private PIDController shooterController = new PIDController(1, 0, 0);
-
-    private SimpleMotorFeedforward intakeFF = new SimpleMotorFeedforward(1, 0);
-    private SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(1, 0);   
-
-    private double intakeVelocity = Constants.ShintakeConstants.intakeIdleVoltage;
-    private double shooterVelocity = Constants.ShintakeConstants.shooterIdleVoltage;
+    private double shintakeGoalVolts = 0;
+    private double leftShooterGoalVolts = 0;
+    private double rightShooterGoalVolts = 0;
 
     public ShintakeSparkMax() 
     {
         rightShooter.setInverted(true);
     }
-    
-   public void setIntakeVelocity(double velocity)
-   {
-    this.intakeVelocity = velocity;
-   }
 
-   public void setShooterVelocity(double velocity)
-   {
-    this.shooterVelocity = velocity;
-   }
+    @Override
+    public double[] getShooterEncoder()
+    {
+        double[] shooterEncoder = {leftEncoder.getPosition(),rightEncoder.getPosition()};
+        return shooterEncoder;
+    }
 
-   public void stopIntake()
-   {
-    intakeMotor.stopMotor();
-   }
+    @Override
+    public double getIntakeEncoder()
+    {
+        return intakeEncoder.getPosition();
+    }
 
-   public void stopShooter()
-   {
-    leftShooter.stopMotor();
-    rightShooter.stopMotor();
-   }
+    @Override
+    public void updateData(ShintakeData data) 
+    {
+        data.intakeVolts = intakeMotor.getBusVoltage();
+        data.intakeVelocity = intakeEncoder.getVelocity();
+        data.intakeTempCelcius = intakeMotor.getMotorTemperature();
+
+        data.leftShooterVolts = leftShooter.getBusVoltage();
+        data.leftShooterVelocity = leftEncoder.getVelocity();
+        data.leftShooterTempCelcius = leftShooter.getMotorTemperature();
+
+        data.rightShooterVolts = rightShooter.getBusVoltage();
+        data.rightShooterVelocity = rightEncoder.getVelocity();
+        data.rightShooterTempCelcius = rightShooter.getMotorTemperature();
+    }
 
    @Override
-   public void periodic()
+   public void setVoltage(double intakeVolts, double leftShooterVolts, double rightShooterVolts)
    {
-    intakeMotor.setVoltage(
-        intakeFF.calculate(intakeVelocity) + 
-        intakeController.calculate(intakeEncoder.getVelocity(),intakeVelocity)
-    );
+        shintakeGoalVolts = MathUtil.clamp(intakeVolts, -8, 8);
+        leftShooterGoalVolts = MathUtil.clamp(leftShooterVolts, -8, 8);
+        rightShooterGoalVolts = MathUtil.clamp(rightShooterVolts, -8, 8);
+        leftShooter.setVoltage(leftShooterVolts);
+        rightShooter.setVoltage(rightShooterVolts);
+        intakeMotor.setVoltage(shintakeGoalVolts);
 
-    leftShooter.setVoltage(
-        shooterFF.calculate(shooterVelocity) +
-        shooterController.calculate(leftEncoder.getVelocity(),shooterVelocity)
-    );
-
-    rightShooter.setVoltage(
-        shooterFF.calculate(shooterVelocity) + 
-        shooterController.calculate(rightEncoder.getVelocity(),shooterVelocity)
-    );
 
     SmartDashboard.putNumber("intakeVolts",intakeMotor.getBusVoltage());
     SmartDashboard.putNumber("shooterVolts", leftShooter.getBusVoltage());

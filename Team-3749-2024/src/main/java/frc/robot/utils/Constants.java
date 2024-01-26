@@ -102,10 +102,17 @@ public class Constants {
 
     public static final class ShintakeConstants
     {
-        public static final double intakeIdleVoltage = 1;
-        public static final double shooterIdleVoltage = 1;
-        public static final double intakeVelocity = 2;
-        public static final double shooterVelocity = -2;
+       public static final double intakeVelocity = 2;
+       public static final double outtakeVelocity = -1;
+       public static final double shootervelocity = 2;
+
+        private static final PIDConstants simShooterPID = new PIDConstants(1,0,0);
+        private static final PIDConstants realShooterPID = new PIDConstants(1,0,0);
+        public static final PIDConstants shooterPID = Robot.isReal() ? realShooterPID : simShooterPID;
+
+        private static final PIDConstants simIntakePID = new PIDConstants(1,0,0);
+        private static final PIDConstants realIntakePID = new PIDConstants(1,0,0);
+        public static final PIDConstants intakePID = Robot.isReal() ? realIntakePID : simIntakePID;
     }
 
 
