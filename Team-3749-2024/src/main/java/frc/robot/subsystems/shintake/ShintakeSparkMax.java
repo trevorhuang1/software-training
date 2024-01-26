@@ -30,14 +30,14 @@ public class ShintakeSparkMax implements ShintakeIO {
     @Override
     public double[] getShooterEncoder()
     {
-        double[] shooterEncoder = {leftEncoder.getPosition(),rightEncoder.getPosition()};
+        double[] shooterEncoder = {leftEncoder.getVelocity(),rightEncoder.getVelocity()};
         return shooterEncoder;
     }
 
     @Override
     public double getIntakeEncoder()
     {
-        return intakeEncoder.getPosition();
+        return intakeEncoder.getVelocity();
     }
 
     @Override
