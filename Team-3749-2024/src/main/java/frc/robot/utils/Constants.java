@@ -46,6 +46,11 @@ public class Constants {
   
     }
 
+    public static final class LEDConstants
+    {
+        public static final int length = 49;
+    }
+
     public static final class DriveConstants {
         // Distance between right and left wheels
         public static final double trackWidth = Units.inchesToMeters(17.5);
