@@ -10,10 +10,13 @@ public class Led extends SubsystemBase {
     private AddressableLED LEDs = new AddressableLED(0); //port
     private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
 
-
     public Led()
     {
        LEDs.setLength(LEDBuffer.getLength());
+       LEDs.setData(LEDBuffer);
+       LEDs.start();
+       setLEDOneColorRGB(255,0,0);
+       LEDs.setData(LEDBuffer);
     }
 
     public void setLEDOneColorRGB(int R, int G, int B)
