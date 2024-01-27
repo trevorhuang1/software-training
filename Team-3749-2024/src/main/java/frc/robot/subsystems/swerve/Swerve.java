@@ -25,6 +25,7 @@ import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.subsystems.swerve.sim.GyroSim;
 import frc.robot.subsystems.swerve.sim.SwerveModuleSim;
 import frc.robot.subsystems.swerve.real.NavX2Gyro;
+import frc.robot.subsystems.swerve.real.SwerveModuleRelative;
 import frc.robot.subsystems.swerve.real.SwerveModuleSparkMax;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
@@ -74,7 +75,7 @@ public class Swerve extends SubsystemBase {
       // real swerve module instatiation here
       for (int i = 0; i < 4; i++) {
         gyro = new NavX2Gyro();
-        modules[i] = new SwerveModule(i, new SwerveModuleSparkMax(i));
+        modules[i] = new SwerveModule(i, new SwerveModuleRelative(i));
       }
     }
 
