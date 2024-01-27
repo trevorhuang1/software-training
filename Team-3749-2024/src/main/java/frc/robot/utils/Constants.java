@@ -78,6 +78,11 @@ public class Constants {
     // Field Parameters
     public static final double speakerHeight = 2.05;
     public static final double minDistance = 0.9;
+
+    // Calcuation stuff
+    public static final double distMargin = 0.5;
+    public static final double maxAngle = 42.109;
+    public static final double maxAngleRad = Math.toRadians(maxAngle);
   }
 
   public static final class ModuleConstants {

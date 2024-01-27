@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj.Filesystem;
 
 public class ShootKinematics {
@@ -24,26 +25,62 @@ public class ShootKinematics {
     private static double maxDist = 0.0;
 
     public static Pose2d ShootingPose2DCalculate(Pose2d currentPose2d){
-        Translation2d distanceVector;
         Rotation2d angle;
 
-        if (DriverStation.getAlliance().get() == Alliance.Red){
-            distanceVector = currentPose2d.getTranslation().minus(redSpeakerPosition);
-        } else {
-            distanceVector = currentPose2d.getTranslation().minus(blueSpeakerPosition);
-        }
+        Translation2d speakerPosition = (DriverStation.getAlliance().get() == Alliance.Red) ? redSpeakerPosition : blueSpeakerPosition;
+        Translation2d distanceVector = currentPose2d.getTranslation().minus(speakerPosition);
 
         angle = new Rotation2d(Math.PI/2 - Math.atan2(Math.abs(distanceVector.getY()), Math.abs(distanceVector.getX())));
-
-        if (angle.getDegrees() > 42.109 && getAngle(distanceVector.getNorm()) != 0.0){ 
-            return changeRotation(currentPose2d, distanceVector);
-        }
+        //double distAngle = getAngle(distanceVector.getNorm());
         
+        // Case 0: We are in angle
+        if (angle.getDegrees() > Constants.ArmConstants.maxAngle && distanceVector.getNorm() <= maxDist){ 
+            return changeRotation(currentPose2d.getTranslation(), distanceVector);
+        } 
+        // Case 1: We are out of angle
+        if (angle.getDegrees() <= Constants.ArmConstants.maxAngle) {
+
+            // TODO: Check if positive/negative x coord check is correct
+            Translation2d radiusVector;
+
+            if (distanceVector.getX() > 0) {
+                radiusVector = new Translation2d(Math.cos(Constants.ArmConstants.maxAngleRad), Math.sin(Constants.ArmConstants.maxAngleRad));
+            } else {
+                radiusVector = new Translation2d(Math.cos(-Constants.ArmConstants.maxAngleRad), Math.sin(-Constants.ArmConstants.maxAngleRad));
+            }
+ 
+            // Don't worry about - dV and + dV
+            Translation2d perpVector = radiusVector.div(Math.pow(radiusVector.getNorm(),2)).times(dotProduct(radiusVector, distanceVector)).minus(distanceVector);
+            Translation2d goal = perpVector.plus(distanceVector);
+
+            // Case 3: We are out of range and out of angle
+            Translation2d newDistanceVector = goal.minus(speakerPosition);
+            if (newDistanceVector.getNorm() > maxDist) {
+                goal = speakerPosition.plus(newDistanceVector.div(newDistanceVector.getNorm()).times(maxDist));
+            }
+
+            return changeRotation(goal, goal.minus(speakerPosition));
+        }
+        // Case 2: We are out of range
+        if (distanceVector.getNorm() > maxDist) {
+            Translation2d goal = speakerPosition.plus(distanceVector.div(distanceVector.getNorm()).times(maxDist));
+            return changeRotation(goal, goal.minus(speakerPosition));
+        }
+
+
+
+        // TODO: Check if pose is in speaker
+
+
         return null;
     }
 
-    private static Pose2d changeRotation(Pose2d currentPose2d, Translation2d distanceVector){
-        return new Pose2d(currentPose2d.getTranslation(), distanceVector.getAngle().plus(new Rotation2d(Math.PI)));
+    private static Pose2d changeRotation(Translation2d currentTranslation2d, Translation2d distanceVector){
+        return new Pose2d(currentTranslation2d, distanceVector.getAngle().plus(new Rotation2d(Math.PI)));
+    }
+
+    private static double dotProduct(Translation2d v1, Translation2d v2) {
+        return v1.getX() * v2.getX() + v1.getY() * v2.getY();
     }
 
     private static double getAngle(double dist) {
@@ -69,6 +106,8 @@ public class ShootKinematics {
             maxDist = Math.max(maxDist, curDist);
             distToAngle[(int)(curDist * 100)] = Double.parseDouble(values[1]);
         }
+
+        maxDist -= Constants.ArmConstants.distMargin;
 
         reader.close();
     }
