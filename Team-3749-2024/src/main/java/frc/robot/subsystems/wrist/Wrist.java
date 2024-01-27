@@ -62,6 +62,7 @@ public class Wrist extends SubsystemBase {
             wristController.calculate(wristModule.getEncoderValue()) + //is getting the goal redundant?
                 wristFF.calculate(wristController.getSetpoint().velocity)
         );
+        mechanismArm.setAngle(Math.toDegrees(wristModule.getEncoderValue()));
         //System.out.println(wristController.getGoal().position);
     }
 
