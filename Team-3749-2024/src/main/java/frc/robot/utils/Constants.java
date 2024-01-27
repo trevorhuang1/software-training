@@ -87,7 +87,7 @@ public class Constants {
 
     public static final class WristConstants
     {
-        private static final PIDConstants simPID = new PIDConstants(1,0,0);
+        private static final PIDConstants simPID = new PIDConstants(100,0,0);
         private static final PIDConstants realPID = new PIDConstants(1,0,0);
 
         private static final Constraints simConstraint = new Constraints(Math.PI,2*Math.PI); //we stealing from arm with this one
@@ -95,7 +95,7 @@ public class Constants {
         public static final Constraints trapezoidConstraint = Robot.isReal() ? realConstraint : simConstraint;
         public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
-        public static final double groundGoal = 40;
+        public static final double groundGoal = Math.toRadians(40);
         public static final double stowGoal = 0;
         public static final double wristOffset = 0;
     }
