@@ -58,7 +58,7 @@ public class ShintakeSim implements ShintakeIO {
         leftShooter.setInputVoltage(leftShooterVolts);
         rightShooter.setInputVoltage(rightShooterVolts);
         intakeMotor.setInputVoltage(shintakeGoalVolts);
-
+        //System.out.println("oc");
 
     SmartDashboard.putNumber("intakeVolts",intakeMotor.getCurrentDrawAmps());
     SmartDashboard.putNumber("shooterVolts", leftShooter.getCurrentDrawAmps());

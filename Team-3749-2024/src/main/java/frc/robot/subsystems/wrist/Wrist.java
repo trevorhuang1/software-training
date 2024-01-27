@@ -53,7 +53,7 @@ public class Wrist extends SubsystemBase {
             wristController.calculate(wristModule.getEncoderValue()) + //is getting the goal redundant?
                 wristFF.calculate(wristController.getSetpoint().velocity)
         );
-        System.out.println(wristController.getGoal().position);
+        //System.out.println(wristController.getGoal().position);
     }
 
     @Override
