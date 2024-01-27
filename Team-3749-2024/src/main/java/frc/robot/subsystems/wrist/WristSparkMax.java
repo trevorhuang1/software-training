@@ -28,7 +28,7 @@ public class WristSparkMax implements WristIO {
     public void updateData(WristData data) 
     {
         data.tempCelcius = wristMotor.getMotorTemperature();
-        data.motorRPM = wristEncoder.getVelocity();
+        data.velocityRadPerSec = wristEncoder.getVelocity(); // do rad per sec math
         data.wristVoltage = wristMotor.getBusVoltage();
         data.appliedVolts = appliedVolts;
     }

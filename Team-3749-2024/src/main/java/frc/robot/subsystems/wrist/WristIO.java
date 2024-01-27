@@ -18,8 +18,9 @@ public interface WristIO {
     public static class WristData { 
         public double wristVoltage = 0.0;
         public double tempCelcius = 0.0;
-        public double motorRPM = 0.0;
+        public double velocityRadPerSec = 0.0;
         public double appliedVolts = 0.0;
+        public double encoderDistance = 0.0;
     }
     /** Updates the set of loggable inputs. */
     public default void updateData(WristData data) {

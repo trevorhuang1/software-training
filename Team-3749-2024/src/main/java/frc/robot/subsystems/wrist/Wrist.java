@@ -5,6 +5,10 @@ import java.util.HashMap;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.wrist.WristIO.WristData;
@@ -19,6 +23,10 @@ public class Wrist extends SubsystemBase {
     private SimpleMotorFeedforward wristFF = new SimpleMotorFeedforward(1, 0);
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean,Double>();
     private boolean isGroundIntake = false;
+    private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
+    private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
+    private MechanismLigament2d mechanismArm = mechanismArmPivot
+            .append(new MechanismLigament2d("mechanism arm", .93, 0));
 
     public Wrist() 
         {
@@ -48,7 +56,8 @@ public class Wrist extends SubsystemBase {
     }
 
     public void moveWristToAngle() {
-        
+
+        SmartDashboard.putNumber("wristGoal",getWristGoal().position);
         wristModule.setVoltage(
             wristController.calculate(wristModule.getEncoderValue()) + //is getting the goal redundant?
                 wristFF.calculate(wristController.getSetpoint().velocity)
@@ -58,6 +67,7 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putData("Mech2d", mechanism);
         wristModule.updateData(data);
     }
 

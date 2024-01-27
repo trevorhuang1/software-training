@@ -10,6 +10,7 @@ public class WristSim implements WristIO {
     
     private FlywheelSim wristMotor = new FlywheelSim(DCMotor.getNEO(1),1, 0.01);
     private double appliedVolts = 0.0;
+    private double distanceRotated = 0.0;
     
     public WristSim() 
     {
@@ -21,9 +22,13 @@ public class WristSim implements WristIO {
    {
     wristMotor.update(Sim.loopPeriodSec);
     data.tempCelcius = 0;
-    data.motorRPM = wristMotor.getAngularVelocityRPM();
+    data.velocityRadPerSec = wristMotor.getAngularVelocityRadPerSec();
     data.wristVoltage = wristMotor.getCurrentDrawAmps();
     data.appliedVolts = appliedVolts;
+    data.encoderDistance = (data.encoderDistance + (data.velocityRadPerSec * 0.02));
+    distanceRotated = data.encoderDistance;
+    SmartDashboard.putNumber("encoderDist", data.encoderDistance);
+    SmartDashboard.putNumber("wristVolts", data.appliedVolts);
    }
 
    @Override
@@ -37,7 +42,7 @@ public class WristSim implements WristIO {
    @Override
    public double getEncoderValue()
    {
-    return 0;
+    return distanceRotated;
    }
 
 }

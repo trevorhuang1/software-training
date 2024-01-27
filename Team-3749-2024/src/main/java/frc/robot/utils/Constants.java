@@ -90,7 +90,7 @@ public class Constants {
         private static final PIDConstants simPID = new PIDConstants(1,0,0);
         private static final PIDConstants realPID = new PIDConstants(1,0,0);
 
-        private static final Constraints simConstraint = new Constraints(2.36,71.58); //we stealing from arm with this one
+        private static final Constraints simConstraint = new Constraints(Math.PI,2*Math.PI); //we stealing from arm with this one
         private static final Constraints realConstraint = new Constraints(Math.PI,2*Math.PI);
         public static final Constraints trapezoidConstraint = Robot.isReal() ? realConstraint : simConstraint;
         public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
