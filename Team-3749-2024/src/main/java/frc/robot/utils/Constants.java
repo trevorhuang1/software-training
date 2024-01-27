@@ -87,7 +87,7 @@ public class Constants {
 
     public static final class WristConstants
     {
-        private static final PIDConstants simPID = new PIDConstants(100,0,0);
+        private static final PIDConstants simPID = new PIDConstants(10,0,1.3);
         private static final PIDConstants realPID = new PIDConstants(1,0,0);
 
         private static final Constraints simConstraint = new Constraints(Math.PI,2*Math.PI); //we stealing from arm with this one
