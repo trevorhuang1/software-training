@@ -49,6 +49,9 @@ public class Constants {
     public static final class LEDConstants
     {
         public static final int length = 49;
+        public static enum LEDPattern {
+            RAINBOW, RED, BLUE, GREEN, NOTHING
+        };
     }
 
     public static final class DriveConstants {
