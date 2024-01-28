@@ -46,12 +46,12 @@ public class Constants {
   }
 
   public static final class ModuleConstants {
-    public static final double wheelDiameterMeters = Units.inchesToMeters(3.5);
+    public static final double wheelDiameterMeters = Units.inchesToMeters(4);
     public static final double driveMotorGearRatio = 6.75;
     public static final double turnMotorGearRatio = 12.8;
     public static final double kPTurningReal = 2.25;
     public static final double kPDrivingReal = 0.0;
-    public static final double kVDrivingReal = 1.5;
+    public static final double kVDrivingReal = 2.5;
     public static final double kSDrivingReal = 0.0;
 
     public static final double kPTurningSim = 4;

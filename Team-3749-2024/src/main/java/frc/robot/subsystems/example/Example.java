@@ -17,6 +17,10 @@ public class Example extends SubsystemBase {
         }
     }
 
+    public void setVoltage(double volts){
+        exampleIO.setVoltage(volts);
+    }
+
     // runs every 0.02 sec
     @Override
     public void periodic(){
