@@ -31,12 +31,10 @@ public class JoystickIO {
   private Xbox pilot;
   private Xbox operator;
 
-  private Swerve swerve;
 
   public JoystickIO(Xbox pilot, Xbox operator) {
     this.pilot = pilot;
     this.operator = operator;
-    this.swerve = Robot.swerve;
   }
 
   public static boolean didJoysticksChange() {
@@ -87,8 +85,10 @@ public class JoystickIO {
   /**
    * If only one controller is plugged in (pi)
    */
+  
   public void pilotBindings() {
-    pilot.aWhileHeld(new PrintCommand("aaa"));
+    pilot.aWhileHeld(Commands.run(() -> Robot.example.setVoltage(8)), Commands.run(() -> Robot.example.setVoltage(0)));
+    pilot.bWhileHeld(Commands.run(() -> Robot.example.setVoltage(-4)), Commands.run(() -> Robot.example.setVoltage(0)));
 
   }
 
@@ -117,12 +117,7 @@ public class JoystickIO {
    * Sets the default commands
    */
   public void setDefaultCommands() {
-    swerve.setDefaultCommand(new Teleop(
 
-        () -> -pilot.getLeftY(), // - is up, + is down by default so we invert here
-        () -> -pilot.getLeftX(), // Positive is left, negative is right by default so we invert here
-        () -> -pilot.getRightX(),
-        () -> -pilot.getRightY())); // Clockwise positive by default, so we invert
     // here
   }
 }

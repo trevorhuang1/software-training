@@ -13,7 +13,7 @@ public class Example extends SubsystemBase {
     // Constructor
     public Example(){
         if (Robot.isReal()){
-            exampleIO = new ExampleSim();
+            exampleIO = new ExampleSparkmax();
         }
     }
 
