@@ -49,9 +49,8 @@ public class ShootKinematics {
                 radiusVector = new Translation2d(Math.cos(-Constants.ArmConstants.maxAngleRad), Math.sin(-Constants.ArmConstants.maxAngleRad));
             }
  
-            // Don't worry about - dV and + dV
             Translation2d perpVector = radiusVector.div(Math.pow(radiusVector.getNorm(),2)).times(dotProduct(radiusVector, distanceVector)).minus(distanceVector);
-            Translation2d goal = perpVector.plus(distanceVector);
+            Translation2d goal = perpVector.plus(currentPose2d);
 
             // Case 3: We are out of range and out of angle
             Translation2d newDistanceVector = goal.minus(speakerPosition);
