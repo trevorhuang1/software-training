@@ -15,7 +15,7 @@ public class Led extends SubsystemBase {
 
     private AddressableLED LEDs = new AddressableLED(0); //port
     private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
-    private LEDPattern currentPattern = teamColorLED();
+    private LEDPattern currentPattern = LEDPattern.WHITE;
     private int hue = 0;
 
     public Led()
@@ -79,8 +79,17 @@ public class Led extends SubsystemBase {
                 setLEDRainbow();
             break;
 
-            default:
+            case WHITE:
+                setLEDOneColorRGB(255, 255, 255);
+            break;
+
+            case NOTHING:
                 setLEDOneColorRGB(0, 0, 0);
+            break;
+
+            default:
+                setLEDOneColorRGB(210,105,30);
+                System.out.println("LEDpattern missing case");
             break;
         }
         LEDs.setData(LEDBuffer);

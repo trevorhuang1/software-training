@@ -50,7 +50,7 @@ public class Constants {
     {
         public static final int length = 49;
         public static enum LEDPattern {
-            RAINBOW, RED, BLUE, GREEN, NOTHING
+            RAINBOW, RED, BLUE, GREEN, WHITE, NOTHING
         };
     }
 
