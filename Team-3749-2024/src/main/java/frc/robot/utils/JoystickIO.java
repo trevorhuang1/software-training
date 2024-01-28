@@ -3,11 +3,13 @@ package frc.robot.utils;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Robot;
 import frc.robot.commands.ShintakeCommand;
 import frc.robot.commands.WristCommand;
@@ -22,6 +24,7 @@ public class JoystickIO {
 
     private Xbox pilot; 
     private Xbox operator;
+    private Joystick home = new Joystick(1);
 
     public JoystickIO(Xbox pilot, Xbox operator) {
         this.pilot = pilot;
@@ -110,6 +113,8 @@ public class JoystickIO {
        pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.shintake.setShooterVelocity(0)));
 
        pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
+       JoystickButton buttonX = new JoystickButton(home, 3);
+       buttonX.onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
     }
         
