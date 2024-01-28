@@ -57,6 +57,11 @@ public class Led extends SubsystemBase {
         }
     }
 
+    public void setLEDPattern(LEDPattern pattern)
+    {
+        this.currentPattern = pattern;
+    }
+
     // runs every 0.02 sec
     @Override
     public void periodic()
