@@ -44,7 +44,6 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     DriverStation.removeRefreshedDataEventHandle(44000);
 
-    initAuto();
     configureBindings();
 
     RobotController.setBrownoutVoltage(7.0);
