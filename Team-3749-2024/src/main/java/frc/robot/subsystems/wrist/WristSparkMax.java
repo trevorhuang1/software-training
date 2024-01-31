@@ -21,7 +21,7 @@ public class WristSparkMax implements WristIO {
 
     public WristSparkMax()
     {
-        
+        wristEncoder.setPositionConversionFactor(Math.PI/180);
     }
 
     @Override
