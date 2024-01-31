@@ -18,8 +18,13 @@ import edu.wpi.first.wpilibj.Filesystem;
 // TODO: Clean up this code, abstract the code and chunk it out, check if logic works on global level (sim or smth)
 
 public class ShootKinematics {
+    // constants move to constants file
     private static final Translation2d redSpeakerPosition = new Translation2d(0, 265.8); // rounded need to change
     private static final Translation2d blueSpeakerPosition = new Translation2d(1659.1, 265.8); // rounded need to change
+    
+    // Note: some of these points are basically not used, tolerances of 10 in were used
+    private static final Translation2d[] redStagePoints = {new Translation2d(269.24, 410.56), new Translation2d(612.62, 603.61),new Translation2d(612.62, 217.52)};
+    private static final Translation2d[] blueStagePoints = {new Translation2d(1659.28-redStagePoints[0].getX(), redStagePoints[0].getY()),new Translation2d(1659.28-redStagePoints[1].getX(), redStagePoints[1].getY()),new Translation2d(1659.28-redStagePoints[2].getX(), redStagePoints[2].getY())};
 
     // 10.00 m = 1000
     // angle 0.0 = impossible to shoot from here
@@ -29,10 +34,10 @@ public class ShootKinematics {
     public static Pose2d ShootingPose2DCalculate(Pose2d currentPose2d){
         Rotation2d angle;
 
-        Translation2d speakerPosition = (DriverStation.getAlliance().get() == Alliance.Red) ? redSpeakerPosition : blueSpeakerPosition;
-        Translation2d distanceVector = currentPose2d.getTranslation().minus(speakerPosition);
+        Translation2d distanceVector = currentPose2d.getTranslation().minus(getSpeakerPosition());
 
         angle = new Rotation2d(Math.PI/2 - Math.atan2(Math.abs(distanceVector.getY()), Math.abs(distanceVector.getX())));
+
         //double distAngle = getAngle(distanceVector.getNorm());
         
         // Case 0: We are in angle
@@ -51,40 +56,48 @@ public class ShootKinematics {
                 radiusVector = new Translation2d(Math.cos(-Constants.ArmConstants.maxAngleRad), Math.sin(-Constants.ArmConstants.maxAngleRad));
             }
  
-            Translation2d perpVector = radiusVector.div(Math.pow(radiusVector.getNorm(),2)).times(dotProduct(radiusVector, distanceVector)).minus(distanceVector); // projection (put into function)
+            Translation2d perpVector = projection(distanceVector, radiusVector).minus(distanceVector);
             Translation2d goal = perpVector.plus(currentPose2d.getTranslation());
 
             // Case 3: We are out of range and out of angle
-            Translation2d newDistanceVector = goal.minus(speakerPosition);
+            Translation2d newDistanceVector = goal.minus(getSpeakerPosition());
             if (newDistanceVector.getNorm() > maxDist) {
-                goal = speakerPosition.plus(newDistanceVector.div(newDistanceVector.getNorm()).times(maxDist));
+                goal = getSpeakerPosition().plus(newDistanceVector.div(newDistanceVector.getNorm()).times(maxDist));
             }
 
-            return changeRotation(goal, goal.minus(speakerPosition));
+            return changeRotation(goal, goal.minus(getSpeakerPosition()));
         }
         // Case 2: We are out of range
         if (distanceVector.getNorm() > maxDist) {
-            Translation2d goal = speakerPosition.plus(distanceVector.div(distanceVector.getNorm()).times(maxDist));
-            return changeRotation(goal, goal.minus(speakerPosition));
+            Translation2d goal = getSpeakerPosition().plus(distanceVector.div(distanceVector.getNorm()).times(maxDist));
+            return moveOutOfStage(changeRotation(goal, goal.minus(getSpeakerPosition())));
         }
-
-
-
-        // TODO: Check if pose is in speaker
-
 
         return null;
     }
 
-    // NOTE: check if rotation works globally
     private static Pose2d changeRotation(Translation2d currentTranslation2d, Translation2d distanceVector){
         return new Pose2d(currentTranslation2d, distanceVector.getAngle().plus(new Rotation2d(Math.PI)));
     }
 
-    private static Pose2d inStage(Pose2d poseInRadius){
-        
+    private static Pose2d moveOutOfStage(Pose2d poseInRadius){
+        Translation2d[] stagePoints = (DriverStation.getAlliance().get() == Alliance.Red) ? redStagePoints : blueStagePoints;
 
-        return null;
+        Translation2d distanceVector = poseInRadius.getTranslation().minus(stagePoints[0]);
+        double angle = Math.abs(distanceVector.getAngle().getDegrees());
+
+        if (angle < Math.PI/6 && poseInRadius.getTranslation().getX() < stagePoints[1].getX()){
+            Translation2d perpVector = projection(distanceVector, stagePoints[2].minus(stagePoints[0]).minus(distanceVector));
+            Translation2d nearestShootPoint = poseInRadius.getTranslation().plus(perpVector);
+            
+            return changeRotation(nearestShootPoint, nearestShootPoint.minus(getSpeakerPosition()));
+        }
+
+        return poseInRadius;
+    }
+
+    private static Translation2d projection(Translation2d vector, Translation2d target) {
+        return target.div(Math.pow(target.getNorm(),2)).times(dotProduct(target, vector));
     }
 
     private static double dotProduct(Translation2d v1, Translation2d v2) {
@@ -97,6 +110,10 @@ public class ShootKinematics {
             return 0;
         }
         return distToAngle[distNum];
+    }
+
+    private static Translation2d getSpeakerPosition() {
+        return (DriverStation.getAlliance().get() == Alliance.Red) ? redSpeakerPosition : blueSpeakerPosition;
     }
 
     public static void loadDistCSV() throws FileNotFoundException, IOException {
