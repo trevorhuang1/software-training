@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.TurnToAngle;
 import frc.robot.utils.Constants;
@@ -55,17 +54,13 @@ public class RobotContainer {
     commandList.put("PrintCMD-hello", new PrintCommand("hello"));
     commandList.put("shoot", new PrintCommand("note goes wheee"));
 
-    AutoUtils.initPathCommands(commandList);
-    AutoUtils.initPPUtils();
+
   }
 
   public Command getAutonomousCommand() {
     Command command;
-
-    command = AutoUtils.getAutoPath("4 pt");
-    command = AutoUtils.timeCommand(command);
     
-    return command;
+    return new PrintCommand(null);
   }
 
 }
