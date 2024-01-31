@@ -111,7 +111,7 @@ public class AutoUtils {
   }
 
   public static Command pathFindToThenFollowTraj(String trajName, PathConstraints constraints) {
-    ChoreoTrajectory traj = ChoreoUtils.getTraj(trajName);
+    ChoreoTrajectory traj = AutoUtils.getTraj(trajName);
     PathPlannerPath ppPath = PathPlannerPath.fromChoreoTrajectory(trajName);
 
     // Note from Neel --
@@ -126,11 +126,7 @@ public class AutoUtils {
     return returnCommand.andThen(pathCommand);
   }
 
-  class ChoreoUtils {
-    public static ChoreoTrajectory getTraj(String trajName) {
-      return Choreo.getTrajectory(trajName);
-    }
-
-    // More to come.. I have ideas for this... dont delete
+  public static ChoreoTrajectory getTraj(String trajName) {
+    return Choreo.getTrajectory(trajName);
   }
 }

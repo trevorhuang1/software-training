@@ -53,6 +53,7 @@ public class RobotContainer {
     HashMap<String, Command> commandList = new HashMap<String, Command>();
 
     commandList.put("PrintCMD-hello", new PrintCommand("hello"));
+    commandList.put("shoot", new PrintCommand("note goes wheee"));
 
     AutoUtils.initPathCommands(commandList);
     AutoUtils.initPPUtils();
@@ -61,7 +62,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command command;
 
-    command = AutoUtils.getAutoPath("ChoreoTestAuto");
+    command = AutoUtils.getAutoPath("New Auto");
     // command = AutoUtils.getAutoPath("Straight Line");
 
     return command;

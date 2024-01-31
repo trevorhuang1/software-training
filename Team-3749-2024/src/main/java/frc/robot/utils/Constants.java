@@ -135,40 +135,32 @@ public class Constants {
   }
 
   public static final class AutoConstants {
-    public static double kP_PathPlannerDrive = 9.8;
+    public static double kP_PathPlannerDrive = 8.8;
     public static double kD_PathPlannerDrive = 0;
 
     public static double kP_PathPlannerTurn = 0.9;
     public static double kD_PathPlannerTurn = 0;
 
-    public static PIDConstants driveConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerDrive, 0,
+    public static PIDConstants drivePIDConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerDrive, 0,
         Constants.AutoConstants.kD_PathPlannerDrive);
-    public static PIDConstants turnConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerTurn, 0,
+    public static PIDConstants turnPIDConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerTurn, 0,
         Constants.AutoConstants.kD_PathPlannerTurn);
 
     public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
         // in your Constants class
-        driveConstants,
-        turnConstants,
+        drivePIDConstants,
+        turnPIDConstants,
         Constants.DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s
         Math.sqrt(2 * (DriveConstants.trackWidth * DriveConstants.trackWidth)), // Drivetrain radius
         new ReplanningConfig() // Default path replanning config. See the API for the
     // options here
     );
 
-    private static PathConstraints sim = new PathConstraints(
-        1.5,
-        Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
-        Constants.DriveConstants.maxAngularSpeedRadiansPerSecond,
-        Constants.DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
-
-    private static PathConstraints real = new PathConstraints(
+    public static PathConstraints defaultPathConstraints = new PathConstraints(
         Constants.DriveConstants.maxSpeedMetersPerSecond,
         Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
         Constants.DriveConstants.maxAngularSpeedRadiansPerSecond,
         Constants.DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
-
-    public static PathConstraints defaultPathConstraints = Robot.isReal() ? real : sim;
   }
 
   public static final class ControllerConstants {
