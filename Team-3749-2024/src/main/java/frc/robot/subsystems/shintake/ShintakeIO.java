@@ -28,6 +28,8 @@ public interface ShintakeIO {
         public double rightShooterVolts = 0.0;
         public double rightShooterVelocity = 0.0;
         public double rightShooterTempCelcius = 0.0;
+
+        public boolean sensorTripped = false;
         
     }
     /** Updates the set of loggable inputs. */

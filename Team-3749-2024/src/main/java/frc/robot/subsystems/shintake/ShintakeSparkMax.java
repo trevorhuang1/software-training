@@ -5,13 +5,17 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.utils.Constants;
 
 public class ShintakeSparkMax implements ShintakeIO {
 
     private CANSparkMax intakeMotor = new CANSparkMax(0, MotorType.kBrushless);
     private CANSparkMax leftShooter = new CANSparkMax(1,MotorType.kBrushless);
     private CANSparkMax rightShooter = new CANSparkMax(2,MotorType.kBrushless);
+
+    private DigitalInput photoelectricSensor = new DigitalInput(0);
 
 
     private RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
@@ -54,6 +58,15 @@ public class ShintakeSparkMax implements ShintakeIO {
         data.rightShooterVolts = rightShooter.getBusVoltage();
         data.rightShooterVelocity = rightEncoder.getVelocity();
         data.rightShooterTempCelcius = rightShooter.getMotorTemperature();
+
+        data.sensorTripped = photoelectricSensor.get();
+        SmartDashboard.putBoolean("sensorTripped", photoelectricSensor.get());
+        /* 
+        if(data.sensorTripped)
+        {
+            Robot.led.setLEDPattern(LEDPattern.GREEN);
+        }
+        */
     }
 
    @Override
