@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj.Filesystem;
 
+// TODO: Clean up this code, abstract the code and chunk it out, check if logic works on global level (sim or smth)
+
 public class ShootKinematics {
     private static final Translation2d redSpeakerPosition = new Translation2d(0, 265.8); // rounded need to change
     private static final Translation2d blueSpeakerPosition = new Translation2d(1659.1, 265.8); // rounded need to change
@@ -49,8 +51,8 @@ public class ShootKinematics {
                 radiusVector = new Translation2d(Math.cos(-Constants.ArmConstants.maxAngleRad), Math.sin(-Constants.ArmConstants.maxAngleRad));
             }
  
-            Translation2d perpVector = radiusVector.div(Math.pow(radiusVector.getNorm(),2)).times(dotProduct(radiusVector, distanceVector)).minus(distanceVector);
-            Translation2d goal = perpVector.plus(currentPose2d);
+            Translation2d perpVector = radiusVector.div(Math.pow(radiusVector.getNorm(),2)).times(dotProduct(radiusVector, distanceVector)).minus(distanceVector); // projection (put into function)
+            Translation2d goal = perpVector.plus(currentPose2d.getTranslation());
 
             // Case 3: We are out of range and out of angle
             Translation2d newDistanceVector = goal.minus(speakerPosition);
@@ -74,8 +76,15 @@ public class ShootKinematics {
         return null;
     }
 
+    // NOTE: check if rotation works globally
     private static Pose2d changeRotation(Translation2d currentTranslation2d, Translation2d distanceVector){
         return new Pose2d(currentTranslation2d, distanceVector.getAngle().plus(new Rotation2d(Math.PI)));
+    }
+
+    private static Pose2d inStage(Pose2d poseInRadius){
+        
+
+        return null;
     }
 
     private static double dotProduct(Translation2d v1, Translation2d v2) {
