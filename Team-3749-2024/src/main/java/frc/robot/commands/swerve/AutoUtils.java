@@ -25,6 +25,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -63,13 +64,23 @@ public class AutoUtils {
           // if alliance is selected in driverstation, use that alliance,
           // otherwise get from sendable chooser
 
+          // if alliance is selected in driverstation, use that alliance,
+          // otherwise get from sendable chooser
+
           Alliance robotAlliance = allianceChooser.getSelected();
           robotAlliance = DriverStation.getAlliance().isPresent()
               ? DriverStation.getAlliance().get()
               : robotAlliance;
 
           if (robotAlliance == Alliance.Red)
+          robotAlliance = DriverStation.getAlliance().isPresent()
+              ? DriverStation.getAlliance().get()
+              : robotAlliance;
+
+          if (robotAlliance == Alliance.Red)
             return true;
+
+          return false;
 
           return false;
         },
@@ -134,6 +145,17 @@ public class AutoUtils {
 
   public static ChoreoTrajectory getTraj(String trajName) {
     return Choreo.getTrajectory(trajName);
+  }
+
+  public static Command timeCommand(Command cmd) {
+    Timer timer = new Timer();
+
+    return cmd
+        .beforeStarting(() -> timer.start())
+        .andThen(() -> {
+          timer.stop();
+          System.out.println(timer.get());
+        });
   }
 
   public static Command timeCommand(Command cmd) {
