@@ -62,7 +62,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command command;
 
-    command = AutoUtils.getAutoPath("New Auto");
+    command = AutoUtils.getAutoPath("4 pt");
     // command = AutoUtils.getAutoPath("Straight Line");
 
     return command;

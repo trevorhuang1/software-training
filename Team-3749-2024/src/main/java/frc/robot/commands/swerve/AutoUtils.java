@@ -81,11 +81,11 @@ public class AutoUtils {
   }
 
   public static Command getAutoPath() {
-    return autoChooser.getSelected();
+    return autoChooser.getSelected().andThen(() -> swerve.stopModules());
   }
 
   public static Command getAutoPath(String autoPathName) {
-    return AutoBuilder.buildAuto(autoPathName);
+    return AutoBuilder.buildAuto(autoPathName).andThen(() -> swerve.stopModules());
   }
 
   public static Command followPathCommand(PathPlannerPath path) {
