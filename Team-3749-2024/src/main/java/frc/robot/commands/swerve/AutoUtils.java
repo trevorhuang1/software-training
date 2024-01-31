@@ -24,6 +24,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,6 +51,8 @@ public class AutoUtils {
     allianceChooser.addOption("Red Alliance", Alliance.Red);
     allianceChooser.setDefaultOption("Blue Alliance", Alliance.Blue);
 
+    SmartDashboard.putData("Choose Alliance", allianceChooser);
+
     AutoBuilder.configureHolonomic(
         swerve::getPose,
         swerve::resetOdometry,
@@ -57,21 +60,24 @@ public class AutoUtils {
         swerve::setChassisSpeeds,
         Constants.AutoConstants.cfgHolonomicFollower,
         () -> {
+          // if alliance is selected in driverstation, use that alliance,
+          // otherwise get from sendable chooser
+
           Alliance robotAlliance = allianceChooser.getSelected();
-          robotAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : robotAlliance;
-          System.out.println();
-          if (robotAlliance == Alliance.Red) {
+          robotAlliance = DriverStation.getAlliance().isPresent()
+              ? DriverStation.getAlliance().get()
+              : robotAlliance;
+
+          if (robotAlliance == Alliance.Red)
             return true;
-          } else {
-            return false;
-          }
+
+          return false;
         },
         swerve);
 
     autoChooser = AutoBuilder.buildAutoChooser("TestAuto");
 
     SmartDashboard.putData("Choose Auto", autoChooser);
-    SmartDashboard.putData("Choose Alliance", allianceChooser);
   }
 
   public static void initPathCommands(HashMap<String, Command> commandList) {
@@ -128,5 +134,16 @@ public class AutoUtils {
 
   public static ChoreoTrajectory getTraj(String trajName) {
     return Choreo.getTrajectory(trajName);
+  }
+
+  public static Command timeCommand(Command cmd) {
+    Timer timer = new Timer();
+
+    return cmd
+        .beforeStarting(() -> timer.start())
+        .andThen(() -> {
+          timer.stop();
+          System.out.println(timer.get());
+        });
   }
 }
