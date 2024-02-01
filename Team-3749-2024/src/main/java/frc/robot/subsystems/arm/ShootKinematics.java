@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 public class ShootKinematics {
     // constants move to constants file
     private static final Translation2d redSpeakerPosition = new Translation2d(0, 2.658); // rounded need to change
-    private static final Translation2d blueSpeakerPosition = new Translation2d(1.6591, 2.658); // rounded need to change
+    private static final Translation2d blueSpeakerPosition = new Translation2d(16.591, 2.658); // rounded need to change
     
     // Note: some of these points are basically not used, tolerances of 10 inches were used
     private static final Translation2d[] redStagePoints = {new Translation2d(2.6924, 4.1056), new Translation2d(6.1262, 6.0361),new Translation2d(6.1262, 2.1752)};
