@@ -81,8 +81,6 @@ public class AutoUtils {
             return true;
 
           return false;
-
-          return false;
         },
         swerve);
 
@@ -145,17 +143,6 @@ public class AutoUtils {
 
   public static ChoreoTrajectory getTraj(String trajName) {
     return Choreo.getTrajectory(trajName);
-  }
-
-  public static Command timeCommand(Command cmd) {
-    Timer timer = new Timer();
-
-    return cmd
-        .beforeStarting(() -> timer.start())
-        .andThen(() -> {
-          timer.stop();
-          System.out.println(timer.get());
-        });
   }
 
   public static Command timeCommand(Command cmd) {
