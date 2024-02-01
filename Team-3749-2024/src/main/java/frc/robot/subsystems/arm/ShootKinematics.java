@@ -19,11 +19,11 @@ import edu.wpi.first.wpilibj.Filesystem;
 
 public class ShootKinematics {
     // constants move to constants file
-    private static final Translation2d redSpeakerPosition = new Translation2d(0, 2.658); // rounded need to change
-    private static final Translation2d blueSpeakerPosition = new Translation2d(16.591, 2.658); // rounded need to change
+    private static final Translation2d redSpeakerPosition = new Translation2d(16.591, 5.553); // rounded need to change
+    private static final Translation2d blueSpeakerPosition = new Translation2d(0, 5.553); // rounded need to change
     
     // Note: some of these points are basically not used, tolerances of 10 inches were used
-    private static final Translation2d[] redStagePoints = {new Translation2d(2.6924, 4.1056), new Translation2d(6.1262, 6.0361),new Translation2d(6.1262, 2.1752)};
+    private static final Translation2d[] redStagePoints = {new Translation2d(13.8986, 4.1056), new Translation2d(10.4648, 2.1752),new Translation2d(10.4648, 6.0361)};
     private static final Translation2d[] blueStagePoints = {new Translation2d(16.5928-redStagePoints[0].getX(), redStagePoints[0].getY()),new Translation2d(16.5928-redStagePoints[1].getX(), redStagePoints[1].getY()),new Translation2d(16.5928-redStagePoints[2].getX(), redStagePoints[2].getY())};
 
     // 10.00 m = 1000
@@ -77,7 +77,7 @@ public class ShootKinematics {
     }
 
     private static Pose2d changeRotation(Translation2d currentTranslation2d, Translation2d distanceVector){
-        return new Pose2d(currentTranslation2d, distanceVector.getAngle().plus(new Rotation2d(Math.PI)));
+        return new Pose2d(currentTranslation2d, new Rotation2d(-distanceVector.getAngle().getRadians()));
     }
 
     // Case 5 Check if we are in stage and move accordingly
@@ -117,7 +117,7 @@ public class ShootKinematics {
         try {
             return (DriverStation.getAlliance().get() == Alliance.Red) ? redSpeakerPosition : blueSpeakerPosition;
         } catch (Exception e) {
-            return redSpeakerPosition;
+            return blueSpeakerPosition;
         }
     }
 
@@ -125,7 +125,7 @@ public class ShootKinematics {
         try {
             return (DriverStation.getAlliance().get() == Alliance.Red) ? redStagePoints : blueStagePoints;
         } catch (Exception e) {
-            return redStagePoints;
+            return blueStagePoints;
         }
     }
 
