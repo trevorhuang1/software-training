@@ -19,19 +19,19 @@ import edu.wpi.first.wpilibj.Filesystem;
 
 public class ShootKinematics {
     // constants move to constants file
-    private static final Translation2d redSpeakerPosition = new Translation2d(0, 265.8); // rounded need to change
-    private static final Translation2d blueSpeakerPosition = new Translation2d(1659.1, 265.8); // rounded need to change
+    private static final Translation2d redSpeakerPosition = new Translation2d(0, 2.658); // rounded need to change
+    private static final Translation2d blueSpeakerPosition = new Translation2d(1.6591, 2.658); // rounded need to change
     
     // Note: some of these points are basically not used, tolerances of 10 inches were used
-    private static final Translation2d[] redStagePoints = {new Translation2d(269.24, 410.56), new Translation2d(612.62, 603.61),new Translation2d(612.62, 217.52)};
-    private static final Translation2d[] blueStagePoints = {new Translation2d(1659.28-redStagePoints[0].getX(), redStagePoints[0].getY()),new Translation2d(1659.28-redStagePoints[1].getX(), redStagePoints[1].getY()),new Translation2d(1659.28-redStagePoints[2].getX(), redStagePoints[2].getY())};
+    private static final Translation2d[] redStagePoints = {new Translation2d(2.6924, 4.1056), new Translation2d(6.1262, 6.0361),new Translation2d(6.1262, 2.1752)};
+    private static final Translation2d[] blueStagePoints = {new Translation2d(16.5928-redStagePoints[0].getX(), redStagePoints[0].getY()),new Translation2d(16.5928-redStagePoints[1].getX(), redStagePoints[1].getY()),new Translation2d(16.5928-redStagePoints[2].getX(), redStagePoints[2].getY())};
 
     // 10.00 m = 1000
     // angle 0.0 = impossible to shoot from here
     private static final double[] distToAngle = new double[1001];
     private static double maxDist = 0.0;
 
-    public static Pose2d ShootingPose2DCalculate(Pose2d currentPose2d){
+    public static Pose2d shootingPose2DCalculate(Pose2d currentPose2d){
         Rotation2d angle;
 
         Translation2d distanceVector = currentPose2d.getTranslation().minus(getSpeakerPosition());
@@ -42,7 +42,7 @@ public class ShootKinematics {
         
         // Case 0: We are in angle
         if (angle.getDegrees() > Constants.ArmConstants.maxAngle && distanceVector.getNorm() <= maxDist){ 
-            return changeRotation(currentPose2d.getTranslation(), distanceVector);
+            return moveOutOfStage(changeRotation(currentPose2d.getTranslation(), distanceVector));
         } 
         // Case 1: We are out of angle
         if (angle.getDegrees() <= Constants.ArmConstants.maxAngle) {
@@ -65,7 +65,7 @@ public class ShootKinematics {
                 goal = getSpeakerPosition().plus(newDistanceVector.div(newDistanceVector.getNorm()).times(maxDist));
             }
 
-            return changeRotation(goal, goal.minus(getSpeakerPosition()));
+            return moveOutOfStage(changeRotation(goal, goal.minus(getSpeakerPosition())));
         }
         // Case 2: We are out of range
         if (distanceVector.getNorm() > maxDist) {
@@ -82,7 +82,7 @@ public class ShootKinematics {
 
     // Case 5 Check if we are in stage and move accordingly
     private static Pose2d moveOutOfStage(Pose2d poseInRadius){
-        Translation2d[] stagePoints = (DriverStation.getAlliance().get() == Alliance.Red) ? redStagePoints : blueStagePoints;
+        Translation2d[] stagePoints = getStagePoints();
 
         Translation2d distanceVector = poseInRadius.getTranslation().minus(stagePoints[0]);
         double angle = Math.abs(distanceVector.getAngle().getDegrees());
@@ -114,7 +114,19 @@ public class ShootKinematics {
     }
 
     private static Translation2d getSpeakerPosition() {
-        return (DriverStation.getAlliance().get() == Alliance.Red) ? redSpeakerPosition : blueSpeakerPosition;
+        try {
+            return (DriverStation.getAlliance().get() == Alliance.Red) ? redSpeakerPosition : blueSpeakerPosition;
+        } catch (Exception e) {
+            return redSpeakerPosition;
+        }
+    }
+
+    private static Translation2d[] getStagePoints(){
+        try {
+            return (DriverStation.getAlliance().get() == Alliance.Red) ? redStagePoints : blueStagePoints;
+        } catch (Exception e) {
+            return redStagePoints;
+        }
     }
 
     public static void loadDistCSV() throws FileNotFoundException, IOException {

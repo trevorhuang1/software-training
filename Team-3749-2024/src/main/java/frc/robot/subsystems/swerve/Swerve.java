@@ -20,6 +20,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.arm.ShootKinematics;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.subsystems.swerve.sim.GyroSim;
@@ -52,6 +53,8 @@ public class Swerve extends SubsystemBase {
   private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>("swerve", "odometry",
       new Double[] { 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> desiredOdometryLog = new ShuffleData<Double[]>("swerve", "desiredOdometry",
+      new Double[] { 0.0, 0.0, 0.0, 0.0 });
+      private ShuffleData<Double[]> shooterOdometryLog = new ShuffleData<Double[]>("swerve", "shooterOdometry",
       new Double[] { 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> realStatesLog = new ShuffleData<Double[]>("swerve", "real states",
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
@@ -164,6 +167,7 @@ public class Swerve extends SubsystemBase {
     this.desiredPose = desiredPose;
     desiredOdometryLog
         .set(new Double[] { desiredPose.getX(), desiredPose.getY(), desiredPose.getRotation().getDegrees() });
+
   }
 
   public void stopModules() {
@@ -223,6 +227,13 @@ public class Swerve extends SubsystemBase {
     rotationalVelocityLog.set(Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond));
     odometryLog.set(
         new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+
+    
+    Pose2d shooterPose = ShootKinematics.shootingPose2DCalculate(getPose());
+    shooterOdometryLog.set(
+        new Double[] { shooterPose.getX(), shooterPose.getY(), shooterPose.getRotation().getDegrees() });
+
+
     yawLog.set(gyroData.yawDeg);
     pitchLog.set(gyroData.pitchDeg);
     rollLog.set(gyroData.rollDeg);
