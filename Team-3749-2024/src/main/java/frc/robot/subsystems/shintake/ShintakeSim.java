@@ -37,15 +37,15 @@ public class ShintakeSim implements ShintakeIO {
     public void updateData(ShintakeData data) 
     {
         data.intakeVolts = intakeMotor.getCurrentDrawAmps();
-        data.intakeVelocity = intakeMotor.getAngularVelocityRPM();
+        data.intakeVelocityRadPerSec = intakeMotor.getAngularVelocityRadPerSec();
         data.intakeTempCelcius = 0; //see FTC battery fire for guidance https://www.youtube.com/watch?v=eO9vHakAloU
 
         data.leftShooterVolts = leftShooter.getCurrentDrawAmps();
-        data.leftShooterVelocity = leftShooter.getAngularVelocityRPM();
+        data.leftShooterVelocityRadPerSec = leftShooter.getAngularVelocityRadPerSec();
         data.leftShooterTempCelcius = 0;
 
         data.rightShooterVolts = rightShooter.getCurrentDrawAmps();
-        data.rightShooterVelocity = rightShooter.getAngularVelocityRPM();
+        data.rightShooterVelocityRadPerSec = rightShooter.getAngularVelocityRadPerSec();
         data.rightShooterTempCelcius = 0;
     }
 

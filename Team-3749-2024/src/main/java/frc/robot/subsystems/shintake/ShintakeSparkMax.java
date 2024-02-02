@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shintake;
 
+import org.opencv.core.Mat;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -29,6 +31,9 @@ public class ShintakeSparkMax implements ShintakeIO {
     public ShintakeSparkMax() 
     {
         rightShooter.setInverted(true);
+        leftEncoder.setVelocityConversionFactor((2*Math.PI)/60);
+        rightEncoder.setVelocityConversionFactor((2*Math.PI)/60);
+        intakeEncoder.setVelocityConversionFactor((2*Math.PI)/60);
     }
 
     @Override
@@ -48,15 +53,15 @@ public class ShintakeSparkMax implements ShintakeIO {
     public void updateData(ShintakeData data) 
     {
         data.intakeVolts = intakeMotor.getBusVoltage();
-        data.intakeVelocity = intakeEncoder.getVelocity();
+        data.intakeVelocityRadPerSec = intakeEncoder.getVelocity();
         data.intakeTempCelcius = intakeMotor.getMotorTemperature();
 
         data.leftShooterVolts = leftShooter.getBusVoltage();
-        data.leftShooterVelocity = leftEncoder.getVelocity();
+        data.leftShooterVelocityRadPerSec = leftEncoder.getVelocity();
         data.leftShooterTempCelcius = leftShooter.getMotorTemperature();
 
         data.rightShooterVolts = rightShooter.getBusVoltage();
-        data.rightShooterVelocity = rightEncoder.getVelocity();
+        data.rightShooterVelocityRadPerSec = rightEncoder.getVelocity();
         data.rightShooterTempCelcius = rightShooter.getMotorTemperature();
 
         data.sensorTripped = photoelectricSensor.get();

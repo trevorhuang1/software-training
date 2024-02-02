@@ -18,15 +18,15 @@ public interface ShintakeIO {
     public static class ShintakeData {
         // each of these for each motor
         public double intakeVolts = 0.0;
-        public double intakeVelocity = 0.0;
+        public double intakeVelocityRadPerSec = 0.0;
         public double intakeTempCelcius = 0.0;
 
         public double leftShooterVolts = 0.0;
-        public double leftShooterVelocity = 0.0;
+        public double leftShooterVelocityRadPerSec = 0.0;
         public double leftShooterTempCelcius = 0.0;
 
         public double rightShooterVolts = 0.0;
-        public double rightShooterVelocity = 0.0;
+        public double rightShooterVelocityRadPerSec = 0.0;
         public double rightShooterTempCelcius = 0.0;
 
         public boolean sensorTripped = false;
