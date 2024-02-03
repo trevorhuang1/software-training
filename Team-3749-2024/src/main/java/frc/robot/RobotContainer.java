@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.arm.ShootKinematics;
 import java.nio.file.Path;
 import java.util.HashMap;
 
@@ -48,16 +47,6 @@ public class RobotContainer {
     configureBindings();
 
     RobotController.setBrownoutVoltage(7.0);
-
-    try {
-        ShootKinematics.loadDistCSV();
-    } catch (FileNotFoundException e) {
-        System.out.println("Shoot Kinematics File Not Found!");
-        e.printStackTrace();
-    } catch (IOException e) {
-        System.out.println("Shoot Kinematics File I/O Exception!");
-        e.printStackTrace();
-    }
 
     Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
     Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY, pilot::getRightX, pilot::getRightY));

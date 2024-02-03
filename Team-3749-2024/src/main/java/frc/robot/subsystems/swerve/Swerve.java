@@ -4,30 +4,24 @@
 
 package frc.robot.subsystems.swerve;
 
-import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.proto.Rotation2dProto;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.subsystems.arm.ShootKinematics;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
-import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.subsystems.swerve.sim.GyroSim;
 import frc.robot.subsystems.swerve.sim.SwerveModuleSim;
 import frc.robot.subsystems.swerve.real.NavX2Gyro;
 import frc.robot.subsystems.swerve.real.SwerveModuleRelative;
-import frc.robot.subsystems.swerve.real.SwerveModuleSparkMax;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
@@ -53,8 +47,6 @@ public class Swerve extends SubsystemBase {
   private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>("swerve", "odometry",
       new Double[] { 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> desiredOdometryLog = new ShuffleData<Double[]>("swerve", "desiredOdometry",
-      new Double[] { 0.0, 0.0, 0.0, 0.0 });
-      private ShuffleData<Double[]> shooterOdometryLog = new ShuffleData<Double[]>("swerve", "shooterOdometry",
       new Double[] { 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double[]> realStatesLog = new ShuffleData<Double[]>("swerve", "real states",
       new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
@@ -229,10 +221,6 @@ public class Swerve extends SubsystemBase {
         new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
 
     
-    Pose2d shooterPose = ShootKinematics.shootingPose2DCalculate(getPose());
-    shooterOdometryLog.set(
-        new Double[] { shooterPose.getX(), shooterPose.getY(), shooterPose.getRotation().getDegrees() });
-
 
     yawLog.set(gyroData.yawDeg);
     pitchLog.set(gyroData.pitchDeg);
