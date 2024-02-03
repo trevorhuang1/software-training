@@ -152,7 +152,6 @@ public class AutoUtils {
         .beforeStarting(() -> timer.start())
         .andThen(() -> {
           timer.stop();
-          System.out.println(timer.get());
         });
   }
 }

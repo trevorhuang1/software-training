@@ -201,11 +201,11 @@ public class Constants {
     public static final double toleranceM_Misc = 0.02;
     public static final double toleranceRad_Misc = Math.PI / 750;
 
-    public static final Pose2d fieldStartingPose = new Pose2d(1, 1, Rotation2d.fromDegrees(0));
+    public static final Pose2d fieldStartingPose = new Pose2d(1.37, 4.51, Rotation2d.fromDegrees(-22.62));
   }
 
   public static final class AutoConstants {
-    public static double kP_PathPlannerDrive = 8.8;
+    public static double kP_PathPlannerDrive = 8;
     public static double kD_PathPlannerDrive = 0;
 
     public static double kP_PathPlannerTurn = 0.9;

@@ -26,6 +26,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.Teleop;
 import frc.robot.commands.swerve.TurnToAngle;
@@ -45,11 +46,11 @@ public class RobotContainer {
     DriverStation.removeRefreshedDataEventHandle(44000);
 
     configureBindings();
+    AutoUtils.initPPUtils();
 
     RobotController.setBrownoutVoltage(7.0);
 
     Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
-    Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY, pilot::getRightX, pilot::getRightY));
   }
 
   private void configureBindings() {
@@ -59,7 +60,8 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // return Commands.run(() -> Robot.arm.setVoltage(8-0.973));
-    return Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(90)));
+    return AutoUtils.getAutoPath("Choreo-BottomSpeaker-3xWing_Speaker-Center-Speaker");
+    // return Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(90)));
   }
 
 
