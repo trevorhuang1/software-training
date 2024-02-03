@@ -36,16 +36,21 @@ public class ShootKinematics {
 
         Translation2d distanceVector = currentPose2d.getTranslation().minus(getSpeakerPosition());
 
-        angle = new Rotation2d(Math.PI/2 - Math.atan2(Math.abs(distanceVector.getY()), Math.abs(distanceVector.getX())));
+        angle = new Rotation2d(Math.atan2(Math.abs(distanceVector.getY()), Math.abs(distanceVector.getX())));
+        System.out.println("Angle: " + angle);
+        System.out.println("MAX ANGLE: " + Constants.ArmConstants.maxAngle);
 
         //double distAngle = getAngle(distanceVector.getNorm());
         
         // Case 0: We are in angle
-        if (angle.getDegrees() > Constants.ArmConstants.maxAngle && distanceVector.getNorm() <= maxDist){ 
-            return moveOutOfStage(changeRotation(currentPose2d.getTranslation(), distanceVector));
+        if (angle.getDegrees() < Constants.ArmConstants.maxAngle && distanceVector.getNorm() <= maxDist){ 
+            System.out.println("Case 0");
+            // return moveOutOfStage(changeRotation(currentPose2d.getTranslation(), distanceVector));
+            return changeRotation(currentPose2d.getTranslation(), distanceVector);
         } 
         // Case 1: We are out of angle
-        if (angle.getDegrees() <= Constants.ArmConstants.maxAngle) {
+        else if (angle.getDegrees() >= Constants.ArmConstants.maxAngle) {
+            System.out.println("Case 1");
 
             // TODO: Check if positive/negative x coord check is correct
             Translation2d radiusVector;
@@ -62,13 +67,16 @@ public class ShootKinematics {
             // Case 3: We are out of range and out of angle
             Translation2d newDistanceVector = goal.minus(getSpeakerPosition());
             if (newDistanceVector.getNorm() > maxDist) {
+                System.out.println("Special Case 3");
                 goal = getSpeakerPosition().plus(newDistanceVector.div(newDistanceVector.getNorm()).times(maxDist));
             }
 
-            return moveOutOfStage(changeRotation(goal, goal.minus(getSpeakerPosition())));
+            // return moveOutOfStage(changeRotation(goal, goal.minus(getSpeakerPosition())));
+            return changeRotation(goal, goal.minus(getSpeakerPosition()));
         }
         // Case 2: We are out of range
-        if (distanceVector.getNorm() > maxDist) {
+        else if (distanceVector.getNorm() > maxDist) {
+            System.out.println("Case 2");
             Translation2d goal = getSpeakerPosition().plus(distanceVector.div(distanceVector.getNorm()).times(maxDist));
             return moveOutOfStage(changeRotation(goal, goal.minus(getSpeakerPosition())));
         }
@@ -77,11 +85,14 @@ public class ShootKinematics {
     }
 
     private static Pose2d changeRotation(Translation2d currentTranslation2d, Translation2d distanceVector){
-        return new Pose2d(currentTranslation2d, new Rotation2d(-distanceVector.getAngle().getRadians()));
+        return new Pose2d(currentTranslation2d, new Rotation2d(Math.PI - distanceVector.getAngle().getRadians()));
+        // Ok basically the Rotation2d angle is pi + angle only if the currenttranslation is above the speaker
+        // Otherwise the angle is pi - angle if the currenttranslation is below the speaker
     }
 
     // Case 5 Check if we are in stage and move accordingly
     private static Pose2d moveOutOfStage(Pose2d poseInRadius){
+        System.out.println("Case 5");
         Translation2d[] stagePoints = getStagePoints();
 
         Translation2d distanceVector = poseInRadius.getTranslation().minus(stagePoints[0]);
@@ -98,7 +109,8 @@ public class ShootKinematics {
     }
 
     private static Translation2d projection(Translation2d vector, Translation2d target) {
-        return target.div(Math.pow(target.getNorm(),2)).times(dotProduct(target, vector));
+        // return target.div(Math.pow(target.getNorm(),2)).times(dotProduct(target, vector));
+        return target.times(dotProduct(target, vector) / (Math.pow(target.getNorm(), 2)));
     }
 
     private static double dotProduct(Translation2d v1, Translation2d v2) {

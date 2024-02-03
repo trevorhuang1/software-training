@@ -109,7 +109,7 @@ public class Constants {
     public static final double minDistance = 0.9;
 
     // Calcuation stuff
-    public static final double distMargin = 0.5;
+    public static final double distMargin = 0.25; // Half a meter is kind of a lot, don't you think?
     public static final double maxAngle = 42.109;
     public static final double maxAngleRad = Math.toRadians(maxAngle);
   }
