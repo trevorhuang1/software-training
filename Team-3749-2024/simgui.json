@@ -2,6 +2,8 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Choose Alliance": "String Chooser",
+      "/SmartDashboard/Choose Auto": "String Chooser",
       "/SmartDashboard/mech": "Mechanism2d"
     }
   },

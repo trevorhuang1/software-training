@@ -34,26 +34,25 @@ import frc.robot.utils.Constants.Sim.PIDValues;;
 
 public class Teleop extends Command {
   private final Swerve swerve;
-  private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction, yTurningSpdFunction;
+  private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
   private final PIDController pid_turnController = new PIDController(PIDValues.kP_teleopTurn, 0,
       PIDValues.kD_teleopTurn);
 
   public Teleop(
-      Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction,
-      Supplier<Double> yTurningSpdFunction) {
+      Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction) {
     this.swerve = Robot.swerve;
     this.xSpdFunction = xSpdFunction;
     this.ySpdFunction = ySpdFunction;
     this.xTurningSpdFunction = xTurningSpdFunction;
-    this.yTurningSpdFunction = yTurningSpdFunction;
 
     // This should be max Acceleration! I think.
     this.xLimiter = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
     this.yLimiter = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
     this.turningLimiter = new SlewRateLimiter(DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
     addRequirements(swerve);
+
   }
 
   @Override
@@ -63,10 +62,10 @@ public class Teleop extends Command {
 
   @Override
   public void execute() {
+
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = xTurningSpdFunction.get();
-
     xSpeed = Math.abs(xSpeed) > ControllerConstants.deadband ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > ControllerConstants.deadband ? ySpeed : 0.0;
     turningSpeed = Math.abs(turningSpeed) > ControllerConstants.deadband ? turningSpeed : 0.0;
@@ -77,7 +76,7 @@ public class Teleop extends Command {
     turningSpeed = turningLimiter.calculate(turningSpeed * DriveConstants.maxAngularSpeedRadiansPerSecond);
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        xSpeed, ySpeed, turningSpeed, swerve.getRotation2d());
+        ySpeed, xSpeed, turningSpeed, swerve.getRotation2d());
 
     // set chassis speeds
     swerve.setChassisSpeeds(chassisSpeeds);

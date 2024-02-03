@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
@@ -187,6 +188,7 @@ public class Swerve extends SubsystemBase {
 
     updateOdometry();
     gyro.updateData(gyroData);
+    Command cmd = this.getCurrentCommand();
 
     for (int i = 0; i < 4; i++) {
       modules[i].periodic();
