@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import java.nio.file.Path;
 import java.util.HashMap;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
@@ -61,8 +62,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // return Commands.run(() -> Robot.arm.setVoltage(8-0.973));
     return AutoUtils.getAutoPath("Choreo-BottomSpeaker-3xWing_Speaker-Center-Speaker");
+
+    //? Note - do we have to calculate the angle? 
     // return Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(90)));
   }
-
-
 }
