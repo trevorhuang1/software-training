@@ -4,6 +4,15 @@
 
 package frc.robot;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import java.nio.file.Path;
 import java.util.HashMap;
 
@@ -15,18 +24,16 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj2.command.Command;
+
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.commands.swerve.MoveToPose;
+import frc.robot.commands.swerve.Teleop;
 import frc.robot.commands.swerve.TurnToAngle;
 import frc.robot.utils.Constants;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.DriveConstants;
+
 
 public class RobotContainer {
   private Xbox pilot = new Xbox(0);
@@ -37,11 +44,12 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     DriverStation.removeRefreshedDataEventHandle(44000);
 
-    initAuto();
     configureBindings();
 
     RobotController.setBrownoutVoltage(7.0);
+
     Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
+    Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY, pilot::getRightX, pilot::getRightY));
   }
 
   private void configureBindings() {
@@ -49,23 +57,10 @@ public class RobotContainer {
 
   }
 
-  public void initAuto() {
-    HashMap<String, Command> commandList = new HashMap<String, Command>();
-
-    commandList.put("PrintCMD-hello", new PrintCommand("hello"));
-    commandList.put("shoot", new PrintCommand("note goes wheee"));
-
-    AutoUtils.initPathCommands(commandList);
-    AutoUtils.initPPUtils();
-  }
-
   public Command getAutonomousCommand() {
-    Command command;
-
-    command = AutoUtils.getAutoPath("4 pt");
-    command = AutoUtils.timeCommand(command);
-    
-    return command;
+    // return Commands.run(() -> Robot.arm.setVoltage(8-0.973));
+    return Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(90)));
   }
+
 
 }

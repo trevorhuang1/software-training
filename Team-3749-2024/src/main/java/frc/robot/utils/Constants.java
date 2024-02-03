@@ -3,9 +3,10 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pathplanner.lib.util.PIDConstants;
+
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -16,14 +17,13 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
 public class Constants {
-
-  public static final boolean ROBOT_IS_REAL = Robot.isReal();
 
   public static final class Sim {
     public static final double loopPeriodSec = 0.02;
@@ -44,6 +44,76 @@ public class Constants {
     };
 
   }
+
+  public static enum RobotState {
+    STOW(0, 0),
+    SPEAKER(30, 0),
+    AMP(80, 0);
+
+    public double armPosRad;
+    public double shintakePosRad;
+
+    private RobotState(double armPosRad, double shintakePosRad) {
+      this.armPosRad = armPosRad;
+      this.shintakePosRad = shintakePosRad;
+    }
+  }
+
+  public static final class ArmConstants {
+    private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
+    private static final PIDConstants realPID = new PIDConstants(0, 0, 0);
+    
+    public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
+
+    public static final int leftID = 0;
+    public static final int rightID = 1;
+    // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
+    public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2; 
+    public static final int encoderID = 2;
+    public static final double encoderOffsetRad = 0;
+
+    // Control - PID, FF, and Trapezoidal Constraints
+  
+    private static final double simkS = 0.0;
+    private static final double simkG = 0.203;// stick arm at 0 degrees, tune till it doesnt move
+    
+    private static final double simkV = 6.616; // max volts - kG / max velocity
+    private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
+
+
+
+    private static final double realkS = 0;
+    private static final double realkG = 0;
+    private static final double realkV = 0;
+    private static final double realkA = 0;
+
+    public static final double kS = Robot.isReal() ? realkS : simkS;
+    public static final double kG = Robot.isReal() ? realkG : simkG;
+    public static final double kV = Robot.isReal() ? realkV : simkV;
+    public static final double kA = Robot.isReal() ? realkA : simkA;
+
+    // private static final Constraints simConstraints = new Constraints(2.36, 71.58);
+        private static final Constraints simConstraints = new Constraints(1.783, 89.175);
+
+    private static final Constraints realConstraints = new Constraints(Math.PI, 2 * Math.PI);
+    public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
+
+    // Field Parameters
+    public static final double armHeightOffset = 0.0; // how high up the arm is, NOTE: need to find
+    public static final double armLength = 0.93;
+    public static final double shooterVelocity = 10.0; // NOTE: likely will vary, might need to pass as parameter
+
+    // NOTE: Not percise
+    // Field Parameters
+    public static final double speakerHeight = 2.05;
+    public static final double minDistance = 0.9;
+
+    // Calcuation stuff
+    public static final double distMargin = 0.5;
+    public static final double maxAngle = 42.109;
+    public static final double maxAngleRad = Math.toRadians(maxAngle);
+  }
+
 
   public static final class ModuleConstants {
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
