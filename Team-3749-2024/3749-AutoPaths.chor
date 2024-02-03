@@ -1,16 +1,16 @@
 {
     "version": "v0.2.1",
     "robotConfiguration": {
-        "mass": 74.08797700309194,
-        "rotationalInertia": 0.9177321143206928,
-        "motorMaxTorque": 1.087292817679558,
+        "mass": 63,
+        "rotationalInertia": 5.03,
+        "motorMaxTorque": 0.7248618784530386,
         "motorMaxVelocity": 4704,
         "gearing": 6.75,
         "wheelbase": 0.4444997599701296,
         "trackWidth": 0.4444997599701296,
-        "bumperLength": 0.7492995953782184,
-        "bumperWidth": 0.7492995953782184,
-        "wheelRadius": 0.050799972568014815
+        "bumperLength": 0.76,
+        "bumperWidth": 0.76,
+        "wheelRadius": 0.051
     },
     "paths": {
         "BottomSpeaker-3xWing_Speaker-Center-Speaker": {
