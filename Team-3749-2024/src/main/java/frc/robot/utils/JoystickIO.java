@@ -113,8 +113,6 @@ public class JoystickIO {
        pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.shintake.setShooterVelocity(0)));
 
        pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
-       JoystickButton buttonX = new JoystickButton(home, 3);
-       buttonX.onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
     }
         
