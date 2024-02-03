@@ -157,7 +157,7 @@ public class ShootKinematics {
             i = Math.round(i*100)/100.0;
             double temp = i + Math.random()*.01;
             temp = Math.round(temp*1000)/1000.0;
-            System.out.println(temp + " " + getAngle(temp));
+            // System.out.println(temp + " " + getAngle(temp));
         }
     }
 }

@@ -58,7 +58,6 @@ public class ArmSparkMax implements ArmIO {
         data.accelerationRadPerSecSquared = (getVelocityRadPerSec() - previousVelocity) / 0.02;
 
         data.appliedVolts = appliedVolts;
-        // System.out.println(appliedVolts);
 
         data.leftCurrentAmps = Math.abs(leftMotor.getOutputCurrent());
         data.rightCurrentAmps = Math.abs(rightMotor.getOutputCurrent());

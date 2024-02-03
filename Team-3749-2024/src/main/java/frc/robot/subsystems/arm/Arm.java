@@ -66,7 +66,7 @@ public class Arm extends SubsystemBase {
         if (Robot.isSimulation()) {
             armIO = new ArmSim();
         }
-        // setGoal(-Math.PI/2);
+        setGoal(Math.PI/4);
         // profiledFeedbackController.setGoal(Units.degreesToRadians(-90));
     }
 
@@ -87,11 +87,13 @@ public class Arm extends SubsystemBase {
     }
 
     public void setState(double position, double velocity, double acceleration) {
+
         // update for logging
         accelerationSetpoint = acceleration;
 
         double feedback = profiledFeedbackController.calculate(data.positionRad);
-        double feedforward = feedForwardController.calculate(data.positionRad, velocity, acceleration);
+        double feedforward = feedForwardController.calculate(Math.PI/4, velocity, acceleration);
+
         setVoltage(feedforward + feedback);
 
 

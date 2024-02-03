@@ -3,6 +3,7 @@ package frc.robot.commands.arm;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.utils.Constants;
 
 public class ArmMoveToGoal extends Command {
 
