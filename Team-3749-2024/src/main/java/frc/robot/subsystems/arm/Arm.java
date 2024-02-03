@@ -66,8 +66,6 @@ public class Arm extends SubsystemBase {
         if (Robot.isSimulation()) {
             armIO = new ArmSim();
         }
-        setGoal(Math.PI/4);
-        // profiledFeedbackController.setGoal(Units.degreesToRadians(-90));
     }
 
     public Rotation2d getRotation2d() {
