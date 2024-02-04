@@ -12,8 +12,7 @@ public class WristSim implements WristIO {
     private SingleJointedArmSim wristMotor = new SingleJointedArmSim(DCMotor.getNEO(1),
         333.333,
         0.755, //2578.65
-        Units.inchesToMeters(21.1), //  21.1 in
-        //how it FEELS to steal from the arm branch (they're us but better)
+        0.455, //  dist from  backmost axle to farthest tip
 
         Units.degreesToRadians(0),
         Units.degreesToRadians(40),
@@ -35,7 +34,7 @@ public class WristSim implements WristIO {
     data.velocityRadPerSec = wristMotor.getVelocityRadPerSec();
     data.wristVoltage = wristMotor.getCurrentDrawAmps();
     data.appliedVolts = appliedVolts;
-    data.encoderDistance = (data.encoderDistance + (data.velocityRadPerSec * 0.02));
+    data.encoderDistance = wristMotor.getAngleRads();//(data.encoderDistance + (data.velocityRadPerSec * 0.02));
     distanceRotated = data.encoderDistance;
     SmartDashboard.putNumber("encoderDist", Math.toDegrees(data.encoderDistance));
     SmartDashboard.putNumber("wristVolts", data.appliedVolts);
