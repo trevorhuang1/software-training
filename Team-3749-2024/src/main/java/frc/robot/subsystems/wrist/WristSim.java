@@ -2,13 +2,24 @@ package frc.robot.subsystems.wrist;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants.Sim;
 
 public class WristSim implements WristIO {
     
-    private FlywheelSim wristMotor = new FlywheelSim(DCMotor.getNEO(1),1, 0.01);
+    private SingleJointedArmSim wristMotor = new SingleJointedArmSim(DCMotor.getNEO(1),
+        333.333,
+        0.755, //2578.65
+        Units.inchesToMeters(21.1), //  21.1 in
+        //how it FEELS to steal from the arm branch (they're us but better)
+
+        Units.degreesToRadians(0),
+        Units.degreesToRadians(40),
+        true,
+        Units.degreesToRadians(0));
     private double appliedVolts = 0.0;
     private double distanceRotated = 0.0;
     
@@ -22,7 +33,7 @@ public class WristSim implements WristIO {
    {
     wristMotor.update(Sim.loopPeriodSec);
     data.tempCelcius = 0;
-    data.velocityRadPerSec = wristMotor.getAngularVelocityRadPerSec();
+    data.velocityRadPerSec = wristMotor.getVelocityRadPerSec();
     data.wristVoltage = wristMotor.getCurrentDrawAmps();
     data.appliedVolts = appliedVolts;
     data.encoderDistance = (data.encoderDistance + (data.velocityRadPerSec * 0.02));

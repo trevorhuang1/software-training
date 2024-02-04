@@ -2,6 +2,7 @@ package frc.robot.subsystems.wrist;
 
 import java.util.HashMap;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
@@ -20,7 +21,8 @@ public class Wrist extends SubsystemBase {
     private WristData data = new WristData();
     private ProfiledPIDController wristController = new ProfiledPIDController(Constants.WristConstants.PID.kP,
             Constants.WristConstants.PID.kI, Constants.WristConstants.PID.kD,Constants.WristConstants.trapezoidConstraint);
-    private SimpleMotorFeedforward wristFF = new SimpleMotorFeedforward(1, 0);
+    private ArmFeedforward wristFF = new ArmFeedforward(Constants.WristConstants.kS,Constants.WristConstants.kG,
+    Constants.WristConstants.kV);
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean,Double>();
     private boolean isGroundIntake = false;
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
@@ -60,7 +62,7 @@ public class Wrist extends SubsystemBase {
         SmartDashboard.putNumber("wristGoal",getWristGoal().position);
         wristModule.setVoltage(
             wristController.calculate(wristModule.getEncoderValue()) + //is getting the goal redundant?
-                wristFF.calculate(wristController.getSetpoint().velocity)
+                wristFF.calculate(wristController.getSetpoint().velocity) //remind me to go fix this
         );
         mechanismArm.setAngle(-Math.toDegrees(wristModule.getEncoderValue()));
         //System.out.println(wristController.getGoal().position);

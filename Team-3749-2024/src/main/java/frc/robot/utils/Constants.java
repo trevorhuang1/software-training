@@ -95,6 +95,23 @@ public class Constants {
         public static final Constraints trapezoidConstraint = Robot.isReal() ? realConstraint : simConstraint;
         public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
+        //thanks arm (robbery)
+        private static final double simkS = 0.0;
+        private static final double simkG = 0.203;// stick arm at 0 degrees, tune till it doesnt move
+    
+        private static final double simkV = 6.616; // max volts - kG / max velocity
+        private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
+
+        private static final double realkS = 0;
+        private static final double realkG = 0;
+        private static final double realkV = 0;
+        private static final double realkA = 0;
+
+        public static final double kS = Robot.isReal() ? realkS : simkS;
+        public static final double kG = Robot.isReal() ? realkG : simkG;
+        public static final double kV = Robot.isReal() ? realkV : simkV;
+        public static final double kA = Robot.isReal() ? realkA : simkA;
+
         public static final double groundGoal = Math.toRadians(40);
         public static final double stowGoal = 0;
         public static final double wristOffset = 0;
