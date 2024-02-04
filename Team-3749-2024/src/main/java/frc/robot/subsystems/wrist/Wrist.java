@@ -5,7 +5,6 @@ import java.util.HashMap;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -69,7 +68,7 @@ public class Wrist extends SubsystemBase {
         State state = getWristSetpoint();
         wristModule.setVoltage(
             wristController.calculate(wristModule.getEncoderValue()) + //is getting the goal redundant?
-                wristFF.calculate(Units.degreesToRadians(state.position),state.velocity,accelerationSpeed) //remind me to go fix this
+                wristFF.calculate(state.position,state.velocity,accelerationSpeed) //remind me to go fix this
         );
         mechanismArm.setAngle(-Math.toDegrees(wristModule.getEncoderValue()));
         //System.out.println(wristController.getGoal().position);
