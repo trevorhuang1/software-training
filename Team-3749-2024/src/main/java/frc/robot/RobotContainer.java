@@ -64,7 +64,7 @@ public class RobotContainer {
 
     commandList.put("PrintCMD-hello", Commands.print("hewlow"));
     commandList.put("shoot", Commands.print("shot a thing"));
-    commandList.put("targetArm", Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(90))));
+    commandList.put("targetArm", Commands.print("shot a thing"));
 
     AutoUtils.initPathCommands(commandList);
     AutoUtils.initPPUtils();
@@ -73,6 +73,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     
     
-    return AutoUtils.timeCommand(AutoUtils.getAutoPath());
+    return AutoUtils.timeCommand(AutoUtils.getAutoPath("top_w-speaker+2c-speaker"));
   }
 }
