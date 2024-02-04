@@ -84,7 +84,7 @@ public class AutoUtils {
         },
         swerve);
 
-    autoChooser = AutoBuilder.buildAutoChooser("TestAuto");
+    autoChooser = AutoBuilder.buildAutoChooser("DefaultAuto");
 
     SmartDashboard.putData("Choose Auto", autoChooser);
   }

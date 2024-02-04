@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import java.nio.file.Path;
@@ -36,7 +37,6 @@ import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.DriveConstants;
 
-
 public class RobotContainer {
   private Xbox pilot = new Xbox(0);
   private Xbox operator = new Xbox(1);
@@ -47,7 +47,7 @@ public class RobotContainer {
     DriverStation.removeRefreshedDataEventHandle(44000);
 
     configureBindings();
-    AutoUtils.initPPUtils();
+    initAuto();
 
     RobotController.setBrownoutVoltage(7.0);
 
@@ -59,11 +59,20 @@ public class RobotContainer {
 
   }
 
-  public Command getAutonomousCommand() {
-    // return Commands.run(() -> Robot.arm.setVoltage(8-0.973));
-    return AutoUtils.getAutoPath("Choreo-BottomSpeaker-3xWing_Speaker-Center-Speaker");
+  public void initAuto() {
+    HashMap<String, Command> commandList = new HashMap<String, Command>();
 
-    //? Note - do we have to calculate the angle? 
-    // return Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(90)));
+    commandList.put("PrintCMD-hello", Commands.print("hewlow"));
+    commandList.put("shoot", Commands.print("shot a thing"));
+    commandList.put("targetArm", Commands.run(() -> Robot.arm.setGoal(Units.degreesToRadians(90))));
+
+    AutoUtils.initPathCommands(commandList);
+    AutoUtils.initPPUtils();
+  }
+
+  public Command getAutonomousCommand() {
+    
+    
+    return AutoUtils.timeCommand(AutoUtils.getAutoPath());
   }
 }

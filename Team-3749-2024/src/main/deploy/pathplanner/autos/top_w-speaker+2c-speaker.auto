@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3126474618911743,
-      "y": 6.502647876739502
+      "x": 1.31059467792511,
+      "y": 6.696061611175537
     },
-    "rotation": -139.08561855881197
+    "rotation": -133.02508846331898
   },
   "command": {
     "type": "sequential",
@@ -18,43 +18,43 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
+                  "name": "targetArm"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "topStart_3pt.1"
+                  "pathName": "top_w-speaker+2c-speaker.1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
+                  "name": "targetArm"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "topStart_3pt.2"
+                  "pathName": "top_w-speaker+2c-speaker.2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
+                  "name": "targetArm"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "topStart_3pt.3"
+                  "pathName": "top_w-speaker+2c-speaker.3"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
+                  "name": "targetArm"
                 }
               }
             ]

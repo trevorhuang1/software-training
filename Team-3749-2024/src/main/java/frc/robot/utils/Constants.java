@@ -60,27 +60,25 @@ public class Constants {
   }
 
   public static final class ArmConstants {
-    private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
+    private static final PIDConstants simPID = new PIDConstants(2.2, 0, 0); // 2.2,0,0
     private static final PIDConstants realPID = new PIDConstants(0, 0, 0);
-    
+
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
     public static final int leftID = 0;
     public static final int rightID = 1;
     // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
-    public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2; 
+    public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2;
     public static final int encoderID = 2;
     public static final double encoderOffsetRad = 0;
 
     // Control - PID, FF, and Trapezoidal Constraints
-  
+
     private static final double simkS = 0.0;
     private static final double simkG = 0.203;// stick arm at 0 degrees, tune till it doesnt move
-    
+
     private static final double simkV = 6.616; // max volts - kG / max velocity
     private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
-
-
 
     private static final double realkS = 0;
     private static final double realkG = 0;
@@ -92,8 +90,9 @@ public class Constants {
     public static final double kV = Robot.isReal() ? realkV : simkV;
     public static final double kA = Robot.isReal() ? realkA : simkA;
 
-    // private static final Constraints simConstraints = new Constraints(2.36, 71.58);
-        private static final Constraints simConstraints = new Constraints(1.783, 89.175);
+    // private static final Constraints simConstraints = new Constraints(2.36,
+    // 71.58);
+    private static final Constraints simConstraints = new Constraints(1.783, 89.175);
 
     private static final Constraints realConstraints = new Constraints(Math.PI, 2 * Math.PI);
     public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
@@ -113,7 +112,6 @@ public class Constants {
     public static final double maxAngle = 42.109;
     public static final double maxAngleRad = Math.toRadians(maxAngle);
   }
-
 
   public static final class ModuleConstants {
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
@@ -206,12 +204,13 @@ public class Constants {
 
   public static final class AutoConstants {
     public static double kP_PathPlannerDrive = 8;
-    public static double kD_PathPlannerDrive = 0;
+    public static double kD_PathPlannerDrive = 0.009;
 
     public static double kP_PathPlannerTurn = 0.9;
     public static double kD_PathPlannerTurn = 0;
 
-    public static PIDConstants drivePIDConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerDrive, 0,
+    public static PIDConstants drivePIDConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerDrive,
+        0,
         Constants.AutoConstants.kD_PathPlannerDrive);
     public static PIDConstants turnPIDConstants = new PIDConstants(Constants.AutoConstants.kP_PathPlannerTurn, 0,
         Constants.AutoConstants.kD_PathPlannerTurn);
