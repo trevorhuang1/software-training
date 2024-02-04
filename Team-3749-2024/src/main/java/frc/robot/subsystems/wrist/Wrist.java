@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -29,6 +29,7 @@ public class Wrist extends SubsystemBase {
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
     private MechanismLigament2d mechanismArm = mechanismArmPivot
             .append(new MechanismLigament2d("mechanism arm", .93, 0));
+    private double accelerationSpeed = 0.0;
 
     public Wrist() 
         {
@@ -57,12 +58,18 @@ public class Wrist extends SubsystemBase {
         return wristController.getSetpoint();
     }
 
+    public void setAcceleration(double acceleration)
+    {
+        this.accelerationSpeed = acceleration;
+    }
+
     public void moveWristToAngle() {
 
         SmartDashboard.putNumber("wristGoal",getWristGoal().position);
+        State state = getWristSetpoint();
         wristModule.setVoltage(
             wristController.calculate(wristModule.getEncoderValue()) + //is getting the goal redundant?
-                wristFF.calculate(wristController.getSetpoint().velocity) //remind me to go fix this
+                wristFF.calculate(Units.degreesToRadians(state.position),state.velocity,accelerationSpeed) //remind me to go fix this
         );
         mechanismArm.setAngle(-Math.toDegrees(wristModule.getEncoderValue()));
         //System.out.println(wristController.getGoal().position);
