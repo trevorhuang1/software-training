@@ -1,7 +1,5 @@
 package frc.robot.subsystems.shintake;
 
-import org.opencv.core.Mat;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -9,7 +7,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.utils.Constants;
 
 public class ShintakeSparkMax implements ShintakeIO {
 
@@ -80,8 +77,8 @@ public class ShintakeSparkMax implements ShintakeIO {
         shintakeGoalVolts = MathUtil.clamp(intakeVolts, -8, 8);
         leftShooterGoalVolts = MathUtil.clamp(leftShooterVolts, -8, 8);
         rightShooterGoalVolts = MathUtil.clamp(rightShooterVolts, -8, 8);
-        leftShooter.setVoltage(leftShooterVolts);
-        rightShooter.setVoltage(rightShooterVolts);
+        leftShooter.setVoltage(leftShooterGoalVolts);
+        rightShooter.setVoltage(rightShooterGoalVolts);
         intakeMotor.setVoltage(shintakeGoalVolts);
 
 

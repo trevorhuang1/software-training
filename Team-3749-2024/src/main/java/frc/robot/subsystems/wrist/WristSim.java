@@ -36,6 +36,7 @@ public class WristSim implements WristIO {
     data.appliedVolts = appliedVolts;
     data.encoderDistance = wristMotor.getAngleRads();//(data.encoderDistance + (data.velocityRadPerSec * 0.02));
     distanceRotated = data.encoderDistance;
+    SmartDashboard.putNumber("velocity", data.velocityRadPerSec);
     SmartDashboard.putNumber("encoderDist", Math.toDegrees(data.encoderDistance));
     SmartDashboard.putNumber("wristVolts", data.appliedVolts);
    }
