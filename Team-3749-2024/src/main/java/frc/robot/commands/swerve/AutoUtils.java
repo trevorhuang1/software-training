@@ -56,7 +56,7 @@ public class AutoUtils {
 
     AutoBuilder.configureHolonomic(
         swerve::getPose,
-        swerve::resetOdometry,
+        (Pose2d pose) -> {},
         swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
         Constants.AutoConstants.cfgHolonomicFollower,
@@ -68,23 +68,18 @@ public class AutoUtils {
           // otherwise get from sendable chooser
 
           Alliance robotAlliance = allianceChooser.getSelected();
-          robotAlliance = DriverStation.getAlliance().isPresent()
-              ? DriverStation.getAlliance().get()
+          robotAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get()
               : robotAlliance;
 
-          if (robotAlliance == Alliance.Red)
-          robotAlliance = DriverStation.getAlliance().isPresent()
-              ? DriverStation.getAlliance().get()
-              : robotAlliance;
-
-          if (robotAlliance == Alliance.Red)
+          if (robotAlliance == Alliance.Red) {
+            return false;
+          } else {
             return true;
-
-          return false;
+          }
         },
         swerve);
 
-    autoChooser = AutoBuilder.buildAutoChooser("TestAuto");
+    autoChooser = AutoBuilder.buildAutoChooser("Test");
 
     SmartDashboard.putData("Choose Auto", autoChooser);
   }
@@ -112,9 +107,9 @@ public class AutoUtils {
               : robotAlliance;
 
           if (robotAlliance == Alliance.Red) {
-            return true;
-          } else {
             return false;
+          } else {
+            return true;
           }
         }, swerve);
   }

@@ -94,8 +94,6 @@ public class Swerve extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, Constants.DriveConstants.maxSpeedMetersPerSecond);
     // 6. Output each module states to wheels
 
-    SmartDashboard.putNumber("chassisSpeeds updates", moduleStates[1].speedMetersPerSecond);
-
     setModuleStates(moduleStates);
   }
 
@@ -221,8 +219,6 @@ public class Swerve extends SubsystemBase {
     rotationalVelocityLog.set(Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond));
     odometryLog.set(
         new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
-
-    
 
     yawLog.set(gyroData.yawDeg);
     pitchLog.set(gyroData.pitchDeg);
