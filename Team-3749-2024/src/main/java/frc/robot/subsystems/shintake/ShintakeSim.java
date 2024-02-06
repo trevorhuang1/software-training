@@ -24,14 +24,14 @@ public class ShintakeSim implements ShintakeIO {
     @Override
     public double[] getShooterEncoder()
     {
-        double[] shooterEncoder = {leftShooter.getAngularVelocityRPM(),rightShooter.getAngularVelocityRPM()};
+        double[] shooterEncoder = {leftShooter.getAngularVelocityRadPerSec(),rightShooter.getAngularVelocityRadPerSec()};
         return shooterEncoder;
     }
 
     @Override
     public double getIntakeEncoder()
     {
-        return intakeMotor.getAngularVelocityRPM();
+        return intakeMotor.getAngularVelocityRadPerSec();
     }
 
     @Override
@@ -40,15 +40,15 @@ public class ShintakeSim implements ShintakeIO {
         intakeMotor.update(Sim.loopPeriodSec);
         leftShooter.update(Sim.loopPeriodSec);
         rightShooter.update(Sim.loopPeriodSec);
-        data.intakeVolts = intakeMotor.getCurrentDrawAmps();
+        data.intakeVolts = shintakeGoalVolts;
         data.intakeVelocityRadPerSec = intakeMotor.getAngularVelocityRadPerSec();
         data.intakeTempCelcius = 0; //see FTC battery fire for guidance https://www.youtube.com/watch?v=eO9vHakAloU
 
-        data.leftShooterVolts = leftShooter.getCurrentDrawAmps();
+        data.leftShooterVolts = leftShooterGoalVolts;
         data.leftShooterVelocityRadPerSec = leftShooter.getAngularVelocityRadPerSec();
         data.leftShooterTempCelcius = 0;
 
-        data.rightShooterVolts = rightShooter.getCurrentDrawAmps();
+        data.rightShooterVolts = rightShooterGoalVolts;
         data.rightShooterVelocityRadPerSec = rightShooter.getAngularVelocityRadPerSec();
         data.rightShooterTempCelcius = 0;
     }
@@ -62,10 +62,7 @@ public class ShintakeSim implements ShintakeIO {
         this.leftShooter.setInputVoltage(leftShooterGoalVolts);
         this.rightShooter.setInputVoltage(rightShooterGoalVolts);
         this.intakeMotor.setInputVoltage(shintakeGoalVolts);
-    SmartDashboard.putNumber("intakeVolts",intakeMotor.getCurrentDrawAmps());
-    SmartDashboard.putNumber("shooterVolts", leftShooter.getCurrentDrawAmps());
-    SmartDashboard.putNumber("intakeVelocity", intakeMotor.getAngularVelocityRPM());
-    SmartDashboard.putNumber("shooterVelocity", leftShooter.getAngularVelocityRPM());
+
    }
 
 }
