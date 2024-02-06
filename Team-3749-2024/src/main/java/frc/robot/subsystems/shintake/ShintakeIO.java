@@ -45,13 +45,13 @@ public interface ShintakeIO {
 
     public default double[] getShooterEncoder() //please have mercy noah
     {
-        double[] sample = {0,0}; //LEFT RIGHT
+        double[] sample = {1,1}; //LEFT RIGHT
         return sample;
     }
 
     public default double getIntakeEncoder()
     {
-        return 0;
+        return 1;
     }
 
     /** Enable or disable brake mode on the drive motor. */
