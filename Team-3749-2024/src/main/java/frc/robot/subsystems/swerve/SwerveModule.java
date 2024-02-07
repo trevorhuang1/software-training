@@ -3,16 +3,9 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.kinematics.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
-import frc.robot.subsystems.swerve.sim.SwerveModuleSim;
-import frc.robot.subsystems.swerve.GyroIO.GyroData;
-import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.ModuleConstants;
 
@@ -73,7 +66,7 @@ public class SwerveModule {
 
         }
         // Tab, name, data
-        driveSpeed = new ShuffleData<>("swerve/" + name, name + " driver speed", moduleData.driveVelocityMPerSec);
+        driveSpeed = new ShuffleData<>("swerve/" + name, name + " drive speed", moduleData.driveVelocityMPerSec);
         drivePosition = new ShuffleData<>("swerve/" + name, name + " drive position", moduleData.driveVelocityMPerSec);
         driveTemp = new ShuffleData<>("swerve/" + name, name + " drive temp", moduleData.driveVelocityMPerSec);
         driveVolts = new ShuffleData<>("swerve/" + name, name + " drive volts", moduleData.driveVelocityMPerSec);

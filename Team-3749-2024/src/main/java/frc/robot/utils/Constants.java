@@ -203,8 +203,8 @@ public class Constants {
   }
 
   public static final class AutoConstants {
-    public static double kP_PathPlannerDrive = 8;
-    public static double kD_PathPlannerDrive = 0.009;
+    public static double kP_PathPlannerDrive = 6.3;
+    public static double kD_PathPlannerDrive = 0.1;
 
     public static double kP_PathPlannerTurn = 0.9;
     public static double kD_PathPlannerTurn = 0;
