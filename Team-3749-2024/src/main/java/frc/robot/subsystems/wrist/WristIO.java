@@ -32,9 +32,5 @@ public interface WristIO {
         
     }
 
-    public default double getEncoderValue() //please have mercy noah
-    {
-        return 0;
-    }
 
 }

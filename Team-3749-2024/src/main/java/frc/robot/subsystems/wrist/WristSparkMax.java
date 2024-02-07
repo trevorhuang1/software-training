@@ -44,9 +44,6 @@ public class WristSparkMax implements WristIO {
         wristMotor.setVoltage(appliedVolts);
     }
 
-    public double getEncoderValue()
-   {
-    return wristEncoder.getPosition();
-   }
+
 
 }

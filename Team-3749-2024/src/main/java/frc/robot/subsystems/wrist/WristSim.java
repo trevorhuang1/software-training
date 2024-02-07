@@ -39,10 +39,6 @@ public class WristSim implements WristIO {
     SmartDashboard.putNumber("wristSpeed", appliedVolts);
    }
 
-   @Override
-   public double getEncoderValue()
-   {
-    return distanceRotated;
-   }
+
 
 }
