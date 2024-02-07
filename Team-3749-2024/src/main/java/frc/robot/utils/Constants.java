@@ -87,6 +87,8 @@ public class Constants {
 
     public static final class WristConstants
     {
+        public static final double gearRatio = 1;
+
         private static final PIDConstants simPID = new PIDConstants(35,0,1);
         private static final PIDConstants realPID = new PIDConstants(1,0,0);
 

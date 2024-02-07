@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import frc.robot.utils.Constants.WristConstants;
 
 /*
  * note from jonathan:
@@ -21,7 +22,9 @@ public class WristSparkMax implements WristIO {
 
     public WristSparkMax()
     {
-        wristEncoder.setPositionConversionFactor(Math.PI/180);
+        wristEncoder.setPositionConversionFactor(2*Math.PI / WristConstants.gearRatio);
+        wristEncoder.setVelocityConversionFactor(2*Math.PI / WristConstants.gearRatio);
+
     }
 
     @Override
@@ -31,13 +34,13 @@ public class WristSparkMax implements WristIO {
         data.velocityRadPerSec = (wristEncoder.getVelocity()/60)*(2*Math.PI);     // RPM -> rad/s
         data.wristVoltage = wristMotor.getBusVoltage();
         data.appliedVolts = appliedVolts;
-        data.encoderDistance = wristEncoder.getPosition();
+        data.positionRad = wristEncoder.getPosition();
     }
 
     @Override
     public void setVoltage(double volts) 
     {
-        appliedVolts = MathUtil.clamp(volts, -8, 8);
+        appliedVolts = MathUtil.clamp(volts, -12, 12);
         wristMotor.setVoltage(appliedVolts);
     }
 
