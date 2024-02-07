@@ -133,11 +133,10 @@ public class Swerve extends SubsystemBase {
   }
 
 
-  // Remember to revert to original return statement
   public Pose2d getPose() {
     Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
-    // return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
-    return new Pose2d(new Translation2d(2, 4.9), new Rotation2d(0));
+    return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
+    // return new Pose2d(new Translation2d(2, 4.9), new Rotation2d(Math.PI/2));
   }
 
   public SwerveDrivePoseEstimator getPoseEstimator() {

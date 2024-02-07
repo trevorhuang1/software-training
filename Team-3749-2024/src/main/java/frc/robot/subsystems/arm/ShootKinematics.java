@@ -23,6 +23,7 @@ public class ShootKinematics {
     private static final Translation2d blueSpeakerPosition = new Translation2d(0, 5.553); // rounded need to change
     
     // Note: some of these points are basically not used, tolerances of 10 inches were used
+    // FOR DON: Use Constants.ArmConstants.stageMargin as the constant 
     private static final Translation2d[] redStagePoints = {new Translation2d(13.8986, 4.1056), new Translation2d(10.4648, 2.1752),new Translation2d(10.4648, 6.0361)};
     private static final Translation2d[] blueStagePoints = {new Translation2d(16.5928-redStagePoints[0].getX(), redStagePoints[0].getY()),new Translation2d(16.5928-redStagePoints[1].getX(), redStagePoints[1].getY()),new Translation2d(16.5928-redStagePoints[2].getX(), redStagePoints[2].getY())};
 
@@ -45,8 +46,8 @@ public class ShootKinematics {
         // Case 0: We are in angle
         if (angle.getDegrees() < Constants.ArmConstants.maxAngle && distanceVector.getNorm() <= maxDist){ 
             System.out.println("Case 0");
-            // return moveOutOfStage(changeRotation(currentPose2d.getTranslation(), distanceVector));
-            return changeRotation(currentPose2d.getTranslation(), distanceVector);
+            return moveOutOfStage(changeRotation(currentPose2d.getTranslation(), distanceVector));
+            // return changeRotation(currentPose2d.getTranslation(), distanceVector);
         } 
         // Case 1: We are out of angle
         else if (angle.getDegrees() >= Constants.ArmConstants.maxAngle) {
@@ -55,9 +56,11 @@ public class ShootKinematics {
             // TODO: Check if positive/negative x coord check is correct
             Translation2d radiusVector;
 
-            if (distanceVector.getX() > 0) {
+            if (distanceVector.getAngle().getRadians() > 0) {
+                System.out.println("case 1a");
                 radiusVector = new Translation2d(Math.cos(Constants.ArmConstants.maxAngleRad), Math.sin(Constants.ArmConstants.maxAngleRad));
             } else {
+                System.out.println("case 1b");
                 radiusVector = new Translation2d(Math.cos(-Constants.ArmConstants.maxAngleRad), Math.sin(-Constants.ArmConstants.maxAngleRad));
             }
  
@@ -71,8 +74,8 @@ public class ShootKinematics {
                 goal = getSpeakerPosition().plus(newDistanceVector.div(newDistanceVector.getNorm()).times(maxDist));
             }
 
-            // return moveOutOfStage(changeRotation(goal, goal.minus(getSpeakerPosition())));
-            return changeRotation(goal, goal.minus(getSpeakerPosition()));
+            return moveOutOfStage(changeRotation(goal, goal.minus(getSpeakerPosition())));
+            // return changeRotation(goal, goal.minus(getSpeakerPosition()));
         }
         // Case 2: We are out of range
         else if (distanceVector.getNorm() > maxDist) {
@@ -85,7 +88,8 @@ public class ShootKinematics {
     }
 
     private static Pose2d changeRotation(Translation2d currentTranslation2d, Translation2d distanceVector){
-        return new Pose2d(currentTranslation2d, new Rotation2d(Math.PI - distanceVector.getAngle().getRadians()));
+        System.out.println(distanceVector.getAngle().getDegrees());
+        return new Pose2d(currentTranslation2d, new Rotation2d(Math.PI + distanceVector.getAngle().getRadians()));
         // Ok basically the Rotation2d angle is pi + angle only if the currenttranslation is above the speaker
         // Otherwise the angle is pi - angle if the currenttranslation is below the speaker
     }
@@ -96,10 +100,10 @@ public class ShootKinematics {
         Translation2d[] stagePoints = getStagePoints();
 
         Translation2d distanceVector = poseInRadius.getTranslation().minus(stagePoints[0]);
-        double angle = Math.abs(distanceVector.getAngle().getDegrees());
+        double angle = Math.abs(distanceVector.getAngle().getRadians());
 
         if (angle < Math.PI/6 && poseInRadius.getTranslation().getX() < stagePoints[1].getX()){
-            Translation2d perpVector = projection(distanceVector, stagePoints[2].minus(stagePoints[0]).minus(distanceVector));
+            Translation2d perpVector = projection(distanceVector, stagePoints[2].minus(stagePoints[0])).minus(distanceVector);
             Translation2d nearestShootPoint = poseInRadius.getTranslation().plus(perpVector);
             
             return changeRotation(nearestShootPoint, nearestShootPoint.minus(getSpeakerPosition()));
