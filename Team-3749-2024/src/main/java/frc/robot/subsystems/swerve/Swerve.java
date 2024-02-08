@@ -187,6 +187,7 @@ public class Swerve extends SubsystemBase {
     updateOdometry();
     gyro.updateData(gyroData);
     Command cmd = this.getCurrentCommand();
+    SmartDashboard.putData("current command", cmd);
 
     for (int i = 0; i < 4; i++) {
       modules[i].periodic();

@@ -1,10 +1,7 @@
 package frc.robot.subsystems.swerve.real;
 
 import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
-import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO;
 
 public class NavX2Gyro implements GyroIO {

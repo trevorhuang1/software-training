@@ -1,36 +1,22 @@
 package frc.robot.utils;
 
-import java.util.Map;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.Teleop;
-import frc.robot.commands.swerve.TeleopJoystickRelative;
-import frc.robot.subsystems.swerve.Swerve;
-
 /**
  * Util class for button bindings
  * 
  * @author Rohin Sood
  */
 public class JoystickIO {
-    private static String[] lastJoystickNames = new String[] { "", "", "", "", "", "" };
 
     private Xbox pilot;
-    private Xbox operator;
+    private Xbox operator; // leave here
 
     public JoystickIO(Xbox pilot, Xbox operator) {
         this.pilot = pilot;
