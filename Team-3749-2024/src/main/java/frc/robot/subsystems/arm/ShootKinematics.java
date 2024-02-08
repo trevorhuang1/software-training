@@ -56,7 +56,7 @@ public class ShootKinematics {
             // TODO: Check if positive/negative x coord check is correct
             Translation2d radiusVector;
 
-            if (distanceVector.getAngle().getRadians() > 0) {
+            if ((distanceVector.getAngle().getRadians() < 0 && DriverStation.getAlliance().get() == Alliance.Red) || (distanceVector.getAngle().getRadians() > 0 && DriverStation.getAlliance().get() == Alliance.Blue)) {
                 System.out.println("case 1a");
                 radiusVector = new Translation2d(Math.cos(Constants.ArmConstants.maxAngleRad), Math.sin(Constants.ArmConstants.maxAngleRad));
             } else {
