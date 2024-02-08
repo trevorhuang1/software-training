@@ -75,6 +75,9 @@ public class JoystickIO {
      */
     public void setDefaultCommands() {
         Robot.arm.setDefaultCommand(new ArmMoveToGoal());
+
+        // y inverted
+        
         Robot.swerve.setDefaultCommand(new Teleop(()->-pilot.getLeftX(), ()->-pilot.getLeftY(), ()->-pilot.getRightX()));
 
     }

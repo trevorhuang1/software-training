@@ -3,8 +3,7 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.kinematics.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.ShuffleData;
@@ -67,7 +66,7 @@ public class SwerveModule {
 
         }
         // Tab, name, data
-        driveSpeed = new ShuffleData<>("swerve/" + name, name + " driver speed", moduleData.driveVelocityMPerSec);
+        driveSpeed = new ShuffleData<>("swerve/" + name, name + " drive speed", moduleData.driveVelocityMPerSec);
         drivePosition = new ShuffleData<>("swerve/" + name, name + " drive position", moduleData.driveVelocityMPerSec);
         driveTemp = new ShuffleData<>("swerve/" + name, name + " drive temp", moduleData.driveVelocityMPerSec);
         driveVolts = new ShuffleData<>("swerve/" + name, name + " drive volts", moduleData.driveVelocityMPerSec);

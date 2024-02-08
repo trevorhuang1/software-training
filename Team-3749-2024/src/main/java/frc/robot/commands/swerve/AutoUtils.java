@@ -31,29 +31,19 @@ public class AutoUtils {
   public static void initPPUtils() {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
 
-    allianceChooser = new SendableChooser<>();
-    allianceChooser.addOption("Blue Alliance", Alliance.Blue);
-    allianceChooser.addOption("Red Alliance", Alliance.Red);
-    allianceChooser.setDefaultOption("Blue Alliance", Alliance.Blue);
-
-    SmartDashboard.putData("Choose Alliance", allianceChooser);
-
     AutoBuilder.configureHolonomic(
         swerve::getPose,
-        (Pose2d pose) -> {},
+        (Pose2d pose) -> {
+        },
         swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
         Constants.AutoConstants.cfgHolonomicFollower,
         () -> {
-          // if alliance is selected in driverstation, use that alliance,
-          // otherwise get from sendable chooser
+          // get alliance
+          if (DriverStation.getAlliance().isEmpty())
+            return true;
 
-          // if alliance is selected in driverstation, use that alliance,
-          // otherwise get from sendable chooser
-
-          Alliance robotAlliance = allianceChooser.getSelected();
-          robotAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get()
-              : robotAlliance;
+          Alliance robotAlliance = DriverStation.getAlliance().get();
 
           if (robotAlliance == Alliance.Red) {
             return false;
@@ -83,19 +73,24 @@ public class AutoUtils {
   }
 
   public static Command followPathCommand(PathPlannerPath path) {
-    return new FollowPathHolonomic(path, swerve::getPose,
+    return new FollowPathHolonomic(
+        path,
+        swerve::getPose,
         swerve::getChassisSpeeds, swerve::setChassisSpeeds,
-        Constants.AutoConstants.cfgHolonomicFollower, () -> {
-          Alliance robotAlliance = allianceChooser.getSelected();
-          robotAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get()
-              : robotAlliance;
+        Constants.AutoConstants.cfgHolonomicFollower,
+        () -> {
+          if (DriverStation.getAlliance().isEmpty())
+            return true;
+
+          Alliance robotAlliance = DriverStation.getAlliance().get();
 
           if (robotAlliance == Alliance.Red) {
             return false;
           } else {
             return true;
           }
-        }, swerve);
+        },
+        swerve);
   }
 
   public static Command getPathFindToPoseCommand(Pose2d targetPose, PathConstraints constraints,
