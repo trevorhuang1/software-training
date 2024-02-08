@@ -54,9 +54,7 @@ public class Shintake extends SubsystemBase {
     public void periodic() {
         shintakeModule.updateData(data);
         SmartDashboard.putNumber("intakeVolts",data.intakeVolts);
-        SmartDashboard.putNumber("shooterVolts", data.intakeVolts);
         SmartDashboard.putNumber("intakeVelocity", data.intakeVelocityRadPerSec);
-        SmartDashboard.putNumber("shooterVelocity", data.leftShooterVelocityRadPerSec);
     }
 
 }

@@ -2,17 +2,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class ShintakeCommand extends Command{
+public class IntakeCommand extends Command{
 
-    public ShintakeCommand()
+    public IntakeCommand()
     {
-        addRequirements(Robot.shintake);
+        addRequirements(Robot.intake);
     }
 
     @Override
     public void execute()
     { 
-        Robot.shintake.moveShintake();
+        Robot.intake.moveIntake();
     }
 
     @Override
