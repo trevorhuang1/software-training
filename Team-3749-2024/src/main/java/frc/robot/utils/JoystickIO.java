@@ -74,9 +74,9 @@ public class JoystickIO {
      */
 
     public void pilotBindings() {
-        pilot.aWhileHeld(Commands.run(() -> Robot.example.setVoltage(8)),
+        pilot.aWhileHeld(Commands.run(() -> Robot.arm.setVoltage(1)),
                 Commands.run(() -> Robot.example.setVoltage(0)));
-        pilot.bWhileHeld(Commands.run(() -> Robot.example.setVoltage(-4)),
+        pilot.bWhileHeld(Commands.run(() -> Robot.arm.setVoltage(-1)),
                 Commands.run(() -> Robot.example.setVoltage(0)));
 
     }
@@ -89,7 +89,7 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        Robot.arm.setDefaultCommand(new ArmMoveToGoal());
+        // Robot.arm.setDefaultCommand(new ArmMoveToGoal());
     }
 
 }

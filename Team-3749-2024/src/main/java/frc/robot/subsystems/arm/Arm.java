@@ -66,8 +66,9 @@ public class Arm extends SubsystemBase {
         if (Robot.isSimulation()) {
             armIO = new ArmSim();
         }
-        setGoal(Math.PI/4);
-        // profiledFeedbackController.setGoal(Units.degreesToRadians(-90));
+        else {
+            armIO = new ArmSparkMax();
+        }
     }
 
     public Rotation2d getRotation2d() {
@@ -106,7 +107,6 @@ public class Arm extends SubsystemBase {
         else{
                 armIO.setVoltage(volts);
         }
-
     }
 
     public void toggleKill(){
