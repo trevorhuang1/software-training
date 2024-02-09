@@ -33,14 +33,17 @@ public class Shooter extends SubsystemBase {
    public void moveShooter()
    {
     shooterIO.setVoltage(
-        shooterController.calculate(shooterIO.getShooterEncoder()[0],shooterVelocity) + shooterFF.calculate(shooterVelocity),
-        shooterController.calculate(shooterIO.getShooterEncoder()[1],shooterVelocity) + shooterFF.calculate(shooterVelocity)
+        shooterController.calculate(data.leftShooterVelocityRadPerSec,shooterVelocity) + shooterFF.calculate(shooterVelocity),
+        shooterController.calculate(data.rightShooterVelocityRadPerSec,shooterVelocity) + shooterFF.calculate(shooterVelocity)
     );
    }
 
     @Override
     public void periodic() {
         shooterIO.updateData(data);
+        SmartDashboard.putNumber("shooterVelocity", data.leftShooterVelocityRadPerSec);
+        SmartDashboard.putNumber("shooterVolts", data.leftShooterVolts);
+        SmartDashboard.putNumber("shooterTemp", data.leftShooterTempCelcius);
     }
 
 }

@@ -32,11 +32,6 @@ public interface IntakeIO {
         
     }
 
-    public default double getIntakeEncoder()
-    {
-        return 1;
-    }
-
     /** Enable or disable brake mode on the drive motor. */
     public default void setBrakeMode(boolean enable) {
     }

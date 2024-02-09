@@ -34,7 +34,7 @@ public class Intake extends SubsystemBase {
    public void moveIntake()
    {
     intakeIO.setVoltage(
-        intakeController.calculate(intakeIO.getIntakeEncoder(),intakeVelocity) + intakeFF.calculate(intakeVelocity)
+        intakeController.calculate(data.intakeVelocityRadPerSec,intakeVelocity) + intakeFF.calculate(intakeVelocity)
     );
    }
 
@@ -42,7 +42,9 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         intakeIO.updateData(data);
         SmartDashboard.putNumber("intakeVolts",data.intakeVolts);
-        SmartDashboard.putNumber("intakeVelocity", data.intakeVelocityRadPerSec);
+        SmartDashboard.putNumber("intakeVelocityRadPerSec", data.intakeVelocityRadPerSec);
+        SmartDashboard.putNumber("intakeTemp", data.intakeTempCelcius);
+        SmartDashboard.putBoolean("intakeHasPiece", data.sensorTripped);
     }
 
 }

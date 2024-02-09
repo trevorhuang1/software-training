@@ -24,8 +24,6 @@ public interface ShooterIO {
         public double rightShooterVolts = 0.0;
         public double rightShooterVelocityRadPerSec = 0.0;
         public double rightShooterTempCelcius = 0.0;
-
-        public boolean sensorTripped = false;
         
     }
     /** Updates the set of loggable inputs. */
@@ -38,13 +36,7 @@ public interface ShooterIO {
     {
         
     }
-
-    public default double[] getShooterEncoder() //please have mercy noah
-    {
-        double[] sample = {1,1}; //LEFT RIGHT
-        return sample;
-    }
-
+    
     /** Enable or disable brake mode on the drive motor. */
     public default void setBrakeMode(boolean enable) {
     }

@@ -25,13 +25,6 @@ public class ShooterSparkMax implements ShooterIO {
     }
 
     @Override
-    public double[] getShooterEncoder()
-    {
-        double[] shooterEncoder = {leftEncoder.getVelocity(),rightEncoder.getVelocity()};
-        return shooterEncoder;
-    }
-
-    @Override
     public void updateData(ShooterData data) 
     {
         data.leftShooterVolts = leftShooter.getBusVoltage();

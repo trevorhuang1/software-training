@@ -17,12 +17,6 @@ public class IntakeSim implements IntakeIO {
     }
 
     @Override
-    public double getIntakeEncoder()
-    {
-        return intakeMotor.getAngularVelocityRadPerSec();
-    }
-
-    @Override
     public void updateData(IntakeData data) 
     {
         intakeMotor.update(Sim.loopPeriodSec);

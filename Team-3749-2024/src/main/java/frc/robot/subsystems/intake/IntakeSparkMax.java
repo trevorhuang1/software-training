@@ -6,25 +6,17 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSparkMax implements IntakeIO {
 
     private CANSparkMax intakeMotor = new CANSparkMax(0, MotorType.kBrushless);
     private DigitalInput photoelectricSensor = new DigitalInput(0);
     private RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
-
     private double intakeGoalVolts = 0;
 
     public IntakeSparkMax() 
     {
         intakeEncoder.setVelocityConversionFactor((2*Math.PI)/60);
-    }
-
-    @Override
-    public double getIntakeEncoder()
-    {
-        return intakeEncoder.getVelocity();
     }
 
     @Override
@@ -34,7 +26,6 @@ public class IntakeSparkMax implements IntakeIO {
         data.intakeVelocityRadPerSec = intakeEncoder.getVelocity();
         data.intakeTempCelcius = intakeMotor.getMotorTemperature();
         data.sensorTripped = photoelectricSensor.get();
-        SmartDashboard.putBoolean("sensorTripped", photoelectricSensor.get());
         /* 
         if(data.sensorTripped)
         {

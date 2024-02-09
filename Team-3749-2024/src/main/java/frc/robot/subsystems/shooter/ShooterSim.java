@@ -19,13 +19,6 @@ public class ShooterSim implements ShooterIO {
     }
 
     @Override
-    public double[] getShooterEncoder()
-    {
-        double[] shooterEncoder = {leftShooter.getAngularVelocityRadPerSec(),rightShooter.getAngularVelocityRadPerSec()};
-        return shooterEncoder;
-    }
-
-    @Override
     public void updateData(ShooterData data) 
     {
         leftShooter.update(Sim.loopPeriodSec);
