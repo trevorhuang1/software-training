@@ -111,6 +111,13 @@ public class JoystickIO {
 
        pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
+       /***
+        * Basic Voltage Testing
+        pilot.aWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(1)), Commands.run(() -> Robot.wrist.setVoltage(0)))
+        pilot.bWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(-1)), Commands.run(() -> Robot.wrist.setVoltage(0)))
+
+        */
+        
     }
         
 }

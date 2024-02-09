@@ -63,13 +63,13 @@ public class Wrist extends SubsystemBase {
         double voltage = wristController.calculate(data.positionRad) + //is getting the goal redundant?
                 wristFF.calculate(state.position,state.velocity,accelerationSpeed); //remind me to go fix this
 
-        wristIO.setVoltage(voltage); // negative to make it move 0 to -40, not the other way 
-
-            
-        
+        setVoltage(voltage);
         //System.out.println(wristController.getGoal().position);
     }
 
+    public void setVoltage(double volts){
+        wristIO.setVoltage(volts);
+    }
     @Override
     public void periodic() {
         mechanismArm.setAngle(data.positionRad);
