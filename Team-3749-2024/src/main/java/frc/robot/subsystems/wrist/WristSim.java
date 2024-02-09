@@ -14,15 +14,15 @@ public class WristSim implements WristIO {
         0.755, //2578.65
         0.455, //  dist from  backmost axle to farthest tip
 
-        Units.degreesToRadians(0),
-        Units.degreesToRadians(40),
+        Units.degreesToRadians(-90),
+        Units.degreesToRadians(90),
         true,
         Units.degreesToRadians(0));
     private double appliedVolts = 0.0;
-    private double distanceRotated = 0.0;
     
     public WristSim() 
     {
+        
         
     }
 
@@ -35,10 +35,7 @@ public class WristSim implements WristIO {
     data.wristVoltage = wristMotor.getCurrentDrawAmps();
     data.appliedVolts = appliedVolts;
     data.positionRad = wristMotor.getAngleRads();//(data.positionRad + (data.velocityRadPerSec * 0.02));
-    distanceRotated = data.positionRad;
-    SmartDashboard.putNumber("velocity", data.velocityRadPerSec);
-    SmartDashboard.putNumber("encoderDist", Math.toDegrees(data.positionRad));
-    SmartDashboard.putNumber("wristVolts", data.appliedVolts);
+
    }
 
    @Override
@@ -46,7 +43,6 @@ public class WristSim implements WristIO {
    {
     appliedVolts = MathUtil.clamp(volts,-8.0,8);
     wristMotor.setInputVoltage(appliedVolts);
-    SmartDashboard.putNumber("wristSpeed", appliedVolts);
    }
 
 

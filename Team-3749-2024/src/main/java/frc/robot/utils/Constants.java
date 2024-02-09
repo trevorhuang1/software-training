@@ -114,7 +114,7 @@ public class Constants {
         public static final double kV = Robot.isReal() ? realkV : simkV;
         public static final double kA = Robot.isReal() ? realkA : simkA;
 
-        public static final double groundGoal = Math.toRadians(40);
+        public static final double groundGoal = Math.toRadians(-40);
         public static final double stowGoal = 0;
         public static final double wristOffset = 0;
     }

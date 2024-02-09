@@ -59,20 +59,29 @@ public class Wrist extends SubsystemBase {
 
     public void moveWristToAngle() {
 
-        SmartDashboard.putNumber("wristGoal",getWristGoal().position);
         State state = getWristSetpoint();
-        wristIO.setVoltage(
-            wristController.calculate(data.positionRad) + //is getting the goal redundant?
-                wristFF.calculate(state.position,state.velocity,accelerationSpeed) //remind me to go fix this
-        );
-        mechanismArm.setAngle(-Math.toDegrees(data.positionRad));
+        double voltage = wristController.calculate(data.positionRad) + //is getting the goal redundant?
+                wristFF.calculate(state.position,state.velocity,accelerationSpeed); //remind me to go fix this
+
+        wristIO.setVoltage(voltage); // negative to make it move 0 to -40, not the other way 
+
+            
+        
         //System.out.println(wristController.getGoal().position);
     }
 
     @Override
     public void periodic() {
+        mechanismArm.setAngle(data.positionRad);
         SmartDashboard.putData("Mech2d", mechanism);
         wristIO.updateData(data);
+        mechanismArm.setAngle(Math.toDegrees(data.positionRad));
+        SmartDashboard.putNumber("wristGoal",getWristGoal().position);
+        SmartDashboard.putNumber("Position", data.positionRad);
+        SmartDashboard.putNumber("vel", data.velocityRadPerSec);
+        SmartDashboard.putNumber("volts", data.appliedVolts);
+
+
         // test
     }
 
