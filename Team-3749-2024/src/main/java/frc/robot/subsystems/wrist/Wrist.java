@@ -16,7 +16,7 @@ import frc.robot.utils.Constants;
 
 public class Wrist extends SubsystemBase {
 
-    private WristIO wristModule;
+    private WristIO wristIO;
     private WristData data = new WristData();
     private ProfiledPIDController wristController = new ProfiledPIDController(Constants.WristConstants.PID.kP,
             Constants.WristConstants.PID.kI, Constants.WristConstants.PID.kD,Constants.WristConstants.trapezoidConstraint);
@@ -30,30 +30,25 @@ public class Wrist extends SubsystemBase {
             .append(new MechanismLigament2d("mechanism arm", .93, 0));
     private double accelerationSpeed = 0.0;
 
-    public Wrist() 
-        {
-        setpointToggle.put(true,Constants.WristConstants.groundGoal);
-        setpointToggle.put(false,Constants.WristConstants.stowGoal);
-        wristModule = new WristSparkMax();
-         if(Robot.isSimulation()) 
-         {
-            wristModule = new WristSim();
-         }
+    public Wrist() {
+        setpointToggle.put(true, Constants.WristConstants.groundGoal);
+        setpointToggle.put(false, Constants.WristConstants.stowGoal);
+        wristIO = new WristSparkMax();
+        if (Robot.isSimulation()) {
+            wristIO = new WristSim();
+        }
     }
-    
-    public void toggleWristGoal() 
-    {
+
+    public void toggleWristGoal() {
         this.isGroundIntake = !this.isGroundIntake;
         wristController.setGoal(setpointToggle.get(this.isGroundIntake));
     }
 
-    public State getWristGoal()
-    {
+    public State getWristGoal() {
         return wristController.getGoal();
     }
 
-    public State getWristSetpoint()
-    {
+    public State getWristSetpoint() {
         return wristController.getSetpoint();
     }
 
@@ -64,20 +59,30 @@ public class Wrist extends SubsystemBase {
 
     public void moveWristToAngle() {
 
-        SmartDashboard.putNumber("wristGoal",getWristGoal().position);
         State state = getWristSetpoint();
-        wristModule.setVoltage(
-            wristController.calculate(wristModule.getEncoderValue()) + //is getting the goal redundant?
-                wristFF.calculate(state.position,state.velocity,accelerationSpeed) //remind me to go fix this
-        );
-        mechanismArm.setAngle(-Math.toDegrees(wristModule.getEncoderValue()));
+        double voltage = wristController.calculate(data.positionRad) + //is getting the goal redundant?
+                wristFF.calculate(state.position,state.velocity,accelerationSpeed); //remind me to go fix this
+
+        wristIO.setVoltage(voltage); // negative to make it move 0 to -40, not the other way 
+
+            
+        
         //System.out.println(wristController.getGoal().position);
     }
 
     @Override
     public void periodic() {
+        mechanismArm.setAngle(data.positionRad);
         SmartDashboard.putData("Mech2d", mechanism);
-        wristModule.updateData(data);
+        wristIO.updateData(data);
+        mechanismArm.setAngle(Math.toDegrees(data.positionRad));
+        SmartDashboard.putNumber("wristGoal",getWristGoal().position);
+        SmartDashboard.putNumber("Position", data.positionRad);
+        SmartDashboard.putNumber("vel", data.velocityRadPerSec);
+        SmartDashboard.putNumber("volts", data.appliedVolts);
+
+
+        // test
     }
 
 }

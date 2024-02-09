@@ -20,7 +20,7 @@ public interface WristIO {
         public double tempCelcius = 0.0;
         public double velocityRadPerSec = 0.0;
         public double appliedVolts = 0.0;
-        public double encoderDistance = 0.0;
+        public double positionRad = 0.0;
     }
     /** Updates the set of loggable inputs. */
     public default void updateData(WristData data) {
@@ -32,9 +32,5 @@ public interface WristIO {
         
     }
 
-    public default double getEncoderValue() //please have mercy noah
-    {
-        return 0;
-    }
 
 }

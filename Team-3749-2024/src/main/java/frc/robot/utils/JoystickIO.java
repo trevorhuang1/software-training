@@ -110,8 +110,6 @@ public class JoystickIO {
        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
 
        pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
-       JoystickButton buttonX = new JoystickButton(home, 3);
-       buttonX.onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
     }
         

@@ -87,6 +87,8 @@ public class Constants {
 
     public static final class WristConstants
     {
+        public static final double gearRatio = 1;
+
         private static final PIDConstants simPID = new PIDConstants(35,0,1);
         private static final PIDConstants realPID = new PIDConstants(1,0,0);
 
@@ -112,7 +114,7 @@ public class Constants {
         public static final double kV = Robot.isReal() ? realkV : simkV;
         public static final double kA = Robot.isReal() ? realkA : simkA;
 
-        public static final double groundGoal = Math.toRadians(40);
+        public static final double groundGoal = Math.toRadians(-40);
         public static final double stowGoal = 0;
         public static final double wristOffset = 0;
     }
