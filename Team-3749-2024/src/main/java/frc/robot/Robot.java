@@ -7,12 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.shintake.Shintake;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.wrist.Wrist;
 public class Robot extends TimedRobot {
 
-  public static final Shintake shintake = new Shintake();
   public static final Wrist wrist = new Wrist();
+  public static final Intake intake = new Intake();
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;

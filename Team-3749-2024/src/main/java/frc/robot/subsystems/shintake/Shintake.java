@@ -2,6 +2,7 @@ package frc.robot.subsystems.shintake;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.shintake.ShintakeIO.ShintakeData;
@@ -14,8 +15,8 @@ public class Shintake extends SubsystemBase {
     private PIDController intakeController = new PIDController(Constants.ShintakeConstants.intakePID.kP,Constants.ShintakeConstants.intakePID.kI,Constants.ShintakeConstants.intakePID.kD);
     private PIDController shooterController = new PIDController(Constants.ShintakeConstants.shooterPID.kP, Constants.ShintakeConstants.shooterPID.kI, Constants.ShintakeConstants.shooterPID.kD);
         
-    private SimpleMotorFeedforward intakeFF = new SimpleMotorFeedforward(1, 0);
-    private SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(1, 0);  
+    private SimpleMotorFeedforward intakeFF = new SimpleMotorFeedforward(0, 1);
+    private SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(0, 1);  
     
     private double intakeVelocity = 0;
     private double shooterVelocity = 0;
@@ -45,12 +46,15 @@ public class Shintake extends SubsystemBase {
         intakeController.calculate(shintakeModule.getIntakeEncoder(),intakeVelocity) + intakeFF.calculate(intakeVelocity),
         shooterController.calculate(shintakeModule.getShooterEncoder()[0],shooterVelocity) + shooterFF.calculate(shooterVelocity),
         shooterController.calculate(shintakeModule.getShooterEncoder()[1],shooterVelocity) + shooterFF.calculate(shooterVelocity)
+        // SmartDashboard.putNumber("intakeVelo", intakeController.calculate(shintakeModule.getIntakeEncoder(),intakeVelocity) + intakeFF.calculate(intakeVelocity))
     );
    }
 
     @Override
     public void periodic() {
         shintakeModule.updateData(data);
+        SmartDashboard.putNumber("intakeVolts",data.intakeVolts);
+        SmartDashboard.putNumber("intakeVelocity", data.intakeVelocityRadPerSec);
     }
 
 }

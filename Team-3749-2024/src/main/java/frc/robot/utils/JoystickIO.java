@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Robot;
-import frc.robot.commands.ShintakeCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.WristCommand;
 
 /**
@@ -101,16 +101,13 @@ public class JoystickIO {
     public void setDefaultCommands() {
         
        Robot.wrist.setDefaultCommand(new WristCommand());
-       Robot.shintake.setDefaultCommand(new ShintakeCommand());
+       Robot.intake.setDefaultCommand(new IntakeCommand());
 
-       pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.shintake.setIntakeVelocity(Constants.ShintakeConstants.intakeVelocity)));
-       pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.shintake.setIntakeVelocity(0)));
+       pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.intakeVelocity)));
+       pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
 
-       pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.shintake.setIntakeVelocity(Constants.ShintakeConstants.outtakeVelocity)));
-       pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.shintake.setIntakeVelocity(0)));
-
-       pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.shintake.setShooterVelocity(Constants.ShintakeConstants.shooterVelocity)));
-       pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.shintake.setShooterVelocity(0)));
+       pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.outtakeVelocity)));
+       pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
 
        pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
