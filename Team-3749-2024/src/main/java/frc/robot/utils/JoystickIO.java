@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Robot;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.WristCommand;
 
 /**
@@ -24,7 +24,6 @@ public class JoystickIO {
 
     private Xbox pilot; 
     private Xbox operator;
-    private Joystick home = new Joystick(1);
 
     public JoystickIO(Xbox pilot, Xbox operator) {
         this.pilot = pilot;
@@ -102,12 +101,16 @@ public class JoystickIO {
         
        Robot.wrist.setDefaultCommand(new WristCommand());
        Robot.intake.setDefaultCommand(new IntakeCommand());
+       Robot.shooter.setDefaultCommand(new ShooterCommand());
 
        pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.intakeVelocity)));
        pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
 
        pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.outtakeVelocity)));
        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
+
+       pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(Constants.ShintakeConstants.shooterVelocity)));
+       pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(0)));
 
        pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
