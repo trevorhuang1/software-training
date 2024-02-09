@@ -1,4 +1,4 @@
-package frc.robot.subsystems.shintake;
+package frc.robot.subsystems.shooter;
 
 // Copyright (c) 2023 FRC 6328
 // http://github.com/Mechanical-Advantage
@@ -14,12 +14,8 @@ package frc.robot.subsystems.shintake;
  *         motors and their encoders for a subsytems and sets up for easy
  *         logging, easy simulation, and future advantage kit implementation
  */
-public interface ShintakeIO {
-    public static class ShintakeData {
-        // each of these for each motor
-        public double intakeVolts = 0.0;
-        public double intakeVelocityRadPerSec = 0.0;
-        public double intakeTempCelcius = 0.0;
+public interface ShooterIO {
+    public static class ShooterData {
 
         public double leftShooterVolts = 0.0;
         public double leftShooterVelocityRadPerSec = 0.0;
@@ -33,12 +29,12 @@ public interface ShintakeIO {
         
     }
     /** Updates the set of loggable inputs. */
-    public default void updateData(ShintakeData data) {
+    public default void updateData(ShooterData data) {
 
     }
 
     /** Run the drive motor at the specified voltage. */
-    public default void setVoltage(double intakeVolts, double leftShooterVolts, double rightShooterVolts) 
+    public default void setVoltage(double leftShooterVolts, double rightShooterVolts) 
     {
         
     }
@@ -47,11 +43,6 @@ public interface ShintakeIO {
     {
         double[] sample = {1,1}; //LEFT RIGHT
         return sample;
-    }
-
-    public default double getIntakeEncoder()
-    {
-        return 1;
     }
 
     /** Enable or disable brake mode on the drive motor. */

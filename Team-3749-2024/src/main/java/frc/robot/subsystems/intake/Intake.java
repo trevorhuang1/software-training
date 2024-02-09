@@ -10,7 +10,7 @@ import frc.robot.utils.Constants;
 
 public class Intake extends SubsystemBase {
 
-    private IntakeIO intakeModule;
+    private IntakeIO intakeIO;
     private IntakeData data = new IntakeData();
     private PIDController intakeController = new PIDController(Constants.ShintakeConstants.intakePID.kP,Constants.ShintakeConstants.intakePID.kI,Constants.ShintakeConstants.intakePID.kD);
         
@@ -19,10 +19,10 @@ public class Intake extends SubsystemBase {
 
     public Intake() 
         {
-        intakeModule = new IntakeSparkMax();
+        intakeIO = new IntakeSparkMax();
          if(Robot.isSimulation()) 
          {
-            intakeModule = new IntakeSim();
+            intakeIO = new IntakeSim();
          }
     }
 
@@ -33,14 +33,14 @@ public class Intake extends SubsystemBase {
 
    public void moveIntake()
    {
-    intakeModule.setVoltage(
-        intakeController.calculate(intakeModule.getIntakeEncoder(),intakeVelocity) + intakeFF.calculate(intakeVelocity)
+    intakeIO.setVoltage(
+        intakeController.calculate(intakeIO.getIntakeEncoder(),intakeVelocity) + intakeFF.calculate(intakeVelocity)
     );
    }
 
     @Override
     public void periodic() {
-        intakeModule.updateData(data);
+        intakeIO.updateData(data);
         SmartDashboard.putNumber("intakeVolts",data.intakeVolts);
         SmartDashboard.putNumber("intakeVelocity", data.intakeVelocityRadPerSec);
     }
