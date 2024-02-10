@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import java.util.HashMap;
+
+import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.DriveConstants;
@@ -41,14 +43,13 @@ public class RobotContainer {
 
     commandList.put("PrintCMD-hello", Commands.print("hewlow"));
     commandList.put("shoot", Commands.print("shot a thing"));
-    commandList.put("targetArm", Commands.print("shot a thing"));
+    commandList.put("shoot-amp", Commands.print("shot a thing"));
 
-    // AutoUtils.initPathCommands(commandList);
-    // AutoUtils.initPPUtils();
+    AutoUtils.initAuto(commandList);
   }
 
   public Command getAutonomousCommand() {
-    return new PrintCommand("");
-    // return AutoUtils.timeCommand(AutoUtils.getAutoPath("bottom_3w-speaker+c+speaker"));
+    
+    return AutoUtils.timeCommand(AutoUtils.getAutoPath());
   }
 }
