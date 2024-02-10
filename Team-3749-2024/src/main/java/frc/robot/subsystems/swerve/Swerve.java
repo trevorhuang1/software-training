@@ -20,18 +20,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.sim.*;
 import frc.robot.subsystems.swerve.real.*;
 import frc.robot.utils.*;
 import frc.robot.utils.Constants.*;
-import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.Units.VoltsPerMeterPerSecond;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
 
 /***
  * @author Noah Simon
@@ -67,61 +62,7 @@ public class Swerve extends SubsystemBase {
 
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 
-  private final MutableMeasure<Voltage> identificationVoltageMeasure = mutable(Volts.of(0));
-  private final MutableMeasure<Distance> identificationDistanceMeasure = mutable(Meters.of(0));
-  private final MutableMeasure<Velocity<Distance>> identificaitonVelocityMeasure = mutable(MetersPerSecond.of(0));
-
-
-
-  SysIdRoutine routine = new SysIdRoutine(
-      // new SysIdRoutine.Config(),
-      new SysIdRoutine.Config(Volts.per(Seconds).of(1),Volts.of(7), Seconds.of(10) ),
-      new SysIdRoutine.Mechanism(this::identificationDriveConsumer,
-          log -> {
-            // Record a frame for the left motors. Since these share an encoder, we consider
-            // the entire group to be one motor.
-            log.motor("front-left")
-                .voltage(
-                    identificationVoltageMeasure.mut_replace(
-                        modules[0].getModuleData().driveAppliedVolts, Volts))
-                .linearPosition(
-                    identificationDistanceMeasure.mut_replace(modules[0].getModuleData().drivePositionM, Meters))
-                .linearVelocity(
-                    identificaitonVelocityMeasure.mut_replace(modules[0].getModuleData().driveVelocityMPerSec,
-                        MetersPerSecond));
-            // Record a frame for the right motors. Since these share an encoder, we
-            // consider
-            // the entire group to be one motor.
-            log.motor("front-right")
-                .voltage(
-                    identificationVoltageMeasure.mut_replace(
-                        modules[1].getModuleData().driveAppliedVolts, Volts))
-                .linearPosition(
-                    identificationDistanceMeasure.mut_replace(modules[1].getModuleData().drivePositionM, Meters))
-                .linearVelocity(
-                    identificaitonVelocityMeasure.mut_replace(modules[1].getModuleData().driveVelocityMPerSec,
-                        MetersPerSecond));
-
-            log.motor("back-left")
-                .voltage(
-                    identificationVoltageMeasure.mut_replace(
-                        modules[2].getModuleData().driveAppliedVolts, Volts))
-                .linearPosition(
-                    identificationDistanceMeasure.mut_replace(modules[2].getModuleData().drivePositionM, Meters))
-                .linearVelocity(
-                    identificaitonVelocityMeasure.mut_replace(modules[2].getModuleData().driveVelocityMPerSec,
-                        MetersPerSecond));
-            log.motor("back-right")
-                .voltage(
-                    identificationVoltageMeasure.mut_replace(
-                        modules[3].getModuleData().driveAppliedVolts, Volts))
-                .linearPosition(
-                    identificationDistanceMeasure.mut_replace(modules[3].getModuleData().drivePositionM, Meters))
-                .linearVelocity(
-                    identificaitonVelocityMeasure.mut_replace(modules[3].getModuleData().driveVelocityMPerSec,
-                        MetersPerSecond));
-          },
-          this));
+  public SwerveSysId sysId = new SwerveSysId(modules);
 
   public Swerve() {
     if (Robot.isSimulation()) {
@@ -248,12 +189,20 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-  public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return routine.quasistatic(direction);
+  public Command getSysIdQuasistaticForwardTest() {
+    return sysId.getSysIdQuasistatic(Direction.kForward);
   }
 
-  public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-    return routine.dynamic(direction);
+  public Command getSysIdQuasistaticReverseTest() {
+    return sysId.getSysIdQuasistatic(Direction.kForward);
+  }
+
+  public Command getSysIdDynamicForwardTest() {
+    return sysId.getSysIdDynamic(Direction.kForward);
+  }
+
+  public Command getSysIdDynamicReverseTest() {
+    return sysId.getSysIdDynamic(Direction.kForward);
   }
 
   public double getVerticalTilt() {
