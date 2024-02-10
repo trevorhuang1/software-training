@@ -87,7 +87,7 @@ public class Swerve extends SubsystemBase {
             // Record a frame for the right motors. Since these share an encoder, we
             // consider
             // the entire group to be one motor.
-            log.motor("front-left")
+            log.motor("front-right")
                 .voltage(
                     identificationVoltageMeasure.mut_replace(
                         modules[1].getModuleData().driveAppliedVolts, Volts))
@@ -97,7 +97,7 @@ public class Swerve extends SubsystemBase {
                     identificaitonVelocityMeasure.mut_replace(modules[1].getModuleData().driveVelocityMPerSec,
                         MetersPerSecond));
 
-            log.motor("front-left")
+            log.motor("back-left")
                 .voltage(
                     identificationVoltageMeasure.mut_replace(
                         modules[2].getModuleData().driveAppliedVolts, Volts))
@@ -106,7 +106,7 @@ public class Swerve extends SubsystemBase {
                 .linearVelocity(
                     identificaitonVelocityMeasure.mut_replace(modules[2].getModuleData().driveVelocityMPerSec,
                         MetersPerSecond));
-            log.motor("front-left")
+            log.motor("back-right")
                 .voltage(
                     identificationVoltageMeasure.mut_replace(
                         modules[3].getModuleData().driveAppliedVolts, Volts))
@@ -259,8 +259,6 @@ public class Swerve extends SubsystemBase {
 
     updateOdometry();
     gyro.updateData(gyroData);
-    Command cmd = this.getCurrentCommand();
-    SmartDashboard.putData("current command", cmd);
 
     for (int i = 0; i < 4; i++) {
       modules[i].periodic();

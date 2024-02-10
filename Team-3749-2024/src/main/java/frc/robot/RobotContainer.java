@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
 import java.util.HashMap;
 import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.utils.JoystickIO;
@@ -32,7 +35,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    joystickIO.getButtonBindings();
+    joystickIO.pilotBindings();
 
   }
 
@@ -43,11 +46,12 @@ public class RobotContainer {
     commandList.put("shoot", Commands.print("shot a thing"));
     commandList.put("targetArm", Commands.print("shot a thing"));
 
-    AutoUtils.initPathCommands(commandList);
-    AutoUtils.initPPUtils();
+    // AutoUtils.initPathCommands(commandList);
+    // AutoUtils.initPPUtils();
   }
 
   public Command getAutonomousCommand() {
-    return AutoUtils.timeCommand(AutoUtils.getAutoPath("bottom_3w-speaker+c+speaker"));
+    return new PrintCommand("");
+    // return AutoUtils.timeCommand(AutoUtils.getAutoPath("bottom_3w-speaker+c+speaker"));
   }
 }
