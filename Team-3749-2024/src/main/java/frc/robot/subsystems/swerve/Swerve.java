@@ -12,6 +12,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
@@ -27,9 +28,10 @@ import frc.robot.utils.*;
 import frc.robot.utils.Constants.*;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Volts;
-
+import static edu.wpi.first.units.Units.VoltsPerMeterPerSecond;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 /***
  * @author Noah Simon
@@ -69,8 +71,11 @@ public class Swerve extends SubsystemBase {
   private final MutableMeasure<Distance> identificationDistanceMeasure = mutable(Meters.of(0));
   private final MutableMeasure<Velocity<Distance>> identificaitonVelocityMeasure = mutable(MetersPerSecond.of(0));
 
+
+
   SysIdRoutine routine = new SysIdRoutine(
-      new SysIdRoutine.Config(),
+      // new SysIdRoutine.Config(),
+      new SysIdRoutine.Config(Volts.per(Seconds).of(1),Volts.of(7), Seconds.of(5) ),
       new SysIdRoutine.Mechanism(this::identificationDriveConsumer,
           log -> {
             // Record a frame for the left motors. Since these share an encoder, we consider
@@ -165,7 +170,8 @@ public class Swerve extends SubsystemBase {
     return speeds;
   }
 
-  public void resetGyro() {
+  public void resetGyro(Measure<Velocity<Voltage>> rampRate) {
+    rampRate.baseUnitMagnitude();
     gyro.resetGyro();
   }
 
