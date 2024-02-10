@@ -75,7 +75,7 @@ public class Swerve extends SubsystemBase {
 
   SysIdRoutine routine = new SysIdRoutine(
       // new SysIdRoutine.Config(),
-      new SysIdRoutine.Config(Volts.per(Seconds).of(1),Volts.of(7), Seconds.of(5) ),
+      new SysIdRoutine.Config(Volts.per(Seconds).of(1),Volts.of(7), Seconds.of(10) ),
       new SysIdRoutine.Mechanism(this::identificationDriveConsumer,
           log -> {
             // Record a frame for the left motors. Since these share an encoder, we consider
