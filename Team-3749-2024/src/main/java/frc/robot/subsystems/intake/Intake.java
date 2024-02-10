@@ -33,9 +33,11 @@ public class Intake extends SubsystemBase {
 
    public void moveIntake()
    {
-    intakeIO.setVoltage(
-        intakeController.calculate(data.intakeVelocityRadPerSec,intakeVelocity) + intakeFF.calculate(intakeVelocity)
-    );
+    double voltage = intakeController.calculate(data.intakeVelocityRadPerSec,intakeVelocity) + intakeFF.calculate(intakeVelocity);
+    setVoltage(voltage);
+   }
+   public void setVoltage(double volts){
+    intakeIO.setVoltage(volts);
    }
 
     @Override
