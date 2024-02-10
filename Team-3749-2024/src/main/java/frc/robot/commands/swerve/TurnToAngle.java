@@ -11,7 +11,6 @@ import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
-import frc.robot.utils.Constants.Sim.PIDValues;
 
 public class TurnToAngle extends Command {
   private final Swerve swerve;
@@ -19,8 +18,8 @@ public class TurnToAngle extends Command {
   private Rotation2d desiredRotation = new Rotation2d(0);
   private boolean preserveVelocity = false;
 
-  private final PIDController pid_turnController = new PIDController(PIDValues.kP_TurnToAngle, 0,
-      PIDValues.kD_TurnToAngle);
+  private final PIDController pid_turnController = new PIDController(DriveConstants.kP_TurnToAngle, 0,
+      DriveConstants.kD_TurnToAngle);
   private final SlewRateLimiter slewLimit_turn = new SlewRateLimiter(
       DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
 

@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.MoveToPose;
@@ -60,14 +61,16 @@ public class JoystickIO {
      */
 
     public void pilotBindings() {
-        pilot.aWhileHeld(Commands.run(() -> Robot.example.setVoltage(12)),
-                Commands.run(() -> Robot.example.setVoltage(0)));
+        pilot.aWhileHeld(Robot.swerve.getSysIdDynamic(Direction.kForward));
+        pilot.bWhileHeld(Robot.swerve.getSysIdDynamic(Direction.kReverse));
+        pilot.yWhileHeld(Robot.swerve.getSysIdQuasistatic(Direction.kForward));
+        pilot.xWhileHeld(Robot.swerve.getSysIdQuasistatic(Direction.kReverse));
+
 
 
     }
 
     public void simBindings() {
-        pilot.aWhileHeld(new MoveToPose(new Pose2d(5, 5, new Rotation2d())));
     }
 
     /**

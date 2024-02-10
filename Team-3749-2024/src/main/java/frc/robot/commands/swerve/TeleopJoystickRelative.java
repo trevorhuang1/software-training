@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants.ControllerConstants;
-import frc.robot.utils.Constants.DriveConstants;
-import frc.robot.utils.Constants.Sim.PIDValues;;
+import frc.robot.utils.Constants.DriveConstants;;
 
 /***
  * @author Noah Simon
@@ -24,8 +23,8 @@ public class TeleopJoystickRelative extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction, yTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  private final PIDController pid_turnController = new PIDController(PIDValues.kP_teleopTurn, 0,
-      PIDValues.kD_teleopTurn);
+  private final PIDController pid_turnController = new PIDController(DriveConstants.kP_teleopTurn, 0,
+      DriveConstants.kD_teleopTurn);
 
   public TeleopJoystickRelative(
       Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction,
