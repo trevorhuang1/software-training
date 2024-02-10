@@ -7,8 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
-import frc.robot.utils.Constants.*;
-import frc.robot.utils.Constants.Sim.PIDValues;;
+import frc.robot.utils.Constants.*;;
 
 /***
  * @author Noah Simon
@@ -22,8 +21,8 @@ public class Teleop extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  private final PIDController pid_turnController = new PIDController(PIDValues.kP_teleopTurn, 0,
-      PIDValues.kD_teleopTurn);
+  private final PIDController pid_turnController = new PIDController(DriveConstants.kP_teleopTurn, 0,
+      DriveConstants.kD_teleopTurn);
 
   public Teleop(
       Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction) {
