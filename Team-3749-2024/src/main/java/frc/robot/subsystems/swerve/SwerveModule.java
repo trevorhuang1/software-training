@@ -107,20 +107,39 @@ public class SwerveModule {
         }
         this.desiredState = state;
 
-        double drive_volts = drivingFeedFordward.calculate(state.speedMetersPerSecond)
-                + drivingPidController.calculate(moduleData.driveVelocityMPerSec, state.speedMetersPerSecond);
-
-        double turning_volts = turningPidController.calculate(moduleData.turnAbsolutePositionRad,
-                state.angle.getRadians());
-        // Make a drive PID Controller
-        moduleIO.setDriveVoltage(drive_volts);
-        moduleIO.setTurnVoltage(turning_volts);
+        setDriveSpeed(state.speedMetersPerSecond);
+        setTurnPosition(state.angle.getRadians());
 
     }
 
+    public void setDriveSpeed(double speedMetersPerSecond) {
+        double drive_volts = drivingFeedFordward.calculate(speedMetersPerSecond)
+                + drivingPidController.calculate(moduleData.driveVelocityMPerSec, speedMetersPerSecond);
+        setDriveVoltage(drive_volts);
+    }
+    public void setTurnPosition(double positionRad) {
+        double turning_volts = turningPidController.calculate(moduleData.turnAbsolutePositionRad,
+                positionRad);
+        // Make a drive PID Controller
+        setTurnVoltage(turning_volts);
+    }
+
+    public void setDriveVoltage(double volts) {
+        moduleIO.setDriveVoltage(volts);
+
+    }
+
+    public void setTurnVoltage(double volts) {
+        moduleIO.setTurnVoltage(volts);
+    }
+
     public void stop() {
-        moduleIO.setDriveVoltage(0);
-        moduleIO.setTurnVoltage(0);
+        setDriveVoltage(0);
+        setTurnVoltage(0);
+    }
+
+    public ModuleData getModuleData(){
+        return moduleData;
     }
 
     // called within the swerve subsystem's periodic
