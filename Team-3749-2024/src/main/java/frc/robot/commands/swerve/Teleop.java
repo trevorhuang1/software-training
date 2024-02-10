@@ -23,7 +23,7 @@ import frc.robot.utils.PIDTuner;
 import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.ControllerConstants;
 import frc.robot.utils.Constants.DriveConstants;
-import frc.robot.utils.Constants.Sim.PIDValues;;
+import frc.robot.utils.Constants.DriveConstants.PIDValues;;
 
 /***
  * @author Noah Simon
@@ -37,8 +37,8 @@ public class Teleop extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction, yTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  private final PIDController pid_turnController = new PIDController(PIDValues.kP_teleopTurn, 0,
-      PIDValues.kD_teleopTurn);
+  private final PIDController pid_turnController = new PIDController(DriveConstants.PIDValues.kP_teleopTurn, 0,
+      DriveConstants.PIDValues.kD_teleopTurn);
 
   public Teleop(
       Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction,
