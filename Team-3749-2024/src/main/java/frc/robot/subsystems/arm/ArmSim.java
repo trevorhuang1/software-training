@@ -55,7 +55,6 @@ public class ArmSim implements ArmIO {
         data.accelerationRadPerSecSquared = (armSim.getVelocityRadPerSec() - previousVelocity)/Sim.loopPeriodSec;
 
         data.appliedVolts = appliedVolts;
-        System.out.println(appliedVolts);
 
         data.leftCurrentAmps = Math.abs(armSim.getCurrentDrawAmps());
         data.rightCurrentAmps = Math.abs(armSim.getCurrentDrawAmps());

@@ -38,29 +38,29 @@ public class ShootKinematics {
         Translation2d distanceVector = currentPose2d.getTranslation().minus(getSpeakerPosition());
 
         angle = new Rotation2d(Math.atan2(Math.abs(distanceVector.getY()), Math.abs(distanceVector.getX())));
-        System.out.println("Angle: " + angle);
-        System.out.println("MAX ANGLE: " + Constants.ArmConstants.maxAngle);
+        // System.out.println("Angle: " + angle);
+        // System.out.println("MAX ANGLE: " + Constants.ArmConstants.maxAngle);
 
         //double distAngle = getAngle(distanceVector.getNorm());
         
         // Case 0: We are in angle
         if (angle.getDegrees() < Constants.ArmConstants.maxAngle && distanceVector.getNorm() <= maxDist){ 
-            System.out.println("Case 0");
+            // System.out.println("Case 0");
             return moveOutOfStage(changeRotation(currentPose2d.getTranslation(), distanceVector));
             // return changeRotation(currentPose2d.getTranslation(), distanceVector);
         } 
         // Case 1: We are out of angle
         else if (angle.getDegrees() >= Constants.ArmConstants.maxAngle) {
-            System.out.println("Case 1");
+            // System.out.println("Case 1");
 
             // TODO: Check if positive/negative x coord check is correct
             Translation2d radiusVector;
 
             if ((distanceVector.getAngle().getRadians() < 0 && DriverStation.getAlliance().get() == Alliance.Red) || (distanceVector.getAngle().getRadians() > 0 && DriverStation.getAlliance().get() == Alliance.Blue)) {
-                System.out.println("case 1a");
+                // System.out.println("case 1a");
                 radiusVector = new Translation2d(Math.cos(Constants.ArmConstants.maxAngleRad), Math.sin(Constants.ArmConstants.maxAngleRad));
             } else {
-                System.out.println("case 1b");
+                // System.out.println("case 1b");
                 radiusVector = new Translation2d(Math.cos(-Constants.ArmConstants.maxAngleRad), Math.sin(-Constants.ArmConstants.maxAngleRad));
             }
  
@@ -70,7 +70,7 @@ public class ShootKinematics {
             // Case 3: We are out of range and out of angle
             Translation2d newDistanceVector = goal.minus(getSpeakerPosition());
             if (newDistanceVector.getNorm() > maxDist) {
-                System.out.println("Special Case 3");
+                // System.out.println("Special Case 3");
                 goal = getSpeakerPosition().plus(newDistanceVector.div(newDistanceVector.getNorm()).times(maxDist));
             }
 
@@ -79,7 +79,7 @@ public class ShootKinematics {
         }
         // Case 2: We are out of range
         else if (distanceVector.getNorm() > maxDist) {
-            System.out.println("Case 2");
+            // System.out.println("Case 2");
             Translation2d goal = getSpeakerPosition().plus(distanceVector.div(distanceVector.getNorm()).times(maxDist));
             return moveOutOfStage(changeRotation(goal, goal.minus(getSpeakerPosition())));
         }
@@ -88,7 +88,7 @@ public class ShootKinematics {
     }
 
     private static Pose2d changeRotation(Translation2d currentTranslation2d, Translation2d distanceVector){
-        System.out.println(distanceVector.getAngle().getDegrees());
+        // System.out.println(distanceVector.getAngle().getDegrees());
         return new Pose2d(currentTranslation2d, new Rotation2d(Math.PI + distanceVector.getAngle().getRadians()));
         // Ok basically the Rotation2d angle is pi + angle only if the currenttranslation is above the speaker
         // Otherwise the angle is pi - angle if the currenttranslation is below the speaker
@@ -96,7 +96,7 @@ public class ShootKinematics {
 
     // Case 5 Check if we are in stage and move accordingly
     private static Pose2d moveOutOfStage(Pose2d poseInRadius){
-        System.out.println("Case 5");
+        // System.out.println("Case 5");
         Translation2d[] stagePoints = getStagePoints();
 
         Translation2d distanceVector = poseInRadius.getTranslation().minus(stagePoints[0]);

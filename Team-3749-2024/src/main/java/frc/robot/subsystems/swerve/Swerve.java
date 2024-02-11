@@ -69,15 +69,15 @@ public class Swerve extends SubsystemBase {
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 
   public Swerve() {
-    if (!Robot.isReal()) {
+    if (Robot.isSimulation()) {
       gyro = new GyroSim();
       for (int i = 0; i < 4; i++) {
         modules[i] = new SwerveModule(i, new SwerveModuleSim());
       }
     } else {
       // real swerve module instatiation here
+      gyro = new NavX2Gyro();
       for (int i = 0; i < 4; i++) {
-        gyro = new NavX2Gyro();
         modules[i] = new SwerveModule(i, new SwerveModuleSparkMax(i));
       }
     }

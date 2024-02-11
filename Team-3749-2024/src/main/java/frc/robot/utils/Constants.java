@@ -54,7 +54,7 @@ public class Constants {
     public static final int rightID = 16;
     // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
     public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2; 
-    public static final int encoderID = 17;
+    public static final int encoderID = 7;
     public static final double encoderOffsetRad = 0;
 
     // Control - PID, FF, and Trapezoidal Constraints
