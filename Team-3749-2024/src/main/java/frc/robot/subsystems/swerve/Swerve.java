@@ -78,7 +78,7 @@ public class Swerve extends SubsystemBase {
       // real swerve module instatiation here
       for (int i = 0; i < 4; i++) {
         gyro = new NavX2Gyro();
-        modules[i] = new SwerveModule(i, new SwerveModuleRelative(i));
+        modules[i] = new SwerveModule(i, new SwerveModuleSparkMax(i));
       }
     }
 

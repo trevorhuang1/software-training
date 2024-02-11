@@ -50,11 +50,11 @@ public class Constants {
     
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
-    public static final int leftID = 0;
-    public static final int rightID = 1;
+    public static final int leftID = 15;
+    public static final int rightID = 16;
     // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
     public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2; 
-    public static final int encoderID = 2;
+    public static final int encoderID = 17;
     public static final double encoderOffsetRad = 0;
 
     // Control - PID, FF, and Trapezoidal Constraints
@@ -144,13 +144,13 @@ public class Constants {
         new Translation2d(-wheelBase / 2, trackWidth / 2), // back left
         new Translation2d(-wheelBase / 2, -trackWidth / 2)); // back right
 
-    public static final int[] driveMotorPorts = { 1, 3, 7, 5 }; // FL, FR, BL, BR
-    public static final int[] turningMotorPorts = { 2, 4, 8, 6 }; // FL, FR, BL, BR
+    public static final int[] driveMotorPorts = { 3, 5, 7, 9 }; // FL, FR, BL, BR
+    public static final int[] turningMotorPorts = { 4, 6, 8, 10 }; // FL, FR, BL, BR
 
     public static final boolean[] driveEncoderReversed = { true, false, true, false };
     public static final boolean[] turningEncoderReversed = { false, false, false, false };
 
-    public static final int[] absoluteEncoderPorts = { 9, 10, 11, 12 };
+    public static final int[] absoluteEncoderPorts = { 11, 12, 13, 14 };
 
     public static final boolean[] driveAbsoluteEncoderReversed = { false, false, false, false };
 
