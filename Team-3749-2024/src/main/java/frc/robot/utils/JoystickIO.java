@@ -57,10 +57,10 @@ public class JoystickIO {
      */
 
     public void pilotBindings() {
-        pilot.aWhileHeld(Robot.swerve.getSysIdDynamicForwardTest());
-        pilot.bWhileHeld(Robot.swerve.getSysIdDynamicReverseTest());
-        pilot.yWhileHeld(Robot.swerve.getSysIdQuasistaticForwardTest());
-        pilot.xWhileHeld(Robot.swerve.getSysIdQuasistaticReverseTest());
+        pilot.aWhileHeld(Robot.swerve.getDriveSysIdDynamicForwardTest());
+        pilot.bWhileHeld(Robot.swerve.getDriveSysIdDynamicReverseTest());
+        pilot.yWhileHeld(Robot.swerve.getDriveSysIdQuasistaticForwardTest());
+        pilot.xWhileHeld(Robot.swerve.getDriveSysIdQuasistaticReverseTest());
 
 
 
