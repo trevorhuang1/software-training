@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.Teleop;
 import frc.robot.commands.swerve.TeleopJoystickRelative;
@@ -74,10 +73,6 @@ public class JoystickIO {
      */
 
     public void pilotBindings() {
-        pilot.aWhileHeld(Commands.run(() -> Robot.example.setVoltage(8)),
-                Commands.run(() -> Robot.example.setVoltage(0)));
-        pilot.bWhileHeld(Commands.run(() -> Robot.example.setVoltage(-4)),
-                Commands.run(() -> Robot.example.setVoltage(0)));
 
     }
 
@@ -89,7 +84,6 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        Robot.arm.setDefaultCommand(new ArmMoveToGoal());
     }
 
 }

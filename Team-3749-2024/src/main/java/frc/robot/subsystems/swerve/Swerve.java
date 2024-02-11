@@ -23,6 +23,7 @@ import frc.robot.subsystems.swerve.sim.SwerveModuleSim;
 import frc.robot.subsystems.swerve.real.NavX2Gyro;
 import frc.robot.subsystems.swerve.real.SwerveModuleRelative;
 import frc.robot.utils.Constants;
+import frc.robot.utils.LimelightHelpers;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
 
@@ -69,8 +70,10 @@ public class Swerve extends SubsystemBase {
     } else {
       // real swerve module instatiation here
       for (int i = 0; i < 4; i++) {
-        gyro = new NavX2Gyro();
-        modules[i] = new SwerveModule(i, new SwerveModuleRelative(i));
+        gyro = new GyroSim();
+        modules[i] = new SwerveModule(i, new SwerveModuleIO() {
+          
+        });
       }
     }
 
@@ -152,8 +155,14 @@ public class Swerve extends SubsystemBase {
     swerveDrivePoseEstimator.update(gyroHeading,
         new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
             modules[2].getPosition(), modules[3].getPosition() });
-
+      
   }
+  public void visionUpdateOdometry(LimelightHelpers.LimelightPose... visionPoses){
+    for (LimelightHelpers.LimelightPose visionPose : visionPoses){
+        swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose, visionPose.timestamp);
+      }
+  }
+  
 
   public void logDesiredOdometry(Pose2d desiredPose) {
     this.desiredPose = desiredPose;
@@ -186,7 +195,7 @@ public class Swerve extends SubsystemBase {
   public void periodic() {
 
     updateOdometry();
-    gyro.updateData(gyroData);
+    // gyro.updateData(gyroData);
 
     for (int i = 0; i < 4; i++) {
       modules[i].periodic();
