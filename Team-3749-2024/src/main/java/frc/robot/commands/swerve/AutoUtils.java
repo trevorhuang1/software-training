@@ -58,7 +58,9 @@ public class AutoUtils {
     SmartDashboard.putData("Choose Auto", autoChooser);
   }
 
-  public static void initPathCommands(HashMap<String, Command> commandList) {
+  public static void initAuto(HashMap<String, Command> commandList) {
+    initPPUtils();
+
     commandList.forEach((String cmdName, Command cmd) -> {
       NamedCommands.registerCommand(cmdName, cmd);
     });

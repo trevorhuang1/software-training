@@ -1,13 +1,9 @@
 package frc.robot.utils;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.commands.arm.ArmMoveToGoal;
-import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.Teleop;
 /**
  * Util class for button bindings
