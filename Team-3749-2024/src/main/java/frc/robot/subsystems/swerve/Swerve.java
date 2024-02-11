@@ -260,7 +260,7 @@ public class Swerve extends SubsystemBase {
   private final MutableMeasure<Distance> identificationDistanceMeasure = mutable(Meters.of(0));
   private final MutableMeasure<Velocity<Distance>> identificaitonVelocityMeasure = mutable(MetersPerSecond.of(0));
 
-  private SysIdRoutine routine = new SysIdRoutine(
+  private SysIdRoutine driveRoutine = new SysIdRoutine(
       // new SysIdRoutine.Config(),
       new SysIdRoutine.Config(Volts.per(Seconds).of(1), Volts.of(7), Seconds.of(10)),
       new SysIdRoutine.Mechanism(Robot.swerve::identificationDriveConsumer,
@@ -318,19 +318,59 @@ public class Swerve extends SubsystemBase {
           },
           Robot.swerve));
 
-  public Command getSysIdQuasistaticForwardTest() {
-    return routine.quasistatic(Direction.kForward);
+  public Command getDriveSysIdQuasistaticForwardTest() {
+    return driveRoutine.quasistatic(Direction.kForward);
   }
 
-  public Command getSysIdQuasistaticReverseTest() {
-    return routine.quasistatic(Direction.kForward);
+  public Command getDriveSysIdQuasistaticReverseTest() {
+    return driveRoutine.quasistatic(Direction.kForward);
   }
 
-  public Command getSysIdDynamicForwardTest() {
-    return routine.dynamic(Direction.kForward);
+  public Command getDriveSysIdDynamicForwardTest() {
+    return driveRoutine.dynamic(Direction.kForward);
   }
 
-  public Command getSysIdDynamicReverseTest() {
-    return routine.dynamic(Direction.kForward);
+  public Command getDriveSysIdDynamicReverseTest() {
+    return driveRoutine.dynamic(Direction.kForward);
   }
+
+
+
+  // private SysIdRoutine turnRoutine = new SysIdRoutine(
+  //     // new SysIdRoutine.Config(),
+  //     new SysIdRoutine.Config(Volts.per(Seconds).of(1), Volts.of(7), Seconds.of(10)),
+  //     new SysIdRoutine.Mechanism(Robot.swerve::identificationDriveConsumer,
+  //         log -> {
+  //           // Record a frame for the left motors. Since these share an encoder, we consider
+  //           // the entire group to be one motor.
+  //           log.motor("front-left")
+  //               .voltage(
+  //                   identificationVoltageMeasure.mut_replace(
+  //                       modules[0].getModuleData().driveAppliedVolts, Volts))
+  //               .linearPosition(
+  //                   identificationDistanceMeasure
+  //                       .mut_replace(modules[0].getModuleData().drivePositionM, Meters))
+  //               .linearVelocity(
+  //                   identificaitonVelocityMeasure.mut_replace(
+  //                       modules[0].getModuleData().driveVelocityMPerSec,
+  //                       MetersPerSecond));
+  //         },
+  //         Robot.swerve));
+
+  // public Command getDriveSysIdQuasistaticForwardTest() {
+  //   return driveRoutine.quasistatic(Direction.kForward);
+  // }
+
+  // public Command getDriveSysIdQuasistaticReverseTest() {
+  //   return driveRoutine.quasistatic(Direction.kForward);
+  // }
+
+  // public Command getDriveSysIdDynamicForwardTest() {
+  //   return driveRoutine.dynamic(Direction.kForward);
+  // }
+
+  // public Command getDriveSysIdDynamicReverseTest() {
+  //   return driveRoutine.dynamic(Direction.kForward);
+  // }
+
 }
