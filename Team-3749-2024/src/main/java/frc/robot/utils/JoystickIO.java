@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.Teleop;
+
 /**
  * Util class for button bindings
  * 
@@ -13,7 +14,7 @@ import frc.robot.commands.swerve.Teleop;
 public class JoystickIO {
 
     private Xbox pilot;
-    private Xbox operator; // leave here
+    private Xbox operator;
 
     public JoystickIO(Xbox pilot, Xbox operator) {
         this.pilot = pilot;
@@ -49,7 +50,9 @@ public class JoystickIO {
      * If both controllers are plugged in (pi and op)
      */
     public void pilotAndOperatorBindings() {
+        pilotBindings();
 
+        //op bindings
     }
 
     /**
@@ -57,13 +60,14 @@ public class JoystickIO {
      */
 
     public void pilotBindings() {
-        pilot.aWhileHeld(Robot.swerve.getDriveSysIdDynamicForwardTest());
-        pilot.bWhileHeld(Robot.swerve.getDriveSysIdDynamicReverseTest());
-        pilot.yWhileHeld(Robot.swerve.getDriveSysIdQuasistaticForwardTest());
-        pilot.xWhileHeld(Robot.swerve.getDriveSysIdQuasistaticReverseTest());
+        //sysid config
+        pilot.aWhileHeld(Robot.swerve.getSysIdDynamic(Direction.kForward));
+        pilot.bWhileHeld(Robot.swerve.getSysIdDynamic(Direction.kReverse));
+        pilot.yWhileHeld(Robot.swerve.getSysIdQuasistatic(Direction.kForward));
+        pilot.xWhileHeld(Robot.swerve.getSysIdQuasistatic(Direction.kReverse));
 
 
-
+        //pilot commands
     }
 
     public void simBindings() {
@@ -76,9 +80,8 @@ public class JoystickIO {
         Robot.arm.setDefaultCommand(new ArmMoveToGoal());
 
         // y inverted
-        
-        Robot.swerve.setDefaultCommand(new Teleop(()->-pilot.getLeftX(), ()->-pilot.getLeftY(), ()->-pilot.getRightX()));
 
+        Robot.swerve.setDefaultCommand(
+                new Teleop(() -> -pilot.getLeftX(), () -> -pilot.getLeftY(), () -> -pilot.getRightX()));
     }
-
 }

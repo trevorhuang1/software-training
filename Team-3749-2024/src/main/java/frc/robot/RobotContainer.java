@@ -34,8 +34,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    joystickIO.getButtonBindings();
     joystickIO.pilotBindings();
-
   }
 
   public void initAuto() {
