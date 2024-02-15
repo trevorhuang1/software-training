@@ -66,7 +66,6 @@ public class JoystickIO {
         pilot.yWhileHeld(Robot.swerve.getSysIdQuasistatic(Direction.kForward));
         pilot.xWhileHeld(Robot.swerve.getSysIdQuasistatic(Direction.kReverse));
 
-
         //pilot commands
     }
 

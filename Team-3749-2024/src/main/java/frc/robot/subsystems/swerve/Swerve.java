@@ -12,8 +12,10 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Robot;
@@ -66,15 +68,19 @@ public class Swerve extends SubsystemBase {
   private final MutableMeasure<Distance> identificationDistanceMeasure = mutable(Meters.of(0));
   private final MutableMeasure<Velocity<Distance>> identificaitonVelocityMeasure = mutable(MetersPerSecond.of(0));
 
-
-
   SysIdRoutine routine = new SysIdRoutine(
       // new SysIdRoutine.Config(),
-      new SysIdRoutine.Config(Volts.per(Seconds).of(1),Volts.of(7), Seconds.of(10) ),
+      new SysIdRoutine.Config(Volts.per(Seconds).of(1), Volts.of(7), Seconds.of(10)),
       new SysIdRoutine.Mechanism(this::identificationDriveConsumer,
           log -> {
             // Record a frame for the left motors. Since these share an encoder, we consider
             // the entire group to be one motor.
+            SmartDashboard.putNumber("motorAppliedVolts", identificationVoltageMeasure.mut_replace(
+                modules[0].getModuleData().driveAppliedVolts, Volts).magnitude());
+            SmartDashboard.putNumber("motorSpeed",
+                identificaitonVelocityMeasure.mut_replace(modules[0].getModuleData().driveVelocityMPerSec,
+                    MetersPerSecond).magnitude());
+
             log.motor("front-left")
                 .voltage(
                     identificationVoltageMeasure.mut_replace(

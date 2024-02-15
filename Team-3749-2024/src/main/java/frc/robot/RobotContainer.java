@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
 import java.util.HashMap;
 
 import frc.robot.commands.swerve.AutoUtils;
@@ -50,6 +52,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     
-    return AutoUtils.timeCommand(AutoUtils.getAutoPath());
+    // return AutoUtils.timeCommand(AutoUtils.getAutoPath("bottom-s_3w-speaker+c-speaker"));
+    return Commands.print("auto");
   }
 }
