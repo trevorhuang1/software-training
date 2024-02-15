@@ -12,7 +12,7 @@ import frc.robot.subsystems.swerve.Swerve;
 
 public class Robot extends TimedRobot {
 
-  public static Arm arm = new Arm();
+  // public static Arm arm = new Arm();
   public static final Swerve swerve = new Swerve();
 
   private Command m_autonomousCommand;
