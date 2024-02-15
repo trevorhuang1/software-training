@@ -6,16 +6,18 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.utils.Constants.ShintakeConstants;
 
 public class IntakeSparkMax implements IntakeIO {
 
-    private CANSparkMax intakeMotor = new CANSparkMax(0, MotorType.kBrushless);
+    private CANSparkMax intakeMotor = new CANSparkMax(ShintakeConstants.intakeId, MotorType.kBrushless);
     private DigitalInput photoelectricSensor = new DigitalInput(0);
     private RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
     private double intakeGoalVolts = 0;
 
     public IntakeSparkMax() 
     {
+        intakeEncoder.setPosition(2*Math.PI);
         intakeEncoder.setVelocityConversionFactor((2*Math.PI)/60);
     }
 
