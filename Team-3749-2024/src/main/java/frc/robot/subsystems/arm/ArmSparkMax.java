@@ -35,6 +35,9 @@ public class ArmSparkMax implements ArmIO {
         leftMotor.setIdleMode(IdleMode.kBrake);
         rightMotor.setIdleMode(IdleMode.kBrake);
 
+        rightMotor.setInverted(true);
+
+
     }
 
     private double getAbsolutePositionRad() {
