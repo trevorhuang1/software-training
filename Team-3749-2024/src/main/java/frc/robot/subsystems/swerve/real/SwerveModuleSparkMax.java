@@ -14,6 +14,7 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     private CANSparkMax turnMotor;
 
     private RelativeEncoder driveEncoder;
+    private RelativeEncoder turnEncoder;
     private CANcoder absoluteEncoder;
     private double absoluteEncoderOffsetRad;
 
@@ -26,9 +27,16 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
                 CANSparkMax.MotorType.kBrushless);
 
         driveEncoder = driveMotor.getEncoder();
+        turnEncoder = turnMotor.getEncoder();
 
         absoluteEncoder = new CANcoder(Constants.DriveConstants.absoluteEncoderPorts[index]);
         absoluteEncoderOffsetRad = DriveConstants.driveAbsoluteEncoderOffsetDeg[index] / 180 * Math.PI;
+        
+        turnMotor.setInverted(Constants.DriveConstants.turningEncoderReversed[index]);
+        turnEncoder.setInverted(DriveConstants.turningEncoderReversed[index]);
+        turnEncoder.setPositionConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI));
+        turnEncoder.setVelocityConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI) * (1 / 60));
+        turnEncoder.setPosition(getAbsoluteTurningPositionRad());
 
         driveMotor.setInverted(DriveConstants.driveEncoderReversed[index]);
         driveEncoder.setInverted(DriveConstants.driveEncoderReversed[index]);
@@ -37,7 +45,6 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         driveEncoder.setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * (Math.PI
                 * ModuleConstants.wheelDiameterMeters) * (1 / 60));
 
-        turnMotor.setInverted(Constants.DriveConstants.turningEncoderReversed[index]);
 
         driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit,
                 Constants.DriveConstants.driveMotorFreeLimit);
@@ -58,8 +65,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         data.driveCurrentAmps = Math.abs(driveMotor.getOutputCurrent());
         data.driveTempCelcius = driveMotor.getMotorTemperature();
 
-        data.turnAbsolutePositionRad = getTurningPositionRad();
-        data.turnVelocityRadPerSec = getTurningVelocityRadPerSec();
+        data.turnAbsolutePositionRad = turnEncoder.getPosition();
+        data.turnVelocityRadPerSec = turnEncoder.getVelocity();
         data.turnAppliedVolts = turnAppliedVolts;
         data.turnCurrentAmps = Math.abs(turnMotor.getOutputCurrent());
         data.turnTempCelcius = turnMotor.getMotorTemperature();
@@ -83,7 +90,7 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         return driveEncoder.getPosition();
     };
 
-    private double getTurningPositionRad() {
+    private double getAbsoluteTurningPositionRad() {
         return absoluteEncoder.getPosition().getValueAsDouble() * (2 * Math.PI) + absoluteEncoderOffsetRad;
     };
 
@@ -91,11 +98,5 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         return driveEncoder.getVelocity();
     };
 
-    private double getTurningVelocityRadPerSec() {
-        return absoluteEncoder.getVelocity().getValueAsDouble() * (2 * Math.PI);
-    };
 
-    private void resetDriveEncoder() {
-        driveEncoder.setPosition(0);
-    };
 }
