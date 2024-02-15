@@ -122,7 +122,7 @@ public class Constants {
     public static final boolean[] driveEncoderReversed = { false, false, false, false };
     public static final boolean[] turningEncoderReversed = { false, false, false, false };
 
-    public static final int[] absoluteEncoderPorts = { 11, 12, 13, 14 };
+    public static final int[] absoluteEncoderPorts = { 4, 6, 8, 10 };
 
     public static final boolean[] driveAbsoluteEncoderReversed = { false, false, false, false };
 
