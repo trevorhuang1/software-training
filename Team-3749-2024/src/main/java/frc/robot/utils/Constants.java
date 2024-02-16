@@ -107,9 +107,9 @@ public class Constants {
 
   public static final class DriveConstants {
     // Distance between right and left wheels
-    public static final double trackWidth = Units.inchesToMeters(17.5);
+    public static final double trackWidth = Units.inchesToMeters(19.5);
     // Distance between front and back wheels
-    public static final double wheelBase = Units.inchesToMeters(17.5);
+    public static final double wheelBase = Units.inchesToMeters(19.5);
     public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
         new Translation2d(wheelBase / 2, trackWidth / 2), // front left
         new Translation2d(wheelBase / 2, -trackWidth / 2), // front right
@@ -122,7 +122,7 @@ public class Constants {
     public static final boolean[] driveEncoderReversed = { false, false, false, false };
     public static final boolean[] turningEncoderReversed = { false, false, false, false };
 
-    public static final int[] absoluteEncoderPorts = { 11, 12, 13, 14 };
+    public static final int[] absoluteEncoderPorts = { 4, 6, 8, 10 };
 
     public static final boolean[] driveAbsoluteEncoderReversed = { false, false, false, false };
 
