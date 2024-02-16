@@ -2,8 +2,8 @@ package frc.robot.subsystems.swerve.real;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.swerve.SwerveModuleIO;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
@@ -13,8 +13,6 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     private CANSparkMax driveMotor;
     private CANSparkMax turnMotor;
 
-    private RelativeEncoder driveEncoder;
-    private RelativeEncoder turnEncoder;
     private CANcoder absoluteEncoder;
     private double absoluteEncoderOffsetRad;
 
@@ -26,25 +24,21 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         turnMotor = new CANSparkMax(Constants.DriveConstants.turningMotorPorts[index],
                 CANSparkMax.MotorType.kBrushless);
 
-        driveEncoder = driveMotor.getEncoder();
-        turnEncoder = turnMotor.getEncoder();
-
         absoluteEncoder = new CANcoder(Constants.DriveConstants.absoluteEncoderPorts[index]);
-        absoluteEncoderOffsetRad = DriveConstants.driveAbsoluteEncoderOffsetDeg[index] / 180 * Math.PI;
-        
+        absoluteEncoderOffsetRad = Units.degreesToRadians(DriveConstants.absoluteEncoderOffsetDeg[index]);
+
         turnMotor.setInverted(Constants.DriveConstants.turningEncoderReversed[index]);
-        turnEncoder.setInverted(DriveConstants.turningEncoderReversed[index]);
-        turnEncoder.setPositionConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI));
-        turnEncoder.setVelocityConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI) * (1 / 60));
-        turnEncoder.setPosition(getAbsoluteTurningPositionRad());
+        turnMotor.getEncoder().setInverted(DriveConstants.turningEncoderReversed[index]);
+        turnMotor.getEncoder().setPositionConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI));
+        turnMotor.getEncoder().setVelocityConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI) * (1 / 60));
+        turnMotor.getEncoder().setPosition(getAbsoluteTurningPositionRad());
 
         driveMotor.setInverted(DriveConstants.driveEncoderReversed[index]);
-        driveEncoder.setInverted(DriveConstants.driveEncoderReversed[index]);
-        driveEncoder.setPositionConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Math.PI
+        driveMotor.getEncoder().setInverted(DriveConstants.driveEncoderReversed[index]);
+        driveMotor.getEncoder().setPositionConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Math.PI
                 * ModuleConstants.wheelDiameterMeters);
-        driveEncoder.setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * (Math.PI
+        driveMotor.getEncoder().setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * (Math.PI
                 * ModuleConstants.wheelDiameterMeters) * (1 / 60));
-
 
         driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit,
                 Constants.DriveConstants.driveMotorFreeLimit);
@@ -65,8 +59,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         data.driveCurrentAmps = Math.abs(driveMotor.getOutputCurrent());
         data.driveTempCelcius = driveMotor.getMotorTemperature();
 
-        data.turnAbsolutePositionRad = turnEncoder.getPosition();
-        data.turnVelocityRadPerSec = turnEncoder.getVelocity();
+        data.turnAbsolutePositionRad = turnMotor.getEncoder().getPosition();
+        data.turnVelocityRadPerSec = turnMotor.getEncoder().getVelocity();
         data.turnAppliedVolts = turnAppliedVolts;
         data.turnCurrentAmps = Math.abs(turnMotor.getOutputCurrent());
         data.turnTempCelcius = turnMotor.getMotorTemperature();
@@ -87,16 +81,15 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     };
 
     private double getDrivePositionMeters() {
-        return driveEncoder.getPosition();
+        return driveMotor.getEncoder().getPosition();
     };
 
     private double getAbsoluteTurningPositionRad() {
-        return absoluteEncoder.getPosition().getValueAsDouble() * (2 * Math.PI) + absoluteEncoderOffsetRad;
+        return Units.rotationsToRadians(absoluteEncoder.getPosition().getValueAsDouble()) + absoluteEncoderOffsetRad;
     };
 
     private double getDriveVelocityMetersPerSec() {
-        return driveEncoder.getVelocity();
+        return driveMotor.getEncoder().getVelocity();
     };
-
 
 }
