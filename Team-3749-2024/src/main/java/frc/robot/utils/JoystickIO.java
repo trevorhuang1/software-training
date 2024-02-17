@@ -99,28 +99,28 @@ public class JoystickIO {
      */
     public void setDefaultCommands() {
         
-       Robot.wrist.setDefaultCommand(new WristCommand());
-       Robot.intake.setDefaultCommand(new IntakeCommand());
-       Robot.shooter.setDefaultCommand(new ShooterCommand());
+    //    Robot.wrist.setDefaultCommand(new WristCommand());
+    //    Robot.intake.setDefaultCommand(new IntakeCommand());
+    //    Robot.shooter.setDefaultCommand(new ShooterCommand());
 
-       pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.intakeVelocity)));
-       pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
+    //    pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.intakeVelocity)));
+    //    pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
 
-       pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.outtakeVelocity)));
-       pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
+    //    pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.outtakeVelocity)));
+    //    pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
 
-       pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(Constants.ShintakeConstants.shooterVelocity)));
-       pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(0)));
+    //    pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(Constants.ShintakeConstants.shooterVelocity)));
+    //    pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(0)));
 
-       pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
+    //    pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
-       /***
-        * Basic Voltage Testing
-        pilot.aWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(1)), Commands.run(() -> Robot.wrist.setVoltage(0)))
-        pilot.bWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(-1)), Commands.run(() -> Robot.wrist.setVoltage(0)))
+        // Basic Voltage Testing
+        pilot.aWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(1)), Commands.run(() -> Robot.wrist.setVoltage(0)));
+        pilot.bWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(-1)), Commands.run(() -> Robot.wrist.setVoltage(0)));
 
-        */
-        
+        pilot.xWhileHeld(Commands.run(() -> Robot.shooter.setVoltage(1)), Commands.run(() -> Robot.shooter.setVoltage(0)));
+        pilot.bWhileHeld(Commands.run(() -> Robot.intake.setVoltage(-1)), Commands.run(() -> Robot.intake.setVoltage(0)));
+
     }
         
 }

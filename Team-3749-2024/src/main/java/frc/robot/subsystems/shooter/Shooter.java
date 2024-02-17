@@ -12,38 +12,39 @@ public class Shooter extends SubsystemBase {
 
     private ShooterIO shooterIO;
     private ShooterData data = new ShooterData();
-    private PIDController shooterController = new PIDController(Constants.ShintakeConstants.shooterPID.kP, Constants.ShintakeConstants.shooterPID.kI, Constants.ShintakeConstants.shooterPID.kD);
-    private SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(0, 1);  
+    private PIDController shooterController = new PIDController(Constants.ShintakeConstants.shooterPID.kP,
+            Constants.ShintakeConstants.shooterPID.kI, Constants.ShintakeConstants.shooterPID.kD);
+    private SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(0, 1);
     private double shooterVelocity = 0;
     private double armAngle = 0;
     private double antiShooterRubbing = 0; //i dont actually know what angle the arm is at when it's resting 
     //and the wheels are touching the body of the robot but thats what this represents
 
-    public Shooter() 
-        {
+    public Shooter() {
         shooterIO = new ShooterSparkMax();
-         if(Robot.isSimulation()) 
-         {
+        if (Robot.isSimulation()) {
             shooterIO = new ShooterSim();
-         }
+        }
     }
 
-   public void setShooterVelocity(double velocity)
-   {
-    this.shooterVelocity = velocity;
-   }
+    public void setShooterVelocity(double velocity) {
+        this.shooterVelocity = velocity;
+    }
 
-   public void moveShooter()
-   {
-    if(armAngle == antiShooterRubbing)
+    public void moveShooter() {
+       if(armAngle == antiShooterRubbing)
     {
         return; //the wheels might still have inertia from spinning but it shouldn't be a problem?
     }
-    shooterIO.setVoltage(
-        shooterController.calculate(data.leftShooterVelocityRadPerSec,shooterVelocity) + shooterFF.calculate(shooterVelocity),
-        shooterController.calculate(data.rightShooterVelocityRadPerSec,shooterVelocity) + shooterFF.calculate(shooterVelocity)
-    );
-   }
+     double voltage = shooterController.calculate(data.leftShooterVelocityRadPerSec, shooterVelocity)
+                + shooterFF.calculate(shooterVelocity);
+
+        setVoltage(voltage);
+    }
+
+    public void setVoltage(double volts) {
+        shooterIO.setVoltage(volts, volts);
+    }
 
     @Override
     public void periodic() {
