@@ -59,6 +59,9 @@ public class Swerve extends SubsystemBase {
   private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
   private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
+  private ShuffleData<Boolean> gyroConnectedLog = new ShuffleData<Boolean>("swerve", "pitch", false);
+  private ShuffleData<Boolean> gyroCalibratingLog = new ShuffleData<Boolean>("swerve", "roll", false);
+
   private ShuffleData<Double> headingLog = new ShuffleData<Double>("swerve", "heading", 0.0);
   private ShuffleData<Double> rotationalVelocityLog = new ShuffleData<Double>("swerve", "rotational velocity", 0.0);
 
@@ -299,6 +302,8 @@ public class Swerve extends SubsystemBase {
     yawLog.set(gyroData.yawDeg);
     pitchLog.set(gyroData.pitchDeg);
     rollLog.set(gyroData.rollDeg);
+    gyroCalibratingLog.set(gyroData.isCalibrating);
+    gyroConnectedLog.set(gyroData.isConnected);
     headingLog.set(getRotation2d().getDegrees());
   }
 

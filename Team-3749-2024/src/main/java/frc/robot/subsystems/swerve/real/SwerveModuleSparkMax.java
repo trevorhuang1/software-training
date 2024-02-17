@@ -38,7 +38,7 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         turnMotor.setInverted(Constants.DriveConstants.turningMotorReversed[index]);
         turnMotor.getEncoder().setPositionConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI));
         turnMotor.getEncoder()
-                .setVelocityConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI) * (1 / 60));
+                .setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Units.rotationsPerMinuteToRadiansPerSecond(1));
         // turnMotor.getEncoder().setPosition(Units.radiansToRotations(getAbsoluteTurningPositionRad()));
 
         driveMotor.setInverted(DriveConstants.driveMotorReversed[index]);
@@ -46,11 +46,9 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         driveMotor.getEncoder().setPositionConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Math.PI
                 * ModuleConstants.wheelDiameterMeters);
 
-        
-        // driveMotor.getEncoder().setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * (Math.PI
-        //         * ModuleConstants.wheelDiameterMeters) * (1 / 60));
+        driveMotor.getEncoder().setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Units.rotationsPerMinuteToRadiansPerSecond(1)
+                * (ModuleConstants.wheelDiameterMeters / 2.0));
 
-                
         driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit,
                 Constants.DriveConstants.driveMotorFreeLimit);
         turnMotor.setSmartCurrentLimit(Constants.DriveConstants.turnMotorStallLimit,
@@ -60,10 +58,6 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         turnMotor.setIdleMode(IdleMode.kBrake);
 
         this.index = index;
-        System.out.println("Conversion factor: " + index);
-        System.out.println(driveMotor.getEncoder().getVelocityConversionFactor());
-
-
     };
 
     @Override
@@ -112,7 +106,7 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     };
 
     private double getDriveVelocityMetersPerSec() {
-   
+
         return driveMotor.getEncoder().getVelocity();
     };
 

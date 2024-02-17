@@ -26,9 +26,9 @@ public class NavX2Gyro implements GyroIO {
     public void updateData(GyroData data) {
 
         data.isCalibrating = gyro.isCalibrating();
-        data.connected = gyro.isConnected();
+        data.isConnected = gyro.isConnected();
 
-        if (data.connected && !data.isCalibrating) {
+        if (data.isConnected && !data.isCalibrating) {
             data.yawDeg = gyro.getYaw();
             data.pitchDeg = gyro.getPitch();
             data.rollDeg = gyro.getRoll();
