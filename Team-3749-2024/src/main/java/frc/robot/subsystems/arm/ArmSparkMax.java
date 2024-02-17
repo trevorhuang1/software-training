@@ -30,12 +30,16 @@ public class ArmSparkMax implements ArmIO {
         System.out.println("[Init] Creating ExampleIOSim");
         absoluteEncoder.setPositionOffset(ArmConstants.encoderOffsetRad / (2 * Math.PI));
         absoluteEncoder.setDistancePerRotation(Math.PI * 2);
-        leftEncoder.setVelocityConversionFactor(ArmConstants.relativeEncoderVelocityConversionFactor);
-        rightEncoder.setVelocityConversionFactor(ArmConstants.relativeEncoderVelocityConversionFactor);
+        
+        leftEncoder.setVelocityConversionFactor(1 / ArmConstants.gearRatio * Units.rotationsPerMinuteToRadiansPerSecond(1));
+        rightEncoder.setVelocityConversionFactor(1 / ArmConstants.gearRatio * Units.rotationsPerMinuteToRadiansPerSecond(1));
         leftMotor.setIdleMode(IdleMode.kBrake);
         rightMotor.setIdleMode(IdleMode.kBrake);
 
         rightMotor.setInverted(true);
+
+        rightMotor.setSmartCurrentLimit(40);
+        leftMotor.setSmartCurrentLimit(40);
 
 
     }
@@ -72,7 +76,7 @@ public class ArmSparkMax implements ArmIO {
 
     @Override
     public void setVoltage(double volts) {
-        appliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
+        appliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
         leftMotor.setVoltage(appliedVolts);
         rightMotor.setVoltage(appliedVolts);
 

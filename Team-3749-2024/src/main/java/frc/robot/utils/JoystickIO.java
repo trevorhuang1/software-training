@@ -74,9 +74,9 @@ public class JoystickIO {
      */
 
     public void pilotBindings() {
-        pilot.aWhileHeld(Commands.run(() -> Robot.arm.setVoltage(1)),
+        pilot.aWhileHeld(Commands.run(() -> Robot.arm.setVoltage(9)),
                 Commands.run(() -> Robot.example.setVoltage(0)));
-        pilot.bWhileHeld(Commands.run(() -> Robot.arm.setVoltage(-1)),
+        pilot.bWhileHeld(Commands.run(() -> Robot.arm.setVoltage(-9)),
                 Commands.run(() -> Robot.example.setVoltage(0)));
 
     }

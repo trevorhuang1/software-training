@@ -176,6 +176,10 @@ public class Arm extends SubsystemBase {
 
         mechanismArm.setAngle(getRotation2d());
         SmartDashboard.putData("mech", mechanism);
+
+        SmartDashboard.putNumber("Arm Currentleft", data.leftCurrentAmps);       
+         SmartDashboard.putNumber("Arm Currentright", data.rightCurrentAmps);
+
     }
 
 }
