@@ -25,17 +25,18 @@ public class SwerveModuleRelative implements SwerveModuleIO {
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
 
-        driveMotor.setInverted(DriveConstants.driveEncoderReversed[index]);
+        driveMotor.setInverted(DriveConstants.driveMotorReversed[index]);
         // driveEncoder.setInverted(DriveConstants.driveEncoderReversed[index]);
         driveEncoder.setPositionConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Math.PI
                 * ModuleConstants.wheelDiameterMeters);
         driveEncoder.setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * (Math.PI
                 * ModuleConstants.wheelDiameterMeters) * (1.0 / 60.0));
 
-        turnMotor.setInverted(DriveConstants.turningEncoderReversed[index]);
+        turnMotor.setInverted(DriveConstants.turningMotorReversed[index]);
         // turnEncoder.setInverted(DriveConstants.turningEncoderReversed[index]);
-        turnEncoder.setPositionConversionFactor((1 / ModuleConstants.turnMotorGearRatio)*(2*Math.PI));
-        turnEncoder.setVelocityConversionFactor((1 / ModuleConstants.turnMotorGearRatio)*(2*Math.PI) * (1.0 / 60.0));
+        turnEncoder.setPositionConversionFactor((1 / ModuleConstants.turnMotorGearRatio) * (2 * Math.PI));
+        turnEncoder
+                .setVelocityConversionFactor((1 / ModuleConstants.turnMotorGearRatio) * (2 * Math.PI) * (1.0 / 60.0));
 
         driveMotor.setSmartCurrentLimit(DriveConstants.driveMotorStallLimit,
                 DriveConstants.driveMotorFreeLimit);
@@ -47,7 +48,6 @@ public class SwerveModuleRelative implements SwerveModuleIO {
     @Override
     public void updateData(ModuleData data) {
 
-
         driveAppliedVolts = driveMotor.getBusVoltage();
         turnAppliedVolts = turnMotor.getBusVoltage();
 
@@ -56,13 +56,13 @@ public class SwerveModuleRelative implements SwerveModuleIO {
         data.driveAppliedVolts = driveAppliedVolts;
         data.driveCurrentAmps = Math.abs(driveMotor.getOutputCurrent());
         data.driveTempCelcius = driveMotor.getMotorTemperature();
-        
+
         double turningPositionRads = turnEncoder.getPosition();
-        while (turningPositionRads > Math.PI*2){
-            turningPositionRads-= 2 * Math.PI;
+        while (turningPositionRads > Math.PI * 2) {
+            turningPositionRads -= 2 * Math.PI;
         }
-        while (turningPositionRads <0){
-            turningPositionRads+= 2 * Math.PI;
+        while (turningPositionRads < 0) {
+            turningPositionRads += 2 * Math.PI;
         }
         data.turnAbsolutePositionRad = turningPositionRads;
         data.turnVelocityRadPerSec = turnEncoder.getVelocity();

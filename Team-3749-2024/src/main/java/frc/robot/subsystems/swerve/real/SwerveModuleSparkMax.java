@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.swerve.SwerveModuleIO;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
@@ -27,14 +28,16 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         absoluteEncoder = new CANcoder(Constants.DriveConstants.absoluteEncoderPorts[index]);
         absoluteEncoderOffsetRad = Units.degreesToRadians(DriveConstants.absoluteEncoderOffsetDeg[index]);
 
-        turnMotor.setInverted(Constants.DriveConstants.turningEncoderReversed[index]);
-        turnMotor.getEncoder().setInverted(DriveConstants.turningEncoderReversed[index]);
-        turnMotor.getEncoder().setPositionConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI));
-        turnMotor.getEncoder().setVelocityConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI) * (1 / 60));
-        turnMotor.getEncoder().setPosition(getAbsoluteTurningPositionRad());
+        SmartDashboard.putNumber("offset" + index, Units.radiansToDegrees(absoluteEncoderOffsetRad));
+        SmartDashboard.putNumber("rotations" + index, Units.radiansToDegrees(getAbsoluteTurningPositionRad()));
 
-        driveMotor.setInverted(DriveConstants.driveEncoderReversed[index]);
-        driveMotor.getEncoder().setInverted(DriveConstants.driveEncoderReversed[index]);
+        turnMotor.setInverted(Constants.DriveConstants.turningMotorReversed[index]);
+        turnMotor.getEncoder().setPositionConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI));
+        turnMotor.getEncoder()
+                .setVelocityConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI) * (1 / 60));
+        // turnMotor.getEncoder().setPosition(Units.radiansToRotations(getAbsoluteTurningPositionRad()));
+
+        driveMotor.setInverted(DriveConstants.driveMotorReversed[index]);
         driveMotor.getEncoder().setPositionConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Math.PI
                 * ModuleConstants.wheelDiameterMeters);
         driveMotor.getEncoder().setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * (Math.PI
@@ -59,8 +62,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         data.driveCurrentAmps = Math.abs(driveMotor.getOutputCurrent());
         data.driveTempCelcius = driveMotor.getMotorTemperature();
 
-        data.turnAbsolutePositionRad = turnMotor.getEncoder().getPosition();
-        data.turnVelocityRadPerSec = turnMotor.getEncoder().getVelocity();
+        data.turnAbsolutePositionRad = getAbsoluteTurningPositionRad();
+        data.turnVelocityRadPerSec = getAbsoluteTurninVelocityRadPerSec();
         data.turnAppliedVolts = turnAppliedVolts;
         data.turnCurrentAmps = Math.abs(turnMotor.getOutputCurrent());
         data.turnTempCelcius = turnMotor.getMotorTemperature();
@@ -86,6 +89,10 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
 
     private double getAbsoluteTurningPositionRad() {
         return Units.rotationsToRadians(absoluteEncoder.getPosition().getValueAsDouble()) + absoluteEncoderOffsetRad;
+    };
+
+    private double getAbsoluteTurninVelocityRadPerSec() {
+        return Units.rotationsToRadians(absoluteEncoder.getVelocity().getValueAsDouble());
     };
 
     private double getDriveVelocityMetersPerSec() {
