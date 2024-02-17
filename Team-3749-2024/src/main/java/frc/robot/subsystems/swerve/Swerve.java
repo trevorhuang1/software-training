@@ -42,7 +42,6 @@ import frc.robot.utils.Constants.*;
  *         logging information
  */
 public class Swerve extends SubsystemBase {
-
   private SwerveModule[] modules = new SwerveModule[4];
 
   private GyroIO gyro;
@@ -98,7 +97,7 @@ public class Swerve extends SubsystemBase {
 
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 
-  SysIdRoutine routine = t_SysIdRoutine.getSysIdRoutine(modules, this);
+  SysIdRoutine routine = t_SysIdRoutine.getSysIdRoutine(modules, Robot.swerve, "swerve");
 
   public Swerve() {
     if (Robot.isSimulation()) {

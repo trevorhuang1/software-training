@@ -7,16 +7,13 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.SwerveModule;
 
-interface t_Subsystem extends Subsystem {
-  public void identificationDriveConsumer(Measure<Voltage> voltage);
-}
-
 public class t_SysIdRoutine {
-  public static SysIdRoutine getSysIdRoutine(SwerveModule[] modules, t_Subsystem subsystem, String subsystemName) {
+
+  public static SysIdRoutine getSysIdRoutine(SwerveModule[] modules, Swerve subsystem, String subsystemName) {
     String name = (subsystemName.toLowerCase().replace(" ", "")) + "-";
 
     final MutableMeasure<Voltage> identificationVoltageMeasure = mutable(
