@@ -25,7 +25,8 @@ public class WristSparkMax implements WristIO {
         wristEncoder.setPositionConversionFactor(2 * Math.PI / WristConstants.gearRatio);
         wristEncoder.setVelocityConversionFactor(2 * Math.PI / WristConstants.gearRatio * 1 /60);
         wristEncoder.setInverted(false);
-        
+        wristMotor.setSmartCurrentLimit(40);
+
     }
 
     @Override

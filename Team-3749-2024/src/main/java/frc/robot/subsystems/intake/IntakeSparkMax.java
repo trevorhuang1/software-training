@@ -17,6 +17,8 @@ public class IntakeSparkMax implements IntakeIO {
 
     public IntakeSparkMax() 
     {
+        intakeMotor.setSmartCurrentLimit(40);
+
         intakeEncoder.setPosition(2*Math.PI);
         intakeEncoder.setVelocityConversionFactor((2*Math.PI)/60);
     }

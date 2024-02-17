@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -20,6 +21,11 @@ public class ShooterSparkMax implements ShooterIO {
 
     public ShooterSparkMax() {
         bottomShooter.setInverted(true);
+        bottomShooter.setIdleMode(IdleMode.kBrake);
+        topShooter.setIdleMode(IdleMode.kBrake);
+        topShooter.setSmartCurrentLimit(40);
+                bottomShooter.setSmartCurrentLimit(40);
+
         leftEncoder.setVelocityConversionFactor((2 * Math.PI) / 60);
         rightEncoder.setVelocityConversionFactor((2 * Math.PI) / 60);
     }

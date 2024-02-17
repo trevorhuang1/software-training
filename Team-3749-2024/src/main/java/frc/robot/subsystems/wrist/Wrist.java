@@ -37,6 +37,7 @@ public class Wrist extends SubsystemBase {
         if (Robot.isSimulation()) {
             wristIO = new WristSim();
         }
+
     }
 
     public void toggleWristGoal() {

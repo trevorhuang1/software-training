@@ -115,11 +115,12 @@ public class JoystickIO {
     //    pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
         // Basic Voltage Testing
-        pilot.aWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(1)), Commands.run(() -> Robot.wrist.setVoltage(0)));
-        pilot.bWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(-1)), Commands.run(() -> Robot.wrist.setVoltage(0)));
+        pilot.aWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(7)), Commands.run(() -> Robot.wrist.setVoltage(0)));
+        pilot.bWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(-7)), Commands.run(() -> Robot.wrist.setVoltage(0)));
 
-        pilot.xWhileHeld(Commands.run(() -> Robot.shooter.setVoltage(1)), Commands.run(() -> Robot.shooter.setVoltage(0)));
-        pilot.bWhileHeld(Commands.run(() -> Robot.intake.setVoltage(-1)), Commands.run(() -> Robot.intake.setVoltage(0)));
+        pilot.xWhileHeld(Commands.run(() -> Robot.shooter.setVoltage(12)), Commands.run(() -> Robot.shooter.setVoltage(0)));
+        pilot.rightTriggerWhileHeld(Commands.run(() -> Robot.intake.setVoltage(-10)), Commands.run(() -> Robot.intake.setVoltage(0)));
+        pilot.leftTriggerWhileHeld(Commands.run(() -> Robot.intake.setVoltage(10)), Commands.run(() -> Robot.intake.setVoltage(0)));
 
     }
         
