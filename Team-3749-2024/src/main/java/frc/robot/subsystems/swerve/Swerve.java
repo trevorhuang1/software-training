@@ -133,7 +133,7 @@ public class Swerve extends SubsystemBase {
     } else {
       // real swerve module instatiation here
       for (int i = 0; i < 4; i++) {
-        gyro = new GyroSim();
+        gyro = new NavX2Gyro();
         modules[i] = new SwerveModule(i, new SwerveModuleSparkMax(i));
       }
 
@@ -238,8 +238,6 @@ public class Swerve extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       modules[i].setDesiredState(desiredStates[i]);
     }
-
-    updateOdometry();
   }
 
   public void identificationDriveConsumer(Measure<Voltage> voltage) {
@@ -263,9 +261,8 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-    updateOdometry();
     gyro.updateData(gyroData);
+    updateOdometry();
 
     for (int i = 0; i < 4; i++) {
       modules[i].periodic();

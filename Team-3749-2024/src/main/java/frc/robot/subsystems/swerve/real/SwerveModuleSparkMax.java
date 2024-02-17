@@ -2,6 +2,8 @@ package frc.robot.subsystems.swerve.real;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,6 +21,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
 
     private double driveAppliedVolts;
     private double turnAppliedVolts;
+
+    private int index;
 
     public SwerveModuleSparkMax(int index) {
         driveMotor = new CANSparkMax(Constants.DriveConstants.driveMotorPorts[index], CANSparkMax.MotorType.kBrushless);
@@ -38,23 +42,35 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         // turnMotor.getEncoder().setPosition(Units.radiansToRotations(getAbsoluteTurningPositionRad()));
 
         driveMotor.setInverted(DriveConstants.driveMotorReversed[index]);
+
         driveMotor.getEncoder().setPositionConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Math.PI
                 * ModuleConstants.wheelDiameterMeters);
-        driveMotor.getEncoder().setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * (Math.PI
-                * ModuleConstants.wheelDiameterMeters) * (1 / 60));
 
+        
+        // driveMotor.getEncoder().setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * (Math.PI
+        //         * ModuleConstants.wheelDiameterMeters) * (1 / 60));
+
+                
         driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit,
                 Constants.DriveConstants.driveMotorFreeLimit);
         turnMotor.setSmartCurrentLimit(Constants.DriveConstants.turnMotorStallLimit,
                 Constants.DriveConstants.turnMotorFreeLimit);
+
+        driveMotor.setIdleMode(IdleMode.kBrake);
+        turnMotor.setIdleMode(IdleMode.kBrake);
+
+        this.index = index;
+        System.out.println("Conversion factor: " + index);
+        System.out.println(driveMotor.getEncoder().getVelocityConversionFactor());
+
 
     };
 
     @Override
     public void updateData(ModuleData data) {
 
-        driveAppliedVolts = driveMotor.getBusVoltage();
-        turnAppliedVolts = turnMotor.getBusVoltage();
+        driveAppliedVolts = driveMotor.getBusVoltage() * driveMotor.getAppliedOutput();
+        turnAppliedVolts = turnMotor.getBusVoltage() * turnMotor.getAppliedOutput();
 
         data.drivePositionM = getDrivePositionMeters();
         data.driveVelocityMPerSec = getDriveVelocityMetersPerSec();
@@ -96,6 +112,7 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     };
 
     private double getDriveVelocityMetersPerSec() {
+   
         return driveMotor.getEncoder().getVelocity();
     };
 

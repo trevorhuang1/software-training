@@ -113,17 +113,17 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     armIO.updateData(data);
 
-    positionLog.set(getRotation2d().getRadians());
-    velocityLog.set(data.velocityRadPerSec);
-    accelerationLog.set(data.accelerationRadPerSecSquared);
-    voltageLog.set(data.appliedVolts);
-    goalLog.set(profiledFeedbackController.getGoal().position);
-    setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
-    setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
-    setpointAccelerationLog.set(accelerationSetpoint);
-    errorPositionLog.set(profiledFeedbackController.getSetpoint().position - data.positionRad);
-    errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec);
-    errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
+    // positionLog.set(getRotation2d().getRadians());
+    // velocityLog.set(data.velocityRadPerSec);
+    // accelerationLog.set(data.accelerationRadPerSecSquared);
+    // voltageLog.set(data.appliedVolts);
+    // goalLog.set(profiledFeedbackController.getGoal().position);
+    // setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
+    // setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
+    // setpointAccelerationLog.set(accelerationSetpoint);
+    // errorPositionLog.set(profiledFeedbackController.getSetpoint().position - data.positionRad);
+    // errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec);
+    // errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
 
     mechanismArm.setAngle(getRotation2d());
     SmartDashboard.putData("mech", mechanism);

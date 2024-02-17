@@ -25,7 +25,6 @@ public class JoystickIO {
      * Calls binding methods according to the joysticks connected
      */
     public void getButtonBindings() {
-        System.out.println(DriverStation.isJoystickConnected(0));
 
         if (DriverStation.isJoystickConnected(1)) {
             // if both xbox controllers are connected

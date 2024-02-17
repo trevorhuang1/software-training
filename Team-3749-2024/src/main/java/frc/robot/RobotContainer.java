@@ -51,8 +51,9 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    
-    // return AutoUtils.timeCommand(AutoUtils.getAutoPath("bottom-s_3w-speaker+c-speaker"));
-    return Commands.print("auto");
+
+    // return
+    // AutoUtils.timeCommand(AutoUtils.getAutoPath("bottom-s_3w-speaker+c-speaker"));
+    return Robot.swerve.getSysIdDynamic(Direction.kForward);
   }
 }

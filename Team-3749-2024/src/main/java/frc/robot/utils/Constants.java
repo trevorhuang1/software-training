@@ -120,10 +120,10 @@ public class Constants {
     public static final int[] turningMotorPorts = { 4, 6, 8, 10 }; // FL, FR, BL, BR
     public static final int[] absoluteEncoderPorts = { 11, 12, 13, 14 };
 
-    public static final boolean[] driveMotorReversed = { true, false, true, true };
+    public static final boolean[] driveMotorReversed = { true, false, false, true };
     public static final boolean[] turningMotorReversed = { false, false, false, false };
     public static final boolean[] driveAbsoluteEncoderReversed = { false, false, false, false };
-    public static final double[] absoluteEncoderOffsetDeg = { 0, 22, -11.891, -68 };
+    public static final double[] absoluteEncoderOffsetDeg = { -18.896-0.088, -292.730+44, -11.891-216.361, -68 +20.275};
 
     // public static final double[] absoluteEncoderOffsetDeg = { -275, -48, 0, 263
     // };
