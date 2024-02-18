@@ -32,9 +32,6 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         absoluteEncoder = new CANcoder(Constants.DriveConstants.absoluteEncoderPorts[index]);
         absoluteEncoderOffsetRad = Units.degreesToRadians(DriveConstants.absoluteEncoderOffsetDeg[index]);
 
-        SmartDashboard.putNumber("offset" + index, Units.radiansToDegrees(absoluteEncoderOffsetRad));
-        SmartDashboard.putNumber("rotations" + index, Units.radiansToDegrees(getAbsoluteTurningPositionRad()));
-
         turnMotor.setInverted(Constants.DriveConstants.turningMotorReversed[index]);
         turnMotor.getEncoder().setPositionConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI));
         turnMotor.getEncoder()
