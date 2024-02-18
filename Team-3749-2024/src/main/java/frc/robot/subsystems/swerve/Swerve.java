@@ -16,6 +16,7 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.real.*;
@@ -350,6 +351,7 @@ public class Swerve extends SubsystemBase {
     }
   }
 
+
   public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
     return routine.quasistatic(direction);
   }
@@ -416,120 +418,51 @@ public class Swerve extends SubsystemBase {
   // // SysID things
 
   // //
+  public void identificaitonTurnConsumer(Measure<Voltage> voltage) {
+    for (int i = 0; i < 4; i++) {
+      modules[i].setTurnVoltage(voltage.baseUnitMagnitude());
+    }
+  }
 
-  // private final MutableMeasure<Voltage> identificationVoltageMeasure = mutable(Volts.of(0));
-  // private final MutableMeasure<Distance> identificationDistanceMeasure = mutable(Meters.of(0));
-  // private final MutableMeasure<Velocity<Distance>> identificaitonVelocityMeasure = mutable(MetersPerSecond.of(0));
+  private final MutableMeasure<Voltage> identificationTurnVoltageMeasure = mutable(Volts.of(0));
+  private final MutableMeasure<Angle> identificationTurnDistanceMeasure = mutable(Radians.of(0));
+  private final MutableMeasure<Velocity<Angle>> identificaitonTurnVelocityMeasure = mutable(RadiansPerSecond.of(0));
 
-  // private SysIdRoutine driveRoutine = new SysIdRoutine(
-  //     // new SysIdRoutine.Config(),
-  //     new SysIdRoutine.Config(Volts.per(Seconds).of(1), Volts.of(7), Seconds.of(10)),
-  //     new SysIdRoutine.Mechanism(Robot.swerve::identificationDriveConsumer,
-  //         log -> {
-  //           // Record a frame for the left motors. Since these share an encoder, we consider
-  //           // the entire group to be one motor.
-  //           log.motor("front-left")
-  //               .voltage(
-  //                   identificationVoltageMeasure.mut_replace(
-  //                       modules[0].getModuleData().driveAppliedVolts, Volts))
-  //               .linearPosition(
-  //                   identificationDistanceMeasure
-  //                       .mut_replace(modules[0].getModuleData().drivePositionM, Meters))
-  //               .linearVelocity(
-  //                   identificaitonVelocityMeasure.mut_replace(
-  //                       modules[0].getModuleData().driveVelocityMPerSec,
-  //                       MetersPerSecond));
-  //           // Record a frame for the right motors. Since these share an encoder, we
-  //           // consider
-  //           // the entire group to be one motor.
-  //           log.motor("front-right")
-  //               .voltage(
-  //                   identificationVoltageMeasure.mut_replace(
-  //                       modules[1].getModuleData().driveAppliedVolts, Volts))
-  //               .linearPosition(
-  //                   identificationDistanceMeasure
-  //                       .mut_replace(modules[1].getModuleData().drivePositionM, Meters))
-  //               .linearVelocity(
-  //                   identificaitonVelocityMeasure.mut_replace(
-  //                       modules[1].getModuleData().driveVelocityMPerSec,
-  //                       MetersPerSecond));
+  private SysIdRoutine turnRoutine = new SysIdRoutine(
+      // new SysIdRoutine.Config(),
+      new SysIdRoutine.Config(Volts.per(Seconds).of(1), Volts.of(7), Seconds.of(10)),
+      new SysIdRoutine.Mechanism(Robot.swerve::identificationDriveConsumer,
+          log -> {
+            // Record a frame for the left motors. Since these share an encoder, we consider
+            // the entire group to be one motor.
+            log.motor("front-left-turn")
+                .voltage(
+                    identificationTurnVoltageMeasure.mut_replace(
+                        modules[0].getModuleData().turnAppliedVolts, Volts))
+                .angularPosition(
+                    identificationTurnDistanceMeasure
+                        .mut_replace(modules[0].getModuleData().turnAbsolutePositionRad, Radians))
+                .angularVelocity(
+                    identificaitonTurnVelocityMeasure.mut_replace(
+                        modules[0].getModuleData().turnVelocityRadPerSec,
+                        RadiansPerSecond));
+          },
+          Robot.swerve));
 
-  //           log.motor("back-left")
-  //               .voltage(
-  //                   identificationVoltageMeasure.mut_replace(
-  //                       modules[2].getModuleData().driveAppliedVolts, Volts))
-  //               .linearPosition(
-  //                   identificationDistanceMeasure
-  //                       .mut_replace(modules[2].getModuleData().drivePositionM, Meters))
-  //               .linearVelocity(
-  //                   identificaitonVelocityMeasure.mut_replace(
-  //                       modules[2].getModuleData().driveVelocityMPerSec,
-  //                       MetersPerSecond));
-  //           log.motor("back-right")
-  //               .voltage(
-  //                   identificationVoltageMeasure.mut_replace(
-  //                       modules[3].getModuleData().driveAppliedVolts, Volts))
-  //               .linearPosition(
-  //                   identificationDistanceMeasure
-  //                       .mut_replace(modules[3].getModuleData().drivePositionM, Meters))
-  //               .linearVelocity(
-  //                   identificaitonVelocityMeasure.mut_replace(
-  //                       modules[3].getModuleData().driveVelocityMPerSec,
-  //                       MetersPerSecond));
-  //         },
-  //         Robot.swerve));
+  public Command getTurnSysIdQuasistaticForwardTest() {
+    return turnRoutine.quasistatic(Direction.kForward);
+  }
 
-  // public Command getDriveSysIdQuasistaticForwardTest() {
-  //   return driveRoutine.quasistatic(Direction.kForward);
-  // }
+  public Command getTurnSysIdQuasistaticReverseTest() {
+    return turnRoutine.quasistatic(Direction.kForward);
+  }
 
-  // public Command getDriveSysIdQuasistaticReverseTest() {
-  //   return driveRoutine.quasistatic(Direction.kForward);
-  // }
+  public Command getTurnSysIdDynamicForwardTest() {
+    return turnRoutine.dynamic(Direction.kForward);
+  }
 
-  // public Command getDriveSysIdDynamicForwardTest() {
-  //   return driveRoutine.dynamic(Direction.kForward);
-  // }
-
-  // public Command getDriveSysIdDynamicReverseTest() {
-  //   return driveRoutine.dynamic(Direction.kForward);
-  // }
-
-  // // private SysIdRoutine turnRoutine = new SysIdRoutine(
-  // //     // new SysIdRoutine.Config(),
-  // //     new SysIdRoutine.Config(Volts.per(Seconds).of(1), Volts.of(7), Seconds.of(10)),
-  // //     new SysIdRoutine.Mechanism(Robot.swerve::identificationDriveConsumer,
-  // //         log -> {
-  // //           // Record a frame for the left motors. Since these share an encoder, we consider
-  // //           // the entire group to be one motor.
-  // //           log.motor("front-left")
-  // //               .voltage(
-  // //                   identificationVoltageMeasure.mut_replace(
-  // //                       modules[0].getModuleData().driveAppliedVolts, Volts))
-  // //               .linearPosition(
-  // //                   identificationDistanceMeasure
-  // //                       .mut_replace(modules[0].getModuleData().drivePositionM, Meters))
-  // //               .linearVelocity(
-  // //                   identificaitonVelocityMeasure.mut_replace(
-  // //                       modules[0].getModuleData().driveVelocityMPerSec,
-  // //                       MetersPerSecond));
-  // //         },
-  // //         Robot.swerve));
-
-  // // public Command getDriveSysIdQuasistaticForwardTest() {
-  // //   return driveRoutine.quasistatic(Direction.kForward);
-  // // }
-
-  // // public Command getDriveSysIdQuasistaticReverseTest() {
-  // //   return driveRoutine.quasistatic(Direction.kForward);
-  // // }
-
-  // // public Command getDriveSysIdDynamicForwardTest() {
-  // //   return driveRoutine.dynamic(Direction.kForward);
-  // // }
-
-  // // public Command getDriveSysIdDynamicReverseTest() {
-  // //   return driveRoutine.dynamic(Direction.kForward);
-  // // }
+  public Command getTurnSysIdDynamicReverseTest() {
+    return turnRoutine.dynamic(Direction.kForward);
+  }
 
 }
