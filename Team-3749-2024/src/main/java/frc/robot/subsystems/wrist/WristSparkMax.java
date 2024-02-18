@@ -3,6 +3,7 @@ package frc.robot.subsystems.wrist;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -26,6 +27,7 @@ public class WristSparkMax implements WristIO {
         wristEncoder.setVelocityConversionFactor(2 * Math.PI / WristConstants.gearRatio * 1 /60);
         wristEncoder.setInverted(false);
         wristMotor.setSmartCurrentLimit(40);
+        wristMotor.setIdleMode(IdleMode.kCoast);
 
     }
 

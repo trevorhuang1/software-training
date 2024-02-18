@@ -28,6 +28,8 @@ public class ShooterSparkMax implements ShooterIO {
 
         leftEncoder.setVelocityConversionFactor((2 * Math.PI) / 60);
         rightEncoder.setVelocityConversionFactor((2 * Math.PI) / 60);
+        topShooter.setIdleMode(IdleMode.kCoast);
+        bottomShooter.setIdleMode(IdleMode.kCoast);     
     }
 
     @Override

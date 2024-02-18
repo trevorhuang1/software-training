@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -21,6 +22,7 @@ public class IntakeSparkMax implements IntakeIO {
 
         intakeEncoder.setPosition(2*Math.PI);
         intakeEncoder.setVelocityConversionFactor((2*Math.PI)/60);
+        intakeMotor.setIdleMode(IdleMode.kCoast);
     }
 
     @Override
