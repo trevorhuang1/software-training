@@ -32,8 +32,8 @@ public class ArmSparkMax implements ArmIO {
         absoluteEncoder.setDistancePerRotation(Math.PI * 2);
         leftEncoder.setVelocityConversionFactor(ArmConstants.relativeEncoderVelocityConversionFactor);
         rightEncoder.setVelocityConversionFactor(ArmConstants.relativeEncoderVelocityConversionFactor);
-        leftMotor.setIdleMode(IdleMode.kBrake);
-        rightMotor.setIdleMode(IdleMode.kBrake);
+        leftMotor.setIdleMode(IdleMode.kCoast);
+        rightMotor.setIdleMode(IdleMode.kCoast);
 
         rightMotor.setInverted(true);
 

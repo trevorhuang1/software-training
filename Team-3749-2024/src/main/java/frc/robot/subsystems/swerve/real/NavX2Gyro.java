@@ -7,7 +7,7 @@ import frc.robot.subsystems.swerve.GyroIO;
 
 public class NavX2Gyro implements GyroIO {
 
-    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB2);
+    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private double yaw = 0;
 
     public NavX2Gyro() {
