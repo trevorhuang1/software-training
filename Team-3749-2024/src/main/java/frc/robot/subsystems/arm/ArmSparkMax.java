@@ -40,6 +40,8 @@ public class ArmSparkMax implements ArmIO {
 
         rightMotor.setSmartCurrentLimit(40);
         leftMotor.setSmartCurrentLimit(40);
+        rightMotor.setIdleMode(IdleMode.kCoast);
+        leftMotor.setIdleMode(IdleMode.kCoast);
 
 
     }
