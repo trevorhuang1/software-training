@@ -40,7 +40,7 @@ import static edu.wpi.first.units.Units.Seconds;
  *         and set their states. Also includes a pose estimator, gyro, and
  *         logging information
  */
-public class Swerve extends SubsystemBase {
+public class Swerve extends SubsystemBase { 
   private SwerveModule[] modules = new SwerveModule[4];
 
   private GyroIO gyro;
@@ -59,8 +59,8 @@ public class Swerve extends SubsystemBase {
   private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
   private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
-  private ShuffleData<Boolean> gyroConnectedLog = new ShuffleData<Boolean>("swerve", "pitch", false);
-  private ShuffleData<Boolean> gyroCalibratingLog = new ShuffleData<Boolean>("swerve", "roll", false);
+  private ShuffleData<Boolean> gyroConnectedLog = new ShuffleData<Boolean>("swerve", "gyro connected", false);
+  private ShuffleData<Boolean> gyroCalibratingLog = new ShuffleData<Boolean>("swerve", "gyro calibrating", false);
 
   private ShuffleData<Double> headingLog = new ShuffleData<Double>("swerve", "heading", 0.0);
   private ShuffleData<Double> rotationalVelocityLog = new ShuffleData<Double>("swerve", "rotational velocity", 0.0);
