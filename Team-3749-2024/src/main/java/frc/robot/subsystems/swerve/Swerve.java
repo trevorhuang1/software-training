@@ -454,7 +454,7 @@ public class Swerve extends SubsystemBase {
   }
 
   public Command getTurnSysIdQuasistaticReverseTest() {
-    return turnRoutine.quasistatic(Direction.kForward);
+    return turnRoutine.quasistatic(Direction.kReverse);
   }
 
   public Command getTurnSysIdDynamicForwardTest() {
@@ -462,7 +462,7 @@ public class Swerve extends SubsystemBase {
   }
 
   public Command getTurnSysIdDynamicReverseTest() {
-    return turnRoutine.dynamic(Direction.kForward);
+    return turnRoutine.dynamic(Direction.kReverse);
   }
 
 }
