@@ -60,12 +60,12 @@ public class JoystickIO {
 
     public void pilotBindings() {
         //sysid config
-        pilot.aWhileHeld(Robot.swerve.getSysIdDynamic(Direction.kForward));
-        pilot.bWhileHeld(Robot.swerve.getSysIdDynamic(Direction.kReverse));
-        pilot.yWhileHeld(Robot.swerve.getSysIdQuasistatic(Direction.kForward));
-        pilot.xWhileHeld(Robot.swerve.getSysIdQuasistatic(Direction.kReverse));
+        pilot.aWhileHeld(Robot.swerve.getTurnSysIdQuasistaticForwardTest());
+        pilot.bWhileHeld(Robot.swerve.getTurnSysIdQuasistaticForwardTest());
+        pilot.yWhileHeld(Robot.swerve.getTurnSysIdQuasistaticReverseTest());
+        pilot.xWhileHeld(Robot.swerve.getTurnSysIdDynamicReverseTest());
 
-        //pilot commands
+        //pilot commandse
     }
 
     public void simBindings() {

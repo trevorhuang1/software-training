@@ -431,7 +431,7 @@ public class Swerve extends SubsystemBase {
   private SysIdRoutine turnRoutine = new SysIdRoutine(
       // new SysIdRoutine.Config(),
       new SysIdRoutine.Config(Volts.per(Seconds).of(1), Volts.of(7), Seconds.of(10)),
-      new SysIdRoutine.Mechanism(Robot.swerve::identificationDriveConsumer,
+      new SysIdRoutine.Mechanism(this::identificaitonTurnConsumer,
           log -> {
             // Record a frame for the left motors. Since these share an encoder, we consider
             // the entire group to be one motor.
@@ -447,7 +447,7 @@ public class Swerve extends SubsystemBase {
                         modules[0].getModuleData().turnVelocityRadPerSec,
                         RadiansPerSecond));
           },
-          Robot.swerve));
+          this));
 
   public Command getTurnSysIdQuasistaticForwardTest() {
     return turnRoutine.quasistatic(Direction.kForward);
