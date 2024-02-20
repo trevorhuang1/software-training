@@ -12,7 +12,7 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.Wrist;
 public class Robot extends TimedRobot {
 
-  public static final Wrist wrist = new Wrist();
+  public static final Wrist wrist = new Wrist(() -> 0.0);
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
 

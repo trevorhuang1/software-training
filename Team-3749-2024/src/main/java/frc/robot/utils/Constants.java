@@ -96,21 +96,19 @@ public class Constants {
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
     // thanks arm (robbery)
-    private static final double simkS = 0.0;
-    private static final double simkG = .33775;// stick arm at 0 degrees, tune till it doesnt move (ok it moves but it
+    public static final double simkS = 0.0;
+    public static final double simkG = .33775;// stick arm at 0 degrees, tune till it doesnt move (ok it moves but it
                                                // should be fine it'll take like 3 years to move 1 degree)
-    private static final double simkV = 6.616; // max volts - kG / max velocity
-    private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
+    public static final double simkV = 6.616; // max volts - kG / max velocity
+    public static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-    private static final double realkS = 0;
-    private static final double realkG = 0;
-    private static final double realkV = 0;
-    private static final double realkA = 0;
 
-    public static final double kS = Robot.isReal() ? realkS : simkS;
-    public static final double kG = Robot.isReal() ? realkG : simkG;
-    public static final double kV = Robot.isReal() ? realkV : simkV;
-    public static final double kA = Robot.isReal() ? realkA : simkA;
+    public static final double kYIntercept = 0.9808;
+    public static final double kBar = 0.0289;
+    public static final double kArm = -0.026;
+    public static final double kBarSquared = 0.0;
+    public static final double kArmSquared = 0.0;
+
 
     public static final double groundGoal = Math.toRadians(-40);
     public static final double stowGoal = 0;
