@@ -60,7 +60,7 @@ public class RobotContainer {
     }
 
     Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
-    Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY, pilot::getRightX, pilot::getRightY));
+    // Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY, pilot::getRightX, pilot::getRightY));
   }
 
   private void configureBindings() {
