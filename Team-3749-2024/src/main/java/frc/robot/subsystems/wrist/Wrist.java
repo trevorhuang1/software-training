@@ -51,7 +51,7 @@ public class Wrist extends SubsystemBase {
         if (Robot.isSimulation()) {
             wristIO = new WristSim();
         }
-
+        wristController.enableContinuousInput(0, 2 * Math.PI);
         this.armPositionRadSupplier = armPositionRadSupplier;
     }
 
@@ -109,12 +109,15 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
+        wristIO.updateData(data);
+        
         mechanismArm.setAngle(data.positionRad);
         SmartDashboard.putData("Mech2d", mechanism);
-        wristIO.updateData(data);
         mechanismArm.setAngle(Math.toDegrees(data.positionRad));
         SmartDashboard.putNumber("wristGoal", getWristGoal().position);
         SmartDashboard.putNumber("Position", data.positionRad);
+        SmartDashboard.putNumber("Position Degrees", Units.radiansToDegrees(data.positionRad));
+
         SmartDashboard.putNumber("vel", data.velocityRadPerSec);
         SmartDashboard.putNumber("volts", data.appliedVolts);
         SmartDashboard.putNumber("active volts", data.wristVoltage);

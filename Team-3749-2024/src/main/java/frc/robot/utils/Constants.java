@@ -112,7 +112,7 @@ public class Constants {
 
     public static final double groundGoal = Math.toRadians(-40);
     public static final double stowGoal = 0;
-    public static final double wristOffset = 0;
+    public static final double wristOffsetRad = Units.degreesToRadians(247.95);
   }
 
   public static final class ShintakeConstants {

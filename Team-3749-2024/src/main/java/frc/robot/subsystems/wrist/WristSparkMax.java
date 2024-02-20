@@ -23,21 +23,35 @@ public class WristSparkMax implements WristIO {
     private double appliedVolts = 0;
 
     public WristSparkMax() {
-        wristEncoder.setPositionConversionFactor(2 * Math.PI / WristConstants.gearRatio);
-        wristEncoder.setVelocityConversionFactor(2 * Math.PI / WristConstants.gearRatio * 1 /60);
-        wristEncoder.setInverted(false);
+        
+        // wristEncoder.setPositionConversionFactor(2 * Math.PI * (1/4));
+        // wristEncoder.setVelocityConversionFactor(2 * Math.PI * (1/4) * 1 /60.0);
+        // wristEncoder.setZeroOffset(WristConstants.wristOffset);
         wristMotor.setSmartCurrentLimit(40);
         wristMotor.setIdleMode(IdleMode.kCoast);
 
     }
 
+    private double getAbsolutePosition(){
+        double pos = wristEncoder.getPosition()-WristConstants.wristOffsetRad;
+        if (pos > 2 * Math.PI){
+            pos -= 2 * Math.PI;
+        }
+        if (pos<0){
+            pos += 2 * Math.PI;
+        }
+        return pos;
+
+    }
+
     @Override
     public void updateData(WristData data) {
-        data.tempCelcius = wristMotor.getMotorTemperature();
-        data.velocityRadPerSec = (wristEncoder.getVelocity() / 60) * (2 * Math.PI); // RPM -> rad/s
+        data.positionRad = getAbsolutePosition() ;
+        data.velocityRadPerSec = wristEncoder.getVelocity();
         data.wristVoltage = wristMotor.getBusVoltage() * wristMotor.getAppliedOutput();
         data.appliedVolts = appliedVolts;
-        data.positionRad = wristEncoder.getPosition();
+        data.tempCelcius = wristMotor.getMotorTemperature();
+
     }
 
     @Override
