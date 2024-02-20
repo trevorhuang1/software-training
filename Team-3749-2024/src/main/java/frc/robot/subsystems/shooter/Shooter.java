@@ -93,7 +93,7 @@ public class Shooter extends SubsystemBase {
     // new SysIdRoutine.Config(),
     new SysIdRoutine.Config(
       Volts.per(Seconds).of(1),
-      Volts.of(7),
+      Volts.of(12),
       Seconds.of(10)
     ),
     new SysIdRoutine.Mechanism(
