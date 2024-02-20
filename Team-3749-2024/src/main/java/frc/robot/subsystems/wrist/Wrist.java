@@ -90,6 +90,13 @@ public class Wrist extends SubsystemBase {
         wristIO.setVoltage(volts);
     }
 
+    private ShuffleData<Double> kGData = new ShuffleData<Double>("wrist", "kGData", 0.0);
+    public void runFF(){
+        wristIO.setVoltage(kGdata.get());
+
+        // wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad,0));
+    }
+
     public double calculateRealWristFeedForward(double wristPositionRad, double armPositionRad) {
         double wristPosDegrees = Units.radiansToDegrees(wristPositionRad);
         double armPosDegrees = Units.radiansToDegrees(armPositionRad);

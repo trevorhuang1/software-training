@@ -75,10 +75,13 @@ public class JoystickIO {
    * If only one controller is plugged in (pi)
    */
   public void pilotBindings() {
-    pilot.aWhileHeld(Robot.shooter.getShooterSysIDDynamicForwardTest());
-    pilot.bWhileHeld(Robot.shooter.getShooterSysIDDynamicReverseTest());
-    pilot.yWhileHeld(Robot.shooter.getShooterSysIDQuasistaticForwardTest());
-    pilot.xWhileHeld(Robot.shooter.getShooterSysIDQuasistaticReverseTest());
+
+
+    
+    // pilot.aWhileHeld(Robot.shooter.getShooterSysIDDynamicForwardTest());
+    // pilot.bWhileHeld(Robot.shooter.getShooterSysIDDynamicReverseTest());
+    // pilot.yWhileHeld(Robot.shooter.getShooterSysIDQuasistaticForwardTest());
+    // pilot.xWhileHeld(Robot.shooter.getShooterSysIDQuasistaticReverseTest());
 
     //     pilot.aWhileHeld(
     //   Commands.run(() -> Robot.wrist.setVoltage(7)),
