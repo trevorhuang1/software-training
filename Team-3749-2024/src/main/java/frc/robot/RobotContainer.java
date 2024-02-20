@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.arm.ShootKinematics;
 import java.nio.file.Path;
+import java.sql.Driver;
 import java.util.HashMap;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -27,9 +28,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.commands.swerve.MoveToPose;
-import frc.robot.commands.swerve.Teleop;
-import frc.robot.commands.swerve.TurnToAngle;
+// import frc.robot.commands.swerve.MoveToPose;
+// import frc.robot.commands.swerve.Teleop;
+// import frc.robot.commands.swerve.TurnToAngle;
 import frc.robot.utils.Constants;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
@@ -59,9 +60,10 @@ public class RobotContainer {
         e.printStackTrace();
     }
 
-    Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
+    // Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
     // Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY, pilot::getRightX, pilot::getRightY));
   }
+
 
   private void configureBindings() {
     joystickIO.getButtonBindings();

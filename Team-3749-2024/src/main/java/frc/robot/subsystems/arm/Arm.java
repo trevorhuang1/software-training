@@ -11,6 +11,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -73,6 +74,7 @@ public class Arm extends SubsystemBase {
     private double accelerationSetpoint = 0;
 
     private boolean isKilled = false;
+    private boolean isEnabled = false;
 
     private final MutableMeasure<Voltage> identificationVoltageMeasure = mutable(Volts.of(0));
     private final MutableMeasure<Angle> identificationDistanceMeasure = mutable(Radians.of(0));
@@ -121,19 +123,19 @@ public class Arm extends SubsystemBase {
         return profiledFeedbackController.getSetpoint();
     }
 
-    public void setState(double position, double velocity, double acceleration) {
+    public void setState(double positionRad, double velocityRadPerSec, double accelerationRadPerSecSquared) {
 
         // update for logging
-        accelerationSetpoint = acceleration;
+        accelerationSetpoint = accelerationRadPerSecSquared;
 
-        double feedback = profiledFeedbackController.calculate(data.positionRad);
-        double feedforward = feedForwardController.calculate(Math.PI / 4, velocity, acceleration);
+        double feedback = profiledFeedbackController.calculate(positionRad);
+        double feedforward = feedForwardController.calculate(data.positionRad, velocityRadPerSec, accelerationRadPerSecSquared);
 
         setVoltage(feedforward + feedback);
-
     }
 
     public void setVoltage(double volts) {
+        System.out.println(volts);
         if (isKilled) {
             armIO.setVoltage(0);
         } else {
@@ -162,24 +164,32 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         armIO.updateData(data);
 
-        positionLog.set(getRotation2d().getRadians());
-        velocityLog.set(data.velocityRadPerSec);
-        accelerationLog.set(data.accelerationRadPerSecSquared);
+        positionLog.set(getRotation2d().getDegrees());
+        velocityLog.set(Units.radiansToDegrees(data.velocityRadPerSec));
+        // accelerationLog.set(data.accelerationRadPerSecSquared);
         voltageLog.set(data.appliedVolts);
-        goalLog.set(profiledFeedbackController.getGoal().position);
-        setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
-        setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
-        setpointAccelerationLog.set(accelerationSetpoint);
-        errorPositionLog.set(profiledFeedbackController.getSetpoint().position - data.positionRad);
-        errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec);
-        errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
+        // goalLog.set(profiledFeedbackController.getGoal().position);
+        // setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
+        // setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
+        // setpointAccelerationLog.set(accelerationSetpoint);
+        // errorPositionLog.set(profiledFeedbackController.getSetpoint().position - data.positionRad);
+        // errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec);
+        // errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
 
-        mechanismArm.setAngle(getRotation2d());
-        SmartDashboard.putData("mech", mechanism);
+        // mechanismArm.setAngle(getRotation2d());
+        // SmartDashboard.putData("mech", mechanism);
 
         SmartDashboard.putNumber("Arm Currentleft", data.leftCurrentAmps);       
-         SmartDashboard.putNumber("Arm Currentright", data.rightCurrentAmps);
-
+        SmartDashboard.putNumber("Arm Currentright", data.rightCurrentAmps);
+        boolean driverStationStatus = DriverStation.isEnabled();
+        if (driverStationStatus && !isEnabled){
+            isEnabled = driverStationStatus;
+            armIO.setBreakMode();
+        }
+        if (!driverStationStatus && isEnabled){
+            armIO.setCoastMode();
+            isEnabled = driverStationStatus;
+        }
     }
 
 }

@@ -53,7 +53,7 @@ public class Constants {
     public static final int leftID = 15;
     public static final int rightID = 16;
     // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
-    public static final double gearRatio =  150.0;
+    public static final double gearRatio =  200.0;
     public static final int encoderID = 7;
     public static final double encoderOffsetRad = 0;
 
@@ -67,8 +67,8 @@ public class Constants {
 
 
 
-    private static final double realkS = 0;
-    private static final double realkG = 0;
+    private static final double realkS = 0.1085;
+    private static final double realkG = 0.2435; // 0.355
     private static final double realkV = 0;
     private static final double realkA = 0;
 
