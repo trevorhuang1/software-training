@@ -4,6 +4,7 @@ import java.util.Map;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.arm.ArmMoveToGoal;
+import frc.robot.commands.arm.GetConstraints;
 // import frc.robot.commands.swerve.MoveToPose;
 // import frc.robot.commands.swerve.Teleop;
 // import frc.robot.commands.swerve.TeleopJoystickRelative;
@@ -82,8 +84,11 @@ public class JoystickIO {
         // pilot.b().whileTrue(Commands.run(()-> Robot.arm.setVoltage(-4)));
         // pilot.b().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
 
-        pilot.a().whileTrue(Commands.run(()->Robot.arm.setState(Math.PI/4, 0, 0)));
-                pilot.a().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
+        pilot.a().whileTrue(Commands.run(()->Robot.arm.setGoal(Units.degreesToRadians(80))));
+        pilot.y().whileTrue(Commands.run(()->Robot.arm.setGoal(0)));
+
+        pilot.a().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
+        pilot.b().whileTrue(new GetConstraints());
 
     }
 
@@ -95,7 +100,7 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        // Robot.arm.setDefaultCommand(new ArmMoveToGoal());
+        Robot.arm.setDefaultCommand(new ArmMoveToGoal());
     }
 
 }

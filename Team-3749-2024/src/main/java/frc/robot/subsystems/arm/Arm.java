@@ -123,13 +123,20 @@ public class Arm extends SubsystemBase {
         return profiledFeedbackController.getSetpoint();
     }
 
+    private ShuffleData<Double> kPData = new ShuffleData<Double>("ar", "kPData", 0.0);
+
     public void setState(double positionRad, double velocityRadPerSec, double accelerationRadPerSecSquared) {
 
+        // if resting on the hard stop, don't waste voltage on kG
+        if (positionRad == 0 && Robot.arm.getRotation2d().getDegrees() < 2) {
+            setVoltage(0);
+        }
         // update for logging
         accelerationSetpoint = accelerationRadPerSecSquared;
 
         double feedback = profiledFeedbackController.calculate(positionRad);
-        double feedforward = feedForwardController.calculate(data.positionRad, velocityRadPerSec, accelerationRadPerSecSquared);
+        double feedforward = feedForwardController.calculate(data.positionRad, velocityRadPerSec,
+                accelerationRadPerSecSquared);
 
         setVoltage(feedforward + feedback);
     }
@@ -165,28 +172,29 @@ public class Arm extends SubsystemBase {
         armIO.updateData(data);
 
         positionLog.set(getRotation2d().getDegrees());
-        velocityLog.set(Units.radiansToDegrees(data.velocityRadPerSec));
-        // accelerationLog.set(data.accelerationRadPerSecSquared);
+        velocityLog.set(data.velocityRadPerSec);
+        accelerationLog.set(data.accelerationRadPerSecSquared);
         voltageLog.set(data.appliedVolts);
-        // goalLog.set(profiledFeedbackController.getGoal().position);
-        // setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
-        // setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
-        // setpointAccelerationLog.set(accelerationSetpoint);
-        // errorPositionLog.set(profiledFeedbackController.getSetpoint().position - data.positionRad);
-        // errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec);
-        // errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
+        goalLog.set(profiledFeedbackController.getGoal().position);
+        setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
+        setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
+        setpointAccelerationLog.set(accelerationSetpoint);
+
+        errorPositionLog.set(profiledFeedbackController.getSetpoint().position - data.positionRad);
+        errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec);
+        errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
 
         // mechanismArm.setAngle(getRotation2d());
         // SmartDashboard.putData("mech", mechanism);
 
-        SmartDashboard.putNumber("Arm Currentleft", data.leftCurrentAmps);       
+        SmartDashboard.putNumber("Arm Currentleft", data.leftCurrentAmps);
         SmartDashboard.putNumber("Arm Currentright", data.rightCurrentAmps);
         boolean driverStationStatus = DriverStation.isEnabled();
-        if (driverStationStatus && !isEnabled){
+        if (driverStationStatus && !isEnabled) {
             isEnabled = driverStationStatus;
             armIO.setBreakMode();
         }
-        if (!driverStationStatus && isEnabled){
+        if (!driverStationStatus && isEnabled) {
             armIO.setCoastMode();
             isEnabled = driverStationStatus;
         }
