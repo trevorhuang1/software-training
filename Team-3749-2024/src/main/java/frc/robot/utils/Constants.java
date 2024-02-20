@@ -90,7 +90,8 @@ public class Constants {
 
     private static final Constraints simConstraint = new Constraints(Math.PI, 2 * Math.PI); // we stealing from arm with
                                                                                             // this one
-    private static final Constraints realConstraint = new Constraints(Math.PI, 2 * Math.PI);
+    private static final Constraints realConstraint = new Constraints(Math.PI,Math.PI);
+    
     public static final Constraints trapezoidConstraint = Robot.isReal() ? realConstraint : simConstraint;
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
@@ -98,7 +99,6 @@ public class Constants {
     private static final double simkS = 0.0;
     private static final double simkG = .33775;// stick arm at 0 degrees, tune till it doesnt move (ok it moves but it
                                                // should be fine it'll take like 3 years to move 1 degree)
-
     private static final double simkV = 6.616; // max volts - kG / max velocity
     private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 

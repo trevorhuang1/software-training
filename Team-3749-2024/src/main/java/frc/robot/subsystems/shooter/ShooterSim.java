@@ -36,8 +36,8 @@ public class ShooterSim implements ShooterIO {
    @Override
    public void setVoltage(double leftShooterVolts, double rightShooterVolts)
    {
-        leftShooterGoalVolts = MathUtil.clamp(leftShooterVolts, -8, 8);
-        rightShooterGoalVolts = MathUtil.clamp(rightShooterVolts, -8, 8);
+        leftShooterGoalVolts = MathUtil.clamp(leftShooterVolts, -12, 12);
+        rightShooterGoalVolts = MathUtil.clamp(rightShooterVolts, -12, 21);
         this.leftShooter.setInputVoltage(leftShooterGoalVolts);
         this.rightShooter.setInputVoltage(rightShooterGoalVolts);
 

@@ -47,6 +47,7 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("intakeVelocityRadPerSec", data.intakeVelocityRadPerSec);
         SmartDashboard.putNumber("intakeTemp", data.intakeTempCelcius);
         SmartDashboard.putBoolean("intakeHasPiece", data.sensorTripped);
+        SmartDashboard.putNumber("Current", data.currentAmps);
     }
 
 }

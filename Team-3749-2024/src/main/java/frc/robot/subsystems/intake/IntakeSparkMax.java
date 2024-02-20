@@ -32,6 +32,7 @@ public class IntakeSparkMax implements IntakeIO {
         data.intakeVelocityRadPerSec = intakeEncoder.getVelocity();
         data.intakeTempCelcius = intakeMotor.getMotorTemperature();
         data.sensorTripped = photoelectricSensor.get();
+        data.currentAmps = intakeMotor.getOutputCurrent();
         /* 
         if(data.sensorTripped)
         {

@@ -15,19 +15,26 @@ import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.Constants;
 
 public class Wrist extends SubsystemBase {
-
+ // hello test
     private WristIO wristIO;
     private WristData data = new WristData();
     private ProfiledPIDController wristController = new ProfiledPIDController(Constants.WristConstants.PID.kP,
             Constants.WristConstants.PID.kI, Constants.WristConstants.PID.kD,Constants.WristConstants.trapezoidConstraint);
+
+
     private ArmFeedforward wristFF = new ArmFeedforward(Constants.WristConstants.kS,Constants.WristConstants.kG,
     Constants.WristConstants.kV);
+
+
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean,Double>();
+
+
     private boolean isGroundIntake = false;
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
     private MechanismLigament2d mechanismArm = mechanismArmPivot
             .append(new MechanismLigament2d("mechanism arm", .93, 0));
+
     private double accelerationSpeed = 0.0;
 
     public Wrist() {
@@ -63,7 +70,7 @@ public class Wrist extends SubsystemBase {
         State state = getWristSetpoint();
         double voltage = wristController.calculate(data.positionRad) + //is getting the goal redundant?
                 wristFF.calculate(state.position,state.velocity,accelerationSpeed); //remind me to go fix this
-
+        SmartDashboard.putNumber("Calced Volts", voltage);
         setVoltage(voltage);
         //System.out.println(wristController.getGoal().position);
     }
@@ -81,6 +88,7 @@ public class Wrist extends SubsystemBase {
         SmartDashboard.putNumber("Position", data.positionRad);
         SmartDashboard.putNumber("vel", data.velocityRadPerSec);
         SmartDashboard.putNumber("volts", data.appliedVolts);
+        SmartDashboard.putNumber("active volts", data.wristVoltage);
 
 
         // test

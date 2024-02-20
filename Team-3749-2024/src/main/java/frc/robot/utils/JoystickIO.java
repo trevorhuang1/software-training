@@ -13,6 +13,7 @@ import frc.robot.Robot;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.WristCommand;
+import frc.robot.subsystems.wrist.Wrist;
 
 /**
  * Util class for button bindings
@@ -115,12 +116,16 @@ public class JoystickIO {
     //    pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
         
         // Basic Voltage Testing
-        pilot.aWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(7)), Commands.run(() -> Robot.wrist.setVoltage(0)));
-        pilot.bWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(-7)), Commands.run(() -> Robot.wrist.setVoltage(0)));
+        // pilot.aWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(7)), Commands.run(() -> Robot.wrist.setVoltage(0)));
+        // pilot.bWhileHeld(Commands.run(() -> Robot.wrist.setVoltage(-7)), Commands.run(() -> Robot.wrist.setVoltage(0)));
+
+        // pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal())); 
+
 
         pilot.xWhileHeld(Commands.run(() -> Robot.shooter.setVoltage(12)), Commands.run(() -> Robot.shooter.setVoltage(0)));
-        pilot.rightTriggerWhileHeld(Commands.run(() -> Robot.intake.setVoltage(-7)), Commands.run(() -> Robot.intake.setVoltage(0)));
-        pilot.leftTriggerWhileHeld(Commands.run(() -> Robot.intake.setVoltage(7)), Commands.run(() -> Robot.intake.setVoltage(0)));
+        pilot.rightTriggerWhileHeld(Commands.run(() -> Robot.intake.setVoltage(-6)), Commands.run(() -> Robot.intake.setVoltage(0)));
+        pilot.leftTriggerWhileHeld(Commands.run(() -> Robot.intake.setVoltage(6
+        )), Commands.run(() -> Robot.intake.setVoltage(0)));
 
     }
         
