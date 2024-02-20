@@ -16,6 +16,7 @@ import frc.robot.Robot;
 import frc.robot.commands.WristCommand;
 import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.Constants;
+import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.WristConstants;
 
 public class Wrist extends SubsystemBase {
@@ -92,7 +93,7 @@ public class Wrist extends SubsystemBase {
 
     private ShuffleData<Double> kGData = new ShuffleData<Double>("wrist", "kGData", 0.0);
     public void runFF(){
-        wristIO.setVoltage(kGdata.get());
+        wristIO.setVoltage(kGData.get());
 
         // wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad,0));
     }
