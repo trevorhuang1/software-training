@@ -66,7 +66,11 @@ public class Intake extends SubsystemBase {
     private static double intakeAbsPos = 0;
 
     SysIdRoutine intakeRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
+        new SysIdRoutine.Config(
+            Volts.per(Seconds).of(1),
+            Volts.of(12),
+            Seconds.of(10)
+          ),
         new SysIdRoutine.Mechanism( // takes in voltage consumer, log consumer, and name of mechanism
 
             (Measure<Voltage> volts) -> {
