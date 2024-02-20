@@ -66,12 +66,9 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     shooterIO.updateData(data);
-    SmartDashboard.putNumber(
-      "shooterVelocity",
-      data.leftShooterVelocityRadPerSec
-    );
     SmartDashboard.putNumber("shooterVolts", data.leftShooterVolts);
-    SmartDashboard.putNumber("shooterTemp", data.leftShooterTempCelcius);
+    SmartDashboard.putNumber("shooterVelocityRadPerSec", data.leftShooterVelocityRadPerSec);
+    SmartDashboard.putNumber("shooterTempCelsius", data.leftShooterTempCelcius);
 
     leftShooterAbsPos += data.leftShooterVelocityRadPerSec * 0.02;
     rightShooterAbsPos += data.rightShooterVelocityRadPerSec * 0.02;

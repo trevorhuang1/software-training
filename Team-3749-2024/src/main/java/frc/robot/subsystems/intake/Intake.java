@@ -49,10 +49,10 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         intakeIO.updateData(data);
-        
+
         SmartDashboard.putNumber("intakeVolts",data.intakeVolts);
         SmartDashboard.putNumber("intakeVelocityRadPerSec", data.intakeVelocityRadPerSec);
-        SmartDashboard.putNumber("intakeTemp", data.intakeTempCelcius);
+        SmartDashboard.putNumber("intakeTempCelsius", data.intakeTempCelcius);
         SmartDashboard.putBoolean("intakeHasPiece", data.sensorTripped);
 
         intakeAbsPos += data.intakeVelocityRadPerSec * 0.02;
