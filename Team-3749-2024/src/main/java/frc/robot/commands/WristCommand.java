@@ -1,0 +1,29 @@
+package frc.robot.commands;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
+
+public class WristCommand extends Command{
+
+    private double previousVelocity = 0;
+
+    public WristCommand()
+    {
+        addRequirements(Robot.wrist);
+    }
+
+    @Override
+    public void execute()
+    { 
+        State setpoint = Robot.wrist.getWristSetpoint();
+        double acceleration = (setpoint.velocity - previousVelocity) / 0.02;
+        previousVelocity = setpoint.velocity;
+        Robot.wrist.setAcceleration(acceleration);
+        Robot.wrist.moveWristToAngle();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+      }
+}

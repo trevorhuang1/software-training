@@ -47,6 +47,11 @@ public class RobotContainer {
     DriverStation.removeRefreshedDataEventHandle(44000);
 
     configureBindings();
+  
+    // DataLogManager.start(".wpilog");
+    // DataLogManager.logNetworkTables(true);
+    // DriverStation.startDataLog(DataLogManager.getLog(), true);
+
     initAuto();
 
     RobotController.setBrownoutVoltage(7.0);
