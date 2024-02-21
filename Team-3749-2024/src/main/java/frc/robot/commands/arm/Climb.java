@@ -7,26 +7,18 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.ArmConstants;
 
 public class Climb extends Command {
 
-    private double goal = 0;
-    private State currentSetpoint = new State();
-    private ProfiledPIDController profiledFeedbackController = new ProfiledPIDController(ArmConstants.PID.kP,
-            ArmConstants.PID.kI,
-            ArmConstants.PID.kD,
-            new Constraints(0.2, 0.2));
+    private double voltage = 0;
 
-    private ArmFeedforward feedForwardController = new ArmFeedforward(ArmConstants.kS,
-            ArmConstants.kG,
-            ArmConstants.kV);
-
-    private double prevSetpointVelocity = 0;
 
     public Climb() {
         addRequirements(Robot.arm);
@@ -34,7 +26,6 @@ public class Climb extends Command {
 
     @Override
     public void initialize() {
-        profiledFeedbackController.setGoal(0);
 
     }
 
@@ -44,23 +35,24 @@ public class Climb extends Command {
     @Override
     public void execute() {
 
-        currentSetpoint = profiledFeedbackController.getSetpoint();
-        double accelerationSetpoint = (currentSetpoint.velocity - prevSetpointVelocity) / 0.02;
-        prevSetpointVelocity = currentSetpoint.velocity;
+        if (RobotContainer.pilot.rightBumper().getAsBoolean()){
+            voltage+=0.01;
+        }
 
-        // update for logging
-        double feedback;
-        double feedforward;
-        feedback = profiledFeedbackController.calculate(Robot.arm.getRotation2d().getRadians());
-        feedforward = feedForwardController.calculate(Robot.arm.getRotation2d().getRadians(), currentSetpoint.velocity,
-                accelerationSetpoint);
+        if (RobotContainer.pilot.leftBumper().getAsBoolean()){
+            voltage-=0.01;
+        }
 
-        Robot.arm.setVoltage(feedforward + feedback);
+        System.out.println(voltage);
+        Robot.arm.setVoltage(voltage);
 
     }
 
     @Override
     public void end(boolean interupted) {
+        voltage= 0;
+        Robot.arm.setVoltage(voltage);
+
 
     }
 

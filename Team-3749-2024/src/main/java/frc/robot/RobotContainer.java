@@ -38,8 +38,8 @@ import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.DriveConstants;
 
 public class RobotContainer {
-  private Xbox pilot = new Xbox(0);
-  private Xbox operator = new Xbox(1);
+  public static Xbox pilot = new Xbox(0);
+  public static Xbox operator = new Xbox(1);
   private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
 
   public RobotContainer() {

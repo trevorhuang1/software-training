@@ -73,7 +73,7 @@ public class JoystickIO {
                 Robot.intake));
 
         pilot.a().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(6.5))));
-        pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(80))));
+        pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(90))));
 
         pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
         pilot.back().whileTrue(new Climb());
