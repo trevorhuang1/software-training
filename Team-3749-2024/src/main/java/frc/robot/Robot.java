@@ -10,11 +10,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.Wrist;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.swerve.Swerve;
+
 public class Robot extends TimedRobot {
 
   public static final Wrist wrist = new Wrist(() -> 0.0);
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
+
+  // public static Arm arm = new Arm();
+  public static final Swerve swerve = new Swerve();
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;

@@ -8,17 +8,22 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
+import java.util.HashMap;
+
+import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
+import frc.robot.utils.Constants.DriveConstants;
 
 public class RobotContainer {
-
   private Xbox pilot = new Xbox(0);
   private Xbox operator = new Xbox(1);
   private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
 
   public RobotContainer() {
-
     DriverStation.silenceJoystickConnectionWarning(true);
     DriverStation.removeRefreshedDataEventHandle(44000);
 
@@ -28,17 +33,32 @@ public class RobotContainer {
     // DataLogManager.logNetworkTables(true);
     // DriverStation.startDataLog(DataLogManager.getLog(), true);
 
+    initAuto();
 
     RobotController.setBrownoutVoltage(7.0);
 
+    Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
   }
 
   private void configureBindings() {
     joystickIO.getButtonBindings();
+    joystickIO.pilotBindings();
+  }
 
+  public void initAuto() {
+    HashMap<String, Command> commandList = new HashMap<String, Command>();
+
+    commandList.put("PrintCMD-hello", Commands.print("hewlow"));
+    commandList.put("shoot", Commands.print("shot a thing"));
+    commandList.put("shoot-amp", Commands.print("shot a thing"));
+
+    AutoUtils.initAuto(commandList);
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+
+    // return
+    // AutoUtils.timeCommand(AutoUtils.getAutoPath("bottom-s_3w-speaker+c-speaker"));
+    return Robot.swerve.getSysIdDynamic(Direction.kForward);
   }
 }
