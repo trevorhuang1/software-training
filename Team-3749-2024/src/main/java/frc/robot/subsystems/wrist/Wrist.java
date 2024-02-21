@@ -67,6 +67,10 @@ public class Wrist extends SubsystemBase {
         return wristController.getSetpoint();
     }
 
+    public boolean getIsGroundIntake(){
+        return isGroundIntake;
+    }
+
     public void setAcceleration(double acceleration) {
         this.accelerationSpeed = acceleration;
     }

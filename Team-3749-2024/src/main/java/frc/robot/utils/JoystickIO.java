@@ -61,22 +61,9 @@ public class JoystickIO {
         //op bindings
     }
 
-    /**
-     * If only one controller is plugged in (pi)
-     * 
-     */
-
-    private ShuffleData<Double> armAngle = new ShuffleData<Double>("arm", "setpoint angle", 0.0);
-    ShuffleData<Double> robotX = new ShuffleData("swerve", "swerve x pos", 3.0);
-    ShuffleData<Double> robotY = new ShuffleData("swerve", "swerve y pos", 5.0);
-        ShuffleData<Double> armTargetPos = new ShuffleData("arm", "DON POSE", 0.0);
 
     public void pilotBindings() {
         //sysid config
-        pilot.aWhileHeld(Robot.swerve.getTurnSysIdQuasistaticForwardTest());
-        pilot.bWhileHeld(Robot.swerve.getTurnSysIdQuasistaticReverseTest());
-        pilot.yWhileHeld(Robot.swerve.getTurnSysIdDynamicForwardTest());
-        pilot.xWhileHeld(Robot.swerve.getTurnSysIdDynamicReverseTest());
 
         //pilot commandse
     }
@@ -89,9 +76,9 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        // Robot.arm.setDefaultCommand(new ArmMoveToGoal());
+        Robot.arm.setDefaultCommand(new ArmMoveToGoal(() -> true));
 
-        // y inverted
+        // Robot.arm.setDefaultCommand(new ArmMoveToGoal(() -> Robot.wrist.getIsGroundIntake()));
 
         Robot.swerve.setDefaultCommand(
                 new Teleop(() -> -pilot.getLeftX(), () -> -pilot.getLeftY(), () -> -pilot.getRightX()));
