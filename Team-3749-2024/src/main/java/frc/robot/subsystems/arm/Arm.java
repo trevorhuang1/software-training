@@ -134,10 +134,9 @@ public class Arm extends SubsystemBase {
         // update for logging
         accelerationSetpoint = accelerationRadPerSecSquared;
 
-        double feedback = profiledFeedbackController.calculate(positionRad);
+        double feedback = profiledFeedbackController.calculate(data.positionRad);
         double feedforward = feedForwardController.calculate(data.positionRad, velocityRadPerSec,
                 accelerationRadPerSecSquared);
-
         setVoltage(feedforward + feedback);
     }
 

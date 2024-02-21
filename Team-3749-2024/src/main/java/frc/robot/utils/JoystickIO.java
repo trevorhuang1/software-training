@@ -76,6 +76,7 @@ public class JoystickIO {
      * If only one controller is plugged in (pi)
      */
 
+    private ShuffleData<Double> armAngle = new ShuffleData<Double>("arm", "setpoint angle", 0.0);
 
     public void pilotBindings() {
 
@@ -84,10 +85,10 @@ public class JoystickIO {
         // pilot.b().whileTrue(Commands.run(()-> Robot.arm.setVoltage(-4)));
         // pilot.b().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
 
-        pilot.a().whileTrue(Commands.run(()->Robot.arm.setGoal(Units.degreesToRadians(80))));
+        pilot.a().whileTrue(Commands.run(()->Robot.arm.setGoal(Units.degreesToRadians(armAngle.get()))));
         pilot.y().whileTrue(Commands.run(()->Robot.arm.setGoal(0)));
 
-        pilot.a().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
+        // pilot.a().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
         pilot.b().whileTrue(new GetConstraints());
 
     }
