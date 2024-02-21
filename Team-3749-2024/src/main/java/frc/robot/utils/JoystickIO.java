@@ -8,6 +8,7 @@ import frc.robot.Robot;
 // import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.Teleop;
 import frc.robot.commands.arm.ArmMoveToGoal;
+import frc.robot.commands.arm.Climb;
 import frc.robot.commands.arm.GetConstraints;
 import frc.robot.subsystems.arm.ShootKinematics;
 // import frc.robot.commands.swerve.MoveToPose;
@@ -75,6 +76,7 @@ public class JoystickIO {
         pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(80))));
 
         pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
+        pilot.back().whileTrue(new Climb());
     }
 
     public void simBindings() {
