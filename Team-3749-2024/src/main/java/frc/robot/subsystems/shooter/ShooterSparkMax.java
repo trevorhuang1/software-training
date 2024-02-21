@@ -13,11 +13,11 @@ public class ShooterSparkMax implements ShooterIO {
     private CANSparkMax topShooter = new CANSparkMax(ShintakeConstants.shooterTopId, MotorType.kBrushless);
     private CANSparkMax bottomShooter = new CANSparkMax(ShintakeConstants.shooterBottomId, MotorType.kBrushless);
 
-    private RelativeEncoder leftEncoder = topShooter.getEncoder();
-    private RelativeEncoder rightEncoder = bottomShooter.getEncoder();
+    private RelativeEncoder topEncoder = topShooter.getEncoder();
+    private RelativeEncoder bottomEncoder = bottomShooter.getEncoder();
 
-    private double leftShooterGoalVolts = 0;
-    private double rightShooterGoalVolts = 0;
+    private double bottomShooterGoalVolts = 0;
+    private double topShooterGoalVolts = 0;
 
     public ShooterSparkMax() {
         bottomShooter.setInverted(true);
@@ -27,8 +27,12 @@ public class ShooterSparkMax implements ShooterIO {
         topShooter.setSmartCurrentLimit(40);
         bottomShooter.setSmartCurrentLimit(40);
 
-        leftEncoder.setVelocityConversionFactor((2 * Math.PI) / 60);
-        rightEncoder.setVelocityConversionFactor((2 * Math.PI) / 60);
+        bottomEncoder.setVelocityConversionFactor((2 * Math.PI) / 60);
+        topEncoder.setVelocityConversionFactor((2 * Math.PI) / 60);
+
+        topEncoder.setPositionConversionFactor(2 * Math.PI);
+        bottomEncoder.setPositionConversionFactor(2 * Math.PI);
+
         topShooter.setIdleMode(IdleMode.kCoast);
         bottomShooter.setIdleMode(IdleMode.kCoast);     
     }
@@ -36,21 +40,23 @@ public class ShooterSparkMax implements ShooterIO {
 
     @Override
     public void updateData(ShooterData data) {
-        data.leftShooterVolts = topShooter.getBusVoltage() * topShooter.getAppliedOutput();
-        data.leftShooterVelocityRadPerSec = leftEncoder.getVelocity();
-        data.leftShooterTempCelcius = topShooter.getMotorTemperature();
+        data.topShooterVolts = topShooter.getBusVoltage() * topShooter.getAppliedOutput();
+        data.topShooterVelocityRadPerSec = topEncoder.getVelocity();
+        data.topShooterTempCelcius = topShooter.getMotorTemperature();
+        data.topShooterPositionRad = topEncoder.getPosition();
 
-        data.rightShooterVolts = bottomShooter.getBusVoltage() * bottomShooter.getAppliedOutput();
-        data.rightShooterVelocityRadPerSec = rightEncoder.getVelocity();
-        data.rightShooterTempCelcius = bottomShooter.getMotorTemperature();
+        data.bottomShooterVolts = bottomShooter.getBusVoltage() * bottomShooter.getAppliedOutput();
+        data.bottomShooterVelocityRadPerSec = bottomEncoder.getVelocity();
+        data.bottomShooterTempCelcius = bottomShooter.getMotorTemperature();
+        data.bottomShooterPositionRad = bottomEncoder.getPosition();
     }
 
     @Override
-    public void setVoltage(double leftShooterVolts, double rightShooterVolts) {
-        leftShooterGoalVolts = MathUtil.clamp(leftShooterVolts, -12, 12);
-        rightShooterGoalVolts = MathUtil.clamp(rightShooterVolts, -12, 12);
-        topShooter.setVoltage(leftShooterGoalVolts);
-        bottomShooter.setVoltage(rightShooterGoalVolts);
+    public void setVoltage(double topShooterVolts, double bottomShooterVolts) {
+        bottomShooterGoalVolts = MathUtil.clamp(bottomShooterVolts, -12, 12);
+        topShooterGoalVolts = MathUtil.clamp(topShooterVolts, -12, 12);
+        topShooter.setVoltage(topShooterGoalVolts);
+        bottomShooter.setVoltage(bottomShooterGoalVolts);
     }
 
 }

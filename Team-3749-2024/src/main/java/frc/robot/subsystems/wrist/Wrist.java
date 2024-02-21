@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.commands.WristCommand;
 import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;

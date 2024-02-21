@@ -21,17 +21,26 @@ public class Shooter extends SubsystemBase {
 
   private ShooterIO shooterIO;
   private ShooterData data = new ShooterData();
+
   private PIDController shooterController = new PIDController(
     Constants.ShintakeConstants.shooterPID.kP,
     Constants.ShintakeConstants.shooterPID.kI,
     Constants.ShintakeConstants.shooterPID.kD
   );
-  private SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(0, 1);
-  private double shooterVelocity = 0;
-  private double armAngle = 0;
-  private double antiShooterRubbing = 0; //i dont actually know what angle the arm is at when it's resting
 
-  //and the wheels are touching the body of the robot but thats what this represents
+  private SimpleMotorFeedforward topShooterFF = new SimpleMotorFeedforward(
+    Constants.ShintakeConstants.topkS,
+    Constants.ShintakeConstants.topkV,
+    Constants.ShintakeConstants.topkA
+  );
+
+  private SimpleMotorFeedforward bottomShooterFF = new SimpleMotorFeedforward(
+    Constants.ShintakeConstants.bottomkS,  
+    Constants.ShintakeConstants.bottomkV,
+    Constants.ShintakeConstants.bottomkA
+  );
+
+  private double shooterVelocityRadPerSec = 0;
 
   public Shooter() {
     shooterIO = new ShooterSparkMax();
@@ -41,37 +50,48 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterVelocity(double velocity) {
-    this.shooterVelocity = velocity;
+    this.shooterVelocityRadPerSec = velocity;
   }
 
-  public void moveShooter() {
-    if (armAngle == antiShooterRubbing) {
-      return; //the wheels might still have inertia from spinning but it shouldn't be a problem?
-    }
-    double voltage =
+  public void spinShooter() {
+    double topVoltage =
       shooterController.calculate(
-        data.leftShooterVelocityRadPerSec,
-        shooterVelocity
+        data.topShooterVelocityRadPerSec,
+        shooterVelocityRadPerSec
       ) +
-      shooterFF.calculate(shooterVelocity);
+      topShooterFF.calculate(shooterVelocityRadPerSec);
 
-    setVoltage(voltage);
+    double bottomVoltage =
+      shooterController.calculate(
+        data.bottomShooterVelocityRadPerSec,
+        shooterVelocityRadPerSec
+      ) +
+      bottomShooterFF.calculate(shooterVelocityRadPerSec);
+
+    setVoltage(topVoltage,bottomVoltage);
   }
 
-  public void setVoltage(double volts) {
-    shooterIO.setVoltage(volts, volts);
+  public void setVoltage(double topVolts, double bottomVolts) {
+    shooterIO.setVoltage(topVolts, bottomVolts);
   }
 
   @Override
   public void periodic() {
+    
     shooterIO.updateData(data);
-    SmartDashboard.putNumber("shooterVolts", data.leftShooterVolts);
-    SmartDashboard.putNumber("shooterVelocityRadPerSec", data.leftShooterVelocityRadPerSec);
-    SmartDashboard.putNumber("shooterTempCelsius", data.leftShooterTempCelcius);
 
-    leftShooterAbsPos += data.leftShooterVelocityRadPerSec * 0.02;
-    rightShooterAbsPos += data.rightShooterVelocityRadPerSec * 0.02;
+    SmartDashboard.putNumber("bottomShooterVolts", data.bottomShooterVolts);
+    SmartDashboard.putNumber("bottomShooterVelocityRadPerSec", data.bottomShooterVelocityRadPerSec);
+    SmartDashboard.putNumber("bottomShooterPositionRad", data.bottomShooterPositionRad);
+    SmartDashboard.putNumber("bottomShooterTempCelsius", data.bottomShooterTempCelcius);
+
+    SmartDashboard.putNumber("topShooterVolts", data.topShooterVolts);
+    SmartDashboard.putNumber("topShooterVelocityRadPerSec", data.topShooterVelocityRadPerSec);
+    SmartDashboard.putNumber("topShooterTempCelsius", data.topShooterTempCelcius);
+    SmartDashboard.putNumber("topShooterPositionRad", data.topShooterPositionRad);
   }
+
+  
 
   private final MutableMeasure<Voltage> identificationTurnVoltageMeasure = mutable(
     Volts.of(0)
@@ -82,8 +102,6 @@ public class Shooter extends SubsystemBase {
   private final MutableMeasure<Velocity<Angle>> identificaitonTurnVelocityMeasure = mutable(
     RadiansPerSecond.of(0)
   );
-  private static double leftShooterAbsPos = 0;
-  private static double rightShooterAbsPos = 0;
 
   private SysIdRoutine shooterRoutine = new SysIdRoutine(
     // new SysIdRoutine.Config(),
@@ -94,47 +112,47 @@ public class Shooter extends SubsystemBase {
     ),
     new SysIdRoutine.Mechanism(
       (Measure<Voltage> volts) -> {
-        setVoltage(volts.magnitude());
+        setVoltage(volts.magnitude(),volts.magnitude());
       },
       log -> {
         log
-          .motor("shooter-left-motor")
+          .motor("shooter-bottom-motor")
           .voltage(
             identificationTurnVoltageMeasure.mut_replace(
-              data.leftShooterVolts,
+              data.bottomShooterVolts,
               Volts
             )
           )
           .angularPosition(
             identificationTurnDistanceMeasure.mut_replace(
-              leftShooterAbsPos,
+              data.bottomShooterPositionRad,
               Radians
             )
           )
           .angularVelocity(
             identificaitonTurnVelocityMeasure.mut_replace(
-              data.leftShooterVelocityRadPerSec,
+              data.bottomShooterVelocityRadPerSec,
               RadiansPerSecond
             )
           );
 
         log
-          .motor("shooter-right-motor")
+          .motor("shooter-top-motor")
           .voltage(
             identificationTurnVoltageMeasure.mut_replace(
-              data.rightShooterVolts,
+              data.topShooterVolts,
               Volts
             )
           )
           .angularPosition(
             identificationTurnDistanceMeasure.mut_replace(
-              rightShooterAbsPos,
+              data.topShooterPositionRad,
               Radians
             )
           )
           .angularVelocity(
             identificaitonTurnVelocityMeasure.mut_replace(
-              data.rightShooterVelocityRadPerSec,
+              data.topShooterVelocityRadPerSec,
               RadiansPerSecond
             )
           );
@@ -158,4 +176,5 @@ public class Shooter extends SubsystemBase {
   public Command getShooterSysIDDynamicReverseTest() {
     return shooterRoutine.dynamic(Direction.kReverse);
   }
+
 }

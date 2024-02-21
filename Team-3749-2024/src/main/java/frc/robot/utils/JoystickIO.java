@@ -5,8 +5,9 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
+import frc.robot.commands.ShooterCommand;
+
 import java.util.Map;
 
 /**
@@ -76,13 +77,11 @@ public class JoystickIO {
    * 
    */
   public void pilotBindings() {
-    pilot.a().whileTrue(Commands.run(() -> Robot.wrist.runFF()));
-    pilot.a().onFalse(Commands.run(()-> Robot.wrist.setVoltage(0)));
     
-    // pilot.aWhileHeld(Robot.shooter.getShooterSysIDDynamicForwardTest());
-    // pilot.bWhileHeld(Robot.shooter.getShooterSysIDDynamicReverseTest());
-    // pilot.yWhileHeld(Robot.shooter.getShooterSysIDQuasistaticForwardTest());
-    // pilot.xWhileHeld(Robot.shooter.getShooterSysIDQuasistaticReverseTest());
+    pilot.aWhileHeld(Robot.shooter.getShooterSysIDDynamicForwardTest());
+    pilot.bWhileHeld(Robot.shooter.getShooterSysIDDynamicReverseTest());
+    pilot.yWhileHeld(Robot.shooter.getShooterSysIDQuasistaticForwardTest());
+    pilot.xWhileHeld(Robot.shooter.getShooterSysIDQuasistaticReverseTest());
 
     //     pilot.aWhileHeld(
     //   Commands.run(() -> Robot.wrist.setVoltage(7)),
@@ -95,10 +94,10 @@ public class JoystickIO {
     //   setVoltage(0))
     // );
 
-    // pilot.xWhileHeld(
-    //   Commands.run(() -> Robot.shooter.setVoltage(12)),
-    //   Commands.run(() -> Robot.shooter.setVoltage(0))
-    // );
+    //  pilot.xWhileHeld(
+    //    Commands.run(() -> Robot.shooter.setVoltage(9,9)),
+    //    Commands.run(() -> Robot.shooter.setVoltage(0,0))
+    //  );
     // pilot.rightTriggerWhileHeld(
     //   Commands.run(() -> Robot.intake.setVoltage(-7)),
     //   Commands.run(() -> Robot.intake.setVoltage(0))
@@ -128,8 +127,8 @@ public class JoystickIO {
    */
   public void setDefaultCommands() {
     //    Robot.wrist.setDefaultCommand(new WristCommand());
-    //    Robot.intake.setDefaultCommand(new IntakeCommand());
-    //    Robot.shooter.setDefaultCommand(new ShooterCommand());
+       // Robot.intake.setDefaultCommand(new IntakeCommand());
+       Robot.shooter.setDefaultCommand(new ShooterCommand());
 
     //    pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.intakeVelocity)));
     //    pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
@@ -137,8 +136,8 @@ public class JoystickIO {
     //    pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.outtakeVelocity)));
     //    pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));
 
-    //    pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(Constants.ShintakeConstants.shooterVelocity)));
-    //    pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(0)));
+        // pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(Constants.ShintakeConstants.shooterVelocityRadPerSec)));
+        // pilot.rightBumper().onFalse(Commands.runOnce(() -> Robot.shooter.setShooterVelocity(0)));
 
     //    pilot.a().onTrue(Commands.runOnce(() -> Robot.wrist.toggleWristGoal()));
 

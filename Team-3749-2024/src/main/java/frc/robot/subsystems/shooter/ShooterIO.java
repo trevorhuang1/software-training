@@ -17,13 +17,15 @@ package frc.robot.subsystems.shooter;
 public interface ShooterIO {
     public static class ShooterData {
 
-        public double leftShooterVolts = 0.0;
-        public double leftShooterVelocityRadPerSec = 0.0;
-        public double leftShooterTempCelcius = 0.0;
+        public double bottomShooterVolts = 0.0;
+        public double bottomShooterVelocityRadPerSec = 0.0;
+        public double bottomShooterTempCelcius = 0.0;
+        public double bottomShooterPositionRad = 0.0;
 
-        public double rightShooterVolts = 0.0;
-        public double rightShooterVelocityRadPerSec = 0.0;
-        public double rightShooterTempCelcius = 0.0;
+        public double topShooterVolts = 0.0;
+        public double topShooterVelocityRadPerSec = 0.0;
+        public double topShooterTempCelcius = 0.0;
+        public double topShooterPositionRad = 0.0;
         
     }
     /** Updates the set of loggable inputs. */
@@ -32,7 +34,7 @@ public interface ShooterIO {
     }
 
     /** Run the drive motor at the specified voltage. */
-    public default void setVoltage(double leftShooterVolts, double rightShooterVolts) 
+    public default void setVoltage(double topShooterVolts, double bottomShooterVolts) 
     {
         
     }
