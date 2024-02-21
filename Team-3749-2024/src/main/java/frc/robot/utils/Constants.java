@@ -55,7 +55,7 @@ public class Constants {
 
     // Control - PID, FF, and Trapezoidal Constraints
     private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
-    private static final PIDConstants realPID = new PIDConstants(20, 0, 0);
+    private static final PIDConstants realPID = new PIDConstants(1.25, 0, 0);
 
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
@@ -70,7 +70,7 @@ public class Constants {
     private static final double realkS = 0.1085;
     private static final double realkG = 0.2435; 
     private static final double realkV = 3.95;
-    private static final double realkA = 0.17;
+    private static final double realkA = 0.23;
 
     public static final double kS = Robot.isReal() ? realkS : simkS;
     public static final double kG = Robot.isReal() ? realkG : simkG;
@@ -81,8 +81,8 @@ public class Constants {
     // 71.58);
     private static final Constraints simConstraints = new Constraints(1.783, 89.175);
 
-    private static final Constraints realConstraints = new Constraints(2.862,
-        10);
+    private static final Constraints realConstraints = new Constraints(2.662,
+        9);
     public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
 
     // Field Parameters
