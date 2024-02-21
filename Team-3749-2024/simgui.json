@@ -21,13 +21,7 @@
     }
   },
   "NetworkTables Info": {
-    "AdvantageScope@1": {
-      "open": true
-    },
     "Clients": {
-      "open": true
-    },
-    "Server": {
       "open": true
     },
     "visible": true

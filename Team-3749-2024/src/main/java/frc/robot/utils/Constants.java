@@ -35,19 +35,20 @@ public class Constants {
   }
 
   public static final class ArmConstants {
-    private static final PIDConstants simPID = new PIDConstants(2.2, 0, 0); // 2.2,0,0
-    private static final PIDConstants realPID = new PIDConstants(0, 0, 0);
 
-    public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
-
-    public static final int leftID = 0;
-    public static final int rightID = 1;
+    public static final int leftID = 15;
+    public static final int rightID = 16;
     // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
-    public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2;
-    public static final int encoderID = 2;
+    public static final double gearRatio = 200.0;
+    public static final int encoderID = 7;
     public static final double encoderOffsetRad = 0;
 
     // Control - PID, FF, and Trapezoidal Constraints
+    private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
+    private static final PIDConstants realPID = new PIDConstants(1.25, 0, 0);
+
+    public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
+
 
     private static final double simkS = 0.0;
     private static final double simkG = 0.203;// stick arm at 0 degrees, tune till it doesnt move
@@ -55,38 +56,41 @@ public class Constants {
     private static final double simkV = 6.616; // max volts - kG / max velocity
     private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-    private static final double realkS = 0;
-    private static final double realkG = 0;
-    private static final double realkV = 0;
-    private static final double realkA = 0;
+
+    private static final double realkS = 0.1085;
+    private static final double realkG = 0.2435; 
+    private static final double realkV = 3.95;
+    private static final double realkA = 0.23;
 
     public static final double kS = Robot.isReal() ? realkS : simkS;
     public static final double kG = Robot.isReal() ? realkG : simkG;
     public static final double kV = Robot.isReal() ? realkV : simkV;
     public static final double kA = Robot.isReal() ? realkA : simkA;
-
+    public static final double deployedKG = 0.38;
     // private static final Constraints simConstraints = new Constraints(2.36,
     // 71.58);
     private static final Constraints simConstraints = new Constraints(1.783, 89.175);
 
-    private static final Constraints realConstraints = new Constraints(Math.PI, 2 * Math.PI);
+    private static final Constraints realConstraints = new Constraints(2.662,
+        9);
     public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
 
     // Field Parameters
     public static final double armHeightOffset = 0.0; // how high up the arm is, NOTE: need to find
     public static final double armLength = 0.93;
-    public static final double shooterVelocity = 10.0; // NOTE: likely will vary, might need to pass as
-                                                       // parameter
+    public static final double shooterVelocity = 20.0; // NOTE: likely will vary, might need to pass as parameter
 
     // NOTE: Not percise
     // Field Parameters
-    public static final double speakerHeight = 2.05;
-    public static final double minDistance = 0.9;
+    public static final double speakerHeight = 2.05; // likely thing you'll need to tune
+    public static final double minDistance = 0.9; // confirm (this is subwoofer)
 
     // Calcuation stuff
-    public static final double distMargin = 0.5;
+    // TODO: adjust stage margin stuff and distance margin/max angle (ask Bailey)
+    public static final double distMargin = 0.25; // Half a meter is kind of a lot, don't you think?
     public static final double maxAngle = 42.109;
     public static final double maxAngleRad = Math.toRadians(maxAngle);
+    public static final double stageMargin = 10; // inches
   }
 
   public static final class ModuleConstants {

@@ -197,6 +197,7 @@ public class Swerve extends SubsystemBase {
       }
     } else {
       // real swerve module instatiation here
+      gyro = new NavX2Gyro();
       for (int i = 0; i < 4; i++) {
         gyro = new NavX2Gyro();
         modules[i] = new SwerveModule(i, new SwerveModuleSparkMax(i));
@@ -267,9 +268,11 @@ public class Swerve extends SubsystemBase {
     return new Rotation2d(heading / 180 * Math.PI);
   }
 
+
   public Pose2d getPose() {
     Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
     return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
+    // return new Pose2d(new Translation2d(2, 4.9), new Rotation2d(Math.PI/2));
   }
 
   public SwerveDrivePoseEstimator getPoseEstimator() {
