@@ -90,12 +90,14 @@ public class JoystickIO {
         // );
 
         pilot.xWhileHeld(
-                Commands.run(() -> Robot.shooter.setShooterVelocity(550)),
-                Commands.run(() -> Robot.shooter.setVoltage(0, 0)));
-                
+                Commands.run(() -> Robot.intake.setIntakeVelocity(60)),
+                Commands.run(() -> Robot.intake.setVoltage(0)));
+        pilot.yWhileHeld(
+                Commands.run(() -> Robot.intake.setIntakeVelocity(-60)),
+                Commands.run(() -> Robot.intake.setVoltage(0)));
         pilot.aWhileHeld(
-                Commands.run(() -> Robot.shooter.setVoltage(9, 9)),
-                Commands.run(() -> Robot.shooter.setVoltage(0, 0)));
+                Commands.run(() -> Robot.intake.setVoltage(12)),
+                Commands.run(() -> Robot.intake.setVoltage( 0)));
         // pilot.rightTriggerWhileHeld(
         // Commands.run(() -> Robot.intake.setVoltage(-7)),
         // Commands.run(() -> Robot.intake.setVoltage(0))
