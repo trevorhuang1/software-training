@@ -33,6 +33,7 @@ public class NavX2Gyro implements GyroIO {
             data.yawDeg = gyro.getYaw();
             data.pitchDeg = gyro.getPitch();
             data.rollDeg = gyro.getRoll();
+            System.out.println(data.yawDeg);
         } else {
             // double angleDiffRad = Robot.swerve.getChassisSpeeds().omegaRadiansPerSecond * 0.02;
             // Rotation2d currentRotationDiff = new Rotation2d(angleDiffRad);
