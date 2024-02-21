@@ -73,10 +73,11 @@ public class JoystickIO {
 
   /**
    * If only one controller is plugged in (pi)
+   * 
    */
   public void pilotBindings() {
-
-
+    pilot.a().whileTrue(Commands.run(() -> Robot.wrist.runFF()));
+    pilot.a().onFalse(Commands.run(()-> Robot.wrist.setVoltage(0)));
     
     // pilot.aWhileHeld(Robot.shooter.getShooterSysIDDynamicForwardTest());
     // pilot.bWhileHeld(Robot.shooter.getShooterSysIDDynamicReverseTest());
