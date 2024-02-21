@@ -107,7 +107,7 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        Robot.arm.setDefaultCommand(new ArmMoveToGoal());
+        Robot.arm.setDefaultCommand(new ArmMoveToGoal(()-> false));
     }
 
 }

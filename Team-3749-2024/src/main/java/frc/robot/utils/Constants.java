@@ -76,7 +76,7 @@ public class Constants {
     public static final double kG = Robot.isReal() ? realkG : simkG;
     public static final double kV = Robot.isReal() ? realkV : simkV;
     public static final double kA = Robot.isReal() ? realkA : simkA;
-
+    public static final double deployedKG = 0.38;
     // private static final Constraints simConstraints = new Constraints(2.36,
     // 71.58);
     private static final Constraints simConstraints = new Constraints(1.783, 89.175);
