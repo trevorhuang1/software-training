@@ -7,11 +7,11 @@ import frc.robot.utils.Constants.Sim;
 
 public class ShooterSim implements ShooterIO {
 
-    private FlywheelSim leftShooter = new FlywheelSim(DCMotor.getNEO(1),1, 0.04);
-    private FlywheelSim rightShooter = new FlywheelSim(DCMotor.getNEO(1),1, 0.04);
+    private FlywheelSim bottomShooter = new FlywheelSim(DCMotor.getNEO(1),1, 0.04);
+    private FlywheelSim topShooter = new FlywheelSim(DCMotor.getNEO(1),1, 0.04);
 
-    private double leftShooterGoalVolts = 0;
-    private double rightShooterGoalVolts = 0;
+    private double bottomShooterGoalVolts = 0;
+    private double topShooterGoalVolts = 0;
 
     public ShooterSim() 
     {
@@ -21,25 +21,25 @@ public class ShooterSim implements ShooterIO {
     @Override
     public void updateData(ShooterData data) 
     {
-        leftShooter.update(Sim.loopPeriodSec);
-        rightShooter.update(Sim.loopPeriodSec);
+        bottomShooter.update(Sim.loopPeriodSec);
+        topShooter.update(Sim.loopPeriodSec);
 
-        data.leftShooterVolts = leftShooterGoalVolts;
-        data.leftShooterVelocityRadPerSec = leftShooter.getAngularVelocityRadPerSec();
-        data.leftShooterTempCelcius = 0;
+        data.bottomShooterVolts = bottomShooterGoalVolts;
+        data.bottomShooterVelocityRadPerSec = bottomShooter.getAngularVelocityRadPerSec();
+        data.bottomShooterTempCelcius = 0;
 
-        data.rightShooterVolts = rightShooterGoalVolts;
-        data.rightShooterVelocityRadPerSec = rightShooter.getAngularVelocityRadPerSec();
-        data.rightShooterTempCelcius = 0;
+        data.topShooterVolts = topShooterGoalVolts;
+        data.topShooterVelocityRadPerSec = topShooter.getAngularVelocityRadPerSec();
+        data.topShooterTempCelcius = 0;
     }
 
    @Override
-   public void setVoltage(double leftShooterVolts, double rightShooterVolts)
+   public void setVoltage(double bottomShooterVolts, double topShooterVolts)
    {
-        leftShooterGoalVolts = MathUtil.clamp(leftShooterVolts, -12, 12);
-        rightShooterGoalVolts = MathUtil.clamp(rightShooterVolts, -12, 21);
-        this.leftShooter.setInputVoltage(leftShooterGoalVolts);
-        this.rightShooter.setInputVoltage(rightShooterGoalVolts);
+        bottomShooterGoalVolts = MathUtil.clamp(bottomShooterVolts, -12, 12);
+        topShooterGoalVolts = MathUtil.clamp(topShooterVolts, -12, 21);
+        this.bottomShooter.setInputVoltage(bottomShooterGoalVolts);
+        this.topShooter.setInputVoltage(topShooterGoalVolts);
 
    }
 
