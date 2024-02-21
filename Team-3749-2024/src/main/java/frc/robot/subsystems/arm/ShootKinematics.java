@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj.Filesystem;
 
-// TODO: Fix Speaker Position Values and Stage points, MOVE to Constants
+// TODO: Fix Speaker Position Values to be bigger margin and make sure Stage points exact, MOVE these to Constants
 
 public class ShootKinematics {
     // constants move to constants file
