@@ -10,11 +10,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.Wrist;
+import frc.robot.utils.Xbox;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
 
 public class Robot extends TimedRobot {
-
+  public static final Xbox pilot = new Xbox(0);
+  public static final Xbox operator = new Xbox(1);
   public static final Wrist wrist = new Wrist(() -> 0.0);
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();

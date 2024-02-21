@@ -38,9 +38,8 @@ import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.DriveConstants;
 
 public class RobotContainer {
-  public static Xbox pilot = new Xbox(0);
-  public static Xbox operator = new Xbox(1);
-  private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
+
+  private final JoystickIO joystickIO = new JoystickIO();
 
   public RobotContainer() {
     DriverStation.silenceJoystickConnectionWarning(true);

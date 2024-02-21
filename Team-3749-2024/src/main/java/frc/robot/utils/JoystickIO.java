@@ -26,9 +26,10 @@ public class JoystickIO {
     private Xbox pilot;
     private Xbox operator;
 
-    public JoystickIO(Xbox pilot, Xbox operator) {
-        this.pilot = pilot;
-        this.operator = operator;
+    public JoystickIO() {
+        pilot = Robot.pilot;
+        operator = Robot.operator;
+
     }
 
     /**
