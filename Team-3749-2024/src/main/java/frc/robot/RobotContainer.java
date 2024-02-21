@@ -25,9 +25,9 @@ public class RobotContainer {
 
     configureBindings();
   
-    DataLogManager.start(".wpilog");
-    DataLogManager.logNetworkTables(true);
-    DriverStation.startDataLog(DataLogManager.getLog(), true);
+    // DataLogManager.start(".wpilog");
+    // DataLogManager.logNetworkTables(true);
+    // DriverStation.startDataLog(DataLogManager.getLog(), true);
 
 
     RobotController.setBrownoutVoltage(7.0);
