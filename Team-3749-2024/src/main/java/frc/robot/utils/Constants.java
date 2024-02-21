@@ -122,10 +122,10 @@ public class Constants {
 
     public static final double intakeVelocity = 2;
     public static final double outtakeVelocity = -1;
-    public static final double shooterVelocity = 2;
+    public static final double shooterVelocityRadPerSec = 100;
 
-    private static final PIDConstants simShooterPID = new PIDConstants(1, 0, 0);
-    private static final PIDConstants realShooterPID = new PIDConstants(1, 0, 0);
+    private static final PIDConstants simShooterPID = new PIDConstants(0, 0, 0);
+    private static final PIDConstants realShooterPID = new PIDConstants(0, 0, 0);
     public static final PIDConstants shooterPID = Robot.isReal() ? realShooterPID : simShooterPID;
 
     private static final PIDConstants simIntakePID = new PIDConstants(1, 0, 0);
@@ -135,12 +135,10 @@ public class Constants {
     public static final double topKs = 0.11157; 
     public static final double topKv = 0.12308;
     public static final double topKa = 0.029929;
-    public static final double topKg = -0.016204;
 
     public static final double bottomKs = 0.29534; 
     public static final double bottomKv = 0.12482;
     public static final double bottomKa = 0.017107;
-    public static final double bottomKg = -0.051651;
   }
 
   public static final class AutoConstants {

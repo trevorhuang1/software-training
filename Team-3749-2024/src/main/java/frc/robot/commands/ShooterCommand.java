@@ -12,7 +12,7 @@ public class ShooterCommand extends Command{
     @Override
     public void execute()
     { 
-        Robot.shooter.moveShooter();
+        Robot.shooter.spinShooter();
     }
 
     @Override

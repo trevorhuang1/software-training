@@ -20,10 +20,12 @@ public interface ShooterIO {
         public double bottomShooterVolts = 0.0;
         public double bottomShooterVelocityRadPerSec = 0.0;
         public double bottomShooterTempCelcius = 0.0;
+        public double bottomShooterPositionRad = 0.0;
 
         public double topShooterVolts = 0.0;
         public double topShooterVelocityRadPerSec = 0.0;
         public double topShooterTempCelcius = 0.0;
+        public double topShooterPositionRad = 0.0;
         
     }
     /** Updates the set of loggable inputs. */
@@ -32,7 +34,7 @@ public interface ShooterIO {
     }
 
     /** Run the drive motor at the specified voltage. */
-    public default void setVoltage(double bottomShooterVolts, double topShooterVolts) 
+    public default void setVoltage(double topShooterVolts, double bottomShooterVolts) 
     {
         
     }

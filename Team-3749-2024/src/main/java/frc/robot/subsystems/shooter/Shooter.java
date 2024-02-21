@@ -3,7 +3,6 @@ package frc.robot.subsystems.shooter;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.*;
@@ -27,14 +26,12 @@ public class Shooter extends SubsystemBase {
     Constants.ShintakeConstants.shooterPID.kI,
     Constants.ShintakeConstants.shooterPID.kD
   );
-  //private SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(0, 1);
-  private ArmFeedforward topShooterFF = new ArmFeedforward(Constants.ShintakeConstants.topKs, Constants.ShintakeConstants.topKg, 
-  Constants.ShintakeConstants.topKv,Constants.ShintakeConstants.topKa); //ks kg kv ka
-  private ArmFeedforward bottomShooterFF = new ArmFeedforward(Constants.ShintakeConstants.bottomKs, Constants.ShintakeConstants.bottomKg, 
+  private SimpleMotorFeedforward topShooterFF = new SimpleMotorFeedforward(Constants.ShintakeConstants.topKs,
+  Constants.ShintakeConstants.topKv,Constants.ShintakeConstants.topKa);
+
+  private SimpleMotorFeedforward bottomShooterFF = new SimpleMotorFeedforward(Constants.ShintakeConstants.bottomKs,  
   Constants.ShintakeConstants.bottomKv,Constants.ShintakeConstants.bottomKa); //ks kg kv ka
-  private double shooterVelocity = 0;
-  private static double bottomShooterAbsPos = 0;
-  private static double topShooterAbsPos = 0;
+  private double shooterVelocityRadPerSec = 0;
 
   public Shooter() {
     shooterIO = new ShooterSparkMax();
@@ -44,23 +41,23 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterVelocity(double velocity) {
-    this.shooterVelocity = velocity;
+    this.shooterVelocityRadPerSec = velocity;
   }
 
-  public void moveShooter() {
+  public void spinShooter() {
     double topVoltage =
       shooterController.calculate(
         data.topShooterVelocityRadPerSec,
-        shooterVelocity
+        shooterVelocityRadPerSec
       ) +
-      topShooterFF.calculate(shooterController.getSetpoint(), shooterVelocity);
+      topShooterFF.calculate(shooterVelocityRadPerSec);
 
     double bottomVoltage =
       shooterController.calculate(
         data.bottomShooterVelocityRadPerSec,
-        shooterVelocity
+        shooterVelocityRadPerSec
       ) +
-      bottomShooterFF.calculate(shooterController.getSetpoint(), shooterVelocity);
+      bottomShooterFF.calculate(shooterVelocityRadPerSec);
 
     setVoltage(topVoltage,bottomVoltage);
   }
@@ -76,17 +73,16 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("bottomShooterVolts", data.bottomShooterVolts);
     SmartDashboard.putNumber("bottomShooterVelocityRadPerSec", data.bottomShooterVelocityRadPerSec);
+    SmartDashboard.putNumber("bottomShooterPositionRad", data.bottomShooterPositionRad);
     SmartDashboard.putNumber("bottomShooterTempCelsius", data.bottomShooterTempCelcius);
 
     SmartDashboard.putNumber("topShooterVolts", data.topShooterVolts);
     SmartDashboard.putNumber("topShooterVelocityRadPerSec", data.topShooterVelocityRadPerSec);
     SmartDashboard.putNumber("topShooterTempCelsius", data.topShooterTempCelcius);
-
-    bottomShooterAbsPos += data.bottomShooterVelocityRadPerSec * 0.02;
-    topShooterAbsPos += data.topShooterVelocityRadPerSec * 0.02;
+    SmartDashboard.putNumber("topShooterPositionRad", data.topShooterPositionRad);
   }
 
-  /*
+  
 
   private final MutableMeasure<Voltage> identificationTurnVoltageMeasure = mutable(
     Volts.of(0)
@@ -107,7 +103,7 @@ public class Shooter extends SubsystemBase {
     ),
     new SysIdRoutine.Mechanism(
       (Measure<Voltage> volts) -> {
-        setVoltage(volts.magnitude());
+        setVoltage(volts.magnitude(),volts.magnitude());
       },
       log -> {
         log
@@ -120,13 +116,13 @@ public class Shooter extends SubsystemBase {
           )
           .angularPosition(
             identificationTurnDistanceMeasure.mut_replace(
-              leftShooterAbsPos,
+              data.bottomShooterPositionRad,
               Radians
             )
           )
           .angularVelocity(
             identificaitonTurnVelocityMeasure.mut_replace(
-              data.leftShooterVelocityRadPerSec,
+              data.bottomShooterVelocityRadPerSec,
               RadiansPerSecond
             )
           );
@@ -135,19 +131,19 @@ public class Shooter extends SubsystemBase {
           .motor("shooter-top-motor")
           .voltage(
             identificationTurnVoltageMeasure.mut_replace(
-              data.rightShooterVolts,
+              data.topShooterVolts,
               Volts
             )
           )
           .angularPosition(
             identificationTurnDistanceMeasure.mut_replace(
-              rightShooterAbsPos,
+              data.topShooterPositionRad,
               Radians
             )
           )
           .angularVelocity(
             identificaitonTurnVelocityMeasure.mut_replace(
-              data.rightShooterVelocityRadPerSec,
+              data.topShooterVelocityRadPerSec,
               RadiansPerSecond
             )
           );
@@ -171,5 +167,5 @@ public class Shooter extends SubsystemBase {
   public Command getShooterSysIDDynamicReverseTest() {
     return shooterRoutine.dynamic(Direction.kReverse);
   }
-  */
+
 }
