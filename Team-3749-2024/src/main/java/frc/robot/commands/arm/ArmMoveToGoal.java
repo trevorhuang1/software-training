@@ -39,9 +39,10 @@ public class ArmMoveToGoal extends Command {
         // return;
         // }
         if (setpoint.velocity == 0 && isFourBarDeployedSupplier.getAsBoolean()) {
-            // kg and P
-            double voltage = ArmConstants.deployedKG * Math.cos(Robot.arm.getRotation2d().getRadians())
-                    + ArmConstants.deployedKP * (setpoint.position - Robot.arm.getRotation2d().getRadians());
+            // ks, kg, and P
+            double error = (setpoint.position - Robot.arm.getRotation2d().getRadians());
+            double voltage =Math.signum(error) * ArmConstants.kS + ArmConstants.deployedKG * Math.cos(Robot.arm.getRotation2d().getRadians())
+                    + ArmConstants.deployedKP * error ;
             Robot.arm.setVoltage(voltage);
             return;
         }

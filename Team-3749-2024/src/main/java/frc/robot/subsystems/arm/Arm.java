@@ -90,14 +90,20 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> kPData = new ShuffleData<Double>("ar", "kPData", 0.0);
 
     public void setState(double positionRad, double velocityRadPerSec, double accelerationRadPerSecSquared) {
-
-
         // update for logging
         accelerationSetpoint = accelerationRadPerSecSquared;
-
-        double feedback = profiledFeedbackController.calculate(data.positionRad);
-        double feedforward = feedForwardController.calculate(data.positionRad, velocityRadPerSec,
-                accelerationRadPerSecSquared);
+        double feedback;
+        double feedforward;
+        if (velocityRadPerSec!=0){
+            feedback = profiledFeedbackController.calculate(data.positionRad);
+             feedforward = feedForwardController.calculate(data.positionRad, velocityRadPerSec,
+                    accelerationRadPerSecSquared);
+        }
+        else{
+            // have the kS help the PID when stationary
+            feedback = profiledFeedbackController.calculate(data.positionRad);
+            feedforward = Math.signum(feedback) * ArmConstants.kS;
+        }
         setVoltage(feedforward + feedback);
     }
 

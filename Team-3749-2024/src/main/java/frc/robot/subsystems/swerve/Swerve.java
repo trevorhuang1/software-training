@@ -366,6 +366,10 @@ public class Swerve extends SubsystemBase {
     return gyroData.pitchDeg;
   }
 
+  public void resetGyro(){
+    gyro.resetGyro();
+  }
+
   @Override
   public void periodic() {
     gyro.updateData(gyroData);
@@ -413,6 +417,8 @@ public class Swerve extends SubsystemBase {
     yawLog.set(gyroData.yawDeg);
     pitchLog.set(gyroData.pitchDeg);
     rollLog.set(gyroData.rollDeg);
+    gyroConnectedLog.set(gyroData.isConnected);
+    gyroCalibratingLog.set(gyroData.isCalibrating);
     headingLog.set(getRotation2d().getDegrees());
   }
   // //

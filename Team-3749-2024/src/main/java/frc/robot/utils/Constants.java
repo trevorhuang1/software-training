@@ -174,9 +174,9 @@ public class Constants {
     private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
 
-    private static final double realkS = 0.1085;
-    private static final double realkG = 0.2435; 
-    private static final double realkV = 3.95;
+    private static final double realkS = 0.12;
+    private static final double realkG = 0.24; 
+    private static final double realkV = 3.92;
     private static final double realkA = 0.23;
 
     public static final double kS = Robot.isReal() ? realkS : simkS;
@@ -184,7 +184,7 @@ public class Constants {
     public static final double kV = Robot.isReal() ? realkV : simkV;
     public static final double kA = Robot.isReal() ? realkA : simkA;
     public static final double deployedKG = 0.6;
-    public static final double deployedKP = 0.2;
+    public static final double deployedKP = 1.25;
 
     // private static final Constraints simConstraints = new Constraints(2.36,
     // 71.58);

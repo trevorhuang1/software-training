@@ -71,9 +71,10 @@ public class JoystickIO {
         pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
                 Robot.intake));
 
-        pilot.a().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(5))));
+        pilot.a().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(6.5))));
         pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(80))));
 
+        pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
     }
 
     public void simBindings() {
