@@ -17,8 +17,8 @@ public class ArmAngleCalculator {
     public static final double g = 9.8;
 
     // Range of Angles & Minimum Shooting Distance
-    public static final double initial_angle = 140.0;
-    public static final double final_angle = 0.0;
+    public static final double initial_angle = 90.0;
+    public static final double final_angle = 0.00;
     public static double min_distance = 0.9;
 
     // Differentials & Margins of Error
@@ -54,14 +54,27 @@ public class ArmAngleCalculator {
          // if angles decrease then it is shooting downwards (STOP)
          for (double i = initial_angle; i >= final_angle; i = round(i - angle_increment)) {
                double initial_angle_rad = Math.toRadians(i);
-               double shoot_angle_rad = Math.toRadians(140-i);
+               double shoot_angle_rad = Math.toRadians(60-i);
                
                double vx = Math.cos(shoot_angle_rad) * v_initial;
                double t = ( x_dist + arm_length*Math.cos(initial_angle_rad) ) / vx;
                double y = ( Math.sin(shoot_angle_rad) * v_initial * t ) - ( g/2 * t*t ) + ( arm_length * Math.sin(initial_angle_rad) ) + y_arm;
 
                if (Math.abs(y_speaker - y) <= margin_of_error) {
-                   return i;
+                    System.out.print("x-dist: ");
+                    System.out.println(x_dist);
+
+                    System.out.print("y-value: ");
+                    System.out.println(y);
+
+                    System.out.print("arm angle: ");
+                    System.out.println(Math.toDegrees(initial_angle_rad));
+
+                    System.out.print("shooter angle: ");
+                    System.out.println(Math.toDegrees(shoot_angle_rad));
+
+                    System.out.println("---------------------------");
+                    return i;
                }
          }
 
