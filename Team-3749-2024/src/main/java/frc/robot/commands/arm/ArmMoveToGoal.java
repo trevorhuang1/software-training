@@ -24,7 +24,8 @@ public class ArmMoveToGoal extends Command {
     public void initialize() {
     }
 
-    private ShuffleData<Double> dKG = new ShuffleData<Double>(Robot.arm.getName(), "DKG", 0.0);
+    // private ShuffleData<Double> dKG = new
+    // ShuffleData<Double>(Robot.arm.getName(), "DKG", 0.0);
 
     @Override
     public void execute() {
@@ -38,7 +39,10 @@ public class ArmMoveToGoal extends Command {
         // return;
         // }
         if (setpoint.velocity == 0 && isFourBarDeployedSupplier.getAsBoolean()) {
-            Robot.arm.setVoltage(dKG.get() * Math.cos(Robot.arm.getRotation2d().getRadians()));
+            // kg and P
+            double voltage = ArmConstants.deployedKG * Math.cos(Robot.arm.getRotation2d().getRadians())
+                    + ArmConstants.deployedKP * (setpoint.position - Robot.arm.getRotation2d().getRadians());
+            Robot.arm.setVoltage(voltage);
             return;
         }
 

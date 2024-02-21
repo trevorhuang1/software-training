@@ -2,6 +2,7 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 // import frc.robot.commands.arm.ArmMoveToGoal;
@@ -23,7 +24,6 @@ public class JoystickIO {
 
     private Xbox pilot;
     private Xbox operator;
-
 
     public JoystickIO(Xbox pilot, Xbox operator) {
         this.pilot = pilot;
@@ -58,14 +58,22 @@ public class JoystickIO {
     public void pilotAndOperatorBindings() {
         pilotBindings();
 
-        //op bindings
+        // op bindings
     }
 
-
     public void pilotBindings() {
-        //sysid config
+        pilot.leftTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(60),
+                Robot.intake));
+        pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
+                Robot.intake));
+        pilot.rightTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(-60),
+                Robot.intake));
+        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
+                Robot.intake));
 
-        //pilot commandse
+        pilot.a().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(5))));
+        pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(80))));
+
     }
 
     public void simBindings() {
@@ -76,9 +84,10 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        Robot.arm.setDefaultCommand(new ArmMoveToGoal(() -> true));
+        Robot.arm.setDefaultCommand(new ArmMoveToGoal(() -> pilot.b().getAsBoolean()));
 
-        // Robot.arm.setDefaultCommand(new ArmMoveToGoal(() -> Robot.wrist.getIsGroundIntake()));
+        // Robot.arm.setDefaultCommand(new ArmMoveToGoal(() ->
+        // Robot.wrist.getIsGroundIntake()));
 
         Robot.swerve.setDefaultCommand(
                 new Teleop(() -> -pilot.getLeftX(), () -> -pilot.getLeftY(), () -> -pilot.getRightX()));
