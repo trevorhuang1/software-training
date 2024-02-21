@@ -92,6 +92,10 @@ public class JoystickIO {
         pilot.xWhileHeld(
                 Commands.run(() -> Robot.shooter.setShooterVelocity(550)),
                 Commands.run(() -> Robot.shooter.setVoltage(0, 0)));
+                
+        pilot.aWhileHeld(
+                Commands.run(() -> Robot.shooter.setVoltage(9, 9)),
+                Commands.run(() -> Robot.shooter.setVoltage(0, 0)));
         // pilot.rightTriggerWhileHeld(
         // Commands.run(() -> Robot.intake.setVoltage(-7)),
         // Commands.run(() -> Robot.intake.setVoltage(0))
@@ -120,7 +124,6 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        System.out.println("IM UPDATING");
         // Robot.wrist.setDefaultCommand(new WristCommand());
         // Robot.intake.setDefaultCommand(new IntakeCommand());
         // Robot.shooter.setDefaultCommand(new ShooterCommand());

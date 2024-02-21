@@ -21,11 +21,13 @@ public interface ShooterIO {
         public double bottomShooterVelocityRadPerSec = 0.0;
         public double bottomShooterTempCelcius = 0.0;
         public double bottomShooterPositionRad = 0.0;
+        public double bottomShooterCurrentAmps = 0.0;
 
         public double topShooterVolts = 0.0;
         public double topShooterVelocityRadPerSec = 0.0;
         public double topShooterTempCelcius = 0.0;
         public double topShooterPositionRad = 0.0;
+        public double topShooterCurrentAmps = 0.0;
         
     }
     /** Updates the set of loggable inputs. */

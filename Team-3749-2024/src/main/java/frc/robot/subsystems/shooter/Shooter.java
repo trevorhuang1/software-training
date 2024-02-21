@@ -35,6 +35,14 @@ public class Shooter extends SubsystemBase {
       Constants.ShooterConstants.bottomkV,
       0);
 
+
+  private ShuffleData<Double> topShooterVelocityLog = new ShuffleData<Double>(this.getName(), "top shooter velocity", 0.0);
+  private ShuffleData<Double> bottomShooterVelocityLog = new ShuffleData<Double>(this.getName(), "bottom shooter velocity", 0.0);
+  private ShuffleData<Double> topShootervoltageLog = new ShuffleData<Double>(this.getName(), "top shooter voltage", 0.0);
+  private ShuffleData<Double> bottomShootervoltageLog = new ShuffleData<Double>(this.getName(), "bottom shooter voltage", 0.0);
+  private ShuffleData<Double> topShootercurrentLog = new ShuffleData<Double>(this.getName(), "top shooter current", 0.0);
+  private ShuffleData<Double> bottomShootercurrentLog = new ShuffleData<Double>(this.getName(), "bottom shooter current", 0.0);
+
   public Shooter() {
     shooterIO = new ShooterSparkMax();
     if (Robot.isSimulation()) {
@@ -42,23 +50,35 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  ShuffleData<Double> kVData = new ShuffleData<Double>(this.getName(), "kVData", 0.0);
-    ShuffleData<Double> kPData = new ShuffleData<Double>(this.getName(), "kPData", 0.0);
-    ShuffleData<Double> velData = new ShuffleData<Double>(this.getName(), "velData", 0.0);
+  // ShuffleData<Double> kVData = new ShuffleData<Double>(this.getName(), "kVData", 0.0);
+  //   ShuffleData<Double> kPData = new ShuffleData<Double>(this.getName(), "kPData", 0.0);
+  //   ShuffleData<Double> velData = new ShuffleData<Double>(this.getName(), "velData", 0.0);
 
   public void setShooterVelocity(double velocityRadPerSec) {
 
+    
     double topVoltage = topFeedback.calculate(
         data.topShooterVelocityRadPerSec,
-        velData.get()) +
-        topShooterFF.calculate(velData.get());
+        velocityRadPerSec) +
+        topShooterFF.calculate(velocityRadPerSec);
 
     double bottomVoltage = bottomFeedback.calculate(
         data.bottomShooterVelocityRadPerSec,
-        velData.get()) +
-        bottomShooterFF.calculate(velData.get());
+        velocityRadPerSec) +
+        bottomShooterFF.calculate(velocityRadPerSec);
 
-    bottomVoltage = velData.get() * kVData.get() + (velData.get() - data.topShooterVelocityRadPerSec)*kPData.get();
+
+    // double topVoltage = topFeedback.calculate(
+    //     data.topShooterVelocityRadPerSec,
+    //     velData.get()) +
+    //     topShooterFF.calculate(velData.get());
+
+    // double bottomVoltage = bottomFeedback.calculate(
+    //     data.bottomShooterVelocityRadPerSec,
+    //     velData.get()) +
+    //     bottomShooterFF.calculate(velData.get());
+
+    // bottomVoltage = velData.get() * kVData.get() + (velData.get() - data.topShooterVelocityRadPerSec)*kPData.get();
 
     setVoltage(topVoltage, bottomVoltage);
   }
@@ -72,15 +92,14 @@ public class Shooter extends SubsystemBase {
     
     shooterIO.updateData(data);
 
-    SmartDashboard.putNumber("bottomShooterVolts", data.bottomShooterVolts);
-    SmartDashboard.putNumber("bottomShooterVelocityRadPerSec", data.bottomShooterVelocityRadPerSec);
-    SmartDashboard.putNumber("bottomShooterPositionRad", data.bottomShooterPositionRad);
-    SmartDashboard.putNumber("bottomShooterTempCelsius", data.bottomShooterTempCelcius);
+    topShooterVelocityLog.set(data.topShooterVelocityRadPerSec);
+    bottomShooterVelocityLog.set(data.bottomShooterVelocityRadPerSec);
 
-    SmartDashboard.putNumber("topShooterVolts", data.topShooterVolts);
-    SmartDashboard.putNumber("topShooterVelocityRadPerSec", data.topShooterVelocityRadPerSec);
-    SmartDashboard.putNumber("topShooterTempCelsius", data.topShooterTempCelcius);
-    SmartDashboard.putNumber("topShooterPositionRad", data.topShooterPositionRad);
+    topShootervoltageLog.set(data.topShooterVolts);
+    bottomShootervoltageLog.set(data.bottomShooterVolts);
+    
+    topShootercurrentLog.set(data.topShooterCurrentAmps);
+    bottomShootercurrentLog.set(data.bottomShooterCurrentAmps);
   }
 
 }
