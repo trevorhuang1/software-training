@@ -92,10 +92,11 @@ public class Constants {
 
     // NOTE: Not percise
     // Field Parameters
-    public static final double speakerHeight = 2.05;
-    public static final double minDistance = 0.9;
+    public static final double speakerHeight = 2.05; // likely thing you'll need to tune
+    public static final double minDistance = 0.9; // confirm (this is subwoofer)
 
     // Calcuation stuff
+    // TODO: adjust stage margin stuff and distance margin/max angle (ask Bailey)
     public static final double distMargin = 0.25; // Half a meter is kind of a lot, don't you think?
     public static final double maxAngle = 42.109;
     public static final double maxAngleRad = Math.toRadians(maxAngle);

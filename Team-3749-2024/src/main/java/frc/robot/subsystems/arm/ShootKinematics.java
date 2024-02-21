@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj.Filesystem;
 
-// TODO: Clean up this code, abstract the code and chunk it out, check if logic works on global level (sim or smth)
+// TODO: Fix Speaker Position Values to be bigger margin and make sure Stage points exact, MOVE these to Constants
 
 public class ShootKinematics {
     // constants move to constants file
@@ -124,7 +124,7 @@ public class ShootKinematics {
     private static double getAngle(double dist) {
         int distNum = (int)(Math.round(dist * 100.0));
         if (distNum < 0 || distNum > 1000) {
-            return 0;
+            return -1;
         }
         return distToAngle[distNum];
     }
@@ -166,14 +166,24 @@ public class ShootKinematics {
         reader.close();
     }
 
+    public static double getArmAngleGivenPose(Pose2d currentPose2d) throws FileNotFoundException, IOException{
+        double distance = currentPose2d.getTranslation().minus(blueSpeakerPosition).getNorm();
+        return getAngle(distance);
+    }
+
     // for testing load csv & other functionality
     public static void main(String[] args) throws FileNotFoundException, IOException {
+        // loadDistCSV(new File("src/main/deploy/angles.csv"));
+        // for (double i = 0.9; i < maxDist; i += 0.01) {
+        //     i = Math.round(i*100)/100.0;
+        //     double temp = i + Math.random()*.01;
+        //     temp = Math.round(temp*1000)/1000.0;
+        //     System.out.println(temp + " " + getAngle(temp));
+        // }
+        
+        // returns -1 if out of range, returns 0 if too close
         loadDistCSV(new File("src/main/deploy/angles.csv"));
-        for (double i = 0.9; i < maxDist; i += 0.01) {
-            i = Math.round(i*100)/100.0;
-            double temp = i + Math.random()*.01;
-            temp = Math.round(temp*1000)/1000.0;
-            // System.out.println(temp + " " + getAngle(temp));
-        }
+        Pose2d currentPose2d = new Pose2d(0, 5, new Rotation2d(0));
+        System.out.println(getArmAngleGivenPose(currentPose2d));
     }
 }
