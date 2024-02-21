@@ -1,29 +1,14 @@
 package frc.robot.commands.swerve;
 
 import java.util.function.Supplier;
-
-import com.pathplanner.lib.util.PIDConstants;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
-import frc.robot.utils.Constants;
-import frc.robot.utils.JoystickIO;
-import frc.robot.utils.PIDTuner;
-import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.ControllerConstants;
-import frc.robot.utils.Constants.DriveConstants;
-import frc.robot.utils.Constants.Sim.PIDValues;;
+import frc.robot.utils.Constants.DriveConstants;;
 
 /***
  * @author Noah Simon
@@ -38,8 +23,8 @@ public class TeleopJoystickRelative extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction, yTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  private final PIDController pid_turnController = new PIDController(PIDValues.kP_teleopTurn, 0,
-      PIDValues.kD_teleopTurn);
+  private final PIDController pid_turnController = new PIDController(DriveConstants.kP_teleopTurn, 0,
+      DriveConstants.kD_teleopTurn);
 
   public TeleopJoystickRelative(
       Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction,

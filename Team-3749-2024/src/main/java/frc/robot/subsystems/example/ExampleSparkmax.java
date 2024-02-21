@@ -13,8 +13,9 @@ import frc.robot.utils.Constants.Sim;
 
 public class ExampleSparkmax implements ExampleIO {
 
-    private CANSparkMax motor = new CANSparkMax(12, MotorType.kBrushless);
-    private CANSparkMax motor2 = new CANSparkMax(13, MotorType.kBrushless);
+    private CANSparkMax motorTop = new CANSparkMax(12, MotorType.kBrushless);
+    private CANSparkMax motorBottom = new CANSparkMax(3, MotorType.kBrushless);
+    private CANSparkMax motorIntake = new CANSparkMax(6, MotorType.kBrushless);
 
     private double appliedVolts = 0.0;
     private int currentLimit = 0;
@@ -22,8 +23,9 @@ public class ExampleSparkmax implements ExampleIO {
     public ExampleSparkmax() {
         System.out.println("[Init] Creating ExampleIOSim");
 
-        motor.setSmartCurrentLimit(40);
-        motor.setSmartCurrentLimit(40);
+        motorTop.setSmartCurrentLimit(40);
+        motorBottom.setSmartCurrentLimit(40);
+        motorIntake.setSmartCurrentLimit(40);
     }
 
     @Override
@@ -39,8 +41,11 @@ public class ExampleSparkmax implements ExampleIO {
     @Override
     public void setVoltage(double volts) {
         appliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
-        motor.setVoltage(appliedVolts);
-        motor2.setVoltage(-appliedVolts);
+        motorBottom.setVoltage(volts*1);
+        motorTop.setVoltage(volts*1);
+        motorBottom.setVoltage(-volts*.25);
+
+
     }
 
 }

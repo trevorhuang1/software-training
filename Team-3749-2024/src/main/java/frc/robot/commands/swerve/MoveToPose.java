@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
-import frc.robot.utils.Constants.Sim.PIDValues;
 import frc.robot.Robot;
 
 /***
@@ -22,12 +21,12 @@ public class MoveToPose extends Command {
   private final Swerve swerve = Robot.swerve;
   private Pose2d targetPose = swerve.getPose();
 
-  private final PIDController pid_driveXController = new PIDController(PIDValues.kP_MiscDrive, 0,
-      PIDValues.kD_MiscDrive);
-  private final PIDController pid_driveYController = new PIDController(PIDValues.kP_MiscDrive, 0,
-      PIDValues.kD_MiscDrive);
-  private final PIDController pid_turnController = new PIDController(PIDValues.kP_MiscTurn, 0,
-      PIDValues.kD_MiscTurn);
+  private final PIDController pid_driveXController = new PIDController(DriveConstants.kP_MiscDrive, 0,
+      DriveConstants.kD_MiscDrive);
+  private final PIDController pid_driveYController = new PIDController(DriveConstants.kP_MiscDrive, 0,
+      DriveConstants.kD_MiscDrive);
+  private final PIDController pid_turnController = new PIDController(DriveConstants.kP_MiscTurn, 0,
+      DriveConstants.kD_MiscTurn);
 
   private final SlewRateLimiter slewLimit_x = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
   private final SlewRateLimiter slewLimit_y = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);

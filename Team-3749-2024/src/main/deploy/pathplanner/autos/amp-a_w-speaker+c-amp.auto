@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3126474618911743,
-      "y": 6.502647876739502
+      "x": 1.8056280612945557,
+      "y": 7.756439208984375
     },
-    "rotation": -139.08561855881197
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "topStart_3pt.1"
+                  "pathName": "amp-a_w-speaker+c-amp.1"
                 }
               },
               {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "topStart_3pt.2"
+                  "pathName": "amp-a_w-speaker+c-amp.2"
                 }
               },
               {
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "topStart_3pt.3"
+                  "pathName": "amp-a_w-speaker+c-amp.3"
                 }
               },
               {

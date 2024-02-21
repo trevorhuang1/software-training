@@ -2,10 +2,34 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Choose Alliance": "String Chooser",
+      "/SmartDashboard/Choose Auto": "String Chooser",
       "/SmartDashboard/mech": "Mechanism2d"
     }
   },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "Choose Auto": {
+          "open": true,
+          "string[]##v_/SmartDashboard/Choose Auto/options": {
+            "open": true
+          }
+        },
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
+    "AdvantageScope@1": {
+      "open": true
+    },
+    "Clients": {
+      "open": true
+    },
+    "Server": {
+      "open": true
+    },
     "visible": true
   }
 }

@@ -1,10 +1,8 @@
 package frc.robot.subsystems.swerve.real;
 
 import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
-import frc.robot.Robot;
+import edu.wpi.first.wpilibj.SerialPort;
 import frc.robot.subsystems.swerve.GyroIO;
 
 public class NavX2Gyro implements GyroIO {
@@ -29,9 +27,9 @@ public class NavX2Gyro implements GyroIO {
     public void updateData(GyroData data) {
 
         data.isCalibrating = gyro.isCalibrating();
-        data.connected = gyro.isConnected();
+        data.isConnected = gyro.isConnected();
 
-        if (data.connected && !data.isCalibrating) {
+        if (data.isConnected && !data.isCalibrating) {
             data.yawDeg = gyro.getYaw();
             data.pitchDeg = gyro.getPitch();
             data.rollDeg = gyro.getRoll();
