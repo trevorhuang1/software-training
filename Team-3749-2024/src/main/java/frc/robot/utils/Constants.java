@@ -88,7 +88,7 @@ public class Constants {
     // Field Parameters
     public static final double armHeightOffset = 0.0; // how high up the arm is, NOTE: need to find
     public static final double armLength = 0.93;
-    public static final double shooterVelocity = 10.0; // NOTE: likely will vary, might need to pass as parameter
+    public static final double shooterVelocity = 20.0; // NOTE: likely will vary, might need to pass as parameter
 
     // NOTE: Not percise
     // Field Parameters

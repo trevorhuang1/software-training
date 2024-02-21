@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.arm.GetConstraints;
+import frc.robot.subsystems.arm.ShootKinematics;
 // import frc.robot.commands.swerve.MoveToPose;
 // import frc.robot.commands.swerve.Teleop;
 // import frc.robot.commands.swerve.TeleopJoystickRelative;
@@ -77,6 +78,9 @@ public class JoystickIO {
      */
 
     private ShuffleData<Double> armAngle = new ShuffleData<Double>("arm", "setpoint angle", 0.0);
+    ShuffleData<Double> robotX = new ShuffleData("swerve", "swerve x pos", 3.0);
+    ShuffleData<Double> robotY = new ShuffleData("swerve", "swerve y pos", 5.0);
+        ShuffleData<Double> armTargetPos = new ShuffleData("arm", "DON POSE", 0.0);
 
     public void pilotBindings() {
 
@@ -90,6 +94,8 @@ public class JoystickIO {
 
         // pilot.a().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
         pilot.b().whileTrue(new GetConstraints());
+
+        pilot.x().whileTrue(Commands.run(() -> Robot.arm.setGoal(ShootKinematics.getArmAngleRadGivenPose(new Pose2d(5,3,new Rotation2d())))));
 
     }
 

@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.utils.Constants;
@@ -166,9 +167,9 @@ public class ShootKinematics {
         reader.close();
     }
 
-    public static double getArmAngleGivenPose(Pose2d currentPose2d) throws FileNotFoundException, IOException{
+    public static double getArmAngleRadGivenPose(Pose2d currentPose2d) {
         double distance = currentPose2d.getTranslation().minus(blueSpeakerPosition).getNorm();
-        return getAngle(distance);
+        return Units.degreesToRadians(getAngle(distance));
     }
 
     // for testing load csv & other functionality
@@ -184,6 +185,6 @@ public class ShootKinematics {
         // returns -1 if out of range, returns 0 if too close
         loadDistCSV(new File("src/main/deploy/angles.csv"));
         Pose2d currentPose2d = new Pose2d(0, 5, new Rotation2d(0));
-        System.out.println(getArmAngleGivenPose(currentPose2d));
+        System.out.println(getArmAngleRadGivenPose(currentPose2d));
     }
 }

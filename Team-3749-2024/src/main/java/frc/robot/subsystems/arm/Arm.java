@@ -113,6 +113,7 @@ public class Arm extends SubsystemBase {
 
     public void setGoal(double positionRad) {
         profiledFeedbackController.setGoal(positionRad);
+        SmartDashboard.putNumber("DON POSE REAL", positionRad);
     }
 
     public double getGoal() {
@@ -197,6 +198,7 @@ public class Arm extends SubsystemBase {
             armIO.setCoastMode();
             isEnabled = driverStationStatus;
         }
+        
     }
 
 }
