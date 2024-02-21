@@ -53,14 +53,14 @@ public class Shooter extends SubsystemBase {
         data.topShooterVelocityRadPerSec,
         shooterVelocity
       ) +
-      topShooterFF.calculate(shooterController.getSetpoint(),shooterVelocity);
+      topShooterFF.calculate(shooterController.getSetpoint(), shooterVelocity);
 
     double bottomVoltage =
       shooterController.calculate(
         data.bottomShooterVelocityRadPerSec,
         shooterVelocity
       ) +
-      bottomShooterFF.calculate(shooterController.getSetpoint(),shooterVelocity);
+      bottomShooterFF.calculate(shooterController.getSetpoint(), shooterVelocity);
 
     setVoltage(topVoltage,bottomVoltage);
   }
@@ -73,9 +73,14 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     
     shooterIO.updateData(data);
-    SmartDashboard.putNumber("shooterVolts", data.bottomShooterVolts);
-    SmartDashboard.putNumber("shooterVelocityRadPerSec", data.bottomShooterVelocityRadPerSec);
-    SmartDashboard.putNumber("shooterTempCelsius", data.bottomShooterTempCelcius);
+
+    SmartDashboard.putNumber("bottomShooterVolts", data.bottomShooterVolts);
+    SmartDashboard.putNumber("bottomShooterVelocityRadPerSec", data.bottomShooterVelocityRadPerSec);
+    SmartDashboard.putNumber("bottomShooterTempCelsius", data.bottomShooterTempCelcius);
+
+    SmartDashboard.putNumber("topShooterVolts", data.topShooterVolts);
+    SmartDashboard.putNumber("topShooterVelocityRadPerSec", data.topShooterVelocityRadPerSec);
+    SmartDashboard.putNumber("topShooterTempCelsius", data.topShooterTempCelcius);
 
     bottomShooterAbsPos += data.bottomShooterVelocityRadPerSec * 0.02;
     topShooterAbsPos += data.topShooterVelocityRadPerSec * 0.02;

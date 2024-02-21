@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
+import frc.robot.commands.ShooterCommand;
+
 import java.util.Map;
 
 /**
@@ -126,8 +128,8 @@ public class JoystickIO {
    */
   public void setDefaultCommands() {
     //    Robot.wrist.setDefaultCommand(new WristCommand());
-    //    Robot.intake.setDefaultCommand(new IntakeCommand());
-    //    Robot.shooter.setDefaultCommand(new ShooterCommand());
+       // Robot.intake.setDefaultCommand(new IntakeCommand());
+       Robot.shooter.setDefaultCommand(new ShooterCommand());
 
     //    pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(Constants.ShintakeConstants.intakeVelocity)));
     //    pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setIntakeVelocity(0)));

@@ -18,5 +18,5 @@ public class ShooterCommand extends Command{
     @Override
     public boolean isFinished() {
         return false;
-      }
+    }
 }
