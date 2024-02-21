@@ -21,16 +21,25 @@ public class Shooter extends SubsystemBase {
 
   private ShooterIO shooterIO;
   private ShooterData data = new ShooterData();
+
   private PIDController shooterController = new PIDController(
     Constants.ShintakeConstants.shooterPID.kP,
     Constants.ShintakeConstants.shooterPID.kI,
     Constants.ShintakeConstants.shooterPID.kD
   );
-  private SimpleMotorFeedforward topShooterFF = new SimpleMotorFeedforward(Constants.ShintakeConstants.topKs,
-  Constants.ShintakeConstants.topKv,Constants.ShintakeConstants.topKa);
 
-  private SimpleMotorFeedforward bottomShooterFF = new SimpleMotorFeedforward(Constants.ShintakeConstants.bottomKs,  
-  Constants.ShintakeConstants.bottomKv,Constants.ShintakeConstants.bottomKa); //ks kg kv ka
+  private SimpleMotorFeedforward topShooterFF = new SimpleMotorFeedforward(
+    Constants.ShintakeConstants.topkS,
+    Constants.ShintakeConstants.topkV,
+    Constants.ShintakeConstants.topkA
+  );
+
+  private SimpleMotorFeedforward bottomShooterFF = new SimpleMotorFeedforward(
+    Constants.ShintakeConstants.bottomkS,  
+    Constants.ShintakeConstants.bottomkV,
+    Constants.ShintakeConstants.bottomkA
+  );
+
   private double shooterVelocityRadPerSec = 0;
 
   public Shooter() {

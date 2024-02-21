@@ -132,13 +132,13 @@ public class Constants {
     private static final PIDConstants realIntakePID = new PIDConstants(1, 0, 0);
     public static final PIDConstants intakePID = Robot.isReal() ? realIntakePID : simIntakePID;
 
-    public static final double topKs = 0.11157; 
-    public static final double topKv = 0.12308;
-    public static final double topKa = 0.029929;
+    public static final double topkS = 0.11157; 
+    public static final double topkV = 0.12308;
+    public static final double topkA = 0.029929;
 
-    public static final double bottomKs = 0.29534; 
-    public static final double bottomKv = 0.12482;
-    public static final double bottomKa = 0.017107;
+    public static final double bottomkS = 0.29534; 
+    public static final double bottomkV = 0.12482;
+    public static final double bottomkA = 0.017107;
   }
 
   public static final class AutoConstants {
