@@ -4,6 +4,7 @@ import java.util.Map;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -16,9 +17,10 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.arm.ArmMoveToGoal;
-import frc.robot.commands.swerve.MoveToPose;
-import frc.robot.commands.swerve.Teleop;
-import frc.robot.commands.swerve.TeleopJoystickRelative;
+import frc.robot.commands.arm.GetConstraints;
+// import frc.robot.commands.swerve.MoveToPose;
+// import frc.robot.commands.swerve.Teleop;
+// import frc.robot.commands.swerve.TeleopJoystickRelative;
 import frc.robot.subsystems.swerve.Swerve;
 
 /**
@@ -31,6 +33,7 @@ public class JoystickIO {
 
     private Xbox pilot;
     private Xbox operator;
+
 
     public JoystickIO(Xbox pilot, Xbox operator) {
         this.pilot = pilot;
@@ -73,16 +76,24 @@ public class JoystickIO {
      * If only one controller is plugged in (pi)
      */
 
+
     public void pilotBindings() {
-        pilot.aWhileHeld(Commands.run(() -> Robot.example.setVoltage(8)),
-                Commands.run(() -> Robot.example.setVoltage(0)));
-        pilot.bWhileHeld(Commands.run(() -> Robot.example.setVoltage(-4)),
-                Commands.run(() -> Robot.example.setVoltage(0)));
+
+        // pilot.a().whileTrue(Commands.run(()-> Robot.arm.setVoltage(kG.get())));
+        // pilot.a().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
+        // pilot.b().whileTrue(Commands.run(()-> Robot.arm.setVoltage(-4)));
+        // pilot.b().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
+
+        pilot.a().whileTrue(Commands.run(()->Robot.arm.setGoal(Units.degreesToRadians(80))));
+        pilot.y().whileTrue(Commands.run(()->Robot.arm.setGoal(0)));
+
+        pilot.a().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
+        pilot.b().whileTrue(new GetConstraints());
 
     }
 
     public void simBindings() {
-        pilot.aWhileHeld(new MoveToPose(new Pose2d(5, 5, new Rotation2d())));
+        // pilot.aWhileHeld(new MoveToPose(new Pose2d(5, 5, new Rotation2d())));
     }
 
     /**

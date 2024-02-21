@@ -69,16 +69,16 @@ public class Swerve extends SubsystemBase {
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 
   public Swerve() {
-    if (!Robot.isReal()) {
+    if (Robot.isSimulation()) {
       gyro = new GyroSim();
       for (int i = 0; i < 4; i++) {
         modules[i] = new SwerveModule(i, new SwerveModuleSim());
       }
     } else {
       // real swerve module instatiation here
+      gyro = new NavX2Gyro();
       for (int i = 0; i < 4; i++) {
-        gyro = new NavX2Gyro();
-        modules[i] = new SwerveModule(i, new SwerveModuleRelative(i));
+        modules[i] = new SwerveModule(i, new SwerveModuleSparkMax(i));
       }
     }
 
@@ -132,9 +132,11 @@ public class Swerve extends SubsystemBase {
     return new Rotation2d(heading / 180 * Math.PI);
   }
 
+
   public Pose2d getPose() {
     Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
     return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
+    // return new Pose2d(new Translation2d(2, 4.9), new Rotation2d(Math.PI/2));
   }
 
   public SwerveDrivePoseEstimator getPoseEstimator() {
@@ -226,7 +228,7 @@ public class Swerve extends SubsystemBase {
     desiredStatesLog.set(desiredStates);
     rotationalVelocityLog.set(Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond));
     odometryLog.set(
-        new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+  new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees()});
 
     
     Pose2d shooterPose = ShootKinematics.shootingPose2DCalculate(getPose());

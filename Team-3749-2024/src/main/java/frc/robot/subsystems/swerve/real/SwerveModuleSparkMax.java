@@ -39,14 +39,14 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = new CANcoder(Constants.DriveConstants.absoluteEncoderPorts[index]);
 
-        driveMotor.setInverted(DriveConstants.driveEncoderReversed[index]);
-        driveEncoder.setInverted(DriveConstants.driveEncoderReversed[index]);
+        // driveMotor.setInverted(DriveConstants.driveEncoderReversed[index]);
+        // driveEncoder.setInverted(DriveConstants.driveEncoderReversed[index]);
         driveEncoder.setPositionConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Math.PI
                 * ModuleConstants.wheelDiameterMeters);
         driveEncoder.setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * (Math.PI
                 * ModuleConstants.wheelDiameterMeters) * (1 / 60));
 
-        turnMotor.setInverted(Constants.DriveConstants.turningEncoderReversed[index]);
+        // turnMotor.setInverted(Constants.DriveConstants.turningEncoderReversed[index]);
 
         driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit,
                 Constants.DriveConstants.driveMotorFreeLimit);

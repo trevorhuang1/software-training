@@ -26,22 +26,7 @@ import frc.robot.Robot;
 public class Constants {
 
   public static final class Sim {
-    public static final double loopPeriodSec = 0.02;
-
-    public static final class PIDValues {
-      // will eventally be easier to change values from here than poke around through
-      // files
-      public static double kP_teleopTurn = 1.3;
-      public static double kD_teleopTurn = 0.0;
-
-      public static double kP_MiscDrive = 0.42;
-      public static double kD_MiscDrive = 0.02;
-      public static double kP_MiscTurn = 0.15;
-      public static double kD_MiscTurn = 0.003;
-
-      public static double kP_TurnToAngle = 0.15;
-      public static double kD_TurnToAngle = 0.008;
-    };
+    public static final double loopPeriodSec = 0.02;;
 
   }
 
@@ -60,36 +45,44 @@ public class Constants {
   }
 
   public static final class ArmConstants {
-    private static final PIDConstants simPID = new PIDConstants(2.2, 0, 0); // 10,0,0
-    private static final PIDConstants realPID = new PIDConstants(0, 0, 0);
-    
-    public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
-    public static final int leftID = 0;
-    public static final int rightID = 1;
+    public static final int leftID = 15;
+    public static final int rightID = 16;
     // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
-    public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2; 
-    public static final int encoderID = 2;
+    public static final double gearRatio = 200.0;
+    public static final int encoderID = 7;
     public static final double encoderOffsetRad = 0;
 
     // Control - PID, FF, and Trapezoidal Constraints
-    private static final double simkS = 0.0;
-    private static final double simkG = 0.973;// stick arm at 0 degrees, tune till it doesnt move
-    private static final double simkV = 2.977; // max volts - kG / max velocity
-    private static final double simkA = 0.0386; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
+    private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
+    private static final PIDConstants realPID = new PIDConstants(20, 0, 0);
 
-    private static final double realkS = 0;
-    private static final double realkG = 0;
-    private static final double realkV = 0;
-    private static final double realkA = 0;
+    public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
+
+
+    private static final double simkS = 0.0;
+    private static final double simkG = 0.203;// stick arm at 0 degrees, tune till it doesnt move
+
+    private static final double simkV = 6.616; // max volts - kG / max velocity
+    private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
+
+
+    private static final double realkS = 0.1085;
+    private static final double realkG = 0.2435; 
+    private static final double realkV = 3.95;
+    private static final double realkA = 0.17;
 
     public static final double kS = Robot.isReal() ? realkS : simkS;
     public static final double kG = Robot.isReal() ? realkG : simkG;
     public static final double kV = Robot.isReal() ? realkV : simkV;
     public static final double kA = Robot.isReal() ? realkA : simkA;
 
-    private static final Constraints simConstraints = new Constraints(2.36, 71.58);
-    private static final Constraints realConstraints = new Constraints(Math.PI, 2 * Math.PI);
+    // private static final Constraints simConstraints = new Constraints(2.36,
+    // 71.58);
+    private static final Constraints simConstraints = new Constraints(1.783, 89.175);
+
+    private static final Constraints realConstraints = new Constraints(2.862,
+        10);
     public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
 
     // Field Parameters
@@ -103,11 +96,11 @@ public class Constants {
     public static final double minDistance = 0.9;
 
     // Calcuation stuff
-    public static final double distMargin = 0.5;
+    public static final double distMargin = 0.25; // Half a meter is kind of a lot, don't you think?
     public static final double maxAngle = 42.109;
     public static final double maxAngleRad = Math.toRadians(maxAngle);
+    public static final double stageMargin = 10; // inches
   }
-
 
   public static final class ModuleConstants {
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
@@ -127,6 +120,21 @@ public class Constants {
 
   public static final class DriveConstants {
 
+    public static final class PIDValues {
+      // will eventally be easier to change values from here than poke around through
+      // files
+      public static double kP_teleopTurn = 1.3;
+      public static double kD_teleopTurn = 0.0;
+
+      public static double kP_MiscDrive = 0.42;
+      public static double kD_MiscDrive = 0.02;
+      public static double kP_MiscTurn = 0.15;
+      public static double kD_MiscTurn = 0.003;
+
+      public static double kP_TurnToAngle = 0.15;
+      public static double kD_TurnToAngle = 0.008;
+    }
+
     // Distance between right and left wheels
     public static final double trackWidth = Units.inchesToMeters(17.5);
     // Distance between front and back wheels
@@ -137,13 +145,13 @@ public class Constants {
         new Translation2d(-wheelBase / 2, trackWidth / 2), // back left
         new Translation2d(-wheelBase / 2, -trackWidth / 2)); // back right
 
-    public static final int[] driveMotorPorts = { 1, 3, 7, 5 }; // FL, FR, BL, BR
-    public static final int[] turningMotorPorts = { 2, 4, 8, 6 }; // FL, FR, BL, BR
+    public static final int[] driveMotorPorts = { 3, 5, 7, 9 }; // FL, FR, BL, BR
+    public static final int[] turningMotorPorts = { 4, 6, 8, 10 }; // FL, FR, BL, BR
 
     public static final boolean[] driveEncoderReversed = { true, false, true, false };
     public static final boolean[] turningEncoderReversed = { false, false, false, false };
 
-    public static final int[] absoluteEncoderPorts = { 9, 10, 11, 12 };
+    public static final int[] absoluteEncoderPorts = { 11, 12, 13, 14 };
 
     public static final boolean[] driveAbsoluteEncoderReversed = { false, false, false, false };
 

@@ -40,5 +40,12 @@ public interface ArmIO {
         
     }
 
+    public default void setBreakMode(){
+
+    }
+
+    public default void setCoastMode(){
+        
+    }
 
 }
