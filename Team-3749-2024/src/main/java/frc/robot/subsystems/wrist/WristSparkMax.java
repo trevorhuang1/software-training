@@ -56,6 +56,7 @@ public class WristSparkMax implements WristIO {
     @Override
     public void setVoltage(double volts) {
         appliedVolts = MathUtil.clamp(volts, -12, 12);
+        System.out.println(appliedVolts);
         wristMotor.setVoltage(appliedVolts);
     }
 

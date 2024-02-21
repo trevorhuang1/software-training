@@ -18,7 +18,7 @@ public class Intake extends SubsystemBase {
 
     private IntakeIO intakeIO;
     private IntakeData data = new IntakeData();
-    private PIDController intakeController = new PIDController(Constants.ShintakeConstants.intakePID.kP,Constants.ShintakeConstants.intakePID.kI,Constants.ShintakeConstants.intakePID.kD);
+    private PIDController intakeController = new PIDController(Constants.IntakeConstants.intakePID.kP,Constants.IntakeConstants.intakePID.kI,Constants.IntakeConstants.intakePID.kD);
         
     private SimpleMotorFeedforward intakeFF = new SimpleMotorFeedforward(0, 1);
     private double intakeVelocity = 0;

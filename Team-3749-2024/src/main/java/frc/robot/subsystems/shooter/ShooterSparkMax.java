@@ -6,12 +6,12 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
-import frc.robot.utils.Constants.ShintakeConstants;
+import frc.robot.utils.Constants.ShooterConstants;
 
 public class ShooterSparkMax implements ShooterIO {
 
-    private CANSparkMax topShooter = new CANSparkMax(ShintakeConstants.shooterTopId, MotorType.kBrushless);
-    private CANSparkMax bottomShooter = new CANSparkMax(ShintakeConstants.shooterBottomId, MotorType.kBrushless);
+    private CANSparkMax topShooter = new CANSparkMax(ShooterConstants.shooterTopId, MotorType.kBrushless);
+    private CANSparkMax bottomShooter = new CANSparkMax(ShooterConstants.shooterBottomId, MotorType.kBrushless);
 
     private RelativeEncoder topEncoder = topShooter.getEncoder();
     private RelativeEncoder bottomEncoder = bottomShooter.getEncoder();
@@ -55,7 +55,8 @@ public class ShooterSparkMax implements ShooterIO {
     public void setVoltage(double topShooterVolts, double bottomShooterVolts) {
         bottomShooterGoalVolts = MathUtil.clamp(bottomShooterVolts, -12, 12);
         topShooterGoalVolts = MathUtil.clamp(topShooterVolts, -12, 12);
-        topShooter.setVoltage(topShooterGoalVolts);
+        // topShooter.setVoltage(topShooterGoalVolts);
+        System.out.println(bottomShooterGoalVolts);
         bottomShooter.setVoltage(bottomShooterGoalVolts);
     }
 

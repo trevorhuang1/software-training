@@ -90,18 +90,17 @@ public class Constants {
 
     private static final Constraints simConstraint = new Constraints(Math.PI, 2 * Math.PI); // we stealing from arm with
                                                                                             // this one
-    private static final Constraints realConstraint = new Constraints(Math.PI,Math.PI);
-    
+    private static final Constraints realConstraint = new Constraints(Math.PI, Math.PI);
+
     public static final Constraints trapezoidConstraint = Robot.isReal() ? realConstraint : simConstraint;
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
     // thanks arm (robbery)
     public static final double simkS = 0.0;
     public static final double simkG = .33775;// stick arm at 0 degrees, tune till it doesnt move (ok it moves but it
-                                               // should be fine it'll take like 3 years to move 1 degree)
+                                              // should be fine it'll take like 3 years to move 1 degree)
     public static final double simkV = 6.616; // max volts - kG / max velocity
     public static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
-
 
     public static final double kYIntercept = 0.9808;
     public static final double kBar = 0.0289;
@@ -114,31 +113,36 @@ public class Constants {
     public static final double wristOffsetRad = Units.degreesToRadians(247.95);
   }
 
-  public static final class ShintakeConstants {
-    public static final int intakeId = 20;
+  public static final class ShooterConstants {
     public static final int shooterBottomId = 19;
-
     public static final int shooterTopId = 18;
 
-    public static final double intakeVelocity = 2;
-    public static final double outtakeVelocity = -1;
     public static final double shooterVelocityRadPerSec = 100;
 
-    private static final PIDConstants simShooterPID = new PIDConstants(0, 0, 0);
-    private static final PIDConstants realShooterPID = new PIDConstants(0, 0, 0);
-    public static final PIDConstants shooterPID = Robot.isReal() ? realShooterPID : simShooterPID;
+    private static final PIDConstants simShooterTopPID = new PIDConstants(0, 0, 0);
+    private static final PIDConstants realShooterTopPID = new PIDConstants(0.0, 0, 0);
+    public static final PIDConstants shooterTopPID = Robot.isReal() ? realShooterTopPID : simShooterTopPID;
 
-    private static final PIDConstants simIntakePID = new PIDConstants(1, 0, 0);
-    private static final PIDConstants realIntakePID = new PIDConstants(1, 0, 0);
+    private static final PIDConstants simShooterBottomPID = new PIDConstants(0, 0, 0);
+    private static final PIDConstants realShooterBottomPID = new PIDConstants(0, 0, 0);
+    public static final PIDConstants shooterBottomPID = Robot.isReal() ? realShooterBottomPID : simShooterBottomPID;
+
+    public static final double topkV = 0.020; // volts/radPerSec
+
+    public static final double bottomkV = 0.;
+
+  }
+
+  public static final class IntakeConstants {
+
+    public static final int intakeId = 20;
+
+    public static final double intakeVelocity = 75;
+    public static final double outtakeVelocity = -30;
+    private static final PIDConstants simIntakePID = new PIDConstants(0, 0, 0);
+    private static final PIDConstants realIntakePID = new PIDConstants(0, 0, 0);
     public static final PIDConstants intakePID = Robot.isReal() ? realIntakePID : simIntakePID;
 
-    public static final double topkS = 0.11157; 
-    public static final double topkV = 0.12308;
-    public static final double topkA = 0.029929;
-
-    public static final double bottomkS = 0.29534; 
-    public static final double bottomkV = 0.12482;
-    public static final double bottomkA = 0.017107;
   }
 
   public static final class AutoConstants {
