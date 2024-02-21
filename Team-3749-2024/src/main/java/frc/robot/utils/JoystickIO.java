@@ -83,7 +83,6 @@ public class JoystickIO {
         // pilot.a().onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
         pilot.b().whileTrue(new GetConstraints());
 
-        pilot.x().whileTrue(Commands.run(() -> Robot.arm.setGoal(ShootKinematics.getArmAngleRadGivenPose(new Pose2d(5,3,new Rotation2d())))));
 
         //pilot commandse
     }

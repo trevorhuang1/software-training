@@ -14,7 +14,7 @@ public class Robot extends TimedRobot {
 
   // public static Arm arm = new Arm();
   public static final Swerve swerve = new Swerve();
-
+  public static final Arm arm = new Arm();
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
