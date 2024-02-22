@@ -87,26 +87,6 @@ public class Arm extends SubsystemBase {
         return profiledFeedbackController.getSetpoint();
     }
 
-    private ShuffleData<Double> kPData = new ShuffleData<Double>("ar", "kPData", 0.0);
-
-    public void setState(double positionRad, double velocityRadPerSec, double accelerationRadPerSecSquared) {
-        // update for logging
-        accelerationSetpoint = accelerationRadPerSecSquared;
-        double feedback;
-        double feedforward;
-        if (velocityRadPerSec!=0){
-            feedback = profiledFeedbackController.calculate(data.positionRad);
-             feedforward = feedForwardController.calculate(data.positionRad, velocityRadPerSec,
-                    accelerationRadPerSecSquared);
-        }
-        else{
-            // have the kS help the PID when stationary
-            feedback = profiledFeedbackController.calculate(data.positionRad);
-            feedforward = Math.signum(feedback) * ArmConstants.kS;
-        }
-        setVoltage(feedforward + feedback);
-    }
-
     public void setVoltage(double volts) {
         System.out.println(volts);
         if (isKilled) {
@@ -120,6 +100,14 @@ public class Arm extends SubsystemBase {
         isKilled = !isKilled;
     }
 
+    public double calculateFF(double currentPositionRad, double setpointVelocityRadPerSec, double setpointAccelerationRadPerSecSquared){
+        return feedForwardController.calculate(currentPositionRad, setpointVelocityRadPerSec, accelerationSetpoint);
+
+    }
+
+    public double calculatePID(double currentPositionRad){
+        return profiledFeedbackController.calculate(currentPositionRad);
+    }
 
 
     // runs every 0.02 sec
