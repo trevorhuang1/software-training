@@ -63,131 +63,98 @@ public class Swerve extends SubsystemBase {
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 
   private final MutableMeasure<Voltage> identificationVoltageMeasure = mutable(
-    Volts.of(0)
-  );
+      Volts.of(0));
   private final MutableMeasure<Distance> identificationDistanceMeasure = mutable(
-    Meters.of(0)
-  );
+      Meters.of(0));
   private final MutableMeasure<Velocity<Distance>> identificaitonVelocityMeasure = mutable(
-    MetersPerSecond.of(0)
-  );
+      MetersPerSecond.of(0));
 
   SysIdRoutine routine = new SysIdRoutine(
-    // new SysIdRoutine.Config(),
-    new SysIdRoutine.Config(
-      Volts.per(Seconds).of(1),
-      Volts.of(7),
-      Seconds.of(10)
-    ),
-    new SysIdRoutine.Mechanism(
-      this::identificationDriveConsumer,
-      log -> {
-        // Record a frame for the left motors. Since these share an encoder, we consider
-        // the entire group to be one motor.
-        SmartDashboard.putNumber(
-          "motorAppliedVolts",
-          identificationVoltageMeasure
-            .mut_replace(modules[0].getModuleData().driveAppliedVolts, Volts)
-            .magnitude()
-        );
-        SmartDashboard.putNumber(
-          "motorSpeed",
-          identificaitonVelocityMeasure
-            .mut_replace(
-              modules[0].getModuleData().driveVelocityMPerSec,
-              MetersPerSecond
-            )
-            .magnitude()
-        );
+      // new SysIdRoutine.Config(),
+      new SysIdRoutine.Config(
+          Volts.per(Seconds).of(1),
+          Volts.of(7),
+          Seconds.of(10)),
+      new SysIdRoutine.Mechanism(
+          this::identificationDriveConsumer,
+          log -> {
+            // Record a frame for the left motors. Since these share an encoder, we consider
+            // the entire group to be one motor.
+            SmartDashboard.putNumber(
+                "motorAppliedVolts",
+                identificationVoltageMeasure
+                    .mut_replace(modules[0].getModuleData().driveAppliedVolts, Volts)
+                    .magnitude());
+            SmartDashboard.putNumber(
+                "motorSpeed",
+                identificaitonVelocityMeasure
+                    .mut_replace(
+                        modules[0].getModuleData().driveVelocityMPerSec,
+                        MetersPerSecond)
+                    .magnitude());
 
-        log
-          .motor("front-left")
-          .voltage(
-            identificationVoltageMeasure.mut_replace(
-              modules[0].getModuleData().driveAppliedVolts,
-              Volts
-            )
-          )
-          .linearPosition(
-            identificationDistanceMeasure.mut_replace(
-              modules[0].getModuleData().drivePositionM,
-              Meters
-            )
-          )
-          .linearVelocity(
-            identificaitonVelocityMeasure.mut_replace(
-              modules[0].getModuleData().driveVelocityMPerSec,
-              MetersPerSecond
-            )
-          );
-        // Record a frame for the right motors. Since these share an encoder, we
-        // consider
-        // the entire group to be one motor.
-        log
-          .motor("front-right")
-          .voltage(
-            identificationVoltageMeasure.mut_replace(
-              modules[1].getModuleData().driveAppliedVolts,
-              Volts
-            )
-          )
-          .linearPosition(
-            identificationDistanceMeasure.mut_replace(
-              modules[1].getModuleData().drivePositionM,
-              Meters
-            )
-          )
-          .linearVelocity(
-            identificaitonVelocityMeasure.mut_replace(
-              modules[1].getModuleData().driveVelocityMPerSec,
-              MetersPerSecond
-            )
-          );
+            log
+                .motor("front-left")
+                .voltage(
+                    identificationVoltageMeasure.mut_replace(
+                        modules[0].getModuleData().driveAppliedVolts,
+                        Volts))
+                .linearPosition(
+                    identificationDistanceMeasure.mut_replace(
+                        modules[0].getModuleData().drivePositionM,
+                        Meters))
+                .linearVelocity(
+                    identificaitonVelocityMeasure.mut_replace(
+                        modules[0].getModuleData().driveVelocityMPerSec,
+                        MetersPerSecond));
+            // Record a frame for the right motors. Since these share an encoder, we
+            // consider
+            // the entire group to be one motor.
+            log
+                .motor("front-right")
+                .voltage(
+                    identificationVoltageMeasure.mut_replace(
+                        modules[1].getModuleData().driveAppliedVolts,
+                        Volts))
+                .linearPosition(
+                    identificationDistanceMeasure.mut_replace(
+                        modules[1].getModuleData().drivePositionM,
+                        Meters))
+                .linearVelocity(
+                    identificaitonVelocityMeasure.mut_replace(
+                        modules[1].getModuleData().driveVelocityMPerSec,
+                        MetersPerSecond));
 
-        log
-          .motor("back-left")
-          .voltage(
-            identificationVoltageMeasure.mut_replace(
-              modules[2].getModuleData().driveAppliedVolts,
-              Volts
-            )
-          )
-          .linearPosition(
-            identificationDistanceMeasure.mut_replace(
-              modules[2].getModuleData().drivePositionM,
-              Meters
-            )
-          )
-          .linearVelocity(
-            identificaitonVelocityMeasure.mut_replace(
-              modules[2].getModuleData().driveVelocityMPerSec,
-              MetersPerSecond
-            )
-          );
-        log
-          .motor("back-right")
-          .voltage(
-            identificationVoltageMeasure.mut_replace(
-              modules[3].getModuleData().driveAppliedVolts,
-              Volts
-            )
-          )
-          .linearPosition(
-            identificationDistanceMeasure.mut_replace(
-              modules[3].getModuleData().drivePositionM,
-              Meters
-            )
-          )
-          .linearVelocity(
-            identificaitonVelocityMeasure.mut_replace(
-              modules[3].getModuleData().driveVelocityMPerSec,
-              MetersPerSecond
-            )
-          );
-      },
-      this
-    )
-  );
+            log
+                .motor("back-left")
+                .voltage(
+                    identificationVoltageMeasure.mut_replace(
+                        modules[2].getModuleData().driveAppliedVolts,
+                        Volts))
+                .linearPosition(
+                    identificationDistanceMeasure.mut_replace(
+                        modules[2].getModuleData().drivePositionM,
+                        Meters))
+                .linearVelocity(
+                    identificaitonVelocityMeasure.mut_replace(
+                        modules[2].getModuleData().driveVelocityMPerSec,
+                        MetersPerSecond));
+            log
+                .motor("back-right")
+                .voltage(
+                    identificationVoltageMeasure.mut_replace(
+                        modules[3].getModuleData().driveAppliedVolts,
+                        Volts))
+                .linearPosition(
+                    identificationDistanceMeasure.mut_replace(
+                        modules[3].getModuleData().drivePositionM,
+                        Meters))
+                .linearVelocity(
+                    identificaitonVelocityMeasure.mut_replace(
+                        modules[3].getModuleData().driveVelocityMPerSec,
+                        MetersPerSecond));
+          },
+          this));
 
   public Swerve() {
     if (Robot.isSimulation()) {
@@ -203,18 +170,16 @@ public class Swerve extends SubsystemBase {
       }
     }
 
-    swerveDrivePoseEstimator =
-      new SwerveDrivePoseEstimator(
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(
         Constants.DriveConstants.driveKinematics,
         new Rotation2d(0),
         new SwerveModulePosition[] {
-          modules[0].getPosition(),
-          modules[1].getPosition(),
-          modules[2].getPosition(),
-          modules[3].getPosition()
+            modules[0].getPosition(),
+            modules[1].getPosition(),
+            modules[2].getPosition(),
+            modules[3].getPosition()
         },
-        new Pose2d(new Translation2d(0, 0), new Rotation2d(0))
-      );
+        new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
 
     if (Robot.isSimulation()) {
       // resetOdometry(new Pose2d(new Translation2d(1, 1), new
@@ -225,13 +190,11 @@ public class Swerve extends SubsystemBase {
   public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
     // Convert chassis speeds to individual module states
     SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(
-      chassisSpeeds
-    );
+        chassisSpeeds);
     // take shortest path to destination
     SwerveDriveKinematics.desaturateWheelSpeeds(
-      moduleStates,
-      Constants.DriveConstants.maxSpeedMetersPerSecond
-    );
+        moduleStates,
+        Constants.DriveConstants.maxSpeedMetersPerSecond);
     // 6. Output each module states to wheels
 
     setModuleStates(moduleStates);
@@ -243,9 +206,8 @@ public class Swerve extends SubsystemBase {
       states[i] = modules[i].getState();
     }
     ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-      DriveConstants.driveKinematics.toChassisSpeeds(states),
-      getRotation2d()
-    );
+        DriveConstants.driveKinematics.toChassisSpeeds(states),
+        getRotation2d());
     return speeds;
   }
 
@@ -256,8 +218,8 @@ public class Swerve extends SubsystemBase {
 
   public Rotation2d getRotation2d() {
     Rotation2d rotation = swerveDrivePoseEstimator
-      .getEstimatedPosition()
-      .getRotation();
+        .getEstimatedPosition()
+        .getRotation();
     // return rotation;
     double heading = rotation.getDegrees();
 
@@ -282,51 +244,46 @@ public class Swerve extends SubsystemBase {
     // convert to -pi to pi
     Rotation2d gyroHeading = new Rotation2d(gyroData.yawDeg / 180 * Math.PI);
     swerveDrivePoseEstimator.resetPosition(
-      gyroHeading,
-      new SwerveModulePosition[] {
-        modules[0].getPosition(),
-        modules[1].getPosition(),
-        modules[2].getPosition(),
-        modules[3].getPosition()
-      },
-      pose
-    );
+        gyroHeading,
+        new SwerveModulePosition[] {
+            modules[0].getPosition(),
+            modules[1].getPosition(),
+            modules[2].getPosition(),
+            modules[3].getPosition()
+        },
+        pose);
 
     desiredOdometryLog.set(
-      new Double[] {
-        getPose().getX(),
-        getPose().getY(),
-        getPose().getRotation().getDegrees()
-      }
-    );
+        new Double[] {
+            getPose().getX(),
+            getPose().getY(),
+            getPose().getRotation().getDegrees()
+        });
   }
 
   public void updateOdometry() {
     // convert to -pi to pi
     Rotation2d gyroHeading = Rotation2d.fromRadians(
-      MathUtil.angleModulus(Units.degreesToRadians(gyroData.yawDeg))
-    );
+        MathUtil.angleModulus(Units.degreesToRadians(gyroData.yawDeg)));
 
     swerveDrivePoseEstimator.update(
-      gyroHeading,
-      new SwerveModulePosition[] {
-        modules[0].getPosition(),
-        modules[1].getPosition(),
-        modules[2].getPosition(),
-        modules[3].getPosition()
-      }
-    );
+        gyroHeading,
+        new SwerveModulePosition[] {
+            modules[0].getPosition(),
+            modules[1].getPosition(),
+            modules[2].getPosition(),
+            modules[3].getPosition()
+        });
   }
 
   public void logDesiredOdometry(Pose2d desiredPose) {
     this.desiredPose = desiredPose;
     desiredOdometryLog.set(
-      new Double[] {
-        desiredPose.getX(),
-        desiredPose.getY(),
-        desiredPose.getRotation().getDegrees()
-      }
-    );
+        new Double[] {
+            desiredPose.getX(),
+            desiredPose.getY(),
+            desiredPose.getRotation().getDegrees()
+        });
   }
 
   public void stopModules() {
@@ -337,9 +294,8 @@ public class Swerve extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-      desiredStates,
-      DriveConstants.maxSpeedMetersPerSecond
-    );
+        desiredStates,
+        DriveConstants.maxSpeedMetersPerSecond);
 
     for (int i = 0; i < 4; i++) {
       modules[i].setDesiredState(desiredStates[i]);
@@ -352,7 +308,6 @@ public class Swerve extends SubsystemBase {
       modules[i].setTurnPosition(0); // they all face forward, locking the wheels
     }
   }
-
 
   public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
     return routine.quasistatic(direction);
@@ -380,39 +335,37 @@ public class Swerve extends SubsystemBase {
     }
 
     Double[] realStates = {
-      modules[0].getState().angle.getDegrees(),
-      modules[0].getState().speedMetersPerSecond,
-      modules[1].getState().angle.getDegrees(),
-      modules[1].getState().speedMetersPerSecond,
-      modules[2].getState().angle.getDegrees(),
-      modules[2].getState().speedMetersPerSecond,
-      modules[3].getState().angle.getDegrees(),
-      modules[3].getState().speedMetersPerSecond
+        modules[0].getState().angle.getDegrees(),
+        modules[0].getState().speedMetersPerSecond,
+        modules[1].getState().angle.getDegrees(),
+        modules[1].getState().speedMetersPerSecond,
+        modules[2].getState().angle.getDegrees(),
+        modules[2].getState().speedMetersPerSecond,
+        modules[3].getState().angle.getDegrees(),
+        modules[3].getState().speedMetersPerSecond
     };
 
     Double[] desiredStates = {
-      modules[0].getDesiredState().angle.getDegrees(),
-      modules[0].getDesiredState().speedMetersPerSecond,
-      modules[1].getDesiredState().angle.getDegrees(),
-      modules[1].getDesiredState().speedMetersPerSecond,
-      modules[2].getDesiredState().angle.getDegrees(),
-      modules[2].getDesiredState().speedMetersPerSecond,
-      modules[3].getDesiredState().angle.getDegrees(),
-      modules[3].getDesiredState().speedMetersPerSecond
+        modules[0].getDesiredState().angle.getDegrees(),
+        modules[0].getDesiredState().speedMetersPerSecond,
+        modules[1].getDesiredState().angle.getDegrees(),
+        modules[1].getDesiredState().speedMetersPerSecond,
+        modules[2].getDesiredState().angle.getDegrees(),
+        modules[2].getDesiredState().speedMetersPerSecond,
+        modules[3].getDesiredState().angle.getDegrees(),
+        modules[3].getDesiredState().speedMetersPerSecond
     };
 
     realStatesLog.set(realStates);
     desiredStatesLog.set(desiredStates);
     rotationalVelocityLog.set(
-      Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond)
-    );
+        Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond));
     odometryLog.set(
-      new Double[] {
-        getPose().getX(),
-        getPose().getY(),
-        getPose().getRotation().getDegrees()
-      }
-    );
+        new Double[] {
+            getPose().getX(),
+            getPose().getY(),
+            getPose().getRotation().getDegrees()
+        });
 
     yawLog.set(gyroData.yawDeg);
     pitchLog.set(gyroData.pitchDeg);
