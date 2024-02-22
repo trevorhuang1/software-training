@@ -19,7 +19,6 @@ public class Climb extends Command {
 
     private double voltage = 0;
 
-
     public Climb() {
         addRequirements(Robot.arm);
     }
@@ -34,25 +33,25 @@ public class Climb extends Command {
 
     @Override
     public void execute() {
-
-        if (Robot.pilot.rightBumper().getAsBoolean()){
-            voltage+=0.01;
+        // Can only climb if arm starts straight up
+        if (Robot.arm.getGoal() != Math.PI/2){
+            return;
         }
+        // Stop/slow down at 2 degrees
+        if (Robot.arm.getRotation2d().getDegrees() > 2) {
 
-        if (Robot.pilot.leftBumper().getAsBoolean()){
-            voltage-=0.01;
+            Robot.arm.setVoltage(-3);
         }
-
-        System.out.println(voltage);
-        Robot.arm.setVoltage(voltage);
+        else {
+            Robot.arm.setVoltage(-1.5);
+        }
 
     }
 
     @Override
     public void end(boolean interupted) {
-        voltage= 0;
+        voltage = 0;
         Robot.arm.setVoltage(voltage);
-
 
     }
 
