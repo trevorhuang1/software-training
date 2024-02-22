@@ -35,11 +35,11 @@ public class Climb extends Command {
     @Override
     public void execute() {
 
-        if (RobotContainer.pilot.rightBumper().getAsBoolean()){
+        if (Robot.pilot.rightBumper().getAsBoolean()){
             voltage+=0.01;
         }
 
-        if (RobotContainer.pilot.leftBumper().getAsBoolean()){
+        if (Robot.pilot.leftBumper().getAsBoolean()){
             voltage-=0.01;
         }
 
