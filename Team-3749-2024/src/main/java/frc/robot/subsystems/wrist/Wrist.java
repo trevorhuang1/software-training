@@ -19,7 +19,7 @@ import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.WristConstants;
 
 public class Wrist extends SubsystemBase {
- // hello test
+    // hello test
     private WristIO wristIO;
     private WristData data = new WristData();
 
@@ -39,7 +39,29 @@ public class Wrist extends SubsystemBase {
     private MechanismLigament2d mechanismArm = mechanismArmPivot
             .append(new MechanismLigament2d("mechanism arm", .93, 0));
 
-    private double accelerationSpeed = 0.0;
+    private ShuffleData<Double> positionLog = new ShuffleData<Double>(this.getName(), "position",
+            0.0);
+    private ShuffleData<Double> velocityLog = new ShuffleData<Double>(this.getName(), "velocity",
+            0.0);
+    private ShuffleData<Double> accelerationLog = new ShuffleData<Double>(this.getName(), "acceleration",
+            0.0);
+    private ShuffleData<Double> voltageLog = new ShuffleData<Double>(this.getName(), "voltage",
+            0.0);
+    private ShuffleData<Double> currentLog = new ShuffleData<Double>(this.getName(), "current",
+            0.0);
+
+    private ShuffleData<Double> goalLog = new ShuffleData<Double>(this.getName(), "goal",
+            0.0);
+    private ShuffleData<Double> setpointPositionLog = new ShuffleData<Double>(this.getName(), "setpoint position",
+            0.0);
+    private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>(this.getName(), "setpoint velocity",
+            0.0);
+    private ShuffleData<Double> setpointAccelerationLog = new ShuffleData<Double>(this.getName(),
+            "setpoint acceleration", 0.0);
+    private ShuffleData<Double> errorPositionLog = new ShuffleData<Double>(this.getName(), "error position",
+            0.0);
+    private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>(this.getName(), "error velocity",
+            0.0);
 
     private DoubleSupplier armPositionRadSupplier;
 
@@ -50,7 +72,6 @@ public class Wrist extends SubsystemBase {
         if (Robot.isSimulation()) {
             wristIO = new WristSim();
         }
-        wristController.enableContinuousInput(0, 2 * Math.PI);
         this.armPositionRadSupplier = armPositionRadSupplier;
     }
 
@@ -67,12 +88,8 @@ public class Wrist extends SubsystemBase {
         return wristController.getSetpoint();
     }
 
-    public boolean getIsGroundIntake(){
+    public boolean getIsGroundIntake() {
         return isGroundIntake;
-    }
-
-    public void setAcceleration(double acceleration) {
-        this.accelerationSpeed = acceleration;
     }
 
     public void moveWristToAngle() {
@@ -95,7 +112,8 @@ public class Wrist extends SubsystemBase {
     }
 
     private ShuffleData<Double> kGData = new ShuffleData<Double>("wrist", "kGData", 0.0);
-    public void runFF(){
+
+    public void runFF() {
         wristIO.setVoltage(kGData.get());
 
         // wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad,0));
@@ -113,17 +131,22 @@ public class Wrist extends SubsystemBase {
     @Override
     public void periodic() {
         wristIO.updateData(data);
-        
-        mechanismArm.setAngle(data.positionRad);
-        SmartDashboard.putData("Mech2d", mechanism);
-        mechanismArm.setAngle(Math.toDegrees(data.positionRad));
-        SmartDashboard.putNumber("wristGoal", getWristGoal().position);
-        SmartDashboard.putNumber("Position", data.positionRad);
-        SmartDashboard.putNumber("Position Degrees", Units.radiansToDegrees(data.positionRad));
 
-        SmartDashboard.putNumber("vel", data.velocityRadPerSec);
-        SmartDashboard.putNumber("volts", data.appliedVolts);
-        SmartDashboard.putNumber("active volts", data.wristVoltage);
+        // mechanismArm.setAngle(data.positionRad);
+        // SmartDashboard.putData("Mech2d", mechanism);
+        // mechanismArm.setAngle(Math.toDegrees(data.positionRad));
+
+        positionLog.set(data.positionRad);
+        velocityLog.set(data.velocityRadPerSec);
+        accelerationLog.set(data.accelerationRadPerSecSquared);
+        goalLog.set(getWristGoal().position);
+        setpointPositionLog.set(getWristSetpoint().position);
+        setpointVelocityLog.set(getWristSetpoint().velocity);
+        voltageLog.set(data.appliedVolts);
+        currentLog.set(data.currentAmps);
+        errorPositionLog.set(getWristSetpoint().position - data.positionRad);
+        errorVelocityLog.set(getWristSetpoint().velocity - data.velocityRadPerSec);
+
 
         // test
     }

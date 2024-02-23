@@ -16,11 +16,12 @@ package frc.robot.subsystems.wrist;
  */
 public interface WristIO {
     public static class WristData { 
-        public double wristVoltage = 0.0;
-        public double tempCelcius = 0.0;
-        public double velocityRadPerSec = 0.0;
-        public double appliedVolts = 0.0;
         public double positionRad = 0.0;
+        public double velocityRadPerSec = 0.0;
+        public double accelerationRadPerSecSquared = 0.0;
+        public double appliedVolts = 0.0;
+        public double currentAmps = 0.0;
+        public double tempCelcius = 0.0;
     }
     /** Updates the set of loggable inputs. */
     public default void updateData(WristData data) {

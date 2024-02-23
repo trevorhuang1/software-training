@@ -17,13 +17,13 @@ import frc.robot.subsystems.swerve.Swerve;
 public class Robot extends TimedRobot {
   public static final Xbox pilot = new Xbox(0);
   public static final Xbox operator = new Xbox(1);
-  public static final Wrist wrist = new Wrist(() -> 0.0);
+
+  public static final Swerve swerve = new Swerve();
+  public static final Arm arm = new Arm();
+  public static final Wrist wrist = new Wrist(() -> arm.getRotation2d().getRadians());
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
 
-  // public static Arm arm = new Arm();
-  public static final Swerve swerve = new Swerve();
-  public static final Arm arm = new Arm();
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 

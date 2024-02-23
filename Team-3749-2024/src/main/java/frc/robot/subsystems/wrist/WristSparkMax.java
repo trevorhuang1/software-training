@@ -20,12 +20,13 @@ public class WristSparkMax implements WristIO {
     private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorType.kBrushless);
     private SparkAbsoluteEncoder wristEncoder = wristMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     private double appliedVolts = 0;
+    private double previousVelocity = 0;
 
     public WristSparkMax() {
         
-        // wristEncoder.setPositionConversionFactor(2 * Math.PI * (1/4));
-        // wristEncoder.setVelocityConversionFactor(2 * Math.PI * (1/4) * 1 /60.0);
-        // wristEncoder.setZeroOffset(WristConstants.wristOffset);
+        wristEncoder.setPositionConversionFactor(2 * Math.PI );
+        wristEncoder.setVelocityConversionFactor(2 * Math.PI * 1 /60.0);
+        wristMotor.setInverted(true);
         wristMotor.setSmartCurrentLimit(40);
         wristMotor.setIdleMode(IdleMode.kCoast);
 
@@ -42,13 +43,18 @@ public class WristSparkMax implements WristIO {
         return pos;
 
     }
+    
 
     @Override
     public void updateData(WristData data) {
+        previousVelocity = data.velocityRadPerSec;
+
         data.positionRad = getAbsolutePosition() ;
         data.velocityRadPerSec = wristEncoder.getVelocity();
-        data.wristVoltage = wristMotor.getBusVoltage() * wristMotor.getAppliedOutput();
-        data.appliedVolts = appliedVolts;
+        data.accelerationRadPerSecSquared = (wristEncoder.getVelocity() - previousVelocity) / 0.02;
+
+        data.appliedVolts = wristMotor.getBusVoltage() * wristMotor.getAppliedOutput();
+        data.currentAmps = wristMotor.getOutputCurrent();
         data.tempCelcius = wristMotor.getMotorTemperature();
 
     }

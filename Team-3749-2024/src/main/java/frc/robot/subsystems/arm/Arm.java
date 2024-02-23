@@ -35,27 +35,30 @@ public class Arm extends SubsystemBase {
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
     private MechanismLigament2d mechanismArm = mechanismArmPivot
             .append(new MechanismLigament2d("mechanism arm", .93, 0));
-
-    private ShuffleData<Double> positionLog = new ShuffleData<Double>("arm", "position",
+    private ShuffleData<Double> positionLog = new ShuffleData<Double>(this.getName(), "position",
             0.0);
-    private ShuffleData<Double> velocityLog = new ShuffleData<Double>("arm", "velocity",
+    private ShuffleData<Double> velocityLog = new ShuffleData<Double>(this.getName(), "velocity",
             0.0);
-    private ShuffleData<Double> accelerationLog = new ShuffleData<Double>("arm", "acceleration",
+    private ShuffleData<Double> accelerationLog = new ShuffleData<Double>(this.getName(), "acceleration",
             0.0);
-    private ShuffleData<Double> voltageLog = new ShuffleData<Double>("arm", "voltage",
+    private ShuffleData<Double> voltageLog = new ShuffleData<Double>(this.getName(), "voltage",
             0.0);
-    private ShuffleData<Double> goalLog = new ShuffleData<Double>("arm", "goal",
+    private ShuffleData<Double> leftCurrentLog = new ShuffleData<Double>(this.getName(), "current",
             0.0);
-    private ShuffleData<Double> setpointPositionLog = new ShuffleData<Double>("arm", "setpoint position",
+    private ShuffleData<Double> rightCurrentLog = new ShuffleData<Double>(this.getName(), "current",
             0.0);
-    private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>("arm", "setpoint velocity",
+    private ShuffleData<Double> goalLog = new ShuffleData<Double>(this.getName(), "goal",
             0.0);
-    private ShuffleData<Double> setpointAccelerationLog = new ShuffleData<Double>("arm", "setpoint acceleration", 0.0);
-    private ShuffleData<Double> errorPositionLog = new ShuffleData<Double>("arm", "error position",
+    private ShuffleData<Double> setpointPositionLog = new ShuffleData<Double>(this.getName(), "setpoint position",
             0.0);
-    private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>("arm", "error velocity",
+    private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>(this.getName(), "setpoint velocity",
             0.0);
-    private ShuffleData<Double> errorAccelerationLog = new ShuffleData<Double>("arm", "error acceleration", 0.0);
+    private ShuffleData<Double> setpointAccelerationLog = new ShuffleData<Double>(this.getName(), "setpoint acceleration", 0.0);
+    private ShuffleData<Double> errorPositionLog = new ShuffleData<Double>(this.getName(), "error position",
+            0.0);
+    private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>(this.getName(), "error velocity",
+            0.0);
+    private ShuffleData<Double> errorAccelerationLog = new ShuffleData<Double>(this.getName(), "error acceleration", 0.0);
 
     private double accelerationSetpoint = 0;
 
@@ -88,7 +91,6 @@ public class Arm extends SubsystemBase {
     }
 
     public void setVoltage(double volts) {
-        System.out.println(volts);
         if (isKilled) {
             armIO.setVoltage(0);
         } else {
@@ -119,6 +121,8 @@ public class Arm extends SubsystemBase {
         velocityLog.set(data.velocityRadPerSec);
         accelerationLog.set(data.accelerationRadPerSecSquared);
         voltageLog.set(data.appliedVolts);
+        leftCurrentLog.set(data.leftCurrentAmps);
+        rightCurrentLog.set(data.rightCurrentAmps);
         goalLog.set(profiledFeedbackController.getGoal().position);
         setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
         setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);

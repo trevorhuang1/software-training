@@ -31,7 +31,7 @@ public class WristSim implements WristIO {
     wristMotor.update(Sim.loopPeriodSec);
     data.tempCelcius = 0;
     data.velocityRadPerSec = wristMotor.getVelocityRadPerSec();
-    data.wristVoltage = wristMotor.getCurrentDrawAmps();
+    data.currentAmps = wristMotor.getCurrentDrawAmps();
     data.appliedVolts = appliedVolts;
     data.positionRad = wristMotor.getAngleRads();//(data.positionRad + (data.velocityRadPerSec * 0.02));
 
