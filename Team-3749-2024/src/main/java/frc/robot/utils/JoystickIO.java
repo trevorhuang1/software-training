@@ -107,7 +107,6 @@ public class JoystickIO {
 
         pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalGround()));
         pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalStow()));
-
     }
 
     public void simBindings() {

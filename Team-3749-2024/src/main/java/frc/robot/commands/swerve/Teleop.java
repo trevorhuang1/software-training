@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
@@ -50,6 +51,8 @@ public class Teleop extends Command {
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = xTurningSpdFunction.get();
+
+    SmartDashboard.putNumberArray("inputs", new Double[] {xSpeed, ySpeed, turningSpeed});
 
     xSpeed = Math.abs(xSpeed) > ControllerConstants.deadband ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > ControllerConstants.deadband ? ySpeed : 0.0;

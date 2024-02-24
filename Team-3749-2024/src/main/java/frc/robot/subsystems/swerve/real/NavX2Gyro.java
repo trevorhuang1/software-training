@@ -45,7 +45,5 @@ public class NavX2Gyro implements GyroIO {
     @Override
     public void resetGyro() {
         gyro.reset();
-
     }
-
 }
