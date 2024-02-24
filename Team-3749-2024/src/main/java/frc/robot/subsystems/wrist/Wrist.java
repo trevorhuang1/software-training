@@ -66,16 +66,14 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>(this.getName(), "error velocity",
             0.0);
 
-    private DoubleSupplier armPositionRadSupplier;
 
-    public Wrist(DoubleSupplier armPositionRadSupplier) {
+    public Wrist() {
         setpointToggle.put(true, Constants.WristConstants.groundGoal);
         setpointToggle.put(false, Constants.WristConstants.stowGoal);
         wristIO = new WristSparkMax();
         if (Robot.isSimulation()) {
             wristIO = new WristSim();
         }
-        this.armPositionRadSupplier = armPositionRadSupplier;
     }
 
     // runs twice???
@@ -139,7 +137,7 @@ public class Wrist extends SubsystemBase {
 
     public void runFF() {
 
-        wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad, 0));
+        wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians()));
     }
 
     public double calculateRealWristFeedForward(double wristPositionRad, double armPositionRad) {

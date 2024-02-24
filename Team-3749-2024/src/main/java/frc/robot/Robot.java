@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
 
   public static final Swerve swerve = new Swerve();
   public static final Arm arm = new Arm();
-  public static final Wrist wrist = new Wrist(() -> arm.getRotation2d().getRadians());
+  public static final Wrist wrist = new Wrist();
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
 
