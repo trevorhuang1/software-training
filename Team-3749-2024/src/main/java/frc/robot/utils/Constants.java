@@ -195,21 +195,32 @@ public class Constants {
     public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
 
     // Field Parameters
-    public static final double armHeightOffset = 0.0; // how high up the arm is, NOTE: need to find
+    public static final double armHeightOffset = 0.2159; 
+    public static final double armLengthOffset = 0.2286;
     public static final double armLength = 0.93;
     public static final double shooterVelocity = 20.0; // NOTE: likely will vary, might need to pass as parameter
 
-    // NOTE: Not percise
     // Field Parameters
     public static final double speakerHeight = 2.05; // likely thing you'll need to tune
-    public static final double minDistance = 0.9; // confirm (this is subwoofer)
+    public static final double minDistance = 0.9; // / NOTE: Not percise, please check
 
     // Calcuation stuff
     // TODO: adjust stage margin stuff and distance margin/max angle (ask Bailey)
     public static final double distMargin = 0.25; // Half a meter is kind of a lot, don't you think?
     public static final double maxAngle = 42.109;
     public static final double maxAngleRad = Math.toRadians(maxAngle);
-    public static final double stageMargin = 10; // inches
+
+    // Important Field Coordinates (everything converted from inches to meters)
+    //NOTE: may need to adjust slightly to make sure code works properly (some inpercision in measurements)
+    public static final Translation2d redSpeakerPosition = new Translation2d(Units.inchesToMeters(653.2), Units.inchesToMeters(218.64)); // rounded need to change
+    public static final Translation2d blueSpeakerPosition = new Translation2d(0, Units.inchesToMeters(218.64)); // rounded need to change
+
+    // public static final Translation2d[] redStagePoints = {new Translation2d(13.8986, 4.1056), new Translation2d(10.4648, 2.1752),new Translation2d(10.4648, 6.0361)};
+    // public static final Translation2d[] blueStagePoints = {new Translation2d(16.5928-redStagePoints[0].getX(), redStagePoints[0].getY()),new Translation2d(16.5928-redStagePoints[1].getX(), redStagePoints[1].getY()),new Translation2d(16.5928-redStagePoints[2].getX(), redStagePoints[2].getY())};
+
+    public static final double stageMargin = 20; // margin in inches
+    public static final Translation2d[] redStagePoints = {new Translation2d(Units.inchesToMeters(125.01 + stageMargin),Units.inchesToMeters(161.64)), new Translation2d(Units.inchesToMeters(231.2 + stageMargin), Units.inchesToMeters(104.64 + stageMargin)), new Translation2d(Units.inchesToMeters(231.2 + stageMargin), Units.inchesToMeters(218.64 + stageMargin))};
+    public static final Translation2d[] blueStagePoints = {new Translation2d(653.2-redStagePoints[0].getX(), redStagePoints[0].getY()), new Translation2d(653.2-redStagePoints[1].getX(), redStagePoints[1].getY()), new Translation2d(653.2-redStagePoints[2].getX(), redStagePoints[2].getY())};
   }
 
   public static final class ModuleConstants {
