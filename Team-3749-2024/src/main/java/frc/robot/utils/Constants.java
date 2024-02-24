@@ -205,7 +205,7 @@ public class Constants {
     public static final double minDistance = 0.9; // / NOTE: Not percise, please check
 
     // Calcuation stuff
-    // TODO: adjust stage margin stuff and distance margin/max angle (ask Bailey)
+    // Max angle??? (ask Bailey)
     public static final double distMargin = 0.25; // Half a meter is kind of a lot, don't you think?
     public static final double maxAngle = 42.109;
     public static final double maxAngleRad = Math.toRadians(maxAngle);
@@ -214,9 +214,6 @@ public class Constants {
     //NOTE: may need to adjust slightly to make sure code works properly (some inpercision in measurements)
     public static final Translation2d redSpeakerPosition = new Translation2d(Units.inchesToMeters(653.2), Units.inchesToMeters(218.64)); // rounded need to change
     public static final Translation2d blueSpeakerPosition = new Translation2d(0, Units.inchesToMeters(218.64)); // rounded need to change
-
-    // public static final Translation2d[] redStagePoints = {new Translation2d(13.8986, 4.1056), new Translation2d(10.4648, 2.1752),new Translation2d(10.4648, 6.0361)};
-    // public static final Translation2d[] blueStagePoints = {new Translation2d(16.5928-redStagePoints[0].getX(), redStagePoints[0].getY()),new Translation2d(16.5928-redStagePoints[1].getX(), redStagePoints[1].getY()),new Translation2d(16.5928-redStagePoints[2].getX(), redStagePoints[2].getY())};
 
     public static final double stageMargin = 20; // margin in inches
     public static final Translation2d[] redStagePoints = {new Translation2d(Units.inchesToMeters(125.01 + stageMargin),Units.inchesToMeters(161.64)), new Translation2d(Units.inchesToMeters(231.2 + stageMargin), Units.inchesToMeters(104.64 + stageMargin)), new Translation2d(Units.inchesToMeters(231.2 + stageMargin), Units.inchesToMeters(218.64 + stageMargin))};
