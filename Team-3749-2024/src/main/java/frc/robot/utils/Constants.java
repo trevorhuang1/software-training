@@ -63,12 +63,6 @@ public class Constants {
     public static final double simkV = 6.616; // max volts - kG / max velocity
     public static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-
-
-             
-       
-
-
     public static final double kYIntercept = 0.2905297;
     public static final double kBar = 0.93000486;
     public static final double kBarSquared = -1.55368244;
