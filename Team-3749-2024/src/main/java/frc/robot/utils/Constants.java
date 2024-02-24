@@ -46,14 +46,15 @@ public class Constants {
     public static final double gearRatio = 1;
 
     private static final PIDConstants simPID = new PIDConstants(35, 0, 1);
-    private static final PIDConstants realPID = new PIDConstants(1, 0, 0);
+    private static final PIDConstants realPID = new PIDConstants(1.75, 0, 0);
 
+    public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
+    
     private static final Constraints simConstraint = new Constraints(Math.PI, 2 * Math.PI); // we stealing from arm with
                                                                                             // this one
-    private static final Constraints realConstraint = new Constraints(Math.PI, Math.PI);
+    private static final Constraints realConstraint = new Constraints(Math.PI, 2*Math.PI);
 
     public static final Constraints trapezoidConstraint = Robot.isReal() ? realConstraint : simConstraint;
-    public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
     // thanks arm (robbery)
     public static final double simkS = 0.0;
@@ -62,21 +63,29 @@ public class Constants {
     public static final double simkV = 6.616; // max volts - kG / max velocity
     public static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-    public static final double kYIntercept = 0.3673;
-    public static final double kBar = 0.035007;
-    public static final double kArm = 0.0;
-    public static final double kBarSquared = -0.0011232;
-    public static final double kArmSquared = 0.0;
-    public static final double kBarCubed = 0.0000083829;
-    public static final double kArmCubed = 0.0;
-    public static final double kBarZenzizenic = -0.0000000185549;
-    public static final double kArmZenzizenic = 0.0;
 
 
+             
+       
 
-    public static final double groundGoal = Math.toRadians(-40);
+
+    public static final double kYIntercept = 0.2905297;
+    public static final double kBar = 0.93000486;
+    public static final double kBarSquared = -1.55368244;
+    public static final double kBarCubed = 0.40010935;
+    public static final double kArm = -0.32402392;
+    public static final double kArmSquared = 0.16496449;
+    public static final double kBarArm = 4.53475144;
+    public static final double kBarSquaredArm = -3.45017636;
+    public static final double kBarCubedArm = 0.67742981 ;
+    public static final double kBarArmSquared = -2.66645873;
+    public static final double kBarSquaredArmSquared =  2.57303994;
+    public static final double kBarCubedArmSquared =  -0.5938634;
+
+
+    public static final double groundGoal = Math.toRadians(150);
     public static final double stowGoal = 0;
-    public static final double wristOffsetRad = Units.degreesToRadians(253.55);
+    public static final double wristOffsetRad = Units.degreesToRadians(251.35);
   }
 
   public static final class ShooterConstants {

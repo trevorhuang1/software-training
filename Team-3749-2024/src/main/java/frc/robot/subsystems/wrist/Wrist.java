@@ -78,9 +78,22 @@ public class Wrist extends SubsystemBase {
         this.armPositionRadSupplier = armPositionRadSupplier;
     }
 
+    // runs twice???
     public void toggleWristGoal() {
         this.isGroundIntake = !this.isGroundIntake;
         wristController.setGoal(setpointToggle.get(this.isGroundIntake));
+        System.out.println("togggle");
+        System.out.println(isGroundIntake);
+    }
+
+    public void setGoalGround() {
+        wristController.setGoal(setpointToggle.get(true));
+
+    }
+
+    public void setGoalStow() {
+        wristController.setGoal(setpointToggle.get(false));
+
     }
 
     public State getWristGoal() {
@@ -95,13 +108,15 @@ public class Wrist extends SubsystemBase {
         return isGroundIntake;
     }
 
-    public double getPositionRad(){
+    public double getPositionRad() {
         return (data.positionRad);
     }
-    public double getVelocityRadPerSec(){
+
+    public double getVelocityRadPerSec() {
         return (data.velocityRadPerSec);
     }
-    public void moveWristToAngle() {
+
+    public void moveWristToAngle(double positionRad, double velocityRadPerSec, double accelerationRadPerSecSquared) {
 
         State state = getWristSetpoint();
         double voltage = wristController.calculate(data.positionRad);
@@ -109,7 +124,7 @@ public class Wrist extends SubsystemBase {
 
             voltage += wristFF.calculate(data.positionRad, state.velocity); // is getting the goal redundant?
         } else {
-            voltage += calculateRealWristFeedForward(data.positionRad, voltage);
+            voltage += calculateRealWristFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians());
         }
 
         setVoltage(voltage);
@@ -123,22 +138,24 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> kGData = new ShuffleData<Double>("wrist", "kGData", 0.0);
 
     public void runFF() {
-        wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad,0));
+
+        wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad, 0));
     }
 
     public double calculateRealWristFeedForward(double wristPositionRad, double armPositionRad) {
-        double wristPosDegrees = Units.radiansToDegrees(wristPositionRad);
-        double armPosDegrees = Units.radiansToDegrees(armPositionRad);
 
-        return WristConstants.kYIntercept 
-                + WristConstants.kBar * wristPosDegrees 
-                + WristConstants.kArm * armPosDegrees
-                + WristConstants.kBarSquared * Math.pow(wristPosDegrees, 2)
-                + WristConstants.kArmSquared * Math.pow(armPosDegrees, 2)
-                + WristConstants.kBarCubed * Math.pow(wristPosDegrees, 3)
-                + WristConstants.kArmCubed * Math.pow(armPosDegrees, 3)
-                + WristConstants.kBarZenzizenic * Math.pow(wristPosDegrees, 4)
-                + WristConstants.kArmZenzizenic * Math.pow(armPosDegrees, 4);
+        return WristConstants.kYIntercept
+                + WristConstants.kBar * wristPositionRad
+                + WristConstants.kBarSquared * Math.pow(wristPositionRad, 2)
+                + WristConstants.kBarCubed * Math.pow(wristPositionRad, 3)
+                + WristConstants.kArm * armPositionRad
+                + WristConstants.kArmSquared * Math.pow(armPositionRad, 2)
+                + WristConstants.kBarArm * wristPositionRad * armPositionRad
+                + WristConstants.kBarSquaredArm * Math.pow(wristPositionRad, 2) * armPositionRad
+                + WristConstants.kBarCubedArm * Math.pow(wristPositionRad, 3) * armPositionRad
+                + WristConstants.kBarArmSquared * wristPositionRad * Math.pow(armPositionRad, 2)
+                + WristConstants.kBarSquaredArmSquared * Math.pow(wristPositionRad, 2) * Math.pow(armPositionRad, 2)
+                + WristConstants.kBarCubedArmSquared * Math.pow(wristPositionRad, 3) * Math.pow(armPositionRad, 2);
     }
 
     @Override

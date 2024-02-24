@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 // import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.Teleop;
+import frc.robot.commands.wrist.WristCommand;
 import frc.robot.commands.wrist.getRegressionData;
 import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.arm.Climb;
@@ -87,11 +88,13 @@ public class JoystickIO {
         // pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
         // pilot.back().whileTrue(new Climb());
 
-        // pilot.a()
-        //         .whileTrue(
-        //             Commands.run(() -> 
-        //                 Robot.wrist.runFF()
-        //             ));
+        pilot.y()
+                .whileTrue(
+                    Commands.run(() -> 
+                        Robot.wrist.runFF()
+                    ));
+
+        pilot.y().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0), Robot.wrist));
 
         pilot.a().whileTrue(
             new getRegressionData(true));
@@ -100,6 +103,9 @@ public class JoystickIO {
         pilot.b().whileTrue(
             new getRegressionData(false));
         pilot.b().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0), Robot.wrist));
+
+        pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalGround()));
+        pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalStow()));
 
     }
 
@@ -111,10 +117,11 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        Robot.arm.setDefaultCommand(new ArmMoveToGoal(() -> pilot.b().getAsBoolean()));
+        // Robot.arm.setDefaultCommand(new ArmMoveToGoal(() -> pilot.b().getAsBoolean()));
 
         // Robot.arm.setDefaultCommand(new ArmMoveToGoal(() ->
         // Robot.wrist.getIsGroundIntake()));
+        Robot.wrist.setDefaultCommand(new WristCommand());
 
         Robot.swerve.setDefaultCommand(
                 new Teleop(() -> -pilot.getLeftX(), () -> -pilot.getLeftY(), () -> -pilot.getRightX()));
