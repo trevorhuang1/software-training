@@ -3,8 +3,11 @@ package frc.robot.subsystems.wrist;
 import java.util.HashMap;
 import java.util.function.DoubleSupplier;
 
+import org.opencv.core.RotatedRect;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -92,6 +95,12 @@ public class Wrist extends SubsystemBase {
         return isGroundIntake;
     }
 
+    public Rotation2d getRotation2d(){
+        return new Rotation2d(data.positionRad);
+    }
+    public Rotation2d getVelocityRotation2d(){
+        return new Rotation2d(data.velocityRadPerSec);
+    }
     public void moveWristToAngle() {
 
         State state = getWristSetpoint();
@@ -114,9 +123,7 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> kGData = new ShuffleData<Double>("wrist", "kGData", 0.0);
 
     public void runFF() {
-        wristIO.setVoltage(kGData.get());
-
-        // wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad,0));
+        wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad,0));
     }
 
     public double calculateRealWristFeedForward(double wristPositionRad, double armPositionRad) {
@@ -130,8 +137,8 @@ public class Wrist extends SubsystemBase {
                 + WristConstants.kArmSquared * Math.pow(armPosDegrees, 2)
                 + WristConstants.kBarCubed * Math.pow(wristPosDegrees, 3)
                 + WristConstants.kArmCubed * Math.pow(armPosDegrees, 3)
-                + WristConstants.kArmHyperCubed * Math.pow(wristPosDegrees, 4)
-                + WristConstants.kArmHyperCubed * Math.pow(armPosDegrees, 4);
+                + WristConstants.kBarZenzizenic * Math.pow(wristPosDegrees, 4)
+                + WristConstants.kArmZenzizenic * Math.pow(armPosDegrees, 4);
     }
 
     @Override
@@ -153,6 +160,7 @@ public class Wrist extends SubsystemBase {
         errorPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position - data.positionRad));
         errorVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity - data.velocityRadPerSec));
 
+        SmartDashboard.putNumber("FF", calculateRealWristFeedForward(data.positionRad, 0));
 
         // test
     }

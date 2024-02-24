@@ -2,6 +2,7 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
@@ -64,23 +65,33 @@ public class JoystickIO {
     }
 
     public void pilotBindings() {
-        // pilot.leftTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(60),
-        //         Robot.intake));
-        // pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
-        //         Robot.intake));
-        // pilot.rightTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(-60),
-        //         Robot.intake));
-        // pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
-        //         Robot.intake));
+        // pilot.leftTrigger().whileTrue(Commands.run(() ->
+        // Robot.intake.setIntakeVelocity(60),
+        // Robot.intake));
+        // pilot.leftTrigger().onFalse(Commands.runOnce(() ->
+        // Robot.intake.setVoltage(0),
+        // Robot.intake));
+        // pilot.rightTrigger().whileTrue(Commands.run(() ->
+        // Robot.intake.setIntakeVelocity(-60),
+        // Robot.intake));
+        // pilot.rightTrigger().onFalse(Commands.runOnce(() ->
+        // Robot.intake.setVoltage(0),
+        // Robot.intake));
 
-        // pilot.a().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(6.5))));
-        // pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(90))));
+        // pilot.a().onTrue(Commands.runOnce(() ->
+        // Robot.arm.setGoal(Units.degreesToRadians(6.5))));
+        // pilot.y().onTrue(Commands.runOnce(() ->
+        // Robot.arm.setGoal(Units.degreesToRadians(90))));
 
         // pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
         // pilot.back().whileTrue(new Climb());
 
-        pilot.a().whileTrue(Commands.run(() -> Robot.wrist.runFF(), Robot.wrist));
-        pilot.a().onFalse(Commands.run(() -> Robot.wrist.setVoltage(0), Robot.wrist));
+        pilot.a()
+                .whileTrue(
+                    Commands.run(() -> 
+                        Robot.wrist.runFF()
+                    ));
+        pilot.a().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0), Robot.wrist));
 
     }
 

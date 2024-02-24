@@ -34,12 +34,14 @@ public class WristSparkMax implements WristIO {
 
     private double getAbsolutePosition(){
         double pos = wristEncoder.getPosition()-WristConstants.wristOffsetRad;
-        if (pos > 2 * Math.PI){
+        if (pos >  3.0 / 2.0 * Math.PI){
             pos -= 2 * Math.PI;
         }
         if (pos<0){
             pos += 2 * Math.PI;
         }
+
+
         return pos;
 
     }
@@ -56,6 +58,7 @@ public class WristSparkMax implements WristIO {
         data.appliedVolts = wristMotor.getBusVoltage() * wristMotor.getAppliedOutput();
         data.currentAmps = wristMotor.getOutputCurrent();
         data.tempCelcius = wristMotor.getMotorTemperature();
+
 
     }
 
