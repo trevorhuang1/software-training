@@ -15,17 +15,12 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.utils.Constants;
 import edu.wpi.first.wpilibj.Filesystem;
 
-// TODO: Fix Speaker Position Values to be bigger margin and make sure Stage points exact, MOVE these to Constants
-
 public class ShootKinematics {
-    // constants move to constants file
-    private static final Translation2d redSpeakerPosition = new Translation2d(16.591, 5.553); // rounded need to change
-    private static final Translation2d blueSpeakerPosition = new Translation2d(0, 5.553); // rounded need to change
-    
-    // Note: some of these points are basically not used, tolerances of 10 inches were used
-    // FOR DON: Use Constants.ArmConstants.stageMargin as the constant 
-    private static final Translation2d[] redStagePoints = {new Translation2d(13.8986, 4.1056), new Translation2d(10.4648, 2.1752),new Translation2d(10.4648, 6.0361)};
-    private static final Translation2d[] blueStagePoints = {new Translation2d(16.5928-redStagePoints[0].getX(), redStagePoints[0].getY()),new Translation2d(16.5928-redStagePoints[1].getX(), redStagePoints[1].getY()),new Translation2d(16.5928-redStagePoints[2].getX(), redStagePoints[2].getY())};
+    private static final Translation2d redSpeakerPosition = Constants.ArmConstants.redSpeakerPosition;
+    private static final Translation2d blueSpeakerPosition = Constants.ArmConstants.blueSpeakerPosition;
+
+    private static final Translation2d[] redStagePoints = Constants.ArmConstants.redStagePoints;
+    private static final Translation2d[] blueStagePoints = Constants.ArmConstants.blueStagePoints;
 
     // 10.00 m = 1000
     // angle 0.0 = impossible to shoot from here
