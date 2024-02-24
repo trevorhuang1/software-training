@@ -1,13 +1,13 @@
 package frc.robot.subsystems.arm;
 
-import java.util.*;
-
 import frc.robot.utils.Constants;
 
 import java.io.*;
 
+// NOTE: all distances in output file are relative to center of robot, arm offset is accounted for
 public class ArmAngleCalculator {
     public static double y_speaker = Constants.ArmConstants.speakerHeight;
+    public static double x_arm = Constants.ArmConstants.armHeightOffset; // how far arm is from center of robot
     public static double y_arm = Constants.ArmConstants.armHeightOffset; // how high up the arm is
     public static double v_initial = Constants.ArmConstants.shooterVelocity;
 
@@ -57,7 +57,7 @@ public class ArmAngleCalculator {
                double shoot_angle_rad = Math.toRadians(60-i);
                
                double vx = Math.cos(shoot_angle_rad) * v_initial;
-               double t = ( x_dist + arm_length*Math.cos(initial_angle_rad) ) / vx;
+               double t = ( x_dist - x_arm + arm_length*Math.cos(initial_angle_rad) ) / vx;
                double y = ( Math.sin(shoot_angle_rad) * v_initial * t ) - ( g/2 * t*t ) + ( arm_length * Math.sin(initial_angle_rad) ) + y_arm;
 
                if (Math.abs(y_speaker - y) <= margin_of_error) {
