@@ -62,15 +62,21 @@ public class Constants {
     public static final double simkV = 6.616; // max volts - kG / max velocity
     public static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-    public static final double kYIntercept = 0.9808;
-    public static final double kBar = 0.0289;
-    public static final double kArm = -0.026;
-    public static final double kBarSquared = 0.0;
+    public static final double kYIntercept = 0.4020;
+    public static final double kBar = 0.027676;
+    public static final double kArm = 0.0;
+    public static final double kBarSquared = -0.00084311;
     public static final double kArmSquared = 0.0;
+    public static final double kBarCubed = 0.0000050409;
+    public static final double kArmCubed = 0.0;
+    public static final double kBarHyperCubed = -0.0000000067756;
+    public static final double kArmHyperCubed = 0.0;
+
+
 
     public static final double groundGoal = Math.toRadians(-40);
     public static final double stowGoal = 0;
-    public static final double wristOffsetRad = Units.degreesToRadians(247.95);
+    public static final double wristOffsetRad = Units.degreesToRadians(253.55);
   }
 
   public static final class ShooterConstants {

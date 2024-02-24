@@ -43,9 +43,9 @@ public class Arm extends SubsystemBase {
             0.0);
     private ShuffleData<Double> voltageLog = new ShuffleData<Double>(this.getName(), "voltage",
             0.0);
-    private ShuffleData<Double> leftCurrentLog = new ShuffleData<Double>(this.getName(), "current",
+    private ShuffleData<Double> leftCurrentLog = new ShuffleData<Double>(this.getName(), "left current",
             0.0);
-    private ShuffleData<Double> rightCurrentLog = new ShuffleData<Double>(this.getName(), "current",
+    private ShuffleData<Double> rightCurrentLog = new ShuffleData<Double>(this.getName(), "right current",
             0.0);
     private ShuffleData<Double> goalLog = new ShuffleData<Double>(this.getName(), "goal",
             0.0);

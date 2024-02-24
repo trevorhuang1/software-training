@@ -123,9 +123,15 @@ public class Wrist extends SubsystemBase {
         double wristPosDegrees = Units.radiansToDegrees(wristPositionRad);
         double armPosDegrees = Units.radiansToDegrees(armPositionRad);
 
-        return WristConstants.kYIntercept + WristConstants.kBar * wristPosDegrees + WristConstants.kArm * armPosDegrees
+        return WristConstants.kYIntercept 
+                + WristConstants.kBar * wristPosDegrees 
+                + WristConstants.kArm * armPosDegrees
                 + WristConstants.kBarSquared * Math.pow(wristPosDegrees, 2)
-                + WristConstants.kBarSquared * Math.pow(armPosDegrees, 2);
+                + WristConstants.kArmSquared * Math.pow(armPosDegrees, 2)
+                + WristConstants.kBarCubed * Math.pow(wristPosDegrees, 3)
+                + WristConstants.kArmCubed * Math.pow(armPosDegrees, 3)
+                + WristConstants.kArmHyperCubed * Math.pow(wristPosDegrees, 4)
+                + WristConstants.kArmHyperCubed * Math.pow(armPosDegrees, 4);
     }
 
     @Override
@@ -136,16 +142,16 @@ public class Wrist extends SubsystemBase {
         // SmartDashboard.putData("Mech2d", mechanism);
         // mechanismArm.setAngle(Math.toDegrees(data.positionRad));
 
-        positionLog.set(data.positionRad);
-        velocityLog.set(data.velocityRadPerSec);
-        accelerationLog.set(data.accelerationRadPerSecSquared);
-        goalLog.set(getWristGoal().position);
-        setpointPositionLog.set(getWristSetpoint().position);
-        setpointVelocityLog.set(getWristSetpoint().velocity);
+        positionLog.set(Units.radiansToDegrees(data.positionRad));
+        velocityLog.set(Units.radiansToDegrees(data.velocityRadPerSec));
+        accelerationLog.set(Units.radiansToDegrees(data.accelerationRadPerSecSquared));
+        goalLog.set(Units.radiansToDegrees(getWristGoal().position));
+        setpointPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position));
+        setpointVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity));
         voltageLog.set(data.appliedVolts);
         currentLog.set(data.currentAmps);
-        errorPositionLog.set(getWristSetpoint().position - data.positionRad);
-        errorVelocityLog.set(getWristSetpoint().velocity - data.velocityRadPerSec);
+        errorPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position - data.positionRad));
+        errorVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity - data.velocityRadPerSec));
 
 
         // test
