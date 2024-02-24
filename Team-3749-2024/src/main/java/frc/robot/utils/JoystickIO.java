@@ -94,10 +94,12 @@ public class JoystickIO {
         //             ));
 
         pilot.a().whileTrue(
-            new getRegressionData());
-        
-        
+            new getRegressionData(true));
         pilot.a().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0), Robot.wrist));
+     
+        pilot.b().whileTrue(
+            new getRegressionData(false));
+        pilot.b().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0), Robot.wrist));
 
     }
 

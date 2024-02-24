@@ -16,14 +16,14 @@ public class getRegressionData extends Command {
     private double stopVelocity = 0.02;
     private double maxVelocity = 0.05;
     private double currentPosition = 0;
-    private String mode = "forward";
+    private String mode = "move";
     private boolean isForward = true;
 
-    public getRegressionData() {
+    public getRegressionData(boolean isForward) {
         dataColleciton.put("Wrist Position Degrees", new ArrayList<Double>());
         dataColleciton.put("Arm Position Degrees", new ArrayList<Double>());
         dataColleciton.put("Voltage", new ArrayList<Double>());
-
+        this.isForward = isForward;
         addRequirements(Robot.wrist);
     }
 
@@ -38,10 +38,10 @@ public class getRegressionData extends Command {
         Robot.wrist.setVoltage(currentVoltage);
         double currentVelocity = Units.radiansToDegrees(Robot.wrist.getVelocityRadPerSec());
         currentPosition = Units.radiansToDegrees(Robot.wrist.getPositionRad());
-
+        
         // progress forward
-        if (mode.equals("forward")) {
-            currentVoltage += 0.0025;
+        if (mode.equals("move")) {
+            currentVoltage += isForward ? 0.0025 : -0.0025;
 
             if (Math.abs(currentVelocity) >= Math.abs(maxVelocity)) {
                 mode = "stop";
@@ -49,7 +49,7 @@ public class getRegressionData extends Command {
         }
         // stop the bar
         if (mode.equals("stop")) {
-            currentVoltage -= 0.005;
+            currentVoltage += isForward ? -0.005 : 0.005;
 
             if (Math.abs(currentVelocity) <= Math.abs(stopVelocity)) {
                 mode = "scan up";
@@ -58,9 +58,9 @@ public class getRegressionData extends Command {
 
         // increase voltage gradually
         if (mode.equals("scan up")) {
-            currentVoltage += 0.002;
+            currentVoltage += isForward ? 0.002 : -0.002;
             if (Math.abs(currentVelocity) >= Math.abs(stopVelocity)) {
-                mode = "forward";
+                mode = "move";
             }
         }
 
@@ -76,7 +76,7 @@ public class getRegressionData extends Command {
     @Override
     public boolean isFinished() {
         // this only works on the way up
-        if (currentPosition > 60) {
+        if ((isForward && currentPosition > 60) || (!isForward && currentPosition<60)) {
             currentVoltage = 0;
             return true;
         }
