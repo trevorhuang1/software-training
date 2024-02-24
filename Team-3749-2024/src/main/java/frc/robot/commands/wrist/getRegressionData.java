@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
 public class getRegressionData extends Command {
     private HashMap<String, ArrayList<Double>> dataColleciton = new HashMap<>();
     private double currentVoltage = 0;
-    private double stopVelocity = 0.05;
-    private double maxVelocity = 0.1;
+    private double stopVelocity = 0.02;
+    private double maxVelocity = 0.05;
     private double currentPosition = 0;
     private String mode = "forward";
+    private boolean isForward = true;
 
     public getRegressionData() {
         dataColleciton.put("Wrist Position Degrees", new ArrayList<Double>());
@@ -25,15 +28,20 @@ public class getRegressionData extends Command {
     }
 
     @Override
+    public void initialize() {
+        System.out.println("4 Bar Position Deg, Arm Position Deg, Gravity Voltage");
+    }
+
+    @Override
     public void execute() {
 
         Robot.wrist.setVoltage(currentVoltage);
-        double currentVelocity = Robot.wrist.getVelocityRotation2d().getDegrees();
-        currentPosition = Robot.wrist.getRotation2d().getDegrees();
+        double currentVelocity = Units.radiansToDegrees(Robot.wrist.getVelocityRadPerSec());
+        currentPosition = Units.radiansToDegrees(Robot.wrist.getPositionRad());
 
         // progress forward
         if (mode.equals("forward")) {
-            currentVoltage += 0.005;
+            currentVoltage += 0.0025;
 
             if (Math.abs(currentVelocity) >= Math.abs(maxVelocity)) {
                 mode = "stop";
@@ -58,11 +66,11 @@ public class getRegressionData extends Command {
 
         // if we are stopped, record it
         if (Math.abs(currentVelocity) <= Math.abs(stopVelocity)) {
-            dataColleciton.get("Wrist Position Degrees").add(currentPosition);
-            dataColleciton.get("Arm Position Degrees").add(0.0);
-            dataColleciton.get("Voltage").add(currentVoltage);
+            System.out.println(currentPosition + "," + 0 + "," + currentVoltage);
         }
 
+        SmartDashboard.putNumber("regression volts", currentVoltage);
+        SmartDashboard.putString("Regression Mode", mode);
     }
 
     @Override

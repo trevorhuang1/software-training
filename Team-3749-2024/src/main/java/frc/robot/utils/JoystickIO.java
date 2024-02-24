@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 // import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.Teleop;
+import frc.robot.commands.wrist.getRegressionData;
 import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.arm.Climb;
 import frc.robot.commands.arm.GetConstraints;
@@ -86,11 +87,16 @@ public class JoystickIO {
         // pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
         // pilot.back().whileTrue(new Climb());
 
-        pilot.a()
-                .whileTrue(
-                    Commands.run(() -> 
-                        Robot.wrist.runFF()
-                    ));
+        // pilot.a()
+        //         .whileTrue(
+        //             Commands.run(() -> 
+        //                 Robot.wrist.runFF()
+        //             ));
+
+        pilot.a().whileTrue(
+            new getRegressionData());
+        
+        
         pilot.a().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0), Robot.wrist));
 
     }

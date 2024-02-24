@@ -33,11 +33,13 @@ public class WristSparkMax implements WristIO {
     }
 
     private double getAbsolutePosition(){
-        double pos = wristEncoder.getPosition()-WristConstants.wristOffsetRad;
+        double pos = wristEncoder.getPosition() - WristConstants.wristOffsetRad;
+        // System.out.println(pos);
+        // System.out.println(pos >  3.0 / 2.0 * Math.PI);
         if (pos >  3.0 / 2.0 * Math.PI){
             pos -= 2 * Math.PI;
         }
-        if (pos<0){
+        if (pos<-Math.PI/2){
             pos += 2 * Math.PI;
         }
 

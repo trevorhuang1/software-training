@@ -95,11 +95,11 @@ public class Wrist extends SubsystemBase {
         return isGroundIntake;
     }
 
-    public Rotation2d getRotation2d(){
-        return new Rotation2d(data.positionRad);
+    public double getPositionRad(){
+        return (data.positionRad);
     }
-    public Rotation2d getVelocityRotation2d(){
-        return new Rotation2d(data.velocityRadPerSec);
+    public double getVelocityRadPerSec(){
+        return (data.velocityRadPerSec);
     }
     public void moveWristToAngle() {
 

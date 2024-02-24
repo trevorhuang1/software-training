@@ -115,6 +115,7 @@ public class Arm extends SubsystemBase {
     // runs every 0.02 sec
     @Override
     public void periodic() {
+        // System.out.println("0,0,0");
         armIO.updateData(data);
 
         positionLog.set(getRotation2d().getDegrees());
@@ -123,6 +124,7 @@ public class Arm extends SubsystemBase {
         voltageLog.set(data.appliedVolts);
         leftCurrentLog.set(data.leftCurrentAmps);
         rightCurrentLog.set(data.rightCurrentAmps);
+        
         goalLog.set(profiledFeedbackController.getGoal().position);
         setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
         setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
