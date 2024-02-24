@@ -91,8 +91,9 @@ public class JoystickIO {
         pilot.y()
                 .whileTrue(
                     Commands.run(() -> 
-                        Robot.wrist.runFF()
-                    ));
+                        Robot.wrist.runFF(2)
+                    )).whileFalse(Commands.run(() -> 
+                        Robot.wrist.runFF(0)));
 
         pilot.y().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0), Robot.wrist));
 

@@ -18,7 +18,7 @@ public class WristCommand extends Command{
         State setpoint = Robot.wrist.getWristSetpoint();
         double acceleration = (setpoint.velocity - previousVelocity) / 0.02;
         previousVelocity = setpoint.velocity;
-        // System.out.println(setpoint.position);
+        System.out.println(setpoint.position);
         Robot.wrist.moveWristToAngle(setpoint.position,setpoint.velocity,acceleration);
     }
 

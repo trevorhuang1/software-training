@@ -46,7 +46,8 @@ public class Constants {
     public static final double gearRatio = 1;
 
     private static final PIDConstants simPID = new PIDConstants(35, 0, 1);
-    private static final PIDConstants realPID = new PIDConstants(1.75, 0, 0);
+
+    private static final PIDConstants realPID = new PIDConstants(1, 0, 0);
 
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
     
@@ -63,6 +64,9 @@ public class Constants {
     public static final double simkV = 6.616; // max volts - kG / max velocity
     public static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
+    public static final double realkVForward =  1.1; // radians
+    public static final double realkVBackward =  .8; // radians
+
     public static final double kYIntercept = 0.2905297;
     public static final double kBar = 0.93000486;
     public static final double kBarSquared = -1.55368244;
@@ -77,9 +81,9 @@ public class Constants {
     public static final double kBarCubedArmSquared =  -0.5938634;
 
 
-    public static final double groundGoal = Math.toRadians(150);
+    public static final double groundGoal = Math.toRadians(140);
     public static final double stowGoal = 0;
-    public static final double wristOffsetRad = Units.degreesToRadians(251.35);
+    public static final double wristOffsetRad = Units.degreesToRadians(251.45);
   }
 
   public static final class ShooterConstants {

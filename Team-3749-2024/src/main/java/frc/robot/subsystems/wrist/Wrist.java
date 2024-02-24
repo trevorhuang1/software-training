@@ -19,6 +19,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
+import frc.robot.utils.SmartData;
 import frc.robot.utils.Constants.WristConstants;
 
 public class Wrist extends SubsystemBase {
@@ -66,7 +67,6 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>(this.getName(), "error velocity",
             0.0);
 
-
     public Wrist() {
         setpointToggle.put(true, Constants.WristConstants.groundGoal);
         setpointToggle.put(false, Constants.WristConstants.stowGoal);
@@ -85,11 +85,14 @@ public class Wrist extends SubsystemBase {
     }
 
     public void setGoalGround() {
+        System.out.println("ground");
         wristController.setGoal(setpointToggle.get(true));
 
     }
 
     public void setGoalStow() {
+        System.out.println("stow");
+
         wristController.setGoal(setpointToggle.get(false));
 
     }
@@ -114,15 +117,28 @@ public class Wrist extends SubsystemBase {
         return (data.velocityRadPerSec);
     }
 
+    private ShuffleData<Double> kPData = new ShuffleData(this.getName(), "kpdata", 0.0);
+    private ShuffleData<Double> kVData = new ShuffleData(this.getName(), "kVdata", 0.0);
+
     public void moveWristToAngle(double positionRad, double velocityRadPerSec, double accelerationRadPerSecSquared) {
+
+
 
         State state = getWristSetpoint();
         double voltage = wristController.calculate(data.positionRad);
+        if (positionRad == 0 && data.positionRad <7){
+            setVoltage(0);
+            return;
+        }
+
         if (Robot.isSimulation()) {
 
             voltage += wristFF.calculate(data.positionRad, state.velocity); // is getting the goal redundant?
         } else {
-            voltage += calculateRealWristFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians());
+            voltage += getWristGoal().position == Units.degreesToRadians(140)
+                    ? velocityRadPerSec * WristConstants.realkVForward
+                    : velocityRadPerSec *WristConstants.realkVBackward;
+            voltage += calculateGravityFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians());
         }
 
         setVoltage(voltage);
@@ -135,12 +151,12 @@ public class Wrist extends SubsystemBase {
 
     private ShuffleData<Double> kGData = new ShuffleData<Double>("wrist", "kGData", 0.0);
 
-    public void runFF() {
+    public void runFF(double add) {
 
-        wristIO.setVoltage(calculateRealWristFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians()));
+        wristIO.setVoltage(calculateGravityFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians()) + add);
     }
 
-    public double calculateRealWristFeedForward(double wristPositionRad, double armPositionRad) {
+    public double calculateGravityFeedForward(double wristPositionRad, double armPositionRad) {
 
         return WristConstants.kYIntercept
                 + WristConstants.kBar * wristPositionRad
@@ -175,7 +191,7 @@ public class Wrist extends SubsystemBase {
         errorPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position - data.positionRad));
         errorVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity - data.velocityRadPerSec));
 
-        SmartDashboard.putNumber("FF", calculateRealWristFeedForward(data.positionRad, 0));
+        SmartDashboard.putNumber("FF", calculateGravityFeedForward(data.positionRad, 0));
 
         // test
     }
