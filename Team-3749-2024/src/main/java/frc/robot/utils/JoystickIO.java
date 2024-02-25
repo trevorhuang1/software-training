@@ -63,16 +63,27 @@ public class JoystickIO {
     }
 
     public void pilotBindings() {
+        // shooter
+        pilot.leftTrigger().whileTrue(Commands.run(() -> Robot.shooter.setShooterVelocity(400.0),
+                Robot.shooter));
+        pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.shooter.setVoltage(0,0),
+                Robot.shooter));
+        pilot.rightTrigger().whileTrue(Commands.run(() -> Robot.shooter.setShooterVelocity(-400),
+                Robot.shooter));
+        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.shooter.setVoltage(0,0),
+                Robot.shooter));
+
+
 
         // intake
-        pilot.leftTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(60),
-                Robot.intake));
-        pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
-                Robot.intake));
-        pilot.rightTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(-60),
-                Robot.intake));
-        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
-                Robot.intake));
+        // pilot.leftTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(60),
+        //         Robot.intake));
+        // pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
+        //         Robot.intake));
+        // pilot.rightTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(-60),
+        //         Robot.intake));
+        // pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
+        //         Robot.intake));
         // arm
         pilot.a().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(6.5))));
         pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(90))));

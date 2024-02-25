@@ -78,7 +78,7 @@ public class Shooter extends SubsystemBase {
         velData.get()) +
         bottomShooterFF.calculate(velData.get());
 
-    bottomVoltage = velData.get() * kVData.get() + (velData.get() - data.topShooterVelocityRadPerSec)*kPData.get();
+    bottomVoltage = velData.get() * kVData.get() + (velData.get() - data.bottomShooterVelocityRadPerSec)*kPData.get();
 
     setVoltage(0, bottomVoltage);
   }
