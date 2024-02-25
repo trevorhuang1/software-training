@@ -18,8 +18,7 @@ public class Shooter extends SubsystemBase {
       Constants.ShooterConstants.shooterBottomPID.kP,
       Constants.ShooterConstants.shooterBottomPID.kI,
       Constants.ShooterConstants.shooterBottomPID.kD);
-  
-      
+
   private PIDController topFeedback = new PIDController(
       Constants.ShooterConstants.shooterTopPID.kP,
       Constants.ShooterConstants.shooterTopPID.kI,
@@ -35,13 +34,18 @@ public class Shooter extends SubsystemBase {
       Constants.ShooterConstants.bottomkV,
       0);
 
-
-  private ShuffleData<Double> topShooterVelocityLog = new ShuffleData<Double>(this.getName(), "top shooter velocity", 0.0);
-  private ShuffleData<Double> bottomShooterVelocityLog = new ShuffleData<Double>(this.getName(), "bottom shooter velocity", 0.0);
-  private ShuffleData<Double> topShootervoltageLog = new ShuffleData<Double>(this.getName(), "top shooter voltage", 0.0);
-  private ShuffleData<Double> bottomShootervoltageLog = new ShuffleData<Double>(this.getName(), "bottom shooter voltage", 0.0);
-  private ShuffleData<Double> topShootercurrentLog = new ShuffleData<Double>(this.getName(), "top shooter current", 0.0);
-  private ShuffleData<Double> bottomShootercurrentLog = new ShuffleData<Double>(this.getName(), "bottom shooter current", 0.0);
+  private ShuffleData<Double> topShooterVelocityLog = new ShuffleData<Double>(this.getName(), "top shooter velocity",
+      0.0);
+  private ShuffleData<Double> bottomShooterVelocityLog = new ShuffleData<Double>(this.getName(),
+      "bottom shooter velocity", 0.0);
+  private ShuffleData<Double> topShootervoltageLog = new ShuffleData<Double>(this.getName(), "top shooter voltage",
+      0.0);
+  private ShuffleData<Double> bottomShootervoltageLog = new ShuffleData<Double>(this.getName(),
+      "bottom shooter voltage", 0.0);
+  private ShuffleData<Double> topShootercurrentLog = new ShuffleData<Double>(this.getName(), "top shooter current",
+      0.0);
+  private ShuffleData<Double> bottomShootercurrentLog = new ShuffleData<Double>(this.getName(),
+      "bottom shooter current", 0.0);
 
   public Shooter() {
     shooterIO = new ShooterSparkMax();
@@ -51,36 +55,22 @@ public class Shooter extends SubsystemBase {
   }
 
   ShuffleData<Double> kVData = new ShuffleData<Double>(this.getName(), "kVData", 0.0);
-    ShuffleData<Double> kPData = new ShuffleData<Double>(this.getName(), "kPData", 0.0);
-    ShuffleData<Double> velData = new ShuffleData<Double>(this.getName(), "velData", 0.0);
+  ShuffleData<Double> kPData = new ShuffleData<Double>(this.getName(), "kPData", 0.0);
+  ShuffleData<Double> velData = new ShuffleData<Double>(this.getName(), "velData", 0.0);
 
   public void setShooterVelocity(double velocityRadPerSec) {
 
-    
-    // double topVoltage = topFeedback.calculate(
-    //     data.topShooterVelocityRadPerSec,
-    //     velocityRadPerSec) +
-    //     topShooterFF.calculate(velocityRadPerSec);
-
-    // double bottomVoltage = bottomFeedback.calculate(
-    //     data.bottomShooterVelocityRadPerSec,
-    //     velocityRadPerSec) +
-    //     bottomShooterFF.calculate(velocityRadPerSec);
-
-
-    // double topVoltage = topFeedback.calculate(
-    //     data.topShooterVelocityRadPerSec,
-    //     velData.get()) +
-    //     topShooterFF.calculate(velData.get());
+    double topVoltage = topFeedback.calculate(
+        data.topShooterVelocityRadPerSec,
+        velocityRadPerSec) +
+        topShooterFF.calculate(velocityRadPerSec);
 
     double bottomVoltage = bottomFeedback.calculate(
         data.bottomShooterVelocityRadPerSec,
-        velData.get()) +
-        bottomShooterFF.calculate(velData.get());
+        velocityRadPerSec) +
+        bottomShooterFF.calculate(velocityRadPerSec);
 
-    bottomVoltage = velData.get() * kVData.get() + (velData.get() - data.bottomShooterVelocityRadPerSec)*kPData.get();
-
-    setVoltage(0, bottomVoltage);
+    setVoltage(topVoltage, bottomVoltage);
   }
 
   public void setVoltage(double topVolts, double bottomVolts) {
@@ -89,7 +79,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+
     shooterIO.updateData(data);
 
     topShooterVelocityLog.set(data.topShooterVelocityRadPerSec);
@@ -97,7 +87,7 @@ public class Shooter extends SubsystemBase {
 
     topShootervoltageLog.set(data.topShooterVolts);
     bottomShootervoltageLog.set(data.bottomShooterVolts);
-    
+
     topShootercurrentLog.set(data.topShooterCurrentAmps);
     bottomShootercurrentLog.set(data.bottomShooterCurrentAmps);
   }
