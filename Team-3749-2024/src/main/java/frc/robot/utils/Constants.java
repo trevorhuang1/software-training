@@ -90,7 +90,7 @@ public class Constants {
 
     public static final double groundGoal = Math.toRadians(140);
     public static final double stowGoal = 0;
-    public static final double wristOffsetRad = Units.degreesToRadians(251.45);
+    public static final double wristOffsetRad = Units.degreesToRadians(250);
   }
 
   public static final class ShooterConstants {

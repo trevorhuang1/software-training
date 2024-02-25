@@ -78,10 +78,8 @@ public class JoystickIO {
         pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(90))));
         pilot.back().whileTrue(new Climb());
 
-
         // gyro
         pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
-
 
         // 4bar
 
@@ -92,18 +90,19 @@ public class JoystickIO {
         // )).whileFalse(Commands.run(() ->
         // Robot.wrist.runFF(0)));
 
-        // pilot.a().whileTrue(
-        // new getRegressionData(true));
-        // pilot.a().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0),
-        // Robot.wrist));
+        pilot.a().whileTrue(
+                new getRegressionData(true));
+        pilot.a().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0),
+                Robot.wrist));
 
-        // pilot.b().whileTrue(
-        // new getRegressionData(false));
-        // pilot.b().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0),
-        // Robot.wrist));
+        pilot.b().whileTrue(
+                new getRegressionData(false));
+        pilot.b().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0),
+                Robot.wrist));
 
-        pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalGround()));
-        pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalStow()));
+        // pilot.rightBumper().onTrue(Commands.runOnce(() ->
+        // Robot.wrist.setGoalGround()));
+        // pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalStow()));
 
     }
 
@@ -116,8 +115,8 @@ public class JoystickIO {
      */
     public void setDefaultCommands() {
 
-        Robot.arm.setDefaultCommand(new ArmMoveToGoal());
-        Robot.wrist.setDefaultCommand(new WristCommand());
+        // Robot.arm.setDefaultCommand(new ArmMoveToGoal());
+        // Robot.wrist.setDefaultCommand(new WristCommand());
         Robot.swerve.setDefaultCommand(
                 new Teleop(
                         () -> -pilot.getLeftX(),
