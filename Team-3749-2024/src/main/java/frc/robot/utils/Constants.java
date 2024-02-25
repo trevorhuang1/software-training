@@ -68,11 +68,10 @@ public class Constants {
 
     // thanks arm (robbery)
     public static final double simkS = 0.0;
-    public static final double simkG = .33775; // stick arm at 0 degrees, tune till it doesnt move (ok it moves but it
-    // should be fine it'll take like 3 years to move 1 degree)
-    public static final double simkV = 6.616; // max volts - kG / max velocity
-    public static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
-
+    public static final double simkG = .33775;
+    public static final double simkV = 6.616; 
+    public static final double simkA = 0; 
+    
     public static final double realkVForward = 1.1; // radians
     public static final double realkVBackward = .8; // radians
 

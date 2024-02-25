@@ -15,11 +15,9 @@ import frc.robot.utils.Constants.ArmConstants;
 public class ArmMoveToGoal extends Command {
 
     private double prevSetpointVelocity = 0;
-    BooleanSupplier isFourBarDeployedSupplier;
 
-    public ArmMoveToGoal(BooleanSupplier isFourBarDeployedSupplier) {
+    public ArmMoveToGoal() {
         addRequirements(Robot.arm);
-        this.isFourBarDeployedSupplier = isFourBarDeployedSupplier;
     }
 
     @Override
@@ -38,7 +36,7 @@ public class ArmMoveToGoal extends Command {
             return;
         }
         // if 4bar is deployed, switch kG
-        if (setpoint.velocity == 0 && isFourBarDeployedSupplier.getAsBoolean()) {
+        if (setpoint.velocity == 0 && Robot.wrist.getIsGroundIntake()) {
             // ks, kg, and P
             double error = (setpoint.position - Robot.arm.getRotation2d().getRadians());
             double voltage = Math.signum(error) * ArmConstants.kS
