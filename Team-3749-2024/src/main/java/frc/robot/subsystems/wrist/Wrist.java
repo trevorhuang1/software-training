@@ -20,6 +20,7 @@ import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.SmartData;
+import frc.robot.utils.UtilityFunctions;
 import frc.robot.utils.Constants.WristConstants;
 
 public class Wrist extends SubsystemBase {
@@ -36,7 +37,7 @@ public class Wrist extends SubsystemBase {
 
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean, Double>();
 
-    private boolean isGroundIntake = false;
+    private boolean isDeployed = false;
 
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
@@ -68,8 +69,8 @@ public class Wrist extends SubsystemBase {
             0.0);
 
     public Wrist() {
-        setpointToggle.put(true, Constants.WristConstants.groundGoal);
-        setpointToggle.put(false, Constants.WristConstants.stowGoal);
+        setpointToggle.put(true, Constants.WristConstants.groundGoalRad);
+        setpointToggle.put(false, Constants.WristConstants.stowGoalRad);
         wristIO = new WristSparkMax();
         if (Robot.isSimulation()) {
             wristIO = new WristSim();
@@ -78,21 +79,21 @@ public class Wrist extends SubsystemBase {
 
     // runs twice???
     public void toggleWristGoal() {
-        this.isGroundIntake = !this.isGroundIntake;
-        wristController.setGoal(setpointToggle.get(this.isGroundIntake));
+        this.isDeployed = !this.isDeployed;
+        wristController.setGoal(setpointToggle.get(this.isDeployed));
         System.out.println("togggle");
-        System.out.println(isGroundIntake);
+        System.out.println(isDeployed);
     }
 
     public void setGoalGround() {
         System.out.println("ground");
         wristController.setGoal(setpointToggle.get(true));
-
+        isDeployed = true;
     }
 
     public void setGoalStow() {
         System.out.println("stow");
-
+        isDeployed = false;
         wristController.setGoal(setpointToggle.get(false));
 
     }
@@ -105,8 +106,8 @@ public class Wrist extends SubsystemBase {
         return wristController.getSetpoint();
     }
 
-    public boolean getIsGroundIntake() {
-        return isGroundIntake;
+    public boolean getIsDeployed() {
+        return isDeployed;
     }
 
     public double getPositionRad() {
@@ -135,7 +136,7 @@ public class Wrist extends SubsystemBase {
 
             voltage += wristFF.calculate(data.positionRad, state.velocity); // is getting the goal redundant?
         } else {
-            voltage += getWristGoal().position == Units.degreesToRadians(140)
+            voltage += getWristGoal().position == WristConstants.groundGoalRad
                     ? velocityRadPerSec * WristConstants.realkVForward
                     : velocityRadPerSec *WristConstants.realkVBackward;
             voltage += calculateGravityFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians());
@@ -191,7 +192,7 @@ public class Wrist extends SubsystemBase {
         errorPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position - data.positionRad));
         errorVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity - data.velocityRadPerSec));
 
-        SmartDashboard.putNumber("FF", calculateGravityFeedForward(data.positionRad, 0));
+        SmartDashboard.putNumber("FF", calculateGravityFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians()));
 
         // test
     }
