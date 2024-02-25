@@ -71,7 +71,7 @@ public class Constants {
     public static final double simkG = .33775;
     public static final double simkV = 6.616; 
     public static final double simkA = 0; 
-    
+
     public static final double realkVForward = 1.1; // radians
     public static final double realkVBackward = .8; // radians
 
@@ -367,9 +367,9 @@ public class Constants {
     // public static final double[] absoluteEncoderOffsetDeg = { -275, -48, 0, 263
     // };
 
-    public static final int driveMotorStallLimit = 20;
+    public static final int driveMotorStallLimit = 40;
     public static final int driveMotorFreeLimit = 40;
-    public static final int turnMotorStallLimit = 20;
+    public static final int turnMotorStallLimit = 40;
     public static final int turnMotorFreeLimit = 40;
 
     private static final double realMaxSpeedMetersPerSecond = 3.707;
