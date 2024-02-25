@@ -1,6 +1,5 @@
 package frc.robot.commands.swerve;
 
-import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -8,7 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
-import frc.robot.utils.Constants.*;;
+import frc.robot.utils.Constants.*;
+import java.util.function.Supplier;
 
 /***
  * @author Noah Simon
@@ -18,26 +18,37 @@ import frc.robot.utils.Constants.*;;
  */
 
 public class Teleop extends Command {
+
   private final Swerve swerve;
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  private final PIDController pid_turnController = new PIDController(DriveConstants.kP_teleopTurn, 0,
-      DriveConstants.kD_teleopTurn);
+  private final PIDController pid_turnController = new PIDController(
+    DriveConstants.kP_teleopTurn,
+    0,
+    DriveConstants.kD_teleopTurn
+  );
 
   public Teleop(
-      Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> xTurningSpdFunction) {
+    Supplier<Double> xSpdFunction,
+    Supplier<Double> ySpdFunction,
+    Supplier<Double> xTurningSpdFunction
+  ) {
     this.swerve = Robot.swerve;
     this.xSpdFunction = xSpdFunction;
     this.ySpdFunction = ySpdFunction;
     this.xTurningSpdFunction = xTurningSpdFunction;
 
     // This should be max Acceleration! I think.
-    this.xLimiter = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
-    this.yLimiter = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
-    this.turningLimiter = new SlewRateLimiter(DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
+    this.xLimiter =
+      new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
+    this.yLimiter =
+      new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
+    this.turningLimiter =
+      new SlewRateLimiter(
+        DriveConstants.maxAngularAccelerationRadiansPerSecondSquared
+      );
     addRequirements(swerve);
-
   }
 
   @Override
@@ -47,24 +58,38 @@ public class Teleop extends Command {
 
   @Override
   public void execute() {
-
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = xTurningSpdFunction.get();
 
-    SmartDashboard.putNumberArray("inputs", new Double[] {xSpeed, ySpeed, turningSpeed});
+    SmartDashboard.putNumberArray(
+      "inputs",
+      new Double[] { xSpeed, ySpeed, turningSpeed }
+    );
 
     xSpeed = Math.abs(xSpeed) > ControllerConstants.deadband ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > ControllerConstants.deadband ? ySpeed : 0.0;
-    turningSpeed = Math.abs(turningSpeed) > ControllerConstants.deadband ? turningSpeed : 0.0;
+    turningSpeed =
+      Math.abs(turningSpeed) > ControllerConstants.deadband
+        ? turningSpeed
+        : 0.0;
 
-    xSpeed = xLimiter.calculate(xSpeed * DriveConstants.maxSpeedMetersPerSecond);
-    ySpeed = yLimiter.calculate(ySpeed * DriveConstants.maxSpeedMetersPerSecond);
+    xSpeed =
+      xLimiter.calculate(xSpeed * DriveConstants.maxSpeedMetersPerSecond);
+    ySpeed =
+      yLimiter.calculate(ySpeed * DriveConstants.maxSpeedMetersPerSecond);
 
-    turningSpeed = turningLimiter.calculate(turningSpeed * DriveConstants.maxAngularSpeedRadiansPerSecond);
+    turningSpeed =
+      turningLimiter.calculate(
+        turningSpeed * DriveConstants.maxAngularSpeedRadiansPerSecond
+      );
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        ySpeed, xSpeed, turningSpeed, swerve.getRotation2d());
+      ySpeed,
+      xSpeed,
+      turningSpeed,
+      swerve.getRotation2d()
+    );
 
     // set chassis speeds
     swerve.setChassisSpeeds(chassisSpeeds);
