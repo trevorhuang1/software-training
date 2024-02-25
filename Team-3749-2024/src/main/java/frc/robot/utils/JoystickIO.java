@@ -122,12 +122,10 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        // Robot.arm.setDefaultCommand(new ArmMoveToGoal(() ->
-        // pilot.b().getAsBoolean()));
+
 
         Robot.arm.setDefaultCommand(new ArmMoveToGoal());
         Robot.wrist.setDefaultCommand(new WristCommand());
-
         Robot.swerve.setDefaultCommand(
                 new Teleop(
                         () -> -pilot.getLeftX(),

@@ -36,7 +36,7 @@ public class Wrist extends SubsystemBase {
 
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean, Double>();
 
-    private boolean isGroundIntake = false;
+    private boolean isDeployed = false;
 
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
@@ -78,21 +78,21 @@ public class Wrist extends SubsystemBase {
 
     // runs twice???
     public void toggleWristGoal() {
-        this.isGroundIntake = !this.isGroundIntake;
-        wristController.setGoal(setpointToggle.get(this.isGroundIntake));
+        this.isDeployed = !this.isDeployed;
+        wristController.setGoal(setpointToggle.get(this.isDeployed));
         System.out.println("togggle");
-        System.out.println(isGroundIntake);
+        System.out.println(isDeployed);
     }
 
     public void setGoalGround() {
         System.out.println("ground");
         wristController.setGoal(setpointToggle.get(true));
-
+        isDeployed = true;
     }
 
     public void setGoalStow() {
         System.out.println("stow");
-
+        isDeployed = false;
         wristController.setGoal(setpointToggle.get(false));
 
     }
@@ -105,8 +105,8 @@ public class Wrist extends SubsystemBase {
         return wristController.getSetpoint();
     }
 
-    public boolean getIsGroundIntake() {
-        return isGroundIntake;
+    public boolean getIsDeployed() {
+        return isDeployed;
     }
 
     public double getPositionRad() {
