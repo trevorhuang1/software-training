@@ -15,11 +15,9 @@ import frc.robot.utils.Constants.ArmConstants;
 public class ArmMoveToGoal extends Command {
 
     private double prevSetpointVelocity = 0;
-    BooleanSupplier isFourBarDeployedSupplier;
 
-    public ArmMoveToGoal(BooleanSupplier isFourBarDeployedSupplier) {
+    public ArmMoveToGoal() {
         addRequirements(Robot.arm);
-        this.isFourBarDeployedSupplier = isFourBarDeployedSupplier;
     }
 
     @Override
@@ -31,14 +29,16 @@ public class ArmMoveToGoal extends Command {
         State setpoint = Robot.arm.getSetpoint();
         double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
         prevSetpointVelocity = setpoint.velocity;
+        double feedback = Robot.arm.calculatePID(Robot.arm.getRotation2d().getRadians());
 
         // if resting on the hard stop, don't waste voltage on kG
         if (setpoint.position == 0 && Robot.arm.getRotation2d().getDegrees() < 2) {
             Robot.arm.setVoltage(0);
+
             return;
         }
         // if 4bar is deployed, switch kG
-        if (setpoint.velocity == 0 && isFourBarDeployedSupplier.getAsBoolean()) {
+        if (setpoint.velocity == 0 && Robot.wrist.getIsDeployed()) {
             // ks, kg, and P
             double error = (setpoint.position - Robot.arm.getRotation2d().getRadians());
             double voltage = Math.signum(error) * ArmConstants.kS
@@ -48,7 +48,6 @@ public class ArmMoveToGoal extends Command {
             return;
         }
 
-        double feedback = Robot.arm.calculatePID(Robot.arm.getRotation2d().getRadians());
         double feedforward;
         if (setpoint.velocity != 0) {
             feedforward = Robot.arm.calculateFF(Robot.arm.getRotation2d().getRadians(),setpoint.velocity, accelerationSetpoint);
@@ -56,7 +55,6 @@ public class ArmMoveToGoal extends Command {
             // have the kS help the PID when stationary
             feedforward = Math.signum(feedback) * ArmConstants.kS;
         }
-
         Robot.arm.setVoltage(feedforward + feedback);
     }
 

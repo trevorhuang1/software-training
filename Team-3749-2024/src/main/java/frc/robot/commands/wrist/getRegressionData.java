@@ -20,12 +20,14 @@ public class getRegressionData extends Command {
     private String mode = "move";
     private boolean isForward = true;
     private boolean scanned = false;
+    private double largestStop;
 
     public getRegressionData(boolean isForward) {
         dataColleciton.put("Wrist Position Degrees", new ArrayList<Double>());
         dataColleciton.put("Arm Position Degrees", new ArrayList<Double>());
         dataColleciton.put("Voltage", new ArrayList<Double>());
         this.isForward = isForward;
+        largestStop = isForward ? -100 : 300;
         addRequirements(Robot.wrist);
     }
 
@@ -43,19 +45,31 @@ public class getRegressionData extends Command {
 
         // progress forward
         if (mode.equals("move")) {
-            currentVoltage += isForward ? 0.001 : -0.001;
+            currentVoltage += isForward ? 0.00125 : -0.00125;
 
             if (Math.abs(currentVelocity) >= Math.abs(maxVelocity)) {
-                mode = "stop";
+                if (isForward && currentPosition > largestStop) {
+                    mode = "stop";
+                } else if (!isForward && currentPosition < largestStop) {
+                    mode = "stop";
+
+                }
+                // System.out.println("stop");
+
             }
         }
         // stop the bar
         if (mode.equals("stop")) {
-            currentVoltage += isForward ? -0.004 : 0.004;
+            currentVoltage += currentVelocity > 0 ? -0.006 : 0.006;
 
             if (Math.abs(currentVelocity) <= Math.abs(stopVelocity)) {
                 mode = "scan up";
                 scanned = false;
+                if (isForward && currentPosition > largestStop){
+                    largestStop = currentPosition;
+                } else if (!isForward && currentPosition<largestStop){
+                    largestStop = currentPosition;
+                }
             }
 
         }
@@ -63,6 +77,7 @@ public class getRegressionData extends Command {
         // increase voltage gradually
         if (mode.equals("scan up")) {
             currentVoltage += isForward ? 0.004 : -0.004;
+            // System.out.println(currentVoltage);
             if (Math.abs(currentVelocity) >= Math.abs(stopVelocity)) {
                 mode = "move";
             } else if (!scanned) {
