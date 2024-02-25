@@ -50,22 +50,22 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  // ShuffleData<Double> kVData = new ShuffleData<Double>(this.getName(), "kVData", 0.0);
-  //   ShuffleData<Double> kPData = new ShuffleData<Double>(this.getName(), "kPData", 0.0);
-  //   ShuffleData<Double> velData = new ShuffleData<Double>(this.getName(), "velData", 0.0);
+  ShuffleData<Double> kVData = new ShuffleData<Double>(this.getName(), "kVData", 0.0);
+    ShuffleData<Double> kPData = new ShuffleData<Double>(this.getName(), "kPData", 0.0);
+    ShuffleData<Double> velData = new ShuffleData<Double>(this.getName(), "velData", 0.0);
 
   public void setShooterVelocity(double velocityRadPerSec) {
 
     
-    double topVoltage = topFeedback.calculate(
-        data.topShooterVelocityRadPerSec,
-        velocityRadPerSec) +
-        topShooterFF.calculate(velocityRadPerSec);
+    // double topVoltage = topFeedback.calculate(
+    //     data.topShooterVelocityRadPerSec,
+    //     velocityRadPerSec) +
+    //     topShooterFF.calculate(velocityRadPerSec);
 
-    double bottomVoltage = bottomFeedback.calculate(
-        data.bottomShooterVelocityRadPerSec,
-        velocityRadPerSec) +
-        bottomShooterFF.calculate(velocityRadPerSec);
+    // double bottomVoltage = bottomFeedback.calculate(
+    //     data.bottomShooterVelocityRadPerSec,
+    //     velocityRadPerSec) +
+    //     bottomShooterFF.calculate(velocityRadPerSec);
 
 
     // double topVoltage = topFeedback.calculate(
@@ -73,14 +73,14 @@ public class Shooter extends SubsystemBase {
     //     velData.get()) +
     //     topShooterFF.calculate(velData.get());
 
-    // double bottomVoltage = bottomFeedback.calculate(
-    //     data.bottomShooterVelocityRadPerSec,
-    //     velData.get()) +
-    //     bottomShooterFF.calculate(velData.get());
+    double bottomVoltage = bottomFeedback.calculate(
+        data.bottomShooterVelocityRadPerSec,
+        velData.get()) +
+        bottomShooterFF.calculate(velData.get());
 
-    // bottomVoltage = velData.get() * kVData.get() + (velData.get() - data.topShooterVelocityRadPerSec)*kPData.get();
+    bottomVoltage = velData.get() * kVData.get() + (velData.get() - data.topShooterVelocityRadPerSec)*kPData.get();
 
-    setVoltage(topVoltage, bottomVoltage);
+    setVoltage(0, bottomVoltage);
   }
 
   public void setVoltage(double topVolts, double bottomVolts) {
