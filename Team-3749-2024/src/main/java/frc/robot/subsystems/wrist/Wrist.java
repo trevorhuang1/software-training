@@ -20,6 +20,7 @@ import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.SmartData;
+import frc.robot.utils.UtilityFunctions;
 import frc.robot.utils.Constants.WristConstants;
 
 public class Wrist extends SubsystemBase {
@@ -68,8 +69,8 @@ public class Wrist extends SubsystemBase {
             0.0);
 
     public Wrist() {
-        setpointToggle.put(true, Constants.WristConstants.groundGoal);
-        setpointToggle.put(false, Constants.WristConstants.stowGoal);
+        setpointToggle.put(true, Constants.WristConstants.groundGoalRad);
+        setpointToggle.put(false, Constants.WristConstants.stowGoalRad);
         wristIO = new WristSparkMax();
         if (Robot.isSimulation()) {
             wristIO = new WristSim();
@@ -135,7 +136,7 @@ public class Wrist extends SubsystemBase {
 
             voltage += wristFF.calculate(data.positionRad, state.velocity); // is getting the goal redundant?
         } else {
-            voltage += getWristGoal().position == Units.degreesToRadians(140)
+            voltage += getWristGoal().position == WristConstants.groundGoalRad
                     ? velocityRadPerSec * WristConstants.realkVForward
                     : velocityRadPerSec *WristConstants.realkVBackward;
             voltage += calculateGravityFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians());
@@ -191,7 +192,7 @@ public class Wrist extends SubsystemBase {
         errorPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position - data.positionRad));
         errorVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity - data.velocityRadPerSec));
 
-        SmartDashboard.putNumber("FF", calculateGravityFeedForward(data.positionRad, 0));
+        SmartDashboard.putNumber("FF", calculateGravityFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians()));
 
         // test
     }
