@@ -75,18 +75,18 @@ public class Constants {
     public static final double realkVForward = 1.1; // radians
     public static final double realkVBackward = .8; // radians
 
-    public static final double kYIntercept = 0.2905297;
-    public static final double kBar = 0.93000486;
-    public static final double kBarSquared = -1.55368244;
-    public static final double kBarCubed = 0.40010935;
-    public static final double kArm = -0.32402392;
-    public static final double kArmSquared = 0.16496449;
-    public static final double kBarArm = 4.53475144;
-    public static final double kBarSquaredArm = -3.45017636;
-    public static final double kBarCubedArm = 0.67742981;
-    public static final double kBarArmSquared = -2.66645873;
-    public static final double kBarSquaredArmSquared = 2.57303994;
-    public static final double kBarCubedArmSquared = -0.5938634;
+    public static final double kYIntercept = 0.1246;
+    public static final double kBar =1.9194513796893218;
+    public static final double kBarSquared = -2.5269984215821695;
+    public static final double kBarCubed = 0.6400358577101314;
+    public static final double kArm = 0.5037381408046562;
+    public static final double kArmSquared = -0.4483587029860206;
+    public static final double kBarArm = 0.3590776457768715;
+    public static final double kBarSquaredArm = 0.35162777243811355;
+    public static final double kBarCubedArm = -0.21730785042191939;
+    public static final double kBarArmSquared = 0.2651848823547487;
+    public static final double kBarSquaredArmSquared = 0;
+    public static final double kBarCubedArmSquared = 0;
 
     public static final double groundGoal = Math.toRadians(140);
     public static final double stowGoal = 0;

@@ -83,22 +83,19 @@ public class JoystickIO {
 
         // 4bar
 
-        // pilot.y()
-        // .whileTrue(
-        // Commands.run(() ->
-        // Robot.wrist.runFF(2)
-        // )).whileFalse(Commands.run(() ->
-        // Robot.wrist.runFF(0)));
+        pilot.rightBumper()
+                .whileTrue(
+                        Commands.run(() -> Robot.wrist.runFF(0)));
 
-        pilot.a().whileTrue(
-                new getRegressionData(true));
-        pilot.a().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0),
-                Robot.wrist));
+        // pilot.a().whileTrue(
+        //         new getRegressionData(true));
+        // pilot.a().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0),
+        //         Robot.wrist));
 
-        pilot.b().whileTrue(
-                new getRegressionData(false));
-        pilot.b().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0),
-                Robot.wrist));
+        // pilot.b().whileTrue(
+        //         new getRegressionData(false));
+        // pilot.b().onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0),
+        //         Robot.wrist));
 
         // pilot.rightBumper().onTrue(Commands.runOnce(() ->
         // Robot.wrist.setGoalGround()));
