@@ -1,18 +1,14 @@
 package frc.robot.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.pathplanner.lib.util.PIDConstants;
-
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -21,6 +17,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Constants {
 
@@ -29,19 +27,22 @@ public class Constants {
     SIM
   }
 
-  public static final RobotType ROBOT_TYPE = Robot.isReal() ? RobotType.REAL : RobotType.SIM;
+  public static final RobotType ROBOT_TYPE = Robot.isReal()
+      ? RobotType.REAL
+      : RobotType.SIM;
 
   public static final class Sim {
+
     public static final double loopPeriodSec = 0.02;
   }
 
-
-
   public static final class ControllerConstants {
+
     public static final double deadband = 0.1;
   }
 
   public static final class WristConstants {
+
     public static final int wristId = 17;
     public static final double gearRatio = 1;
 
@@ -50,60 +51,81 @@ public class Constants {
     private static final PIDConstants realPID = new PIDConstants(1, 0, 0);
 
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
-    
-    private static final Constraints simConstraint = new Constraints(Math.PI, 2 * Math.PI); // we stealing from arm with
-                                                                                            // this one
-    private static final Constraints realConstraint = new Constraints(Math.PI, 2*Math.PI);
 
-    public static final Constraints trapezoidConstraint = Robot.isReal() ? realConstraint : simConstraint;
+    private static final Constraints simConstraint = new Constraints(
+        Math.PI,
+        2 * Math.PI); // we stealing from arm with
+    // this one
+    private static final Constraints realConstraint = new Constraints(
+        Math.PI,
+        2 * Math.PI);
+
+    public static final Constraints trapezoidConstraint = Robot.isReal()
+        ? realConstraint
+        : simConstraint;
 
     // thanks arm (robbery)
     public static final double simkS = 0.0;
-    public static final double simkG = .33775;// stick arm at 0 degrees, tune till it doesnt move (ok it moves but it
-                                              // should be fine it'll take like 3 years to move 1 degree)
-    public static final double simkV = 6.616; // max volts - kG / max velocity
-    public static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
+    public static final double simkG = .33775;
+    public static final double simkV = 6.616;
+    public static final double simkA = 0;
 
-    public static final double realkVForward =  1.1; // radians
-    public static final double realkVBackward =  .8; // radians
+    public static final double realkVForward = 1.15; // radians
+    public static final double realkVBackward = .65; // radians
 
-    public static final double kYIntercept = 0.2905297;
-    public static final double kBar = 0.93000486;
-    public static final double kBarSquared = -1.55368244;
-    public static final double kBarCubed = 0.40010935;
-    public static final double kArm = -0.32402392;
-    public static final double kArmSquared = 0.16496449;
-    public static final double kBarArm = 4.53475144;
-    public static final double kBarSquaredArm = -3.45017636;
-    public static final double kBarCubedArm = 0.67742981 ;
-    public static final double kBarArmSquared = -2.66645873;
-    public static final double kBarSquaredArmSquared =  2.57303994;
-    public static final double kBarCubedArmSquared =  -0.5938634;
+    public static final double kYIntercept = 0.2500;
+    public static final double kBar = 1.2051170442485861;
+    public static final double kBarSquared = -1.8766465126496676;
+    public static final double kBarCubed =  0.48841621426762893;
+    public static final double kArm =  -0.08453955731495624;
+    public static final double kArmSquared = -0.020323277876598187;
+    public static final double kBarArm = 3.7070918562599866;
+    public static final double kBarSquaredArm = -2.6560157465636793;
+    public static final double kBarCubedArm = 0.47800105908391155;
+    public static final double kBarArmSquared = -2.132368908319232;
+    public static final double kBarSquaredArmSquared = 2.148987748059586;
+    public static final double kBarCubedArmSquared = -0.496866520545201;
 
-
-    public static final double groundGoal = Math.toRadians(140);
-    public static final double stowGoal = 0;
-    public static final double wristOffsetRad = Units.degreesToRadians(251.45);
+    public static final double groundGoalRad = Units.degreesToRadians(155);
+    public static final double stowGoalRad = 0;
+    public static final double wristOffsetRad = Units.degreesToRadians(250.7);
   }
 
   public static final class ShooterConstants {
+
     public static final int shooterBottomId = 19;
     public static final int shooterTopId = 18;
 
     public static final double shooterVelocityRadPerSec = 100;
 
-    private static final PIDConstants simShooterTopPID = new PIDConstants(0, 0, 0);
-    private static final PIDConstants realShooterTopPID = new PIDConstants(0.0, 0, 0);
-    public static final PIDConstants shooterTopPID = Robot.isReal() ? realShooterTopPID : simShooterTopPID;
+    private static final PIDConstants simShooterTopPID = new PIDConstants(
+        0,
 
-    private static final PIDConstants simShooterBottomPID = new PIDConstants(0, 0, 0);
-    private static final PIDConstants realShooterBottomPID = new PIDConstants(0, 0, 0);
-    public static final PIDConstants shooterBottomPID = Robot.isReal() ? realShooterBottomPID : simShooterBottomPID;
+        0,
+        0);
+    private static final PIDConstants realShooterTopPID = new PIDConstants(
+        0.0,
+        0,
+        0);
+    public static final PIDConstants shooterTopPID = Robot.isReal()
+        ? realShooterTopPID
+        : simShooterTopPID;
+
+    private static final PIDConstants simShooterBottomPID = new PIDConstants(
+        0,
+        0,
+        0);
+    private static final PIDConstants realShooterBottomPID = new PIDConstants(
+        0,
+        0,
+        0);
+    public static final PIDConstants shooterBottomPID = Robot.isReal()
+        ? realShooterBottomPID
+        : simShooterBottomPID;
 
     public static final double topkV = 0.020; // volts/radPerSec
 
     public static final double bottomkV = 0.;
-
   }
 
   public static final class IntakeConstants {
@@ -114,12 +136,18 @@ public class Constants {
     public static final double intakeVelocity = 75;
     public static final double outtakeVelocity = -30;
     private static final PIDConstants simIntakePID = new PIDConstants(0, 0, 0);
-    private static final PIDConstants realIntakePID = new PIDConstants(0.01, 0, 0);
-    public static final PIDConstants intakePID = Robot.isReal() ? realIntakePID : simIntakePID;
+    private static final PIDConstants realIntakePID = new PIDConstants(
+        0.01,
+        0,
+        0);
+    public static final PIDConstants intakePID = Robot.isReal()
+        ? realIntakePID
+        : simIntakePID;
     public static final double kV = 0.101;
   }
 
   public static class VisionConstants {
+
     // See
     // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
     // page 208
@@ -131,7 +159,8 @@ public class Constants {
     public static final double targetHeight = Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
 
     public static final Transform3d cam_to_robot = new Transform3d(
-        new Translation3d(0, 0, -Units.inchesToMeters(15.25)), new Rotation3d());
+        new Translation3d(0, 0, -Units.inchesToMeters(15.25)),
+        new Rotation3d());
 
     public static final Transform3d robot_to_cam = cam_to_robot.inverse();
 
@@ -146,9 +175,7 @@ public class Constants {
     // msg from Noah: I forget what these do
     public static final double retro_cam_offset = 0.56;
     public static final double apriltag_cam_offset = 3.1;
-
   }
-
 
   public static enum RobotState {
     STOW(0, 0),
@@ -179,16 +206,14 @@ public class Constants {
 
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
-
     private static final double simkS = 0.0;
-    private static final double simkG = 0.203;// stick arm at 0 degrees, tune till it doesnt move
+    private static final double simkG = 0.203; // stick arm at 0 degrees, tune till it doesnt move
 
     private static final double simkV = 6.616; // max volts - kG / max velocity
     private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-
     private static final double realkS = 0.12;
-    private static final double realkG = 0.24; 
+    private static final double realkG = 0.24;
     private static final double realkV = 3.92;
     private static final double realkA = 0.23;
 
@@ -201,31 +226,70 @@ public class Constants {
 
     // private static final Constraints simConstraints = new Constraints(2.36,
     // 71.58);
-    private static final Constraints simConstraints = new Constraints(1.783, 89.175);
+    private static final Constraints simConstraints = new Constraints(
+        1.783,
+        89.175);
 
-    private static final Constraints realConstraints = new Constraints(2.662,
+    private static final Constraints realConstraints = new Constraints(
+        2.662,
         9);
-    public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
+    public static final Constraints constraints = Robot.isReal()
+        ? realConstraints
+        : simConstraints;
 
     // Field Parameters
-    public static final double armHeightOffset = 0.0; // how high up the arm is, NOTE: need to find
+    public static final double armHeightOffset = 0.2159;
+    public static final double armLengthOffset = 0.2286;
     public static final double armLength = 0.93;
     public static final double shooterVelocity = 20.0; // NOTE: likely will vary, might need to pass as parameter
 
-    // NOTE: Not percise
     // Field Parameters
     public static final double speakerHeight = 2.05; // likely thing you'll need to tune
-    public static final double minDistance = 0.9; // confirm (this is subwoofer)
+    public static final double minDistance = 0.9; // / NOTE: Not percise, please check
 
     // Calcuation stuff
-    // TODO: adjust stage margin stuff and distance margin/max angle (ask Bailey)
+    // Max angle??? (ask Bailey)
     public static final double distMargin = 0.25; // Half a meter is kind of a lot, don't you think?
     public static final double maxAngle = 42.109;
     public static final double maxAngleRad = Math.toRadians(maxAngle);
-    public static final double stageMargin = 10; // inches
+
+    // Important Field Coordinates (everything converted from inches to meters)
+    // NOTE: may need to adjust slightly to make sure code works properly (some
+    // inpercision in measurements)
+    public static final Translation2d redSpeakerPosition = new Translation2d(
+        Units.inchesToMeters(653.2),
+        Units.inchesToMeters(218.64)); // rounded need to change
+    public static final Translation2d blueSpeakerPosition = new Translation2d(
+        0,
+        Units.inchesToMeters(218.64)); // rounded need to change
+
+    public static final double stageMargin = 20; // margin in inches
+    public static final Translation2d[] redStagePoints = {
+        new Translation2d(
+            Units.inchesToMeters(125.01 + stageMargin),
+            Units.inchesToMeters(161.64)),
+        new Translation2d(
+            Units.inchesToMeters(231.2 + stageMargin),
+            Units.inchesToMeters(104.64 + stageMargin)),
+        new Translation2d(
+            Units.inchesToMeters(231.2 + stageMargin),
+            Units.inchesToMeters(218.64 + stageMargin))
+    };
+    public static final Translation2d[] blueStagePoints = {
+        new Translation2d(
+            653.2 - redStagePoints[0].getX(),
+            redStagePoints[0].getY()),
+        new Translation2d(
+            653.2 - redStagePoints[1].getX(),
+            redStagePoints[1].getY()),
+        new Translation2d(
+            653.2 - redStagePoints[2].getX(),
+            redStagePoints[2].getY())
+    };
   }
 
   public static final class ModuleConstants {
+
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
     public static final double driveMotorGearRatio = 6.75;
     public static final double turnMotorGearRatio = 12.8;
@@ -238,10 +302,10 @@ public class Constants {
     public static final double kVDrivingSim = 3.19;
     public static final double kSDrivingSim = 0.0;
     public static final double kPDrivingSim = 0.0;
-
   }
 
   public static final class DriveConstants {
+
     // Distance between right and left wheels
     public static final double trackWidth = Units.inchesToMeters(19.5);
     // Distance between front and back wheels
@@ -256,17 +320,37 @@ public class Constants {
     public static final int[] turningMotorPorts = { 4, 6, 8, 10 }; // FL, FR, BL, BR
     public static final int[] absoluteEncoderPorts = { 11, 12, 13, 14 };
 
-    public static final boolean[] driveMotorReversed = { true, false, false, true };
-    public static final boolean[] turningMotorReversed = { false, false, false, false };
-    public static final boolean[] driveAbsoluteEncoderReversed = { false, false, false, false };
-    public static final double[] absoluteEncoderOffsetDeg = { -18.896-0.088, -292.730+44, -11.891-216.361, -68 +20.275};
+    public static final boolean[] driveMotorReversed = {
+        false,
+        true,
+        false,
+        true
+    };
+    public static final boolean[] turningMotorReversed = {
+        false,
+        false,
+        false,
+        false
+    };
+    public static final boolean[] driveAbsoluteEncoderReversed = {
+        false,
+        false,
+        false,
+        false
+    };
+    public static final double[] absoluteEncoderOffsetDeg = {
+        517.148,
+        289.863,
+        843.662,
+        667.617
+    };
 
     // public static final double[] absoluteEncoderOffsetDeg = { -275, -48, 0, 263
     // };
 
-    public static final int driveMotorStallLimit = 20;
+    public static final int driveMotorStallLimit = 40;
     public static final int driveMotorFreeLimit = 40;
-    public static final int turnMotorStallLimit = 20;
+    public static final int turnMotorStallLimit = 40;
     public static final int turnMotorFreeLimit = 40;
 
     private static final double realMaxSpeedMetersPerSecond = 3.707;
@@ -282,7 +366,8 @@ public class Constants {
     private static final double simMaxMotorVoltage = 12.0;
     private static final double realMaxMotorVoltage = 12.0;
 
-    public static final double maxMotorVolts = Robot.isReal() ? DriveConstants.realMaxMotorVoltage
+    public static final double maxMotorVolts = Robot.isReal()
+        ? DriveConstants.realMaxMotorVoltage
         : DriveConstants.simMaxMotorVoltage;
 
     public static final double maxSpeedMetersPerSecond = Robot.isReal()
@@ -304,23 +389,27 @@ public class Constants {
     public static final double toleranceM_Misc = 0.02;
     public static final double toleranceRad_Misc = Math.PI / 750;
 
-    public static final Pose2d fieldStartingPose = new Pose2d(1.37, 4.51, Rotation2d.fromDegrees(-22.62));
+    public static final Pose2d fieldStartingPose = new Pose2d(
+        1.37,
+        4.51,
+        Rotation2d.fromDegrees(-22.62));
     // will eventally be easier to change values from here than poke around through
     // files
-    public static double kP_teleopTurn = 1.3;
-    public static double kD_teleopTurn = 0.0;
+    private static double sim_turnKp = 1.3;
+    private static double sim_turnKd = 0;
+    private static double real_turnKp = 56.861;
+    private static double real_turnKd = 5.1732;
 
-    public static double kP_TurnToAngle = 0.15;
-    public static double kD_TurnToAngle = 0.008;
-
-    public static double kP_MiscDrive = 0.42;
-    public static double kD_MiscDrive = 0.02;
-
-    public static double kP_MiscTurn = 0.15;
-    public static double kD_MiscTurn = 0.003;
+    public static double kP_teleopTurn = Robot.isReal()
+        ? real_turnKp
+        : sim_turnKp;
+    public static double kD_teleopTurn = Robot.isReal()
+        ? real_turnKd
+        : sim_turnKd;
   }
 
   public static final class AutoConstants {
+
     public static double kP_PathPlannerDrive = 13.854869643983458;
     public static double kD_PathPlannerDrive = 0;
 
@@ -332,7 +421,8 @@ public class Constants {
         0.09090823761513889,
         Constants.AutoConstants.kD_PathPlannerDrive);
     public static PIDConstants turnPIDConstants = new PIDConstants(
-        Constants.AutoConstants.kP_PathPlannerTurn, 0,
+        Constants.AutoConstants.kP_PathPlannerTurn,
+        0,
         Constants.AutoConstants.kD_PathPlannerTurn);
 
     public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
@@ -341,7 +431,7 @@ public class Constants {
         turnPIDConstants,
         Constants.DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s
         Math.sqrt(2 * (DriveConstants.trackWidth * DriveConstants.trackWidth)), // Drivetrain
-                                                                                // radius
+        // radius
         new ReplanningConfig() // Default path replanning config. See the API for the
     // options here
     );
@@ -352,5 +442,4 @@ public class Constants {
         Constants.DriveConstants.maxAngularSpeedRadiansPerSecond,
         Constants.DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
   }
-
 }
