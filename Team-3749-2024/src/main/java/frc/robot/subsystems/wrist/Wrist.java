@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 
 import org.opencv.core.RotatedRect;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -122,13 +123,15 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> kVData = new ShuffleData(this.getName(), "kVdata", 0.0);
 
     public void moveWristToAngle(double positionRad, double velocityRadPerSec, double accelerationRadPerSecSquared) {
-
-
-
         State state = getWristSetpoint();
-        double voltage = wristController.calculate(data.positionRad);
-        if (positionRad == 0 && data.positionRad <7){
-            setVoltage(0);
+        double pidGain = wristController.calculate(data.positionRad);
+        double voltage = UtilityFunctions.withinMargin(0.35, getWristGoal().position, data.positionRad)
+                ? pidGain
+                : 0;
+
+        if ((positionRad == 0 && data.positionRad < Units.radiansToDegrees(4))
+                && Math.abs(data.velocityRadPerSec) < 0.05) {
+            setVoltage(-Math.signum(pidGain) * 0.05);
             return;
         }
 
@@ -136,9 +139,10 @@ public class Wrist extends SubsystemBase {
 
             voltage += wristFF.calculate(data.positionRad, state.velocity); // is getting the goal redundant?
         } else {
+            voltage += Math.signum(pidGain) * WristConstants.realkS;
             voltage += getWristGoal().position == WristConstants.groundGoalRad
                     ? velocityRadPerSec * WristConstants.realkVForward
-                    : velocityRadPerSec *WristConstants.realkVBackward;
+                    : velocityRadPerSec * WristConstants.realkVBackward;
             voltage += calculateGravityFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians());
         }
 
@@ -192,7 +196,8 @@ public class Wrist extends SubsystemBase {
         errorPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position - data.positionRad));
         errorVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity - data.velocityRadPerSec));
 
-        SmartDashboard.putNumber("FF", calculateGravityFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians()));
+        SmartDashboard.putNumber("FF",
+                calculateGravityFeedForward(data.positionRad, Robot.arm.getRotation2d().getRadians()));
 
         // test
     }
