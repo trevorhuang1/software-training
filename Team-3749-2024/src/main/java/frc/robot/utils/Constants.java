@@ -48,11 +48,12 @@ public class Constants {
 
     private static final PIDConstants simPID = new PIDConstants(35, 0, 1);
 
-    private static final PIDConstants realPID = new PIDConstants(0, 0, 0); //1
+    private static final PIDConstants realPID = new PIDConstants(0.35, 0, 0); //1
 
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
-    private static final Constraints simConstraint = new Constraints(
+    private static final Constraints simConstraint = new Constraints
+    (
         Math.PI,
         2 * Math.PI); // we stealing from arm with
     // this one
@@ -70,8 +71,9 @@ public class Constants {
     public static final double simkV = 6.616;
     public static final double simkA = 0;
 
-    public static final double realkVForward = 1.15; // radians
-    public static final double realkVBackward = .65; // radians
+    public static final double realkS = 0.1;
+    public static final double realkVForward = 1.27; // radians
+    public static final double realkVBackward = 1.075; // radians
 
     public static final double kYIntercept = 0.2500;
     public static final double kBar = 1.2051170442485861;
@@ -86,9 +88,9 @@ public class Constants {
     public static final double kBarSquaredArmSquared = 2.148987748059586;
     public static final double kBarCubedArmSquared = -0.496866520545201;
 
-    public static final double groundGoalRad = Units.degreesToRadians(155);
+    public static final double groundGoalRad = Units.degreesToRadians(150);
     public static final double stowGoalRad = 0;
-    public static final double wristOffsetRad = Units.degreesToRadians(250.7);
+    public static final double wristOffsetRad = Units.degreesToRadians(252.8);
   }
 
   public static final class ShooterConstants {
