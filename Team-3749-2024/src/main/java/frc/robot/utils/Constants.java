@@ -48,12 +48,11 @@ public class Constants {
 
     private static final PIDConstants simPID = new PIDConstants(35, 0, 1);
 
-    private static final PIDConstants realPID = new PIDConstants(0.35, 0, 0); //1
+    private static final PIDConstants realPID = new PIDConstants(0.35, 0, 0); // 1
 
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
-    private static final Constraints simConstraint = new Constraints
-    (
+    private static final Constraints simConstraint = new Constraints(
         Math.PI,
         2 * Math.PI); // we stealing from arm with
     // this one
@@ -78,8 +77,8 @@ public class Constants {
     public static final double kYIntercept = 0.2500;
     public static final double kBar = 1.2051170442485861;
     public static final double kBarSquared = -1.8766465126496676;
-    public static final double kBarCubed =  0.48841621426762893;
-    public static final double kArm =  -0.08453955731495624;
+    public static final double kBarCubed = 0.48841621426762893;
+    public static final double kArm = -0.08453955731495624;
     public static final double kArmSquared = -0.020323277876598187;
     public static final double kBarArm = 3.7070918562599866;
     public static final double kBarSquaredArm = -2.6560157465636793;
@@ -198,7 +197,7 @@ public class Constants {
     public static final int leftID = 15;
     public static final int rightID = 16;
     // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
-    public static final double gearRatio = 200.0;
+    public static final double sprocketRatio = 64.0 / 24.0;
     public static final int encoderID = 7;
     public static final double encoderOffsetRad = 0;
 
