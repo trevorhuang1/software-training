@@ -45,26 +45,14 @@ public class SwerveModule {
             name = "BR Module";
         }
 
-        if (Robot.isSimulation()) {
+        moduleIO = SwerveModule;
 
-            moduleIO = SwerveModule;
+        drivingPidController = new PIDController(ModuleConstants.kPDriving, 0, 0);
+        drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDriving,
+                ModuleConstants.kVDriving, ModuleConstants.kADriving);
+        turningPidController = new PIDController(ModuleConstants.kPturning, 0, ModuleConstants.kDTurning);
+        turningPidController.enableContinuousInput(0, 2 * Math.PI);
 
-            drivingPidController = new PIDController(ModuleConstants.kPDrivingSim, 0, 0);
-            drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDrivingSim,
-                    ModuleConstants.kVDrivingSim);
-            turningPidController = new PIDController(ModuleConstants.kPTurningSim, 0, 0);
-            turningPidController.enableContinuousInput(0, 2 * Math.PI);
-
-        } else {
-            moduleIO = SwerveModule;
-
-            drivingPidController = new PIDController(ModuleConstants.kPDrivingReal, 0, 0);
-            drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDrivingReal,
-                    ModuleConstants.kVDrivingReal);
-            turningPidController = new PIDController(ModuleConstants.kPTurningReal, 0, 0);
-            turningPidController.enableContinuousInput(0, 2 * Math.PI);
-
-        }
         // Tab, name, data
         driveSpeed = new ShuffleData<>("swerve/" + name, name + " drive speed", moduleData.driveVelocityMPerSec);
         drivePosition = new ShuffleData<>("swerve/" + name, name + " drive position", moduleData.driveVelocityMPerSec);
@@ -116,7 +104,9 @@ public class SwerveModule {
         double drive_volts = drivingFeedFordward.calculate(speedMetersPerSecond)
                 + drivingPidController.calculate(moduleData.driveVelocityMPerSec, speedMetersPerSecond);
         setDriveVoltage(drive_volts);
+
     }
+
     public void setTurnPosition(double positionRad) {
         double turning_volts = turningPidController.calculate(moduleData.turnAbsolutePositionRad,
                 positionRad);
@@ -138,14 +128,14 @@ public class SwerveModule {
         setTurnVoltage(0);
     }
 
-    public ModuleData getModuleData(){
+    public ModuleData getModuleData() {
         return moduleData;
     }
 
-    public void setBreakMode(boolean enabled){
+    public void setBreakMode(boolean enabled) {
         moduleIO.setDriveBrakeMode(enabled);
         moduleIO.setTurningBrakeMode(enabled);
-    
+
     }
 
     // called within the swerve subsystem's periodic
