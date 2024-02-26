@@ -404,10 +404,10 @@ public class Constants {
     private static double real_turnKp = 56.861;
     private static double real_turnKd = 5.1732;
 
-    public static double kP_teleopTurn = Robot.isReal()
+    public static double turnKp = Robot.isReal()
         ? real_turnKp
         : sim_turnKp;
-    public static double kD_teleopTurn = Robot.isReal()
+    public static double turnKd = Robot.isReal()
         ? real_turnKd
         : sim_turnKd;
   }

@@ -24,9 +24,9 @@ public class Teleop extends Command {
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
   private final PIDController pid_turnController = new PIDController(
-    DriveConstants.kP_teleopTurn,
+    DriveConstants.turnKp,
     0,
-    DriveConstants.kD_teleopTurn
+    DriveConstants.turnKd
   );
 
   public Teleop(

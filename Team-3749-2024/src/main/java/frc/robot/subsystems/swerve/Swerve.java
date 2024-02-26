@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -42,6 +43,9 @@ public class Swerve extends SubsystemBase {
   private GyroData gyroData = new GyroData();
   // equivilant to a odometer, but also intakes vision
   private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+
+  private boolean isEnabled = false;
+
 
   private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>(
       "swerve",
@@ -90,13 +94,6 @@ public class Swerve extends SubsystemBase {
       0.0);
 
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-
-  private final MutableMeasure<Voltage> identificationVoltageMeasure = mutable(
-      Volts.of(0));
-  private final MutableMeasure<Distance> identificationDistanceMeasure = mutable(
-      Meters.of(0));
-  private final MutableMeasure<Velocity<Distance>> identificaitonVelocityMeasure = mutable(
-      MetersPerSecond.of(0));
 
 
   public Swerve() {
@@ -153,7 +150,6 @@ public class Swerve extends SubsystemBase {
         getRotation2d());
     return speeds;
   }
-
 
   public Rotation2d getRotation2d() {
     Rotation2d rotation = swerveDrivePoseEstimator
@@ -242,19 +238,18 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-
   public double getVerticalTilt() {
     return gyroData.pitchDeg;
   }
 
   public void resetGyro() {
     gyro.resetGyro();
-    swerveDrivePoseEstimator.resetPosition(getRotation2d(),         new SwerveModulePosition[] {
-          modules[0].getPosition(),
-          modules[1].getPosition(),
-          modules[2].getPosition(),
-          modules[3].getPosition()
-        }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
+    swerveDrivePoseEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[] {
+        modules[0].getPosition(),
+        modules[1].getPosition(),
+        modules[2].getPosition(),
+        modules[3].getPosition()
+    }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
   }
 
   @Override
@@ -305,6 +300,18 @@ public class Swerve extends SubsystemBase {
     gyroConnectedLog.set(gyroData.isConnected);
     gyroCalibratingLog.set(gyroData.isCalibrating);
     headingLog.set(getRotation2d().getDegrees());
+
+    boolean driverStationStatus = DriverStation.isEnabled();
+
+    if (driverStationStatus && !isEnabled) {
+      isEnabled = driverStationStatus;
+      modules[0].setBreakMode(true);;
+    }
+    if (!driverStationStatus && isEnabled) {
+      modules[0].setBreakMode(false);;
+      isEnabled = driverStationStatus;
+    }
+
   }
 
 }

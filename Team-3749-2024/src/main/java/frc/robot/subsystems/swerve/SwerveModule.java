@@ -142,6 +142,12 @@ public class SwerveModule {
         return moduleData;
     }
 
+    public void setBreakMode(boolean enabled){
+        moduleIO.setDriveBrakeMode(enabled);
+        moduleIO.setTurningBrakeMode(enabled);
+    
+    }
+
     // called within the swerve subsystem's periodic
     public void periodic() {
         moduleIO.updateData(moduleData);
