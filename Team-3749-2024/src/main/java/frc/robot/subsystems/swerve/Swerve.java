@@ -98,92 +98,6 @@ public class Swerve extends SubsystemBase {
   private final MutableMeasure<Velocity<Distance>> identificaitonVelocityMeasure = mutable(
       MetersPerSecond.of(0));
 
-  SysIdRoutine routine = new SysIdRoutine(
-      // new SysIdRoutine.Config(),
-      new SysIdRoutine.Config(
-          Volts.per(Seconds).of(1),
-          Volts.of(7),
-          Seconds.of(10)),
-      new SysIdRoutine.Mechanism(
-          this::identificationDriveConsumer,
-          log -> {
-            // Record a frame for the left motors. Since these share an encoder, we consider
-            // the entire group to be one motor.
-            SmartDashboard.putNumber(
-                "motorAppliedVolts",
-                identificationVoltageMeasure
-                    .mut_replace(modules[0].getModuleData().driveAppliedVolts, Volts)
-                    .magnitude());
-            SmartDashboard.putNumber(
-                "motorSpeed",
-                identificaitonVelocityMeasure
-                    .mut_replace(
-                        modules[0].getModuleData().driveVelocityMPerSec,
-                        MetersPerSecond)
-                    .magnitude());
-
-            log
-                .motor("front-left")
-                .voltage(
-                    identificationVoltageMeasure.mut_replace(
-                        modules[0].getModuleData().driveAppliedVolts,
-                        Volts))
-                .linearPosition(
-                    identificationDistanceMeasure.mut_replace(
-                        modules[0].getModuleData().drivePositionM,
-                        Meters))
-                .linearVelocity(
-                    identificaitonVelocityMeasure.mut_replace(
-                        modules[0].getModuleData().driveVelocityMPerSec,
-                        MetersPerSecond));
-            // Record a frame for the right motors. Since these share an encoder, we
-            // consider
-            // the entire group to be one motor.
-            log
-                .motor("front-right")
-                .voltage(
-                    identificationVoltageMeasure.mut_replace(
-                        modules[1].getModuleData().driveAppliedVolts,
-                        Volts))
-                .linearPosition(
-                    identificationDistanceMeasure.mut_replace(
-                        modules[1].getModuleData().drivePositionM,
-                        Meters))
-                .linearVelocity(
-                    identificaitonVelocityMeasure.mut_replace(
-                        modules[1].getModuleData().driveVelocityMPerSec,
-                        MetersPerSecond));
-
-            log
-                .motor("back-left")
-                .voltage(
-                    identificationVoltageMeasure.mut_replace(
-                        modules[2].getModuleData().driveAppliedVolts,
-                        Volts))
-                .linearPosition(
-                    identificationDistanceMeasure.mut_replace(
-                        modules[2].getModuleData().drivePositionM,
-                        Meters))
-                .linearVelocity(
-                    identificaitonVelocityMeasure.mut_replace(
-                        modules[2].getModuleData().driveVelocityMPerSec,
-                        MetersPerSecond));
-            log
-                .motor("back-right")
-                .voltage(
-                    identificationVoltageMeasure.mut_replace(
-                        modules[3].getModuleData().driveAppliedVolts,
-                        Volts))
-                .linearPosition(
-                    identificationDistanceMeasure.mut_replace(
-                        modules[3].getModuleData().drivePositionM,
-                        Meters))
-                .linearVelocity(
-                    identificaitonVelocityMeasure.mut_replace(
-                        modules[3].getModuleData().driveVelocityMPerSec,
-                        MetersPerSecond));
-          },
-          this));
 
   public Swerve() {
     if (Robot.isSimulation()) {
@@ -240,10 +154,6 @@ public class Swerve extends SubsystemBase {
     return speeds;
   }
 
-  public void resetGyro(Measure<Velocity<Voltage>> rampRate) {
-    rampRate.baseUnitMagnitude();
-    gyro.resetGyro();
-  }
 
   public Rotation2d getRotation2d() {
     Rotation2d rotation = swerveDrivePoseEstimator
@@ -332,20 +242,6 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-  public void identificationDriveConsumer(Measure<Voltage> voltage) {
-    for (int i = 0; i < 4; i++) {
-      modules[i].setDriveVoltage(voltage.baseUnitMagnitude());
-      modules[i].setTurnPosition(0); // they all face forward, locking the wheels
-    }
-  }
-
-  public Command getSysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return routine.quasistatic(direction);
-  }
-
-  public Command getSysIdDynamic(SysIdRoutine.Direction direction) {
-    return routine.dynamic(direction);
-  }
 
   public double getVerticalTilt() {
     return gyroData.pitchDeg;
@@ -411,65 +307,4 @@ public class Swerve extends SubsystemBase {
     headingLog.set(getRotation2d().getDegrees());
   }
 
-  // //
-
-  // // SysID things
-
-  // //
-  public void identificaitonTurnConsumer(Measure<Voltage> voltage) {
-    for (int i = 0; i < 4; i++) {
-      modules[i].setTurnVoltage(voltage.baseUnitMagnitude());
-    }
-  }
-
-  private final MutableMeasure<Voltage> identificationTurnVoltageMeasure = mutable(
-      Volts.of(0));
-  private final MutableMeasure<Angle> identificationTurnDistanceMeasure = mutable(
-      Radians.of(0));
-  private final MutableMeasure<Velocity<Angle>> identificaitonTurnVelocityMeasure = mutable(
-      RadiansPerSecond.of(0));
-
-  private SysIdRoutine turnRoutine = new SysIdRoutine(
-      // new SysIdRoutine.Config(),
-      new SysIdRoutine.Config(
-          Volts.per(Seconds).of(1),
-          Volts.of(7),
-          Seconds.of(10)),
-      new SysIdRoutine.Mechanism(
-          this::identificaitonTurnConsumer,
-          log -> {
-            // Record a frame for the left motors. Since these share an encoder, we consider
-            // the entire group to be one motor.
-            log
-                .motor("front-left-turn")
-                .voltage(
-                    identificationTurnVoltageMeasure.mut_replace(
-                        modules[0].getModuleData().turnAppliedVolts,
-                        Volts))
-                .angularPosition(
-                    identificationTurnDistanceMeasure.mut_replace(
-                        modules[0].getModuleData().turnAbsolutePositionRad,
-                        Radians))
-                .angularVelocity(
-                    identificaitonTurnVelocityMeasure.mut_replace(
-                        modules[0].getModuleData().turnVelocityRadPerSec,
-                        RadiansPerSecond));
-          },
-          this));
-
-  public Command getTurnSysIdQuasistaticForwardTest() {
-    return turnRoutine.quasistatic(Direction.kForward);
-  }
-
-  public Command getTurnSysIdQuasistaticReverseTest() {
-    return turnRoutine.quasistatic(Direction.kReverse);
-  }
-
-  public Command getTurnSysIdDynamicForwardTest() {
-    return turnRoutine.dynamic(Direction.kForward);
-  }
-
-  public Command getTurnSysIdDynamicReverseTest() {
-    return turnRoutine.dynamic(Direction.kReverse);
-  }
 }
