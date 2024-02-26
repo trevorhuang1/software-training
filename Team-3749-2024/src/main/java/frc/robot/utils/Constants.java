@@ -58,7 +58,7 @@ public class Constants {
     // this one
     private static final Constraints realConstraint = new Constraints(
         Math.PI,
-        2 * Math.PI);
+        Math.PI);
 
     public static final Constraints trapezoidConstraint = Robot.isReal()
         ? realConstraint
@@ -87,7 +87,7 @@ public class Constants {
     public static final double kBarSquaredArmSquared = 2.148987748059586;
     public static final double kBarCubedArmSquared = -0.496866520545201;
 
-    public static final double groundGoalRad = Units.degreesToRadians(150);
+    public static final double groundGoalRad = Units.degreesToRadians(155);
     public static final double stowGoalRad = 0;
     public static final double wristOffsetRad = Units.degreesToRadians(252.8);
   }
@@ -197,6 +197,8 @@ public class Constants {
     public static final int leftID = 15;
     public static final int rightID = 16;
     // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
+    public static final double gearRatio = 200.0;
+
     public static final double sprocketRatio = 64.0 / 24.0;
     public static final int encoderID = 7;
     public static final double encoderOffsetRad = 0;
@@ -210,20 +212,21 @@ public class Constants {
     private static final double simkS = 0.0;
     private static final double simkG = 0.203; // stick arm at 0 degrees, tune till it doesnt move
 
+
     private static final double simkV = 6.616; // max volts - kG / max velocity
     private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
     private static final double realkS = 0.12;
-    private static final double realkG = 0.24;
-    private static final double realkV = 3.92;
+    private static final double realkG = 0.245;
+    private static final double realkV = 3.94;
     private static final double realkA = 0.23;
 
     public static final double kS = Robot.isReal() ? realkS : simkS;
     public static final double kG = Robot.isReal() ? realkG : simkG;
     public static final double kV = Robot.isReal() ? realkV : simkV;
     public static final double kA = Robot.isReal() ? realkA : simkA;
-    public static final double deployedKG = 0.6;
-    public static final double deployedKP = 1.25;
+    public static final double deployedKG = 0.57;
+    public static final double deployedKP = 1.35;
 
     // private static final Constraints simConstraints = new Constraints(2.36,
     // 71.58);

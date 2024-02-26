@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,7 +39,7 @@ public class Climb extends Command {
             return;
         }
         // Stop/slow down at 2 degrees
-        if (Robot.arm.getRotation2d().getDegrees() > 2) {
+        if (Units.radiansToDegrees(Robot.arm.getPositionRad()) > 2) {
 
             Robot.arm.setVoltage(-3);
         }

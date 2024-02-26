@@ -82,7 +82,7 @@ public class getRegressionData extends Command {
                 mode = "move";
             } else if (!scanned) {
                 System.out
-                        .println(currentPosition + "," + Robot.arm.getRotation2d().getDegrees() + "," + currentVoltage);
+                        .println(currentPosition + "," + Units.radiansToDegrees(Robot.arm.getPositionRad()) + "," + currentVoltage);
                 scanned = true;
             }
         }

@@ -80,14 +80,14 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     public void setDriveVoltage(double volts) {
         driveAppliedVolts = MathUtil.clamp(volts, -Constants.DriveConstants.maxMotorVolts,
                 Constants.DriveConstants.maxMotorVolts);
-        // driveMotor.setVoltage(driveAppliedVolts);
+        driveMotor.setVoltage(driveAppliedVolts);
     };
 
     @Override
     public void setTurnVoltage(double volts) {
         turnAppliedVolts = MathUtil.clamp(volts, -Constants.DriveConstants.maxMotorVolts,
                 Constants.DriveConstants.maxMotorVolts);
-        // turnMotor.setVoltage(turnAppliedVolts);
+        turnMotor.setVoltage(turnAppliedVolts);
     };
 
     private double getDrivePositionMeters() {

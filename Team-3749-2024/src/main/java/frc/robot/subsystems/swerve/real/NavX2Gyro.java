@@ -30,7 +30,8 @@ public class NavX2Gyro implements GyroIO {
         data.isConnected = gyro.isConnected();
 
         if (data.isConnected && !data.isCalibrating) {
-            data.yawDeg = gyro.getYaw();
+            // negative to make it CCP  q
+            data.yawDeg = -gyro.getYaw();
             data.pitchDeg = gyro.getPitch();
             data.rollDeg = gyro.getRoll();
         } else {

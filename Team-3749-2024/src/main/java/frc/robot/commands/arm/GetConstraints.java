@@ -2,6 +2,7 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.utils.Constants;
@@ -21,8 +22,8 @@ public class GetConstraints extends Command {
 
     @Override
     public void execute() {
-        Rotation2d pos = Robot.arm.getRotation2d();
-        if (pos.getDegrees()>=80){
+        double pos = Robot.arm.getPositionRad();
+        if (pos>=Units.degreesToRadians(80)){
             Robot.arm.setVoltage(0);
             return;
         }

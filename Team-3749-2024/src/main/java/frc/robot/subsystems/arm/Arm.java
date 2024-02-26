@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -61,6 +62,7 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> errorAccelerationLog = new ShuffleData<Double>(this.getName(), "error acceleration", 0.0);
 
     private double accelerationSetpoint = 0;
+    private double prevSetpointVelocity = 0;
 
     private boolean isKilled = false;
     private boolean isEnabled = false;
@@ -73,8 +75,12 @@ public class Arm extends SubsystemBase {
         }
     }
 
-    public Rotation2d getRotation2d() {
-        return new Rotation2d(data.positionRad);
+    public double getPositionRad() {
+        return data.positionRad;
+    }
+
+    public double getVelocityRadPerSec(){
+        return data.velocityRadPerSec;
     }
 
     public void setGoal(double positionRad) {
@@ -98,6 +104,39 @@ public class Arm extends SubsystemBase {
         }
     }
 
+    public void moveToGoal(){
+        State setpoint = getSetpoint();
+        double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
+        prevSetpointVelocity = setpoint.velocity;
+        double feedback = calculatePID(getPositionRad());
+
+        // if resting on the hard stop, don't waste voltage on kG
+        if (setpoint.position == 0 && Units.radiansToDegrees(getPositionRad()) < 2) {
+            setVoltage(0);
+
+            return;
+        }
+        // if 4bar is deployed, switch kG
+        if (setpoint.velocity == 0 && Robot.wrist.getIsDeployed()) {
+            // ks, kg, and P
+            double error = (setpoint.position - getPositionRad());
+            double voltage = Math.signum(error) * ArmConstants.kS
+                    + ArmConstants.deployedKG * Math.cos(getPositionRad())
+                    + ArmConstants.deployedKP * error;
+            setVoltage(voltage);
+            return;
+        }
+
+        double feedforward;
+        if (setpoint.velocity != 0) {
+            feedforward = calculateFF(getPositionRad(),setpoint.velocity, accelerationSetpoint);
+        } else {
+            // have the kS help the PID when stationary
+            feedforward = Math.signum(feedback) * ArmConstants.kS;
+        }
+        setVoltage(feedforward + feedback);
+    }
+
     public void toggleKill() {
         isKilled = !isKilled;
     }
@@ -117,8 +156,9 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         // System.out.println("0,0,0");
         armIO.updateData(data);
+        moveToGoal();
 
-        positionLog.set(getRotation2d().getDegrees());
+        positionLog.set(Units.radiansToDegrees(getPositionRad()));
         velocityLog.set(data.velocityRadPerSec);
         accelerationLog.set(data.accelerationRadPerSecSquared);
         voltageLog.set(data.appliedVolts);
