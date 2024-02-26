@@ -48,7 +48,7 @@ public class Constants {
 
     private static final PIDConstants simPID = new PIDConstants(35, 0, 1);
 
-    private static final PIDConstants realPID = new PIDConstants(1, 0, 0);
+    private static final PIDConstants realPID = new PIDConstants(0, 0, 0); //1
 
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 

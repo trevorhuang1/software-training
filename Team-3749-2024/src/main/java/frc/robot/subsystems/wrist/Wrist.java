@@ -122,12 +122,10 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> kVData = new ShuffleData(this.getName(), "kVdata", 0.0);
 
     public void moveWristToAngle(double positionRad, double velocityRadPerSec, double accelerationRadPerSecSquared) {
-
-
-
         State state = getWristSetpoint();
         double voltage = wristController.calculate(data.positionRad);
-        if (positionRad == 0 && data.positionRad <7){
+
+        if (positionRad == 0 && data.positionRad < Units.radiansToDegrees(4)){
             setVoltage(0);
             return;
         }
