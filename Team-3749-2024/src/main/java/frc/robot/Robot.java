@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.Wrist;
+import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Xbox;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
@@ -23,6 +24,11 @@ public class Robot extends TimedRobot {
   public static final Wrist wrist = new Wrist();
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
+
+    public static ShuffleData<Double> kSdata = new ShuffleData<Double>("Swerve", "static data", 0.0);
+    public static ShuffleData<Double> kVdata = new ShuffleData<Double>("Swerve", "vel data", 0.0);
+    public static ShuffleData<Double> kPdata = new ShuffleData<Double>("Swerve", "p data", 0.0);
+
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;

@@ -23,12 +23,6 @@ public class Teleop extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  private final PIDController pid_turnController = new PIDController(
-    DriveConstants.turnKp,
-    0,
-    DriveConstants.turnKd
-  );
-
   public Teleop(
     Supplier<Double> xSpdFunction,
     Supplier<Double> ySpdFunction,
@@ -53,7 +47,6 @@ public class Teleop extends Command {
 
   @Override
   public void initialize() {
-    pid_turnController.enableContinuousInput(0, 2 * Math.PI);
   }
 
   @Override

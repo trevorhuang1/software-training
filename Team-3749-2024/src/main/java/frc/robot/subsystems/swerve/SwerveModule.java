@@ -100,9 +100,20 @@ public class SwerveModule {
 
     }
 
+
+
     public void setDriveSpeed(double speedMetersPerSecond) {
+        if (Robot.pilot.povUp().getAsBoolean()){
+
+            speedMetersPerSecond = 1 * Math.signum(speedMetersPerSecond);
+        }
         double drive_volts = drivingFeedFordward.calculate(speedMetersPerSecond)
                 + drivingPidController.calculate(moduleData.driveVelocityMPerSec, speedMetersPerSecond);
+        drive_volts = 1;
+        double kstatic = Math.signum(speedMetersPerSecond)* Robot.kSdata.get();
+        double kV = speedMetersPerSecond * Robot.kVdata.get();
+        double kP = (speedMetersPerSecond- moduleData.driveVelocityMPerSec) * Robot.kPdata.get();
+        drive_volts = kstatic + kV + kP;
         setDriveVoltage(drive_volts);
 
     }

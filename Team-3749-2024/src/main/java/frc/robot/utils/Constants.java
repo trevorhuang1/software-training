@@ -297,12 +297,12 @@ public class Constants {
         public static final double driveMotorGearRatio = 6.75;
         public static final double turnMotorGearRatio = 12.8;
 
-        private static final double kPTurningReal = 56.861;
-        private static final double kDTurningReal = 5.1732;
+        private static final double kPTurningReal = 5;
+        private static final double kDTurningReal = 0;
 
         private static final double kPDrivingReal = 0.0;
-        private static final double kSDrivingReal = 0.0;
-        private static final double kVDrivingReal = 0;
+        private static final double kSDrivingReal = 0.24;
+        private static final double kVDrivingReal = 2.74;
         private static final double kADrivingReal = 0;
 
         private static final double kPTurningSim = 4;
