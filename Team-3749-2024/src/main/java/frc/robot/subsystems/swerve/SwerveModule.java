@@ -146,17 +146,17 @@ public class SwerveModule {
     public void periodic() {
         moduleIO.updateData(moduleData);
 
-        // driveSpeed.set(moduleData.driveVelocityMPerSec);
-        // drivePosition.set(moduleData.drivePositionM);
-        // driveTemp.set(moduleData.driveTempCelcius);
-        // driveVolts.set(moduleData.driveAppliedVolts);
-        // driveCurrent.set(moduleData.driveCurrentAmps);
+        driveSpeed.set(moduleData.driveVelocityMPerSec);
+        drivePosition.set(moduleData.drivePositionM);
+        driveTemp.set(moduleData.driveTempCelcius);
+        driveVolts.set(moduleData.driveAppliedVolts);
+        driveCurrent.set(moduleData.driveCurrentAmps);
 
-        // turningSpeed.set(moduleData.turnVelocityRadPerSec);
-        // turningPosition.set(moduleData.turnAbsolutePositionRad);
-        // turningTemp.set(moduleData.turnTempCelcius);
-        // turningVolts.set(moduleData.turnAppliedVolts);
-        // turningCurrent.set(moduleData.turnCurrentAmps);
+        turningSpeed.set(moduleData.turnVelocityRadPerSec);
+        turningPosition.set(moduleData.turnAbsolutePositionRad);
+        turningTemp.set(moduleData.turnTempCelcius);
+        turningVolts.set(moduleData.turnAppliedVolts);
+        turningCurrent.set(moduleData.turnCurrentAmps);
 
     }
 }
