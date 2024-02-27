@@ -379,15 +379,15 @@ public class Constants {
         // public static final double[] absoluteEncoderOffsetDeg = { -275, -48, 0, 263
         // };
 
-        public static final int driveMotorStallLimit = 40;
+        public static final int driveMotorStallLimit = 25;
         public static final int driveMotorFreeLimit = 40;
-        public static final int turnMotorStallLimit = 40;
+        public static final int turnMotorStallLimit = 25;
         public static final int turnMotorFreeLimit = 40;
 
-        private static final double realMaxSpeedMetersPerSecond = 4.2;
-        private static final double realMaxAngularSpeedRadiansPerSecond = 11.795;
-        private static final double realMaxAccelerationMetersPerSecondSquared = 50;
-        private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 30.273;
+        private static final double realMaxSpeedMetersPerSecond = 3.722;
+        private static final double realMaxAccelerationMetersPerSecondSquared = 7.935; 
+        private static final double realMaxAngularSpeedRadiansPerSecond = 11.841;// these should be different from the teleop ones
+        private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 30.154;
 
         private static final double simMaxSpeedMetersPerSecond = 3.707;
         private static final double simMaxAngularSpeedRadiansPerSecond = 11.795;
