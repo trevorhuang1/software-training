@@ -231,9 +231,11 @@ public class Swerve extends SubsystemBase {
         desiredStates,
         DriveConstants.maxSpeedMetersPerSecond);
 
-    for (int i = 0; i < 4; i++) {
-      modules[i].setDesiredState(desiredStates[i]);
-    }
+    modules[0].setDesiredState(desiredStates[0]);
+    modules[1].setDesiredState(desiredStates[1]);
+    modules[2].setDesiredState(desiredStates[2]);
+    modules[3].setDesiredState(desiredStates[3]);
+
   }
 
   public double getVerticalTilt() {

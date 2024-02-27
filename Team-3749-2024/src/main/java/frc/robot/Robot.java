@@ -27,6 +27,8 @@ public class Robot extends TimedRobot {
 
     public static ShuffleData<Double> kSdata = new ShuffleData<Double>("Swerve", "static data", 0.0);
     public static ShuffleData<Double> kVdata = new ShuffleData<Double>("Swerve", "vel data", 0.0);
+      public static ShuffleData<Double> kAdata = new ShuffleData<Double>("Swerve", "acc data", 0.0);
+
     public static ShuffleData<Double> kPdata = new ShuffleData<Double>("Swerve", "p data", 0.0);
 
 

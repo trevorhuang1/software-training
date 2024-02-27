@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import java.util.HashMap;
 
 import frc.robot.commands.swerve.AutoUtils;
+import frc.robot.commands.swerve.Autos;
 import frc.robot.subsystems.arm.ShootKinematics;
 import java.nio.file.Path;
 import java.sql.Driver;
@@ -55,7 +56,7 @@ public class RobotContainer {
 
     RobotController.setBrownoutVoltage(7.0);
 
-    Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
+    // Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
     // Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY, pilot::getRightX, pilot::getRightY));
   }
 
@@ -77,8 +78,8 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
-    return new PrintCommand("no auto");
-    // AutoUtils.timeCommand(AutoUtils.getAutoPath("bottom-s_3w-speaker+c-speaker"));
+    // return new PrintCommand("no auto");
+    return Autos.getStraightLine();
     // return Robot.swerve.getSysIdDynamic(Direction.kForward);
   }
 }

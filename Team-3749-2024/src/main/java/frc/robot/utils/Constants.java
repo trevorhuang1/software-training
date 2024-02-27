@@ -301,13 +301,13 @@ public class Constants {
         public static final double driveMotorGearRatio = 6.75;
         public static final double turnMotorGearRatio = 12.8;
 
-        private static final double kPTurningReal = 5;
+        private static final double kPTurningReal = 4.2;
         private static final double kDTurningReal = 0;
 
-        private static final double kPDrivingReal = 0.4;
+        private static final double kPDrivingReal = 0.2;
         private static final double kSDrivingReal = 0.24;
-        private static final double kVDrivingReal = 2.74;
-        private static final double kADrivingReal = 0;
+        private static final double kVDrivingReal = 2.7;
+        private static final double kADrivingReal = 0.6;
 
         private static final double kPTurningSim = 4;
         private static final double kPDrivingSim = 0.0;
@@ -385,7 +385,7 @@ public class Constants {
         public static final int turnMotorFreeLimit = 40;
 
         private static final double realMaxSpeedMetersPerSecond = 3.722;
-        private static final double realMaxAccelerationMetersPerSecondSquared = 7.935; 
+        private static final double realMaxAccelerationMetersPerSecondSquared = 5.5; 
         private static final double realMaxAngularSpeedRadiansPerSecond = 11.841;// these should be different from the teleop ones
         private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 30.154;
 
@@ -431,15 +431,15 @@ public class Constants {
 
     public static final class AutoConstants {
 
-        public static double kP_PathPlannerDrive = 13.854869643983458;
-        public static double kD_PathPlannerDrive = 0;
+        public static double kP_PathPlannerDrive = 3    ;
+        public static double kD_PathPlannerDrive = 0.5;
 
         public static double kP_PathPlannerTurn = 2;
         public static double kD_PathPlannerTurn = 0.4;
 
         public static PIDConstants drivePIDConstants = new PIDConstants(
                 Constants.AutoConstants.kP_PathPlannerDrive,
-                0.09090823761513889,
+                0.0,
                 Constants.AutoConstants.kD_PathPlannerDrive);
         public static PIDConstants turnPIDConstants = new PIDConstants(
                 Constants.AutoConstants.kP_PathPlannerTurn,
@@ -447,7 +447,7 @@ public class Constants {
                 Constants.AutoConstants.kD_PathPlannerTurn);
 
         public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
-                // in your Constants class
+                // in your Constants class      
                 drivePIDConstants,
                 turnPIDConstants,
                 Constants.DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s

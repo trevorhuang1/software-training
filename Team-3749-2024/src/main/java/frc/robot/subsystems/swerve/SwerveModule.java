@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.ShuffleData;
@@ -20,6 +21,8 @@ public class SwerveModule {
 
     private ModuleData moduleData = new ModuleData();
     private SwerveModuleIO moduleIO;
+
+    private double previousSetpointVelocity = 0;
 
     private ShuffleData<Double> driveSpeed;
     private ShuffleData<Double> drivePosition;
@@ -100,16 +103,16 @@ public class SwerveModule {
 
     }
 
-
-
     public void setDriveSpeed(double speedMetersPerSecond) {
 
-        double drive_volts = drivingFeedFordward.calculate(speedMetersPerSecond)
+        double drive_volts = drivingFeedFordward.calculate(speedMetersPerSecond,
+                (speedMetersPerSecond - previousSetpointVelocity) / 0.02)
                 + drivingPidController.calculate(moduleData.driveVelocityMPerSec, speedMetersPerSecond);
-        if (Robot.pilot.povUp().getAsBoolean()){
 
-            drive_volts = 6 * Math.signum(drive_volts);
-        }
+        // drive_volts += Robot.kAdata.get() * (speedMetersPerSecond - previousSetpointVelocity) / 0.02;
+        // previousSetpointVelocity = speedMetersPerSecond;
+
+        // SmartDashboard.putNumber("acceleration", (speedMetersPerSecond - previousSetpointVelocity) / 0.02);
         setDriveVoltage(drive_volts);
 
     }

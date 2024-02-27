@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.DriveConstants;
 
 public class AutoUtils {
   private static Swerve swerve = Robot.swerve;
@@ -71,7 +72,14 @@ public class AutoUtils {
   }
 
   public static Command getAutoPath(String autoPathName) {
-    return AutoBuilder.buildAuto(autoPathName).andThen(() -> swerve.stopModules());
+
+    Command path = AutoBuilder.buildAuto(autoPathName);
+    return path.andThen(() -> swerve.stopModules());
+  }
+  public static Command getAutoPath(String autoPathName, Pose2d startingPose) {
+    Robot.swerve.resetOdometry(startingPose);
+    Command path = AutoBuilder.buildAuto(autoPathName);
+    return path.andThen(() -> swerve.stopModules());
   }
 
   public static Command followPathCommand(PathPlannerPath path) {
@@ -128,6 +136,7 @@ public class AutoUtils {
         .beforeStarting(() -> timer.start())
         .andThen(() -> {
           timer.stop();
+          System.out.println(timer.get());
         });
   }
 }
