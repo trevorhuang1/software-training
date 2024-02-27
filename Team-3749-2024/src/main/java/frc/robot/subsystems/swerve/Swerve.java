@@ -46,7 +46,6 @@ public class Swerve extends SubsystemBase {
 
   private boolean isEnabled = false;
 
-
   private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>(
       "swerve",
       "odometry",
@@ -94,8 +93,7 @@ public class Swerve extends SubsystemBase {
       0.0);
 
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-
-
+  public double prevVelocity = 0;
   public Swerve() {
     if (Robot.isSimulation()) {
       gyro = new GyroSim();
@@ -243,13 +241,13 @@ public class Swerve extends SubsystemBase {
   }
 
   public void resetGyro() {
-    gyro.resetGyro();
     swerveDrivePoseEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[] {
         modules[0].getPosition(),
         modules[1].getPosition(),
         modules[2].getPosition(),
         modules[3].getPosition()
     }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
+    gyro.resetGyro();
   }
 
   @Override
@@ -300,15 +298,24 @@ public class Swerve extends SubsystemBase {
     gyroConnectedLog.set(gyroData.isConnected);
     gyroCalibratingLog.set(gyroData.isCalibrating);
     headingLog.set(getRotation2d().getDegrees());
+      
+
+    double robotVelocity = Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
+        Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
+
+    SmartDashboard.putNumber("robot velocity", robotVelocity);
+    SmartDashboard.putNumber("robot acceleration", (robotVelocity - prevVelocity)/0.02);
+    prevVelocity = robotVelocity;
 
     boolean driverStationStatus = DriverStation.isEnabled();
-
     if (driverStationStatus && !isEnabled) {
       isEnabled = driverStationStatus;
-      modules[0].setBreakMode(true);;
+      modules[0].setBreakMode(true);
+      ;
     }
     if (!driverStationStatus && isEnabled) {
-      modules[0].setBreakMode(false);;
+      modules[0].setBreakMode(false);
+      ;
       isEnabled = driverStationStatus;
     }
 

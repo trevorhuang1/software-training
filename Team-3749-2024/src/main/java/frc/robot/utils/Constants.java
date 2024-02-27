@@ -216,7 +216,7 @@ public class Constants {
         private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
         private static final double realkS = 0.12;
-        private static final double realkG = 0.245;
+        private static final double realkG = 0.247;
         private static final double realkV = 3.94;
         private static final double realkA = 0.23;
 
@@ -225,7 +225,7 @@ public class Constants {
         public static final double kV = Robot.isReal() ? realkV : simkV;
         public static final double kA = Robot.isReal() ? realkA : simkA;
         public static final double deployedKG = 0.57;
-        public static final double deployedKP = 1.35;
+        public static final double deployedKP = 1.32;
 
         // private static final Constraints simConstraints = new Constraints(2.36,
         // 71.58);
@@ -293,14 +293,18 @@ public class Constants {
 
     public static final class ModuleConstants {
 
-        public static final double wheelDiameterMeters = Units.inchesToMeters(4);
+        public static final double wheelDiameterMeters = Units.inchesToMeters(4); 
+        // 2.04
+        // 2.006
+        // I think 2 is good lol 
+
         public static final double driveMotorGearRatio = 6.75;
         public static final double turnMotorGearRatio = 12.8;
 
         private static final double kPTurningReal = 5;
         private static final double kDTurningReal = 0;
 
-        private static final double kPDrivingReal = 0.0;
+        private static final double kPDrivingReal = 0.4;
         private static final double kSDrivingReal = 0.24;
         private static final double kVDrivingReal = 2.74;
         private static final double kADrivingReal = 0;
@@ -380,9 +384,9 @@ public class Constants {
         public static final int turnMotorStallLimit = 40;
         public static final int turnMotorFreeLimit = 40;
 
-        private static final double realMaxSpeedMetersPerSecond = 3.707;
+        private static final double realMaxSpeedMetersPerSecond = 4.2;
         private static final double realMaxAngularSpeedRadiansPerSecond = 11.795;
-        private static final double realMaxAccelerationMetersPerSecondSquared = 7.800;
+        private static final double realMaxAccelerationMetersPerSecondSquared = 50;
         private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 30.273;
 
         private static final double simMaxSpeedMetersPerSecond = 3.707;

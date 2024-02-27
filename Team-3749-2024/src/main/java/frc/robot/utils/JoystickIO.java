@@ -5,13 +5,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.commands.GroundIntake;
 import frc.robot.commands.arm.Climb;
 import frc.robot.commands.arm.GetConstraints;
 // import frc.robot.commands.arm.ArmMoveToGoal;
-import frc.robot.commands.swerve.Teleop;
+import frc.robot.commands.swerve.SwerveTeleop;
 import frc.robot.commands.wrist.getRegressionData;
 import frc.robot.subsystems.arm.ShootKinematics;
 // import frc.robot.commands.swerve.MoveToPose;
@@ -26,8 +27,8 @@ import frc.robot.subsystems.swerve.Swerve;
  */
 public class JoystickIO {
 
-    private Xbox pilot;
-    private Xbox operator;
+    private CommandXboxController pilot;
+    private CommandXboxController operator;
 
     public JoystickIO() {
         pilot = Robot.pilot;
@@ -106,7 +107,7 @@ public class JoystickIO {
     public void setDefaultCommands() {
 
         Robot.swerve.setDefaultCommand(
-                new Teleop(
+                new SwerveTeleop(
                         () -> -pilot.getLeftX(),
                         () -> -pilot.getLeftY(),
                         () -> -pilot.getRightX()));
