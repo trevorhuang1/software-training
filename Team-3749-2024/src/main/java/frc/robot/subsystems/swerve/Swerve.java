@@ -243,13 +243,13 @@ public class Swerve extends SubsystemBase {
   }
 
   public void resetGyro() {
-    swerveDrivePoseEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[] {
+    gyro.resetGyro();
+    swerveDrivePoseEstimator.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
         modules[0].getPosition(),
         modules[1].getPosition(),
         modules[2].getPosition(),
         modules[3].getPosition()
     }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
-    gyro.resetGyro();
   }
 
   @Override

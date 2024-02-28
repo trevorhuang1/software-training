@@ -1,0 +1,38 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.7024641036987305,
+      "y": 4.865417957305908
+    },
+    "rotation": -22.61984359042259
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "bottom-s_3w-speaker+c-speaker.1"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "bottom-s_3w-speaker+c-speaker.2"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4 piece",
+  "choreoAuto": true
+}
