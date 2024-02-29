@@ -73,11 +73,10 @@ public class SwerveTeleop extends Command {
     linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
     turningSpeed = Math.copySign(turningSpeed * turningSpeed, turningSpeed);
 
+    double driveSpeedMPS = linearMagnitude * DriveConstants.maxSpeedMetersPerSecond;
 
-    double driveSpeedMPS = driveLimiter.calculate(linearMagnitude * DriveConstants.maxSpeedMetersPerSecond);
-
-    turningSpeed = turningLimiter.calculate(
-        turningSpeed * DriveConstants.maxAngularSpeedRadiansPerSecond);
+    turningSpeed = 
+        turningSpeed * DriveConstants.maxAngularSpeedRadiansPerSecond;
 
     // Calcaulate new linear components
     double xSpeed = driveSpeedMPS * Math.cos(linearDirection.getRadians());
@@ -88,7 +87,6 @@ public class SwerveTeleop extends Command {
         xSpeed,
         turningSpeed,
         swerve.getRotation2d());
-
 
     // set chassis speeds
     swerve.setChassisSpeeds(chassisSpeeds);

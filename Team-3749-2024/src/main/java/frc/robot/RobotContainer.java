@@ -62,8 +62,9 @@ public class RobotContainer {
 
 
   private void configureBindings() {
-    joystickIO.getButtonBindings();
+    // joystickIO.getButtonBindings();
     joystickIO.pilotBindings();
+    joystickIO.setDefaultCommands();
   }
 
   public void initAuto() {
@@ -79,7 +80,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return new PrintCommand("no auto");
-    return Autos.get4Piece();
+    return Autos.getStraightLine();
     // return Robot.swerve.getSysIdDynamic(Direction.kForward);
   }
 }

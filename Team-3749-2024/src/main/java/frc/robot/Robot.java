@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.intake.Intake;
@@ -25,11 +27,8 @@ public class Robot extends TimedRobot {
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
 
-    public static ShuffleData<Double> kSdata = new ShuffleData<Double>("Swerve", "static data", 0.0);
-    public static ShuffleData<Double> kVdata = new ShuffleData<Double>("Swerve", "vel data", 0.0);
-      public static ShuffleData<Double> kAdata = new ShuffleData<Double>("Swerve", "acc data", 0.0);
+  public static Timer timer = new Timer();
 
-    public static ShuffleData<Double> kPdata = new ShuffleData<Double>("Swerve", "p data", 0.0);
 
 
   private Command m_autonomousCommand;

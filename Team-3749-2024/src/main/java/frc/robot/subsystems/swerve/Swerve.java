@@ -7,6 +7,8 @@ package frc.robot.subsystems.swerve;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Timer;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
@@ -136,6 +138,7 @@ public class Swerve extends SubsystemBase {
     // 6. Output each module states to wheels
 
     setModuleStates(moduleStates);
+
   }
 
   public ChassisSpeeds getChassisSpeeds() {
@@ -252,6 +255,8 @@ public class Swerve extends SubsystemBase {
     }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
   }
 
+  public double totalAcceleration = 0;
+
   @Override
   public void periodic() {
     gyro.updateData(gyroData);
@@ -300,14 +305,14 @@ public class Swerve extends SubsystemBase {
     gyroConnectedLog.set(gyroData.isConnected);
     gyroCalibratingLog.set(gyroData.isCalibrating);
     headingLog.set(getRotation2d().getDegrees());
-      
+    
+
+  
 
     double robotVelocity = Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
         Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
 
     SmartDashboard.putNumber("robot velocity", robotVelocity);
-    SmartDashboard.putNumber("robot acceleration", (robotVelocity - prevVelocity)/0.02);
-    prevVelocity = robotVelocity;
 
     boolean driverStationStatus = DriverStation.isEnabled();
     if (driverStationStatus && !isEnabled) {
@@ -316,8 +321,7 @@ public class Swerve extends SubsystemBase {
       ;
     }
     if (!driverStationStatus && isEnabled) {
-      modules[0].setBreakMode(false);
-      ;
+      modules[0].setBreakMode(false);;
       isEnabled = driverStationStatus;
     }
 

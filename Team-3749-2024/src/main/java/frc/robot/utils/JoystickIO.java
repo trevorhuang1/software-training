@@ -92,9 +92,9 @@ public class JoystickIO {
 
         pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalGround()));
         pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalStow()));
-        operator.a().whileTrue(Commands.run(() -> Robot.swerve.setChassisSpeeds(
-                ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(1, 0, 0), Robot.swerve.getRotation2d())),
-                Robot.swerve));
+        // operator.a().whileTrue(Commands.run(() -> Robot.swerve.setChassisSpeeds(
+        //         ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(1, 0, 0), Robot.swerve.getRotation2d())),
+        //         Robot.swerve));
     }
 
     public void simBindings() {

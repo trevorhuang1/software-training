@@ -52,7 +52,7 @@ public class SwerveModule {
 
         drivingPidController = new PIDController(ModuleConstants.kPDriving, 0, 0);
         drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDriving,
-                ModuleConstants.kVDriving, ModuleConstants.kADriving);
+                ModuleConstants.kVDriving);
         turningPidController = new PIDController(ModuleConstants.kPturning, 0, ModuleConstants.kDTurning);
         turningPidController.enableContinuousInput(0, 2 * Math.PI);
 
@@ -104,11 +104,13 @@ public class SwerveModule {
     }
 
     public void setDriveSpeed(double speedMetersPerSecond) {
+        double drive_volts = 0;
 
-        double drive_volts = drivingFeedFordward.calculate(speedMetersPerSecond,
-                (speedMetersPerSecond - previousSetpointVelocity) / 0.02)
+        drive_volts = drivingFeedFordward.calculate(speedMetersPerSecond)
                 + drivingPidController.calculate(moduleData.driveVelocityMPerSec, speedMetersPerSecond);
 
+        // drive_volts += Robot.kSdata.get() * Math.signum(speedMetersPerSecond);
+        // drive_volts += Robot.kVdata.get() *(speedMetersPerSecond);
         // drive_volts += Robot.kAdata.get() * (speedMetersPerSecond - previousSetpointVelocity) / 0.02;
         // previousSetpointVelocity = speedMetersPerSecond;
 
@@ -152,17 +154,19 @@ public class SwerveModule {
     public void periodic() {
         moduleIO.updateData(moduleData);
 
-        driveSpeed.set(moduleData.driveVelocityMPerSec);
-        drivePosition.set(moduleData.drivePositionM);
-        driveTemp.set(moduleData.driveTempCelcius);
-        driveVolts.set(moduleData.driveAppliedVolts);
-        driveCurrent.set(moduleData.driveCurrentAmps);
+        // driveSpeed.set(moduleData.driveVelocityMPerSec);
+        // drivePosition.set(moduleData.drivePositionM);
+        // driveTemp.set(moduleData.driveTempCelcius);
+        // driveVolts.set(moduleData.driveAppliedVolts);
+        // driveCurrent.set(moduleData.driveCurrentAmps);
 
-        turningSpeed.set(moduleData.turnVelocityRadPerSec);
-        turningPosition.set(moduleData.turnAbsolutePositionRad);
-        turningTemp.set(moduleData.turnTempCelcius);
-        turningVolts.set(moduleData.turnAppliedVolts);
-        turningCurrent.set(moduleData.turnCurrentAmps);
+        // turningSpeed.set(moduleData.turnVelocityRadPerSec);
+        // turningPosition.set(moduleData.turnAbsolutePositionRad);
+        // turningTemp.set(moduleData.turnTempCelcius);
+        // turningVolts.set(moduleData.turnAppliedVolts);
+        // turningCurrent.set(moduleData.turnCurrentAmps);
+
+
 
     }
 }

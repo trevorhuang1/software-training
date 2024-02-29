@@ -38,7 +38,7 @@ public class Constants {
 
     public static final class ControllerConstants {
 
-        public static final double deadband = 0.1;
+        public static final double deadband = 0.125;
     }
 
     public static final class WristConstants {
@@ -304,10 +304,10 @@ public class Constants {
         private static final double kPTurningReal = 4.2;
         private static final double kDTurningReal = 0;
 
-        private static final double kPDrivingReal = 0.2;
-        private static final double kSDrivingReal = 0.24;
-        private static final double kVDrivingReal = 2.7;
-        private static final double kADrivingReal = 0.6;
+        private static final double kPDrivingReal = 0.27;
+        private static final double kSDrivingReal = 0.26;
+        private static final double kVDrivingReal = 2.765; 
+        private static final double kADrivingReal = 0.0;
 
         private static final double kPTurningSim = 4;
         private static final double kPDrivingSim = 0.0;
@@ -384,15 +384,15 @@ public class Constants {
         public static final int turnMotorStallLimit = 25;
         public static final int turnMotorFreeLimit = 40;
 
-        private static final double realMaxSpeedMetersPerSecond = 3.722;
-        private static final double realMaxAccelerationMetersPerSecondSquared = 5.5; 
+        private static final double realMaxSpeedMetersPerSecond = 3.48; // 3.48
+        private static final double realMaxAccelerationMetersPerSecondSquared = 1.92; // 1.92
         private static final double realMaxAngularSpeedRadiansPerSecond = 11.841;// these should be different from the teleop ones
         private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 30.154;
 
         private static final double simMaxSpeedMetersPerSecond = 3.707;
-        private static final double simMaxAngularSpeedRadiansPerSecond = 11.795;
         private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
-        private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 30.273;
+        private static final double simMaxAngularSpeedRadiansPerSecond = 9.94;
+        private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 9;
 
         private static final double simMaxMotorVoltage = 12.0;
         private static final double realMaxMotorVoltage = 12.0;
@@ -431,11 +431,11 @@ public class Constants {
 
     public static final class AutoConstants {
 
-        public static double kP_PathPlannerDrive = 3    ;
-        public static double kD_PathPlannerDrive = 0.5;
+        public static double kP_PathPlannerDrive = 7.5  ; // 3
+        public static double kD_PathPlannerDrive = 0.25; // 0.5
 
-        public static double kP_PathPlannerTurn = 1.9;
-        public static double kD_PathPlannerTurn = 0.425;
+        public static double kP_PathPlannerTurn = 0; // 4.75
+        public static double kD_PathPlannerTurn = 0; // 0.2
 
         public static PIDConstants drivePIDConstants = new PIDConstants(
                 Constants.AutoConstants.kP_PathPlannerDrive,
