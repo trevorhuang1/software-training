@@ -62,11 +62,11 @@ public class Intake extends SubsystemBase {
 
         intakeIO.updateData(data);
 
-        IntakeVelocityLog.set(data.intakeVelocityRadPerSec);
+        // IntakeVelocityLog.set(data.intakeVelocityRadPerSec);
 
-        IntakevoltageLog.set(data.intakeVolts);
+        // IntakevoltageLog.set(data.intakeVolts);
 
-        IntakecurrentLog.set(data.currentAmps);
+        // IntakecurrentLog.set(data.currentAmps);
     }
 
 }

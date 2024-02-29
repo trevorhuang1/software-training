@@ -299,9 +299,9 @@ public class Swerve extends SubsystemBase {
             getPose().getRotation().getDegrees()
         });
 
-    yawLog.set(gyroData.yawDeg);
-    pitchLog.set(gyroData.pitchDeg);
-    rollLog.set(gyroData.rollDeg);
+    // yawLog.set(gyroData.yawDeg);
+    // pitchLog.set(gyroData.pitchDeg);
+    // rollLog.set(gyroData.rollDeg);
     gyroConnectedLog.set(gyroData.isConnected);
     gyroCalibratingLog.set(gyroData.isCalibrating);
     headingLog.set(getRotation2d().getDegrees());
@@ -309,10 +309,10 @@ public class Swerve extends SubsystemBase {
 
   
 
-    double robotVelocity = Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
-        Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
+    // double robotVelocity = Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
+    //     Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
 
-    SmartDashboard.putNumber("robot velocity", robotVelocity);
+    // SmartDashboard.putNumber("robot velocity", robotVelocity);
 
     boolean driverStationStatus = DriverStation.isEnabled();
     if (driverStationStatus && !isEnabled) {

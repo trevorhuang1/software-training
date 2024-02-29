@@ -80,7 +80,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return new PrintCommand("no auto");
-    return Autos.getStraightLine();
+    return Autos.get4Piece();
     // return Robot.swerve.getSysIdDynamic(Direction.kForward);
   }
 }

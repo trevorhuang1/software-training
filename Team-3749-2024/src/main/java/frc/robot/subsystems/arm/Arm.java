@@ -158,27 +158,27 @@ public class Arm extends SubsystemBase {
         armIO.updateData(data);
         moveToGoal();
 
-        positionLog.set(Units.radiansToDegrees(getPositionRad()));
-        velocityLog.set(data.velocityRadPerSec);
-        accelerationLog.set(data.accelerationRadPerSecSquared);
-        voltageLog.set(data.appliedVolts);
-        leftCurrentLog.set(data.leftCurrentAmps);
-        rightCurrentLog.set(data.rightCurrentAmps);
+        // positionLog.set(Units.radiansToDegrees(getPositionRad()));
+        // velocityLog.set(data.velocityRadPerSec);
+        // accelerationLog.set(data.accelerationRadPerSecSquared);
+        // voltageLog.set(data.appliedVolts);
+        // leftCurrentLog.set(data.leftCurrentAmps);
+        // rightCurrentLog.set(data.rightCurrentAmps);
         
-        goalLog.set(profiledFeedbackController.getGoal().position);
-        setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
-        setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
-        setpointAccelerationLog.set(accelerationSetpoint);
+        // goalLog.set(profiledFeedbackController.getGoal().position);
+        // setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
+        // setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
+        // setpointAccelerationLog.set(accelerationSetpoint);
 
-        errorPositionLog.set(profiledFeedbackController.getSetpoint().position - data.positionRad);
-        errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec);
-        errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
+        // errorPositionLog.set(profiledFeedbackController.getSetpoint().position - data.positionRad);
+        // errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec);
+        // errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
 
         // mechanismArm.setAngle(getRotation2d());
         // SmartDashboard.putData("mech", mechanism);
 
-        SmartDashboard.putNumber("Arm Currentleft", data.leftCurrentAmps);
-        SmartDashboard.putNumber("Arm Currentright", data.rightCurrentAmps);
+        // SmartDashboard.putNumber("Arm Currentleft", data.leftCurrentAmps);
+        // SmartDashboard.putNumber("Arm Currentright", data.rightCurrentAmps);
         boolean driverStationStatus = DriverStation.isEnabled();
         if (driverStationStatus && !isEnabled) {
             isEnabled = driverStationStatus;

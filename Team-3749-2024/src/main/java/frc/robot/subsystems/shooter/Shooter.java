@@ -82,14 +82,14 @@ public class Shooter extends SubsystemBase {
 
     shooterIO.updateData(data);
 
-    topShooterVelocityLog.set(data.topShooterVelocityRadPerSec);
-    bottomShooterVelocityLog.set(data.bottomShooterVelocityRadPerSec);
+    // topShooterVelocityLog.set(data.topShooterVelocityRadPerSec);
+    // bottomShooterVelocityLog.set(data.bottomShooterVelocityRadPerSec);
 
-    topShootervoltageLog.set(data.topShooterVolts);
-    bottomShootervoltageLog.set(data.bottomShooterVolts);
+    // topShootervoltageLog.set(data.topShooterVolts);
+    // bottomShootervoltageLog.set(data.bottomShooterVolts);
 
-    topShootercurrentLog.set(data.topShooterCurrentAmps);
-    bottomShootercurrentLog.set(data.bottomShooterCurrentAmps);
+    // topShootercurrentLog.set(data.topShooterCurrentAmps);
+    // bottomShootercurrentLog.set(data.bottomShooterCurrentAmps);
   }
 
 }
