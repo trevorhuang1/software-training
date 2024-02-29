@@ -18,6 +18,7 @@ import frc.robot.subsystems.arm.ShootKinematics;
 // import frc.robot.commands.swerve.Teleop;
 // import frc.robot.commands.swerve.TeleopJoystickRelative;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.wrist.Wrist;
 
 /**
  * Util class for button bindings
