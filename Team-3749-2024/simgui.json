@@ -2,12 +2,26 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Toggle PhotonVision": "Command",
+      "/SmartDashboard/Choose Alliance": "String Chooser",
+      "/SmartDashboard/Choose Auto": "String Chooser",
       "/SmartDashboard/mech": "Mechanism2d"
     }
   },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "Choose Auto": {
+          "open": true,
+          "string[]##v_/SmartDashboard/Choose Auto/options": {
+            "open": true
+          }
+        },
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
-    "Server": {
+    "Clients": {
       "open": true
     },
     "visible": true

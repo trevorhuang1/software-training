@@ -13,9 +13,9 @@ import com.pathplanner.lib.util.PIDConstants;
 
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -30,63 +30,137 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;;
+import frc.robot.Robot;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Constants {
-    /***
-     * 
-     * @param margin how close the values need to be to return true. Use a positive
-     *               number
-     * @param a      the first number
-     * @param b      the second number
-     * @return true if it is within the margin, false if not
-     */
-    public static boolean withinMargin(double margin, double a, double b) {
-        if (a + margin >= b && a - margin <= b) {
-            return true;
-        }
-        return false;
+
+    public static enum RobotType {
+        REAL,
+        SIM
     }
 
-    /***
-     * 
-     * @param margin how close the values need to be to return true. Use a positive
-     *               number
-     * @param a      the first translation
-     * @param b      the second translation
-     * @return true if it is within the margin, false if not
-     */
-    public static boolean withinMargin(double margin, Translation2d a, Translation2d b) {
-        // if X is within margin
-        if (a.getX() + margin >= b.getX() && a.getX() - margin <= b.getX()) {
-            // if Y is within margin
-            if (a.getY() + margin >= b.getY() && a.getY() - margin <= b.getY()) {
-
-                return true;
-            }
-        }
-        return false;
-    }
+    public static final RobotType ROBOT_TYPE = Robot.isReal()
+            ? RobotType.REAL
+            : RobotType.SIM;
 
     public static final class Sim {
+
         public static final double loopPeriodSec = 0.02;
-
-        public static final class PIDValues {
-            // will eventally be easier to change values from here than poke around through
-            // files
-            public static double kP_teleopTurn = 1.3;
-            public static double kD_teleopTurn = 0.0;
-
-            public static double kP_MiscDrive = 0.42;
-            public static double kD_MiscDrive = 0.02;
-            public static double kP_MiscTurn = 0.15;
-            public static double kD_MiscTurn = 0.003;
-
-            public static double kP_TurnToAngle = 0.15;
-            public static double kD_TurnToAngle = 0.008;
-        };
-
     }
+
+    public static final class ControllerConstants {
+
+        public static final double deadband = 0.125;
+    }
+
+    public static final class WristConstants {
+
+        public static final int wristId = 17;
+        public static final double gearRatio = 1;
+
+        private static final PIDConstants simPID = new PIDConstants(35, 0, 1);
+
+        private static final PIDConstants realPID = new PIDConstants(0.35, 0, 0); // 1
+
+        public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
+
+        private static final Constraints simConstraint = new Constraints(
+                Math.PI,
+                2 * Math.PI); // we stealing from arm with
+        // this one
+        private static final Constraints realConstraint = new Constraints(
+                Math.PI,
+                Math.PI);
+
+        public static final Constraints trapezoidConstraint = Robot.isReal()
+                ? realConstraint
+                : simConstraint;
+
+        // thanks arm (robbery)
+        public static final double simkS = 0.0;
+        public static final double simkG = .33775;
+        public static final double simkV = 6.616;
+        public static final double simkA = 0;
+
+        public static final double realkS = 0.1;
+        public static final double realkVForward = 1.27; // radians
+        public static final double realkVBackward = 1.075; // radians
+
+        public static final double kYIntercept = 0.2500;
+        public static final double kBar = 1.2051170442485861;
+        public static final double kBarSquared = -1.8766465126496676;
+        public static final double kBarCubed = 0.48841621426762893;
+        public static final double kArm = -0.08453955731495624;
+        public static final double kArmSquared = -0.020323277876598187;
+        public static final double kBarArm = 3.7070918562599866;
+        public static final double kBarSquaredArm = -2.6560157465636793;
+        public static final double kBarCubedArm = 0.47800105908391155;
+        public static final double kBarArmSquared = -2.132368908319232;
+        public static final double kBarSquaredArmSquared = 2.148987748059586;
+        public static final double kBarCubedArmSquared = -0.496866520545201;
+
+        public static final double groundGoalRad = Units.degreesToRadians(155);
+        public static final double stowGoalRad = 0;
+        public static final double wristOffsetRad = Units.degreesToRadians(252.8);
+    }
+
+    public static final class ShooterConstants {
+
+        public static final int shooterBottomId = 19;
+        public static final int shooterTopId = 18;
+
+        public static final double shooterVelocityRadPerSec = 100;
+
+        private static final PIDConstants simShooterTopPID = new PIDConstants(
+                0,
+
+                0,
+                0);
+        private static final PIDConstants realShooterTopPID = new PIDConstants(
+                0.004,
+                0,
+                0);
+        public static final PIDConstants shooterTopPID = Robot.isReal()
+                ? realShooterTopPID
+                : simShooterTopPID;
+
+        private static final PIDConstants simShooterBottomPID = new PIDConstants(
+                0,
+                0,
+                0);
+        private static final PIDConstants realShooterBottomPID = new PIDConstants(
+                0.004,
+                0,
+                0);
+        public static final PIDConstants shooterBottomPID = Robot.isReal()
+                ? realShooterBottomPID
+                : simShooterBottomPID;
+
+        public static final double topkV = 0.0201; // volts/radPerSec
+
+        public static final double bottomkV = 0.0201;
+    }
+
+    public static final class IntakeConstants {
+
+        public static final int intakeId = 20;
+
+        public static final double gearRatio = 5;
+        public static final double intakeVelocity = 75;
+        public static final double outtakeVelocity = -30;
+        private static final PIDConstants simIntakePID = new PIDConstants(0, 0, 0);
+        private static final PIDConstants realIntakePID = new PIDConstants(
+                0.01,
+                0,
+                0);
+        public static final PIDConstants intakePID = Robot.isReal()
+                ? realIntakePID
+                : simIntakePID;
+        public static final double kV = 0.101;
+    }
+
 
     public static enum RobotState {
         STOW(0, 0),
@@ -103,85 +177,278 @@ public class Constants {
     }
 
     public static final class ArmConstants {
-        private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
-        private static final PIDConstants realPID = new PIDConstants(0, 0, 0);
-
-        public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
         public static final int leftID = 15;
         public static final int rightID = 16;
         // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
-        public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2;
-        public static final int encoderID = 17;
+        public static final double gearRatio = 200.0;
+
+        public static final double sprocketRatio = 64.0 / 24.0;
+        public static final int encoderID = 7;
         public static final double encoderOffsetRad = 0;
 
         // Control - PID, FF, and Trapezoidal Constraints
+        private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
+        private static final PIDConstants realPID = new PIDConstants(1.25, 0, 0);
+
+        public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
         private static final double simkS = 0.0;
-        private static final double simkG = 0.203;// stick arm at 0 degrees, tune till it doesnt move
+        private static final double simkG = 0.203; // stick arm at 0 degrees, tune till it doesnt move
 
         private static final double simkV = 6.616; // max volts - kG / max velocity
         private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-        private static final double realkS = 0;
-        private static final double realkG = 0;
-        private static final double realkV = 0;
-        private static final double realkA = 0;
+        private static final double realkS = 0.12;
+        private static final double realkG = 0.247;
+        private static final double realkV = 3.94;
+        private static final double realkA = 0.23;
 
         public static final double kS = Robot.isReal() ? realkS : simkS;
         public static final double kG = Robot.isReal() ? realkG : simkG;
         public static final double kV = Robot.isReal() ? realkV : simkV;
         public static final double kA = Robot.isReal() ? realkA : simkA;
+        public static final double deployedKG = 0.57;
+        public static final double deployedKP = 1.32;
 
         // private static final Constraints simConstraints = new Constraints(2.36,
         // 71.58);
-        private static final Constraints simConstraints = new Constraints(1.783, 89.175);
+        private static final Constraints simConstraints = new Constraints(
+                1.783,
+                89.175);
 
-        private static final Constraints realConstraints = new Constraints(Math.PI, 2 * Math.PI);
-        public static final Constraints constraints = Robot.isReal() ? realConstraints : simConstraints;
+        private static final Constraints realConstraints = new Constraints(
+                2.662,
+                9);
+        public static final Constraints constraints = Robot.isReal()
+                ? realConstraints
+                : simConstraints;
 
         // Field Parameters
-        public static final double armHeightOffset = 0.0; // how high up the arm is, NOTE: need to find
+        public static final double armHeightOffset = 0.2159;
+        public static final double armLengthOffset = 0.2286;
         public static final double armLength = 0.93;
-        public static final double shooterVelocity = 10.0; // NOTE: likely will vary, might need to pass as parameter
+        public static final double shooterVelocity = 20.0; // NOTE: likely will vary, might need to pass as parameter
 
-        // NOTE: Not percise
         // Field Parameters
-        public static final double speakerHeight = 2.05;
-        public static final double minDistance = 0.9;
+        public static final double speakerHeight = 2.05; // likely thing you'll need to tune
+        public static final double minDistance = 0.9; // / NOTE: Not percise, please check
 
         // Calcuation stuff
-        public static final double distMargin = 0.5;
+        // Max angle??? (ask Bailey)
+        public static final double distMargin = 0.25; // Half a meter is kind of a lot, don't you think?
         public static final double maxAngle = 42.109;
         public static final double maxAngleRad = Math.toRadians(maxAngle);
+
+        // Important Field Coordinates (everything converted from inches to meters)
+        // NOTE: may need to adjust slightly to make sure code works properly (some
+        // inpercision in measurements)
+        public static final Translation2d redSpeakerPosition = new Translation2d(
+                Units.inchesToMeters(653.2),
+                Units.inchesToMeters(218.64)); // rounded need to change
+        public static final Translation2d blueSpeakerPosition = new Translation2d(
+                0,
+                Units.inchesToMeters(218.64)); // rounded need to change
+
+        public static final double stageMargin = 20; // margin in inches
+        public static final Translation2d[] redStagePoints = {
+                new Translation2d(
+                        Units.inchesToMeters(125.01 + stageMargin),
+                        Units.inchesToMeters(161.64)),
+                new Translation2d(
+                        Units.inchesToMeters(231.2 + stageMargin),
+                        Units.inchesToMeters(104.64 + stageMargin)),
+                new Translation2d(
+                        Units.inchesToMeters(231.2 + stageMargin),
+                        Units.inchesToMeters(218.64 + stageMargin))
+        };
+        public static final Translation2d[] blueStagePoints = {
+                new Translation2d(
+                        653.2 - redStagePoints[0].getX(),
+                        redStagePoints[0].getY()),
+                new Translation2d(
+                        653.2 - redStagePoints[1].getX(),
+                        redStagePoints[1].getY()),
+                new Translation2d(
+                        653.2 - redStagePoints[2].getX(),
+                        redStagePoints[2].getY())
+        };
     }
 
     public static final class ModuleConstants {
-        public static final double wheelDiameterMeters = Units.inchesToMeters(4);
+
+        public static final double wheelDiameterMeters = Units.inchesToMeters(4); 
+        // 2.04
+        // 2.006
+        // I think 2 is good lol 
+
         public static final double driveMotorGearRatio = 6.75;
         public static final double turnMotorGearRatio = 12.8;
-        public static final double kPTurningReal = 2.25;
-        public static final double kPDrivingReal = 0.0;
-        public static final double kVDrivingReal = 2.5;
-        public static final double kSDrivingReal = 0.0;
 
-        public static final double kPTurningSim = 4;
-        public static final double kVDrivingSim = 3.19;
-        public static final double kSDrivingSim = 0.0;
-        public static final double kPDrivingSim = 0.0;
+        private static final double kPTurningReal = 4.2;
+        private static final double kDTurningReal = 0;
+
+        private static final double kPDrivingReal = 0.27;
+        private static final double kSDrivingReal = 0.26;
+        private static final double kVDrivingReal = 2.765; 
+        private static final double kADrivingReal = 0.0;
+
+        private static final double kPTurningSim = 4;
+        private static final double kPDrivingSim = 0.0;
+        private static final double kVDrivingSim = 3.19;
+        private static final double kSDrivingSim = 0.0;
+
+        public static double kPturning = Robot.isReal()
+                ? kPTurningReal
+                : kPTurningSim;
+        public static double kDTurning = Robot.isReal()
+                ? kDTurningReal
+                : 0;
+        public static double kPDriving = Robot.isReal()
+                ? kPDrivingReal
+                : kPDrivingSim;
+        public static double kSDriving = Robot.isReal()
+                ? kSDrivingReal
+                : kSDrivingSim;
+        public static double kVDriving = Robot.isReal()
+                ? kVDrivingReal
+                : kVDrivingSim;
+        public static double kADriving = Robot.isReal()
+                ? kADrivingReal
+                : 0;
 
     }
 
-    public static class VisionConstants {
-        public static enum Node {
-            CONE(0), CUBE(Units.inchesToMeters(14.25)), MID_CONE(24), TOP_CONE(43);
+    public static final class DriveConstants {
 
-            public double height_meters;
+        // Distance between right and left wheels
+        public static final double trackWidth = Units.inchesToMeters(19.5);
+        // Distance between front and back wheels
+        public static final double wheelBase = Units.inchesToMeters(19.5);
+        public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
+                new Translation2d(wheelBase / 2, trackWidth / 2), // front left
+                new Translation2d(wheelBase / 2, -trackWidth / 2), // front right
+                new Translation2d(-wheelBase / 2, trackWidth / 2), // back left
+                new Translation2d(-wheelBase / 2, -trackWidth / 2)); // back right
 
-            Node(double height_meters) {
-                this.height_meters = height_meters;
-            }
+        public static final int[] driveMotorPorts = { 3, 5, 7, 9 }; // FL, FR, BL, BR
+        public static final int[] turningMotorPorts = { 4, 6, 8, 10 }; // FL, FR, BL, BR
+        public static final int[] absoluteEncoderPorts = { 11, 12, 13, 14 };
+
+        public static final boolean[] driveMotorReversed = {
+                false,
+                true,
+                false,
+                true
         };
+        public static final boolean[] turningMotorReversed = {
+                false,
+                false,
+                false,
+                false
+        };
+        public static final boolean[] driveAbsoluteEncoderReversed = {
+                false,
+                false,
+                false,
+                false
+        };
+        public static final double[] absoluteEncoderOffsetDeg = {
+                517.148,
+                291.973,
+                843.662,
+                667.617
+        };
+
+        // public static final double[] absoluteEncoderOffsetDeg = { -275, -48, 0, 263
+        // };
+
+        public static final int driveMotorStallLimit = 25;
+        public static final int driveMotorFreeLimit = 40;
+        public static final int turnMotorStallLimit = 25;
+        public static final int turnMotorFreeLimit = 40;
+
+        private static final double realMaxSpeedMetersPerSecond = 3.48; // 3.48
+        private static final double realMaxAccelerationMetersPerSecondSquared = 1.92; // 1.92
+        private static final double realMaxAngularSpeedRadiansPerSecond = 11.841;// these should be different from the teleop ones
+        private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 30.154;
+
+        private static final double simMaxSpeedMetersPerSecond = 3.707;
+        private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
+        private static final double simMaxAngularSpeedRadiansPerSecond = 9.94;
+        private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 9;
+
+        private static final double simMaxMotorVoltage = 12.0;
+        private static final double realMaxMotorVoltage = 12.0;
+
+        public static final double maxMotorVolts = Robot.isReal()
+                ? DriveConstants.realMaxMotorVoltage
+                : DriveConstants.simMaxMotorVoltage;
+
+        public static final double maxSpeedMetersPerSecond = Robot.isReal()
+                ? DriveConstants.realMaxSpeedMetersPerSecond
+                : DriveConstants.simMaxSpeedMetersPerSecond;
+
+        public static final double maxAngularSpeedRadiansPerSecond = Robot.isReal()
+                ? DriveConstants.realMaxAngularSpeedRadiansPerSecond
+                : DriveConstants.simMaxAngularSpeedRadiansPerSecond;
+
+        public static final double maxAccelerationMetersPerSecondSquared = Robot.isReal()
+                ? DriveConstants.realMaxAccelerationMetersPerSecondSquared
+                : DriveConstants.simMaxAccelerationMetersPerSecondSquared;
+
+        public static final double maxAngularAccelerationRadiansPerSecondSquared = Robot.isReal()
+                ? DriveConstants.realMaxAngularAccelerationRadiansPerSecondSquared
+                : DriveConstants.simMaxAngularAccelerationRadiansPerSecondSquared;
+
+        public static final double toleranceM_Misc = 0.02;
+        public static final double toleranceRad_Misc = Math.PI / 750;
+
+        public static final Pose2d fieldStartingPose = new Pose2d(
+                1.37,
+                4.51,
+                Rotation2d.fromDegrees(-22.62));
+        // will eventally be easier to change values from here than poke around through
+        // files
+
+    }
+
+    public static final class AutoConstants {
+
+        public static double kP_PathPlannerDrive = 7  ; // 3
+        public static double kD_PathPlannerDrive = 0.25; // 0.5
+
+        public static double kP_PathPlannerTurn = 6.25; // 4.75
+        public static double kD_PathPlannerTurn = 0.1; // 0.2
+
+        public static PIDConstants drivePIDConstants = new PIDConstants(
+                Constants.AutoConstants.kP_PathPlannerDrive,
+                0.0,
+                Constants.AutoConstants.kD_PathPlannerDrive);
+        public static PIDConstants turnPIDConstants = new PIDConstants(
+                Constants.AutoConstants.kP_PathPlannerTurn,
+                0,
+                Constants.AutoConstants.kD_PathPlannerTurn);
+
+        public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
+                // in your Constants class      
+                drivePIDConstants,
+                turnPIDConstants,
+                Constants.DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s
+                Math.sqrt(2 * (DriveConstants.trackWidth * DriveConstants.trackWidth)), // Drivetrain
+                // radius
+                new ReplanningConfig() // Default path replanning config. See the API for the
+        // options here
+        );
+
+        public static PathConstraints defaultPathConstraints = new PathConstraints(
+                Constants.DriveConstants.maxSpeedMetersPerSecond,
+                Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
+                Constants.DriveConstants.maxAngularSpeedRadiansPerSecond,
+                Constants.DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
+    }
+    public static class VisionConstants {
+
 
         public static enum Cam {
             LEFT(0), RIGHT(1), BACK(2);
@@ -225,119 +492,11 @@ public class Constants {
 
         public static enum Pipelines {
             APRILTAG(0);
-            // CUBE);
-
             public int index;
 
             Pipelines(int index) {
                 this.index = index;
             }
         }
-    }
-
-    public static final class DriveConstants {
-
-        // Distance between right and left wheels
-        public static final double trackWidth = Units.inchesToMeters(17.5);
-        // Distance between front and back wheels
-        public static final double wheelBase = Units.inchesToMeters(17.5);
-        public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
-                new Translation2d(wheelBase / 2, trackWidth / 2), // front left
-                new Translation2d(wheelBase / 2, -trackWidth / 2), // front right
-                new Translation2d(-wheelBase / 2, trackWidth / 2), // back left
-                new Translation2d(-wheelBase / 2, -trackWidth / 2)); // back right
-
-        public static final int[] driveMotorPorts = { 3, 5, 7, 9 }; // FL, FR, BL, BR
-        public static final int[] turningMotorPorts = { 4, 6, 8, 10 }; // FL, FR, BL, BR
-
-        public static final boolean[] driveEncoderReversed = { true, false, true, false };
-        public static final boolean[] turningEncoderReversed = { false, false, false, false };
-
-        public static final int[] absoluteEncoderPorts = { 11, 12, 13, 14};
-
-        public static final boolean[] driveAbsoluteEncoderReversed = { false, false, false, false };
-
-        public static final double[] driveAbsoluteEncoderOffsetDeg = { 130.34, 107.75, 61.70, 168.75 };
-
-        private static final double realMaxSpeedMetersPerSecond = 3.707;
-        private static final double realMaxAngularSpeedRadiansPerSecond = 11.795;
-        private static final double realMaxAccelerationMetersPerSecondSquared = 7.800;
-        private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 30.273;
-
-        public static final int driveMotorStallLimit = 30;
-        public static final int driveMotorFreeLimit = 60;
-        public static final int turnMotorStallLimit = 30;
-        public static final int turnMotorFreeLimit = 60;
-
-        private static final double simMaxSpeedMetersPerSecond = 3.707;
-        private static final double simMaxAngularSpeedRadiansPerSecond = 11.795;
-        private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
-        private static final double simMaxAngularAccelerationRadiansPerSecondSquared = 30.273;
-
-        // private static final double simMaxSpeedMetersPerSecond = 2.65;
-        // private static final double simMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
-        // private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;
-        // private static final double simMaxAngularAccelerationRadiansPerSecondSquared
-        // = 2 * 2 * Math.PI;
-
-        private static final double simMaxMotorVoltage = 12.0;
-        private static final double realMaxMotorVoltage = 12.0;
-
-        public static final double maxMotorVolts = Robot.isReal() ? DriveConstants.realMaxMotorVoltage
-                : DriveConstants.simMaxMotorVoltage;
-
-        public static final double maxSpeedMetersPerSecond = Robot.isReal()
-                ? DriveConstants.realMaxSpeedMetersPerSecond
-                : DriveConstants.simMaxSpeedMetersPerSecond;
-
-        public static final double maxAngularSpeedRadiansPerSecond = Robot.isReal()
-                ? DriveConstants.realMaxAngularSpeedRadiansPerSecond
-                : DriveConstants.simMaxAngularSpeedRadiansPerSecond;
-
-        public static final double maxAccelerationMetersPerSecondSquared = Robot.isReal()
-                ? DriveConstants.realMaxAccelerationMetersPerSecondSquared
-                : DriveConstants.simMaxAccelerationMetersPerSecondSquared;
-
-        public static final double maxAngularAccelerationRadiansPerSecondSquared = Robot.isReal()
-                ? DriveConstants.realMaxAngularAccelerationRadiansPerSecondSquared
-                : DriveConstants.simMaxAngularAccelerationRadiansPerSecondSquared;
-
-        public static final double toleranceM_Misc = 0.02;
-        public static final double toleranceRad_Misc = Math.PI / 750;
-
-        public static final Pose2d fieldStartingPose = new Pose2d(1, 1, Rotation2d.fromDegrees(0));
-    }
-
-    public static final class AutoConstants {
-        public static double kP_PathPlannerDrive = 8.8;
-        public static double kD_PathPlannerDrive = 0;
-
-        public static double kP_PathPlannerTurn = 0.9;
-        public static double kD_PathPlannerTurn = 0;
-
-        public static PIDConstants drivePIDConstants = new PIDConstants(kP_PathPlannerDrive, 0,
-                kD_PathPlannerDrive);
-        public static PIDConstants turnPIDConstants = new PIDConstants(kP_PathPlannerTurn, 0,
-                kD_PathPlannerTurn);
-
-        public static HolonomicPathFollowerConfig cfgHolonomicFollower = new HolonomicPathFollowerConfig(
-                // in your Constants class
-                drivePIDConstants,
-                turnPIDConstants,
-                DriveConstants.maxSpeedMetersPerSecond, // Max module speed, in m/s
-                Math.sqrt(2 * (DriveConstants.trackWidth * DriveConstants.trackWidth)), // Drivetrain radius
-                new ReplanningConfig() // Default path replanning config. See the API for the
-        // options here
-        );
-
-        public static PathConstraints defaultPathConstraints = new PathConstraints(
-                DriveConstants.maxSpeedMetersPerSecond,
-                DriveConstants.maxAccelerationMetersPerSecondSquared,
-                DriveConstants.maxAngularSpeedRadiansPerSecond,
-                DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
-    }
-
-    public static final class ControllerConstants {
-        public static final double deadband = 0.1;
     }
 }

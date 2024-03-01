@@ -1,59 +1,50 @@
 package frc.robot.utils;
 
-import java.util.Map;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Robot;
-import frc.robot.commands.swerve.MoveToPose;
-import frc.robot.commands.swerve.Teleop;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.swerve.TeleopJoystickRelative;
+import frc.robot.commands.GroundIntake;
+import frc.robot.commands.arm.Climb;
+import frc.robot.commands.arm.GetConstraints;
+// import frc.robot.commands.arm.ArmMoveToGoal;
+import frc.robot.commands.swerve.SwerveTeleop;
+import frc.robot.commands.wrist.getRegressionData;
+import frc.robot.subsystems.arm.ShootKinematics;
+// import frc.robot.commands.swerve.MoveToPose;
+// import frc.robot.commands.swerve.Teleop;
+// import frc.robot.commands.swerve.TeleopJoystickRelative;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.Robot;
 
 /**
  * Util class for button bindings
- * 
+ *
  * @author Rohin Sood
  */
 public class JoystickIO {
-    private static String[] lastJoystickNames = new String[] { "", "", "", "", "", "" };
 
-    private Xbox pilot;
-    private Xbox operator;
+    public JoystickIO() {
 
-    public JoystickIO(Xbox pilot, Xbox operator) {
-        this.pilot = pilot;
-        this.operator = operator;
     }
 
     /**
      * Calls binding methods according to the joysticks connected
      */
     public void getButtonBindings() {
-        System.out.println(DriverStation.isJoystickConnected(0));
-
         if (DriverStation.isJoystickConnected(1)) {
             // if both xbox controllers are connected
             pilotAndOperatorBindings();
-
         } else if (DriverStation.isJoystickConnected(0)) {
             // if only one xbox controller is connected
             pilotBindings();
-
         } else if (Robot.isSimulation()) {
             // will show not connected if on sim
             simBindings();
-
         } else {
             // if no joysticks are connected (ShuffleBoard buttons)
 
@@ -65,25 +56,54 @@ public class JoystickIO {
      * If both controllers are plugged in (pi and op)
      */
     public void pilotAndOperatorBindings() {
-
+        pilotBindings();
+        // op bindings
     }
-
-    /**
-     * If only one controller is plugged in (pi)
-     */
 
     public void pilotBindings() {
 
+        // intake
+        Robot.pilot.leftTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(60),
+                Robot.intake));
+        Robot.pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
+                Robot.intake));
+
+        Robot.pilot.leftBumper().whileTrue(new GroundIntake());
+
+        Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(0))));
+        // Robot.pilot.b().onTrue(Commands.runOnce(() ->
+        // Robot.arm.setGoal(Units.degreesToRadians(6))));
+
+        Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(40))));
+        Robot.pilot.back().whileTrue(new Climb());
+
+        // gyro
+        Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
+
+        // // 4bar
+
+        Robot.pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalGround()));
+        Robot.pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalStow()));
+        // operator.a().whileTrue(Commands.run(() -> Robot.swerve.setChassisSpeeds(
+        // ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(1, 0, 0),
+        // Robot.swerve.getRotation2d())),
+        // Robot.swerve));
     }
 
     public void simBindings() {
-        pilot.aWhileHeld(new MoveToPose(new Pose2d(5, 5, new Rotation2d())));
+        // Robot.pilot.aWhileHeld(new MoveToPose(new Pose2d(5, 5, new Rotation2d())));
     }
 
     /**
      * Sets the default commands
      */
     public void setDefaultCommands() {
+
+        Robot.swerve.setDefaultCommand(
+                new SwerveTeleop(
+                        () -> -Robot.pilot.getLeftX(),
+                        () -> -Robot.pilot.getLeftY(),
+                        () -> -Robot.pilot.getRightX()));
     }
 
 }
