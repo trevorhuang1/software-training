@@ -86,16 +86,6 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         driveAppliedVolts = MathUtil.clamp(volts, -Constants.DriveConstants.maxMotorVolts,
                 Constants.DriveConstants.maxMotorVolts);
 
-        if (Robot.operator.y().getAsBoolean()) {
-            if (Robot.timer.get() == 0 && driveAppliedVolts != 0) {
-                Robot.timer.start();
-            }
-            driveAppliedVolts = Math.signum(driveAppliedVolts) * 10;
-        }
-        else {
-            Robot.timer.stop();
-            Robot.timer.reset();
-        }
         driveMotor.setVoltage(driveAppliedVolts);
     };
 

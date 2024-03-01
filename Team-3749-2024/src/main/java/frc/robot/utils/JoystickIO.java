@@ -27,8 +27,8 @@ import frc.robot.subsystems.swerve.Swerve;
  */
 public class JoystickIO {
 
-    private CommandXboxController pilot;
-    private CommandXboxController operator;
+    private Xbox pilot;
+    private Xbox operator;
 
     public JoystickIO() {
         pilot = Robot.pilot;
