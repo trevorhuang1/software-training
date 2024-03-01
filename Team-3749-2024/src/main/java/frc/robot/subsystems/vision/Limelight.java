@@ -38,7 +38,6 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.LimelightHelpers;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.VisionConstants.Cam;
-import frc.robot.utils.Constants.VisionConstants.Node;
 
 /**
  * Encapsulated PhotonCamera object used in posed estimation and alignment
@@ -188,29 +187,8 @@ public class Limelight extends SubsystemBase {
         return target.getPoseAmbiguity();
     }
 
-    // Method to calculate the distance to a target based on its pitch and camera parameters
-    public double getDistance(PhotonTrackedTarget target, Node node) {
-        if (Robot.isSimulation()){
-            return PhotonUtils.calculateDistanceToTargetMeters(
-                    Constants.VisionConstants.SIM_CAM_HEIGHT,
-                    node.height_meters,
-                    Constants.VisionConstants.CAM_PITCH,
-                    Units.degreesToRadians(getPitch(target)));
-        }
-        else{
-            return PhotonUtils.calculateDistanceToTargetMeters(
-                    Constants.VisionConstants.CAM_HEIGHT,
-                    node.height_meters,
-                    Constants.VisionConstants.CAM_PITCH,
-                    Units.degreesToRadians(getPitch(target)));
-        }
-    }
 
-    // Method to estimate the translation from the camera to a target
-    public Translation2d getTranslation2d(PhotonTrackedTarget target, Node node) {
-        return PhotonUtils.estimateCameraToTargetTranslation(
-                getDistance(target, node), getYaw(target));
-    }
+
 
     // Getter for AprilTagFieldLayout
     public AprilTagFieldLayout getAprilTagFieldLayout() {
