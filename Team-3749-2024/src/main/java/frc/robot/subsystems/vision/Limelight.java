@@ -46,16 +46,15 @@ import frc.robot.utils.Constants.VisionConstants.Cam;
  * @author Jadon Lee
  */
 public class Limelight extends SubsystemBase {
-    //Position
-    public Pose2d estimatedPose2dLeft = new Pose2d(0,0,new Rotation2d());
-    public Pose2d estimatedPose2dRight = new Pose2d(0,0,new Rotation2d());
+    // Position
+    public Pose2d estimatedPose2dLeft = new Pose2d(0, 0, new Rotation2d());
+    public Pose2d estimatedPose2dRight = new Pose2d(0, 0, new Rotation2d());
 
     public boolean targeting = false;
     // PhotonCamera instance
     private final PhotonCamera cameraLeft = new PhotonCamera("Limelight2");
     private final PhotonCamera cameraRight = new PhotonCamera("Limelight3");
     // private final PhotonCamera cameraBack = new PhotonCamera("limelight2");
-
 
     private AprilTagFieldLayout aprilTagFieldLayout;
     private PhotonPoseEstimator photonPoseEstimatorLeft;
@@ -77,7 +76,7 @@ public class Limelight extends SubsystemBase {
 
     // ShuffleData for logging pipeline index
     private final ShuffleData<Integer> pipeline = new ShuffleData<Integer>("Limelight",
-    "New Pipeline", -1000);
+            "New Pipeline", -1000);
 
     // Timer for tracking how long the Limelight subsystem has been running
     private final Timer timer;
@@ -89,17 +88,20 @@ public class Limelight extends SubsystemBase {
             aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
 
             // Initializing PhotonPoseEstimator based on robot type
-            if (Robot.isSimulation()){
-                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraLeft, Constants.VisionConstants.SIM_LEFT_ROBOT_TO_CAM);
-                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraRight, Constants.VisionConstants.SIM_RIGHT_ROBOT_TO_CAM);
-            }
-            else{
-                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraLeft, Constants.VisionConstants.ROBOT_LEFT_TO_CAM);
-                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraRight, Constants.VisionConstants.ROBOT_RIGHT_TO_CAM);
+            if (Robot.isSimulation()) {
+                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout,
+                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                        cameraLeft, Constants.VisionConstants.SIM_LEFT_ROBOT_TO_CAM);
+                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout,
+                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                        cameraRight, Constants.VisionConstants.SIM_RIGHT_ROBOT_TO_CAM);
+            } else {
+                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout,
+                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                        cameraLeft, Constants.VisionConstants.ROBOT_LEFT_TO_CAM);
+                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout,
+                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                        cameraRight, Constants.VisionConstants.ROBOT_RIGHT_TO_CAM);
             }
             photonPoseEstimatorLeft.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
             photonPoseEstimatorRight.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
@@ -120,13 +122,13 @@ public class Limelight extends SubsystemBase {
 
     // Method to get the latest PhotonPipelineResult from the camera
     public PhotonPipelineResult getLatestResult(Cam camPose) {
-        switch (camPose){
+        switch (camPose) {
             case LEFT:
                 return cameraLeft.getLatestResult();
             case RIGHT:
                 return cameraRight.getLatestResult();
             // case BACK:
-            //     return cameraBack.getLatestResult();
+            // return cameraBack.getLatestResult();
             default:
                 return null;
 
@@ -149,9 +151,11 @@ public class Limelight extends SubsystemBase {
     public PhotonTrackedTarget getBestTarget(PhotonPipelineResult result) {
         return result.getBestTarget();
     }
-    public PhotonPoseEstimator getPoseEstimator(){
+
+    public PhotonPoseEstimator getPoseEstimator() {
         return photonPoseEstimatorLeft;
     }
+
     // Method to get the yaw (rotation) of a tracked target
     public Rotation2d getYaw(PhotonTrackedTarget target) {
         return new Rotation2d(Math.toRadians(target.getYaw()));
@@ -187,9 +191,6 @@ public class Limelight extends SubsystemBase {
         return target.getPoseAmbiguity();
     }
 
-
-
-
     // Getter for AprilTagFieldLayout
     public AprilTagFieldLayout getAprilTagFieldLayout() {
         return aprilTagFieldLayout;
@@ -197,13 +198,13 @@ public class Limelight extends SubsystemBase {
 
     // Getter for the current camera pipeline index
     public int getPipeline(Cam camPose) {
-        switch (camPose){
+        switch (camPose) {
             case LEFT:
                 return cameraLeft.getPipelineIndex();
             case RIGHT:
                 return cameraRight.getPipelineIndex();
             // case BACK:
-            //     return cameraBack.getPipelineIndex();
+            // return cameraBack.getPipelineIndex();
         }
         return 0;
 
@@ -211,19 +212,19 @@ public class Limelight extends SubsystemBase {
 
     // Setter for the camera pipeline index
     public void setPipeline(int index, Cam camPose) {
-        switch (camPose){
+        switch (camPose) {
             case LEFT:
                 cameraLeft.setPipelineIndex(index);
             case RIGHT:
                 cameraRight.setPipelineIndex(index);
-            // case BACK:
-            //     cameraBack.setPipelineIndex(index);
+                // case BACK:
+                // cameraBack.setPipelineIndex(index);
         }
     }
 
     // Method to set the LED mode for the Limelight
     public void setLED(VisionLEDMode ledMode, Cam camPose) {
-        switch (camPose){
+        switch (camPose) {
             case LEFT:
                 switch (ledMode) {
                     case kOn:
@@ -272,29 +273,29 @@ public class Limelight extends SubsystemBase {
                         break;
                 }
                 cameraRight.setLED(ledMode);
-            // case BACK:
-            //     switch (ledMode) {
-            //         case kOn:
-            //             this.ledModeBack.setInteger(1);
-            //             ledModeStateBack.setInteger(1);
-            //             ledModeRequestBack.setInteger(1);
-            //             break;
-            //         case kOff:
-            //             this.ledModeBack.setInteger(0);
-            //             ledModeStateBack.setInteger(0);
-            //             ledModeRequestBack.setInteger(0);
-            //             break;
-            //         case kBlink:
-            //             this.ledModeBack.setInteger(2);
-            //             ledModeStateBack.setInteger(2);
-            //             ledModeRequestBack.setInteger(2);
-            //             break;
-            //         default:
-            //             this.ledModeBack.setInteger(-1);
-            //             ledModeStateBack.setInteger(-1);
-            //             ledModeRequestBack.setInteger(-1);
-            //             break;
-            //     }
+                // case BACK:
+                // switch (ledMode) {
+                // case kOn:
+                // this.ledModeBack.setInteger(1);
+                // ledModeStateBack.setInteger(1);
+                // ledModeRequestBack.setInteger(1);
+                // break;
+                // case kOff:
+                // this.ledModeBack.setInteger(0);
+                // ledModeStateBack.setInteger(0);
+                // ledModeRequestBack.setInteger(0);
+                // break;
+                // case kBlink:
+                // this.ledModeBack.setInteger(2);
+                // ledModeStateBack.setInteger(2);
+                // ledModeRequestBack.setInteger(2);
+                // break;
+                // default:
+                // this.ledModeBack.setInteger(-1);
+                // ledModeStateBack.setInteger(-1);
+                // ledModeRequestBack.setInteger(-1);
+                // break;
+                // }
                 // cameraBack.setLED(ledMode);
         }
 
@@ -302,7 +303,7 @@ public class Limelight extends SubsystemBase {
 
     // Method to get the estimated global pose using the PhotonPoseEstimator
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, Cam camNum) {
-        switch (camNum){
+        switch (camNum) {
             case LEFT:
                 photonPoseEstimatorLeft.setReferencePose(prevEstimatedRobotPose);
                 return photonPoseEstimatorLeft.update();
@@ -316,7 +317,7 @@ public class Limelight extends SubsystemBase {
     }
 
     // Method to get the time the Limelight subsystem has been running
-    public double getTimeRunning(){
+    public double getTimeRunning() {
         return timer.get();
     }
 
@@ -329,7 +330,7 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         logging();
-        
+
         PhotonPipelineResult latestResultLeft = Robot.limelight.getLatestResult(Cam.LEFT);
         MultiTargetPNPResult multiResultLeft = latestResultLeft.getMultiTagResult();
         if (multiResultLeft.estimatedPose.isPresent) {
@@ -338,9 +339,16 @@ public class Limelight extends SubsystemBase {
             SmartDashboard.putBoolean("Running Limelight Left", true);
 
             try {
-                Robot.limelight.estimatedPose2dLeft = new Pose2d(multiResultLeft.estimatedPose.best.getX(), multiResultLeft.estimatedPose.best.getY(), new Rotation2d( multiResultLeft.estimatedPose.best.getRotation().getZ()));
-                Robot.limelight.estimatedPose2dLeft.transformBy(new Transform2d(Constants.VisionConstants.CAM_LEFT_TO_ROBOT.getX(), Constants.VisionConstants.CAM_LEFT_TO_ROBOT.getZ(), new Rotation2d()));
-
+                Robot.limelight.estimatedPose2dLeft = new Pose2d(multiResultLeft.estimatedPose.best.getX(),
+                        multiResultLeft.estimatedPose.best.getY(),
+                        new Rotation2d(multiResultLeft.estimatedPose.best.getRotation().getZ()));
+                Robot.limelight.estimatedPose2dLeft
+                        .transformBy(new Transform2d(Constants.VisionConstants.CAM_LEFT_TO_ROBOT.getX(),
+                                Constants.VisionConstants.CAM_LEFT_TO_ROBOT.getZ(), new Rotation2d()));
+                // update swerve pose estimator
+                Robot.swerve.visionUpdateOdometry(
+                        new LimelightHelpers.LimelightPose(estimatedPose2dLeft,
+                                latestResultLeft.getTimestampSeconds()));
                 // Logging Limelight odometry information to SmartDashboard
                 SmartDashboard.putNumberArray("Left Limelight Odometry",
                         new double[] { Robot.limelight.estimatedPose2dLeft.getX(),
@@ -359,8 +367,17 @@ public class Limelight extends SubsystemBase {
             SmartDashboard.putBoolean("Running Limelight Right", true);
 
             try {
-                Robot.limelight.estimatedPose2dRight = new Pose2d(multiResultRight.estimatedPose.best.getX(), multiResultRight.estimatedPose.best.getY(), new Rotation2d( multiResultRight.estimatedPose.best.getRotation().getZ()));
-                Robot.limelight.estimatedPose2dRight.transformBy(new Transform2d(Constants.VisionConstants.CAM_RIGHT_TO_ROBOT.getX(), Constants.VisionConstants.CAM_RIGHT_TO_ROBOT.getZ(), new Rotation2d()));
+                Robot.limelight.estimatedPose2dRight = new Pose2d(multiResultRight.estimatedPose.best.getX(),
+                        multiResultRight.estimatedPose.best.getY(),
+                        new Rotation2d(multiResultRight.estimatedPose.best.getRotation().getZ()));
+                Robot.limelight.estimatedPose2dRight
+                        .transformBy(new Transform2d(Constants.VisionConstants.CAM_RIGHT_TO_ROBOT.getX(),
+                                Constants.VisionConstants.CAM_RIGHT_TO_ROBOT.getZ(), new Rotation2d()));
+                // update swerve pose esimtator
+                Robot.swerve.visionUpdateOdometry(
+                        new LimelightHelpers.LimelightPose(estimatedPose2dRight,
+                                latestResultRight.getTimestampSeconds()));
+
                 // Logging Limelight odometry information to SmartDashboard
                 SmartDashboard.putNumberArray("Right Limelight Odometry",
                         new double[] { Robot.limelight.estimatedPose2dRight.getX(),
@@ -371,9 +388,10 @@ public class Limelight extends SubsystemBase {
 
             }
         }
-        Robot.swerve.visionUpdateOdometry(new LimelightHelpers.LimelightPose(estimatedPose2dLeft, latestResultLeft.getTimestampSeconds()), new LimelightHelpers.LimelightPose(estimatedPose2dRight, latestResultLeft.getTimestampSeconds()));
+
     }
-    //Thanks to FRC Team 5712
+
+    // Thanks to FRC Team 5712
     public Matrix<N3, N1> confidenceCalculator(EstimatedRobotPose estimation) {
         double smallestDistance = Double.POSITIVE_INFINITY;
         for (var target : estimation.targetsUsed) {
@@ -383,21 +401,22 @@ public class Limelight extends SubsystemBase {
                 smallestDistance = distance;
         }
         double poseAmbiguityFactor = estimation.targetsUsed.size() != 1
-            ? 1
-            : Math.max(
-                1,
-                (estimation.targetsUsed.get(0).getPoseAmbiguity()
-                    + Constants.VisionConstants.POSE_AMBIGUITY_SHIFTER)
-                    * Constants.VisionConstants.POSE_AMBIGUITY_MULTIPLIER);
+                ? 1
+                : Math.max(
+                        1,
+                        (estimation.targetsUsed.get(0).getPoseAmbiguity()
+                                + Constants.VisionConstants.POSE_AMBIGUITY_SHIFTER)
+                                * Constants.VisionConstants.POSE_AMBIGUITY_MULTIPLIER);
         double confidenceMultiplier = Math.max(
-            1,
-            (Math.max(
                 1,
-                Math.max(0, smallestDistance - Constants.VisionConstants.NOISY_DISTANCE_METERS)
-                    * Constants.VisionConstants.DISTANCE_WEIGHT)
-                * poseAmbiguityFactor)
-                / (1
-                    + ((estimation.targetsUsed.size() - 1) * Constants.VisionConstants.TAG_PRESENCE_WEIGHT)));
+                (Math.max(
+                        1,
+                        Math.max(0, smallestDistance - Constants.VisionConstants.NOISY_DISTANCE_METERS)
+                                * Constants.VisionConstants.DISTANCE_WEIGHT)
+                        * poseAmbiguityFactor)
+                        / (1
+                                + ((estimation.targetsUsed.size() - 1)
+                                        * Constants.VisionConstants.TAG_PRESENCE_WEIGHT)));
 
         return Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS.times(confidenceMultiplier);
     }

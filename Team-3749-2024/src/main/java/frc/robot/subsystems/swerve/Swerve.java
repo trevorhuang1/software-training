@@ -212,10 +212,9 @@ public class Swerve extends SubsystemBase {
             modules[3].getPosition()
         });
   }
-  public void visionUpdateOdometry(LimelightHelpers.LimelightPose... visionPoses){
-    for (LimelightHelpers.LimelightPose visionPose : visionPoses){
-        swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose, visionPose.timestamp);
-      }
+  public void visionUpdateOdometry(LimelightHelpers.LimelightPose visionPose){
+      swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose, visionPose.timestamp);
+      
   }
   
 
