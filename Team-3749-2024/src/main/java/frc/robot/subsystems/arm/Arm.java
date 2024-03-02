@@ -111,7 +111,7 @@ public class Arm extends SubsystemBase {
         double feedback = calculatePID(getPositionRad());
 
         // if resting on the hard stop, don't waste voltage on kG
-        if (setpoint.position == 0 && Units.radiansToDegrees(getPositionRad()) < 2) {
+        if (setpoint.position == 0 && getPositionRad() < 0.035) {
             setVoltage(0);
 
             return;
@@ -158,27 +158,25 @@ public class Arm extends SubsystemBase {
         armIO.updateData(data);
         moveToGoal();
 
-        // positionLog.set(Units.radiansToDegrees(getPositionRad()));
-        // velocityLog.set(data.velocityRadPerSec);
-        // accelerationLog.set(data.accelerationRadPerSecSquared);
-        // voltageLog.set(data.appliedVolts);
-        // leftCurrentLog.set(data.leftCurrentAmps);
-        // rightCurrentLog.set(data.rightCurrentAmps);
+        positionLog.set(Units.radiansToDegrees(getPositionRad()));
+        velocityLog.set(Units.radiansToDegrees(data.velocityRadPerSec));
+        accelerationLog.set(Units.radiansToDegrees(data.accelerationRadPerSecSquared));
+        voltageLog.set(data.appliedVolts);
+        leftCurrentLog.set(data.leftCurrentAmps);
+        rightCurrentLog.set(data.rightCurrentAmps);
         
-        // goalLog.set(profiledFeedbackController.getGoal().position);
-        // setpointPositionLog.set(profiledFeedbackController.getSetpoint().position);
-        // setpointVelocityLog.set(profiledFeedbackController.getSetpoint().velocity);
-        // setpointAccelerationLog.set(accelerationSetpoint);
+        goalLog.set(Units.radiansToDegrees(profiledFeedbackController.getGoal().position));
+        setpointPositionLog.set(Units.radiansToDegrees(profiledFeedbackController.getSetpoint().position));
+        setpointVelocityLog.set(Units.radiansToDegrees(profiledFeedbackController.getSetpoint().velocity));
+        setpointAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint));
 
-        // errorPositionLog.set(profiledFeedbackController.getSetpoint().position - data.positionRad);
-        // errorVelocityLog.set(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec);
-        // errorAccelerationLog.set(accelerationSetpoint - data.accelerationRadPerSecSquared);
+        errorPositionLog.set(Units.radiansToDegrees(profiledFeedbackController.getSetpoint().position - data.positionRad));
+        errorVelocityLog.set(Units.radiansToDegrees(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec));
+        errorAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint - data.accelerationRadPerSecSquared));
 
-        // mechanismArm.setAngle(getRotation2d());
+        // mechanismArm.setAngle();
         // SmartDashboard.putData("mech", mechanism);
 
-        // SmartDashboard.putNumber("Arm Currentleft", data.leftCurrentAmps);
-        // SmartDashboard.putNumber("Arm Currentright", data.rightCurrentAmps);
         boolean driverStationStatus = DriverStation.isEnabled();
         if (driverStationStatus && !isEnabled) {
             isEnabled = driverStationStatus;
