@@ -97,9 +97,9 @@ public class Limelight extends SubsystemBase {
             }
             else{
                 photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraLeft, Constants.VisionConstants.ROBOT_LEFT_TO_CAM);
+                    cameraLeft, Constants.VisionConstants.ROBOT_TO_LEFT_CAM);
                 photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraRight, Constants.VisionConstants.ROBOT_RIGHT_TO_CAM);
+                    cameraRight, Constants.VisionConstants.ROBOT_TO_RIGHT_CAM);
             }
             photonPoseEstimatorLeft.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
             photonPoseEstimatorRight.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
@@ -339,7 +339,7 @@ public class Limelight extends SubsystemBase {
 
             try {
                 Robot.limelight.estimatedPose2dLeft = new Pose2d(multiResultLeft.estimatedPose.best.getX(), multiResultLeft.estimatedPose.best.getY(), new Rotation2d( multiResultLeft.estimatedPose.best.getRotation().getZ()));
-                Robot.limelight.estimatedPose2dLeft.transformBy(new Transform2d(Constants.VisionConstants.CAM_LEFT_TO_ROBOT.getX(), Constants.VisionConstants.CAM_LEFT_TO_ROBOT.getZ(), new Rotation2d()));
+                Robot.limelight.estimatedPose2dLeft.transformBy(new Transform2d(Constants.VisionConstants.LEFT_CAM_TO_ROBOT.getX(), Constants.VisionConstants.LEFT_CAM_TO_ROBOT.getY(), new Rotation2d()));
 
                 // Logging Limelight odometry information to SmartDashboard
                 SmartDashboard.putNumberArray("Left Limelight Odometry",
@@ -360,7 +360,7 @@ public class Limelight extends SubsystemBase {
 
             try {
                 Robot.limelight.estimatedPose2dRight = new Pose2d(multiResultRight.estimatedPose.best.getX(), multiResultRight.estimatedPose.best.getY(), new Rotation2d( multiResultRight.estimatedPose.best.getRotation().getZ()));
-                Robot.limelight.estimatedPose2dRight.transformBy(new Transform2d(Constants.VisionConstants.CAM_RIGHT_TO_ROBOT.getX(), Constants.VisionConstants.CAM_RIGHT_TO_ROBOT.getZ(), new Rotation2d()));
+                Robot.limelight.estimatedPose2dRight.transformBy(new Transform2d(Constants.VisionConstants.RIGHT_CAM_TO_ROBOT.getX(), Constants.VisionConstants.RIGHT_CAM_TO_ROBOT.getY(), new Rotation2d()));
                 // Logging Limelight odometry information to SmartDashboard
                 SmartDashboard.putNumberArray("Right Limelight Odometry",
                         new double[] { Robot.limelight.estimatedPose2dRight.getX(),
