@@ -45,10 +45,19 @@ public class ArmSparkMax implements ArmIO {
         leftMotor.setIdleMode(IdleMode.kCoast);
 
     }
-
+    // the arm will break if it ever goes past 120 degrees... should fix that lmao ;-;
+    // technically would also break if we go past -60 but im much less concerned about that. 
     private double getAbsolutePositionRad() {
+        double pos = absoluteEncoder.getPosition();
 
-        return absoluteEncoder.getPosition();
+        if (pos > 2.0/3.0 *Math.PI ){
+            pos -= absoluteEncoder.getPositionConversionFactor();
+        }
+        else if (pos < -1/3 * Math.PI){
+            pos +=  absoluteEncoder.getPositionConversionFactor();
+        }
+
+        return pos ;
     }
 
     private double getAbsoluteVelocityRadPerSec() {
