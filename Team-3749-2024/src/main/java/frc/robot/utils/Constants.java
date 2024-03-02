@@ -301,7 +301,7 @@ public class Constants {
         public static final double driveMotorGearRatio = 6.75;
         public static final double turnMotorGearRatio = 12.8;
 
-        private static final double kPTurningReal = 4.2;
+        private static final double kPTurningReal = 3.75;
         private static final double kDTurningReal = 0;
 
         private static final double kPDrivingReal = 0.27;
@@ -386,8 +386,8 @@ public class Constants {
 
         private static final double realMaxSpeedMetersPerSecond = 3.48; // 3.48
         private static final double realMaxAccelerationMetersPerSecondSquared = 1.92; // 1.92
-        private static final double realMaxAngularSpeedRadiansPerSecond = 11.841;// these should be different from the teleop ones
-        private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 30.154;
+        private static final double realMaxAngularSpeedRadiansPerSecond = 6.5;// these should be different from the teleop ones
+        private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 9.02;
 
         private static final double simMaxSpeedMetersPerSecond = 3.707;
         private static final double simMaxAccelerationMetersPerSecondSquared = 2.5;

@@ -16,6 +16,12 @@
           "data": {
             "pathName": "bottom-speaker-3xwing_speaker-center.1"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "bottom-speaker-3xwing_speaker-center.2"
+          }
         }
       ]
     }
