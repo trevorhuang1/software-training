@@ -37,6 +37,7 @@ import frc.robot.Robot;
 import frc.robot.utils.Constants;
 import frc.robot.utils.LimelightHelpers;
 import frc.robot.utils.ShuffleData;
+import frc.robot.utils.Constants.VisionConstants;
 import frc.robot.utils.Constants.VisionConstants.Cam;
 
 /**
@@ -88,20 +89,17 @@ public class Limelight extends SubsystemBase {
             aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
 
             // Initializing PhotonPoseEstimator based on robot type
-            if (Robot.isSimulation()) {
-                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout,
-                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                        cameraLeft, Constants.VisionConstants.SIM_LEFT_ROBOT_TO_CAM);
-                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout,
-                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                        cameraRight, Constants.VisionConstants.SIM_RIGHT_ROBOT_TO_CAM);
-            } else {
-                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout,
-                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                        cameraLeft, Constants.VisionConstants.ROBOT_LEFT_TO_CAM);
-                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout,
-                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                        cameraRight, Constants.VisionConstants.ROBOT_RIGHT_TO_CAM);
+            if (Robot.isSimulation()){
+                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    cameraLeft, VisionConstants.SIM_LEFT_ROBOT_TO_CAM);
+                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    cameraRight, VisionConstants.SIM_RIGHT_ROBOT_TO_CAM);
+            }
+            else{
+                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    cameraLeft, VisionConstants.ROBOT_TO_LEFT_CAM);
+                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    cameraRight, VisionConstants.ROBOT_TO_RIGHT_CAM);
             }
             photonPoseEstimatorLeft.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
             photonPoseEstimatorRight.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
@@ -341,10 +339,10 @@ public class Limelight extends SubsystemBase {
             try {
                 Robot.limelight.estimatedPose2dLeft = new Pose2d(multiResultLeft.estimatedPose.best.getX(),
                         multiResultLeft.estimatedPose.best.getY(),
-                        new Rotation2d(multiResultLeft.estimatedPose.best.getRotation().getZ()));
+                        multiResultLeft.estimatedPose.best.getRotation().toRotation2d());
                 Robot.limelight.estimatedPose2dLeft
-                        .transformBy(new Transform2d(Constants.VisionConstants.CAM_LEFT_TO_ROBOT.getX(),
-                                Constants.VisionConstants.CAM_LEFT_TO_ROBOT.getZ(), new Rotation2d()));
+                        .transformBy(new Transform2d(VisionConstants.LEFT_CAM_TO_ROBOT.getX(),
+                                VisionConstants.LEFT_CAM_TO_ROBOT.getY(), VisionConstants.LEFT_CAM_TO_ROBOT.getRotation().toRotation2d()));
                 // update swerve pose estimator
                 Robot.swerve.visionUpdateOdometry(
                         new LimelightHelpers.LimelightPose(estimatedPose2dLeft,
@@ -369,10 +367,10 @@ public class Limelight extends SubsystemBase {
             try {
                 Robot.limelight.estimatedPose2dRight = new Pose2d(multiResultRight.estimatedPose.best.getX(),
                         multiResultRight.estimatedPose.best.getY(),
-                        new Rotation2d(multiResultRight.estimatedPose.best.getRotation().getZ()));
+                        multiResultRight.estimatedPose.best.getRotation().toRotation2d());
                 Robot.limelight.estimatedPose2dRight
-                        .transformBy(new Transform2d(Constants.VisionConstants.CAM_RIGHT_TO_ROBOT.getX(),
-                                Constants.VisionConstants.CAM_RIGHT_TO_ROBOT.getZ(), new Rotation2d()));
+                        .transformBy(new Transform2d(VisionConstants.RIGHT_CAM_TO_ROBOT.getX(),
+                                VisionConstants.RIGHT_CAM_TO_ROBOT.getY(), VisionConstants.RIGHT_CAM_TO_ROBOT.getRotation().toRotation2d()));
                 // update swerve pose esimtator
                 Robot.swerve.visionUpdateOdometry(
                         new LimelightHelpers.LimelightPose(estimatedPose2dRight,
@@ -405,19 +403,19 @@ public class Limelight extends SubsystemBase {
                 : Math.max(
                         1,
                         (estimation.targetsUsed.get(0).getPoseAmbiguity()
-                                + Constants.VisionConstants.POSE_AMBIGUITY_SHIFTER)
-                                * Constants.VisionConstants.POSE_AMBIGUITY_MULTIPLIER);
+                                + VisionConstants.POSE_AMBIGUITY_SHIFTER)
+                                * VisionConstants.POSE_AMBIGUITY_MULTIPLIER);
         double confidenceMultiplier = Math.max(
                 1,
                 (Math.max(
                         1,
-                        Math.max(0, smallestDistance - Constants.VisionConstants.NOISY_DISTANCE_METERS)
-                                * Constants.VisionConstants.DISTANCE_WEIGHT)
+                        Math.max(0, smallestDistance - VisionConstants.NOISY_DISTANCE_METERS)
+                                * VisionConstants.DISTANCE_WEIGHT)
                         * poseAmbiguityFactor)
                         / (1
                                 + ((estimation.targetsUsed.size() - 1)
-                                        * Constants.VisionConstants.TAG_PRESENCE_WEIGHT)));
+                                        * VisionConstants.TAG_PRESENCE_WEIGHT)));
 
-        return Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS.times(confidenceMultiplier);
+        return VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS.times(confidenceMultiplier);
     }
 }
