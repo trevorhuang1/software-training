@@ -201,7 +201,7 @@ public class Constants {
 
                 public static final double sprocketRatio = 64.0 / 24.0;
                 public static final int encoderID = 7;
-                public static final double encoderOffsetRad = Units.degreesToRadians(86.25);
+                public static final double encoderOffsetRad = Units.degreesToRadians(86.15);
 
                 // Control - PID, FF, and Trapezoidal Constraints
                 private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
