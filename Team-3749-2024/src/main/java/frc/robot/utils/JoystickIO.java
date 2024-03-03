@@ -82,14 +82,16 @@ public class JoystickIO {
             Robot.shooter.stop(); 
             Robot.intake.stop();},Robot.shooter));
 
-        Robot.pilot.leftBumper().whileTrue(new GroundIntake());
+        // Robot.pilot.leftBumper().whileTrue(new GroundIntake());
 
         Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(0))));
         // Robot.pilot.b().onTrue(Commands.runOnce(() ->
         // Robot.arm.setGoal(Units.degreesToRadians(6))));
 
-        Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(40))));
-        // Robot.pilot.back().whileTrue(new Climb());
+        Robot.pilot.b().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(40))));
+        Robot.pilot.a().whileTrue(Commands.run(() -> Robot.arm.setVoltage(1))).onFalse(Commands.runOnce(() -> Robot.arm.setVoltage(0)));
+                Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(80))));
+// Robot.pilot.back().whileTrue(new Climb());
 
         // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));

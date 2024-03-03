@@ -22,7 +22,9 @@ public class ArmSparkMax implements ArmIO {
     private CANSparkMax leftMotor = new CANSparkMax(ArmConstants.leftID, CANSparkMax.MotorType.kBrushless);
     private CANSparkMax rightMotor = new CANSparkMax(ArmConstants.rightID, CANSparkMax.MotorType.kBrushless);
 
-    // private RelativeEncoder leftEncoder = leftMotor.getEncoder();
+    private RelativeEncoder leftEncoder = leftMotor.getEncoder();
+    private RelativeEncoder rightEncoder = rightMotor.getEncoder();
+
     private AbsoluteEncoder absoluteEncoder;
 
     private double appliedVolts = 0;
@@ -35,7 +37,8 @@ public class ArmSparkMax implements ArmIO {
         absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / ArmConstants.sprocketRatio);
         absoluteEncoder.setZeroOffset(ArmConstants.encoderOffsetRad);
 
-        // leftEncoder.setPositionConversionFactor(Math.PI * 2 / ArmConstants.gearRatio);
+        leftEncoder.setVelocityConversionFactor(Math.PI * 2 / ArmConstants.gearRatio /60.0);
+        rightEncoder.setVelocityConversionFactor(Math.PI * 2 / ArmConstants.gearRatio /60.0);
 
         rightMotor.setInverted(true);
         rightMotor.setSmartCurrentLimit(40);
@@ -59,8 +62,8 @@ public class ArmSparkMax implements ArmIO {
         return pos ;
     }
 
-    private double getAbsoluteVelocityRadPerSec() {
-        return absoluteEncoder.getVelocity();
+    private double getVelocityRadPerSec() {
+        return (leftEncoder.getVelocity() + rightEncoder.getVelocity())/2;
     }
 
     @Override
@@ -71,7 +74,7 @@ public class ArmSparkMax implements ArmIO {
         // distance traveled + Rad/Time * Time * diameter
         data.positionRad = getAbsolutePositionRad();
 
-        data.velocityRadPerSec = getAbsoluteVelocityRadPerSec();
+        data.velocityRadPerSec = getVelocityRadPerSec();
 
         data.accelerationRadPerSecSquared = (data.velocityRadPerSec - previousVelocity) / 0.02;
 
