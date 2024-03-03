@@ -13,6 +13,7 @@ public final class WristConstants {
 
     public static final double groundGoalRad = Units.degreesToRadians(141);
     public static final double stowGoalRad = Units.degreesToRadians(3);
+    public static final double fullDeployed = Units.degreesToRadians(160);
 
     public static final double wristOffsetRad = Units.degreesToRadians(257.4);
 
@@ -56,5 +57,13 @@ public final class WristConstants {
     public static final double kBarArmSquared = -2.132368908319232;
     public static final double kBarSquaredArmSquared = 2.148987748059586;
     public static final double kBarCubedArmSquared = -0.496866520545201;
+
+
+    public enum WristStates{
+        IN_TRANIST,
+        GROUND_INTAKE,
+        FULL_DEPLOYED,
+        STOW;
+    }
 
 }

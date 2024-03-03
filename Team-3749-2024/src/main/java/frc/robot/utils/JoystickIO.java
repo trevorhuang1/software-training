@@ -15,8 +15,10 @@ import frc.robot.commands.swerve.TeleopJoystickRelative;
 import frc.robot.commands.GroundIntake;
 import frc.robot.commands.arm.Climb;
 import frc.robot.commands.arm.GetConstraints;
+import frc.robot.commands.arm.MoveArmToGoal;
 // import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.SwerveTeleop;
+import frc.robot.commands.wrist.MoveWristToGoal;
 import frc.robot.commands.wrist.getRegressionData;
 import frc.robot.subsystems.arm.ShootKinematics;
 import frc.robot.subsystems.intake.IntakeConstants;
@@ -118,6 +120,8 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
+        Robot.arm.setDefaultCommand(new MoveArmToGoal());
+        Robot.wrist.setDefaultCommand(new MoveWristToGoal());
 
         Robot.swerve.setDefaultCommand(
                 new SwerveTeleop(

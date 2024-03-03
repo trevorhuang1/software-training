@@ -22,12 +22,13 @@ public final class ArmConstants {
         public static final double climbPositionRad = Units.degreesToRadians(90);
         public static final double subWooferPositionRad = Units.degreesToRadians(20);
 
-
         // Control - PID, FF, and Trapezoidal Constraints
         private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
-        private static final PIDConstants realPID = new PIDConstants(0.4,0,0.05);
-
-        public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
+        private static final PIDConstants realStowedPID = new PIDConstants(0.4, 0, 0.05);
+        public static final PIDConstants stowedPID = Robot.isReal() ? realStowedPID : simPID;
+       
+        private static final PIDConstants realDeployedPID = new PIDConstants(0.4, 0, 0.05);
+        public static final PIDConstants deployedPID = Robot.isReal() ? realDeployedPID : new PIDConstants(0);
 
         private static final double simkS = 0.0;
         private static final double simkG = 0.203; // stick arm at 0 degrees, tune till it doesnt move
@@ -36,33 +37,44 @@ public final class ArmConstants {
         private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
         private static final double realStowedkS = 0.12;
-        private static final double realStowedkG = 0.247; //0.37
+        private static final double realStowedkG = 0.247; // 0.37
         private static final double realStowedkV = 3.9;
         private static final double realStowedkA = 0.165;
-        
+
         public static final double stowedkS = Robot.isReal() ? realStowedkS : simkS;
         public static final double stowedkG = Robot.isReal() ? realStowedkG : simkG;
         public static final double stowedkV = Robot.isReal() ? realStowedkV : simkV;
         public static final double stowedkA = Robot.isReal() ? realStowedkA : simkA;
-        
-        
+
         private static final double realDeployedkS = 0.12;
-        private static final double realDeployedkG = 0.247; //0.37
+        private static final double realDeployedkG = 0.247; // 0.37
         private static final double realDeployedkV = 3.9;
         private static final double realDeployedkA = 0.165;
-                
+
+        public static final double deployedkS = Robot.isReal() ? realDeployedkS : simkS;
+        public static final double deployedkG = Robot.isReal() ? realDeployedkG : simkG;
+        public static final double deployedkV = Robot.isReal() ? realDeployedkV : simkV;
+        public static final double deployedkA = Robot.isReal() ? realDeployedkA : simkA;
+
         // private static final Constraints simConstraints = new Constraints(2.36,
         // 71.58);
-        private static final Constraints simConstraints = new Constraints(
+        private static final Constraints simStowedConstraints = new Constraints(
                         1.783,
                         89.175);
 
-        private static final Constraints realConstraints = new Constraints(
+        private static final Constraints realStowedConstraints = new Constraints(
                         2.662,
                         6);
-        public static final Constraints constraints = Robot.isReal()
-                        ? realConstraints
-                        : simConstraints;
+        public static final Constraints stowedConstraints = Robot.isReal()
+                        ? realStowedConstraints
+                        : simStowedConstraints;
+
+        private static final Constraints realDeployedConstraints = new Constraints(
+                        2.662,
+                        6);
+        public static final Constraints deployedConstraints = Robot.isReal()
+                        ? realStowedConstraints
+                        : new Constraints(0, 0);
 
         // Field Parameters
         public static final double armHeightOffset = 0.2159;

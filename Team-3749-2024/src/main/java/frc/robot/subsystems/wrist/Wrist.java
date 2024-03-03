@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.UtilityFunctions;
@@ -29,7 +30,7 @@ public class Wrist extends SubsystemBase {
 
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean, Double>();
 
-    private boolean isDeployed = false;
+    private WristStates state = WristConstants.WristStates.STOW;
 
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
@@ -40,25 +41,23 @@ public class Wrist extends SubsystemBase {
             0.0);
     private ShuffleData<Double> velocityLog = new ShuffleData<Double>(this.getName(), "velocity",
             0.0);
-    private ShuffleData<Double> accelerationLog = new ShuffleData<Double>(this.getName(), "acceleration",
-            0.0);
     private ShuffleData<Double> voltageLog = new ShuffleData<Double>(this.getName(), "voltage",
             0.0);
     private ShuffleData<Double> currentLog = new ShuffleData<Double>(this.getName(), "current",
             0.0);
-
     private ShuffleData<Double> goalLog = new ShuffleData<Double>(this.getName(), "goal",
             0.0);
     private ShuffleData<Double> setpointPositionLog = new ShuffleData<Double>(this.getName(), "setpoint position",
             0.0);
     private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>(this.getName(), "setpoint velocity",
             0.0);
-    private ShuffleData<Double> setpointAccelerationLog = new ShuffleData<Double>(this.getName(),
-            "setpoint acceleration", 0.0);
+
     private ShuffleData<Double> errorPositionLog = new ShuffleData<Double>(this.getName(), "error position",
             0.0);
     private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>(this.getName(), "error velocity",
             0.0);
+    private ShuffleData<String> stateLog = new ShuffleData<String>(this.getName(), "state",
+            WristStates.STOW.name());
 
     public Wrist() {
         setpointToggle.put(true, WristConstants.groundGoalRad);
@@ -67,24 +66,14 @@ public class Wrist extends SubsystemBase {
         if (Robot.isSimulation()) {
             wristIO = new WristSim();
         }
-    }
-
-    // runs twice???
-    public void toggleWristGoal() {
-        this.isDeployed = !this.isDeployed;
-        wristController.setGoal(setpointToggle.get(this.isDeployed));
-        System.out.println(isDeployed);
+        wristController.setGoal(WristConstants.stowGoalRad);
     }
 
     public void setGoalGround() {
-        System.out.println("ground");
         wristController.setGoal(setpointToggle.get(true));
-        isDeployed = true;
     }
 
     public void setGoalStow() {
-        System.out.println("stow");
-        isDeployed = false;
         wristController.setGoal(setpointToggle.get(false));
 
     }
@@ -97,8 +86,8 @@ public class Wrist extends SubsystemBase {
         return wristController.getSetpoint();
     }
 
-    public boolean getIsDeployed() {
-        return isDeployed;
+    public WristStates getState() {
+        return state;
     }
 
     public double getPositionRad() {
@@ -112,7 +101,7 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> kPData = new ShuffleData(this.getName(), "kpdata", 0.0);
     private ShuffleData<Double> kVData = new ShuffleData(this.getName(), "kVdata", 0.0);
 
-    public void moveWristToAngle() {
+    public void moveWristToGoal() {
         double pidGain = wristController.calculate(data.positionRad);
 
         State setpoint = Robot.wrist.getWristSetpoint();
@@ -123,10 +112,6 @@ public class Wrist extends SubsystemBase {
                 ? pidGain
                 : 0;
 
-        // double voltage = 0;
-
-        // voltage += kPData.get() * (positionRad - data.positionRad);
-        // if getting stowed, close to the setpoint, and not moving, then greatly reduce voltage 
         if ((positionRad == WristConstants.stowGoalRad
                 && UtilityFunctions.withinMargin(0.15, positionRad, data.positionRad))
                 && Math.abs(data.velocityRadPerSec) < 0.05) {
@@ -140,15 +125,13 @@ public class Wrist extends SubsystemBase {
         } else {
             voltage += Math.signum(pidGain) * WristConstants.realkS;
             voltage += getWristGoal().position == WristConstants.groundGoalRad
-                    // ? velocityRadPerSec * kVData.get()
-                    // : velocityRadPerSec * kVData.get();
+
                     ? velocityRadPerSec * WristConstants.realkVForward
                     : velocityRadPerSec * WristConstants.realkVBackward;
             voltage += calculateGravityFeedForward(data.positionRad, Robot.arm.getPositionRad());
         }
 
         setVoltage(voltage);
-        // System.out.println(wristController.getGoal().position);
     }
 
     public void setVoltage(double volts) {
@@ -183,18 +166,46 @@ public class Wrist extends SubsystemBase {
                 + WristConstants.kBarCubedArmSquared * Math.pow(wristPositionRad, 3) * Math.pow(armPositionRad, 2));
     }
 
+    private boolean atGoal() {
+        return (Math.abs(data.positionRad - getWristGoal().position) < 0.1);
+    }
+
+
+    private void updateState() {
+        SmartDashboard.putBoolean("at goal", wristController.atGoal());
+        SmartDashboard.putBoolean(" moving", Math.abs(getVelocityRadPerSec()) > 0.1);
+        SmartDashboard.putNumber("vel rad", getVelocityRadPerSec());
+        if (!wristController.atGoal() || Math.abs(getVelocityRadPerSec()) > 0.1) {
+            state = WristStates.IN_TRANIST;
+            return;
+        }
+        if (getWristGoal().position == WristConstants.groundGoalRad) {
+            state = WristStates.GROUND_INTAKE;
+            return;
+        }
+        if (getWristGoal().position == WristConstants.fullDeployed) {
+            state = WristStates.FULL_DEPLOYED;
+            return;
+
+        }
+        if (getWristGoal().position == WristConstants.stowGoalRad) {
+            state = WristStates.STOW;
+            return;
+
+        }
+
+    }
+
     @Override
     public void periodic() {
         wristIO.updateData(data);
-        moveWristToAngle();
-
+        updateState();
         // mechanismArm.setAngle(data.positionRad);
         // SmartDashboard.putData("Mech2d", mechanism);
         // mechanismArm.setAngle(Math.toDegrees(data.positionRad));
 
         positionLog.set(Units.radiansToDegrees(data.positionRad));
         velocityLog.set(Units.radiansToDegrees(data.velocityRadPerSec));
-        accelerationLog.set(Units.radiansToDegrees(data.accelerationRadPerSecSquared));
         goalLog.set(Units.radiansToDegrees(getWristGoal().position));
         setpointPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position));
         setpointVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity));
@@ -203,9 +214,7 @@ public class Wrist extends SubsystemBase {
         errorPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position - data.positionRad));
         errorVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity - data.velocityRadPerSec));
 
-        SmartDashboard.putNumber("FF",
-                calculateGravityFeedForward(data.positionRad, Robot.arm.getPositionRad()));
-
+        stateLog.set(state.name());
         // test
     }
 
