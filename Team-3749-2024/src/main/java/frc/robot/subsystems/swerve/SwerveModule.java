@@ -92,13 +92,17 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState state) {
-        if (DriverStation.isAutonomous()){
 
             state = SwerveModuleState.optimize(state, getState().angle);
-        }
+    
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             state.speedMetersPerSecond = 0;
         }
+
+
+
+
+
         this.desiredState = state;
 
         setDriveSpeed(state.speedMetersPerSecond);

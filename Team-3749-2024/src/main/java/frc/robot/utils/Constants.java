@@ -387,7 +387,7 @@ public class Constants {
         private static final double realMaxSpeedMetersPerSecond = 3.48; // 3.48
         private static final double realMaxAccelerationMetersPerSecondSquared = 1.92; // 1.92
         private static final double realTeleopMaxAngularSpeedRadiansPerSecond = 6.5;
-        private static final double realMaxAngularSpeedRadiansPerSecond = 9.8;
+        private static final double realMaxAngularSpeedRadiansPerSecond = 9.847;
 
         // these should be different from the teleop ones 
         private static final double realMaxAngularAccelerationRadiansPerSecondSquared = 9.02;
