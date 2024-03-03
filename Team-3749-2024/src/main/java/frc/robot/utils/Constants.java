@@ -145,7 +145,7 @@ public class Constants {
 
     public static final class IntakeConstants {
 
-        public static final int intakeId = 20;
+        public static final int intakeId = 19;
 
         public static final double gearRatio = 5;
         public static final double intakeVelocity = 75;
