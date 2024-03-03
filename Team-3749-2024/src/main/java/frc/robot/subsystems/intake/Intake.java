@@ -42,9 +42,10 @@ public class Intake extends SubsystemBase {
         double voltage = feedback.calculate(
                 data.intakeVelocityRadPerSec,
                 velocityRadPerSec) +
-                    intakeFF.calculate(velocityRadPerSec);
+                intakeFF.calculate(velocityRadPerSec);
 
-        // voltage = velData.get() * kVData.get() + (velData.get() - data.intakeVelocityRadPerSec) * kPData.get();
+        // voltage = velData.get() * kVData.get() + (velData.get() -
+        // data.intakeVelocityRadPerSec) * kPData.get();
         // System.out.println(voltage);
         // System.out.println(velData.get());
 
@@ -55,16 +56,21 @@ public class Intake extends SubsystemBase {
         intakeIO.setVoltage(volts);
     }
 
+    public void stop() {
+        intakeIO.setVoltage(0);
+
+    }
+
     @Override
     public void periodic() {
 
         intakeIO.updateData(data);
 
-        // IntakeVelocityLog.set(data.intakeVelocityRadPerSec);
+        IntakeVelocityLog.set(data.intakeVelocityRadPerSec);
 
-        // IntakevoltageLog.set(data.intakeVolts);
+        IntakevoltageLog.set(data.intakeVolts);
 
-        // IntakecurrentLog.set(data.currentAmps);
+        IntakecurrentLog.set(data.currentAmps);
     }
 
 }

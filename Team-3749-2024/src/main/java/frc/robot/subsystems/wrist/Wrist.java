@@ -123,7 +123,12 @@ public class Wrist extends SubsystemBase {
                 ? pidGain
                 : 0;
 
-        if ((positionRad == 0 && data.positionRad < Units.radiansToDegrees(4))
+        // double voltage = 0;
+
+        // voltage += kPData.get() * (positionRad - data.positionRad);
+        // if getting stowed, close to the setpoint, and not moving, then greatly reduce voltage 
+        if ((positionRad == WristConstants.stowGoalRad
+                && UtilityFunctions.withinMargin(0.15, positionRad, data.positionRad))
                 && Math.abs(data.velocityRadPerSec) < 0.05) {
             setVoltage(-Math.signum(pidGain) * 0.05);
             return;
@@ -135,6 +140,8 @@ public class Wrist extends SubsystemBase {
         } else {
             voltage += Math.signum(pidGain) * WristConstants.realkS;
             voltage += getWristGoal().position == WristConstants.groundGoalRad
+                    // ? velocityRadPerSec * kVData.get()
+                    // : velocityRadPerSec * kVData.get();
                     ? velocityRadPerSec * WristConstants.realkVForward
                     : velocityRadPerSec * WristConstants.realkVBackward;
             voltage += calculateGravityFeedForward(data.positionRad, Robot.arm.getPositionRad());
@@ -148,7 +155,8 @@ public class Wrist extends SubsystemBase {
         wristIO.setVoltage(volts);
     }
 
-    private ShuffleData<Double> kGData = new ShuffleData<Double>("wrist", "kGData", 0.0);
+    // private ShuffleData<Double> kGData = new ShuffleData<Double>("wrist",
+    // "kGData", 0.0);
 
     public void runFF(double add) {
 
@@ -156,8 +164,12 @@ public class Wrist extends SubsystemBase {
     }
 
     public double calculateGravityFeedForward(double wristPositionRad, double armPositionRad) {
-
-        return WristConstants.kYIntercept
+        // the way data was collected has it on the front end of the FF rather than the
+        // middle. the 0.6 helps to alliviate this at the cost of working well at
+        // variable arm angle. Yes, that kinda defeats some of the purpose of the
+        // regression, but due to other decisions, we will not really be moving the 4bar
+        // at variable angles anyway. The thing can be retuned and made cool again later
+        return 0.6 * (WristConstants.kYIntercept
                 + WristConstants.kBar * wristPositionRad
                 + WristConstants.kBarSquared * Math.pow(wristPositionRad, 2)
                 + WristConstants.kBarCubed * Math.pow(wristPositionRad, 3)
@@ -168,7 +180,7 @@ public class Wrist extends SubsystemBase {
                 + WristConstants.kBarCubedArm * Math.pow(wristPositionRad, 3) * armPositionRad
                 + WristConstants.kBarArmSquared * wristPositionRad * Math.pow(armPositionRad, 2)
                 + WristConstants.kBarSquaredArmSquared * Math.pow(wristPositionRad, 2) * Math.pow(armPositionRad, 2)
-                + WristConstants.kBarCubedArmSquared * Math.pow(wristPositionRad, 3) * Math.pow(armPositionRad, 2);
+                + WristConstants.kBarCubedArmSquared * Math.pow(wristPositionRad, 3) * Math.pow(armPositionRad, 2));
     }
 
     @Override

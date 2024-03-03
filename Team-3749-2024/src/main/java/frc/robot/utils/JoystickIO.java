@@ -19,6 +19,8 @@ import frc.robot.commands.arm.GetConstraints;
 import frc.robot.commands.swerve.SwerveTeleop;
 import frc.robot.commands.wrist.getRegressionData;
 import frc.robot.subsystems.arm.ShootKinematics;
+import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.shooter.ShooterConstants;
 // import frc.robot.commands.swerve.MoveToPose;
 // import frc.robot.commands.swerve.Teleop;
 // import frc.robot.commands.swerve.TeleopJoystickRelative;
@@ -67,10 +69,18 @@ public class JoystickIO {
     public void pilotBindings() {
 
         // intake
-        Robot.pilot.leftTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(60),
+        Robot.pilot.leftTrigger()
+                .whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec),
+                        Robot.intake));
+        Robot.pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.stop(),
                 Robot.intake));
-        Robot.pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
-                Robot.intake));
+
+        Robot.pilot.rightTrigger().whileTrue(Commands.run(() -> {
+            Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec);
+            Robot.intake.setVoltage(12);}, Robot.shooter));
+        Robot.pilot.rightTrigger().onFalse(Commands.runOnce(() -> {
+            Robot.shooter.stop(); 
+            Robot.intake.stop();},Robot.shooter));
 
         Robot.pilot.leftBumper().whileTrue(new GroundIntake());
 
@@ -79,11 +89,11 @@ public class JoystickIO {
         // Robot.arm.setGoal(Units.degreesToRadians(6))));
 
         Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(40))));
-        Robot.pilot.back().whileTrue(new Climb());
+        // Robot.pilot.back().whileTrue(new Climb());
 
         // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
-
+        // Robot.pilot.back().whileTrue(Commands.run(() -> Robot.wrist.runFF(0)));
         // // 4bar
 
         Robot.pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalGround()));
@@ -94,7 +104,8 @@ public class JoystickIO {
         // Robot.swerve));
 
         Robot.pilot.povDown().onTrue(Commands.runOnce(
-                () -> Robot.swerve.resetOdometry(new Pose2d(new Translation2d(13.95,5.55), Robot.swerve.getRotation2d()))));
+                () -> Robot.swerve
+                        .resetOdometry(new Pose2d(new Translation2d(13.95, 5.55), Robot.swerve.getRotation2d()))));
     }
 
     public void simBindings() {

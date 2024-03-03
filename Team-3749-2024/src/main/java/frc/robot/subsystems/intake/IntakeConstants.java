@@ -9,8 +9,6 @@ public final class IntakeConstants {
     public static final int intakeId = 20;
 
     public static final double gearRatio = 5;
-    public static final double intakeVelocity = 75;
-    public static final double outtakeVelocity = -30;
     private static final PIDConstants simIntakePID = new PIDConstants(0, 0, 0);
     private static final PIDConstants realIntakePID = new PIDConstants(
             0.01,
@@ -19,5 +17,8 @@ public final class IntakeConstants {
     public static final PIDConstants intakePID = Robot.isReal()
             ? realIntakePID
             : simIntakePID;
-    public static final double kV = 0.101;
+    public static final double kV = 0.102;
+
+    public static final double intakeVelocityRadPerSec = 60;
+    public static final double outtakeVelocityRadPerSec = -30;
 }

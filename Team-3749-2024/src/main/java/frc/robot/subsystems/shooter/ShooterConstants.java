@@ -9,7 +9,7 @@ public final class ShooterConstants {
     public static final int shooterBottomId = 19;
     public static final int shooterTopId = 18;
 
-    public static final double shooterVelocityRadPerSec = 100;
+    public static final double shooterVelocityRadPerSec = 560;
 
     private static final PIDConstants simShooterTopPID = new PIDConstants(
             0,
@@ -36,9 +36,9 @@ public final class ShooterConstants {
             ? realShooterBottomPID
             : simShooterBottomPID;
 
-    public static final double topkV = 0.0201; // volts/radPerSec
+    public static final double topkV = 0.02025; // volts/radPerSec
 
-    public static final double bottomkV = 0.0201;
+    public static final double bottomkV = 0.02035;
 }
 
 
