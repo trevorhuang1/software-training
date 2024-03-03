@@ -434,11 +434,11 @@ public class Constants {
 
     public static final class AutoConstants {
 
-        public static double kP_PathPlannerDrive = 7  ; // 3
-        public static double kD_PathPlannerDrive = 0.25; // 0.5
+        public static double kP_PathPlannerDrive = 7  ;
+        public static double kD_PathPlannerDrive = 0.25;
 
-        public static double kP_PathPlannerTurn = 6.25; // 4.75
-        public static double kD_PathPlannerTurn = 0.1; // 0.2
+        public static double kP_PathPlannerTurn = 6.25; 
+        public static double kD_PathPlannerTurn = 0.1; 
 
         public static PIDConstants drivePIDConstants = new PIDConstants(
                 Constants.AutoConstants.kP_PathPlannerDrive,
