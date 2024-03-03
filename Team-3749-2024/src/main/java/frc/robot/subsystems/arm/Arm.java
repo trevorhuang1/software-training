@@ -21,14 +21,14 @@ public class Arm extends SubsystemBase {
     private ArmData data = new ArmData();
     private ArmIO armIO;
 
-    private ProfiledPIDController profiledFeedbackController = new ProfiledPIDController(ArmConstants.PID.kP,
+    private ProfiledPIDController feedbackStowed = new ProfiledPIDController(ArmConstants.PID.kP,
             ArmConstants.PID.kI,
             ArmConstants.PID.kD,
             ArmConstants.constraints);
 
-    private ArmFeedforward feedForwardController = new ArmFeedforward(ArmConstants.kS,
-            ArmConstants.kG,
-            ArmConstants.kV);
+    private ArmFeedforward feedforwaredStowed = new ArmFeedforward(ArmConstants.stowedkS,
+            ArmConstants.stowedkG,
+            ArmConstants.stowedkV);
 
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
@@ -84,16 +84,16 @@ public class Arm extends SubsystemBase {
     }
 
     public void setGoal(double positionRad) {
-        profiledFeedbackController.setGoal(positionRad);
+        feedbackStowed.setGoal(positionRad);
         SmartDashboard.putNumber("DON POSE REAL", positionRad);
     }
 
     public double getGoal() {
-        return profiledFeedbackController.getGoal().position;
+        return feedbackStowed.getGoal().position;
     }
 
     public State getSetpoint() {
-        return profiledFeedbackController.getSetpoint();
+        return feedbackStowed.getSetpoint();
     }
 
     public void setVoltage(double volts) {
@@ -113,42 +113,41 @@ public class Arm extends SubsystemBase {
     private ShuffleData<Double> kDData = new ShuffleData(this.getName(), "kDdata", 0.0);
 
     public void moveToGoal() {
-        State setpoint = getSetpoint();
-        double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
-        prevSetpointVelocity = setpoint.velocity;
-        double feedback = calculatePID(getPositionRad());
-
-        // if resting on the hard stop, don't waste voltage on kG
-
-        SmartDashboard.putBoolean("1", setpoint.position == ArmConstants.stowPositionRad);
-        SmartDashboard.putBoolean("2", UtilityFunctions.withinMargin(0.035, getPositionRad(), ArmConstants.stowPositionRad));
-        SmartDashboard.putBoolean("3", UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0));
-
-        if (setpoint.position == ArmConstants.stowPositionRad
-                && UtilityFunctions.withinMargin(0.035, getPositionRad(), ArmConstants.stowPositionRad)
-                && UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0)) {
-            setVoltage(0);
-            return;
+        if (Robot.wrist.getIsDeployed()) {
+            moveToGoalDeployed();
+        } else {
+            moveToGoalStowed();
         }
-        // if 4bar is deployed, switch kG
-        if (setpoint.velocity == 0 && Robot.wrist.getIsDeployed()) {
-            // ks, kg, and P
-            double error = (setpoint.position - getPositionRad());
-            double voltage = Math.signum(error) * ArmConstants.kS
-                    + ArmConstants.deployedKG * Math.cos(getPositionRad())
-                    + ArmConstants.deployedKP * error;
-            setVoltage(voltage);
-            return;
-        }
+    }
 
-        double feedforward ;
-        feedforward = calculateFF(getPositionRad(), setpoint.velocity, accelerationSetpoint);
-        if (setpoint.velocity == 0) {
-            // have the kS help the PID when stationary
-            feedforward = Math.signum(feedback) * ArmConstants.kS *0.9;
-        }
+    public void moveToGoalDeployed() {
+        // State setpoint = getSetpoint();
+        // double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
+        // prevSetpointVelocity = setpoint.velocity;
+        // double feedback = calculatePID(getPositionRad());
 
-        setVoltage(feedforward + feedback);
+        // // if resting on the hard stop, don't waste voltage on kG
+
+        // SmartDashboard.putBoolean("1", setpoint.position == ArmConstants.stowPositionRad);
+        // SmartDashboard.putBoolean("2",
+        //         UtilityFunctions.withinMargin(0.035, getPositionRad(), ArmConstants.stowPositionRad));
+        // SmartDashboard.putBoolean("3", UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0));
+
+        // if (setpoint.position == ArmConstants.stowPositionRad
+        //         && UtilityFunctions.withinMargin(0.035, getPositionRad(), ArmConstants.stowPositionRad)
+        //         && UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0)) {
+        //     setVoltage(0);
+        //     return;
+        // }
+
+        // double feedforward;
+        // feedforward = calculateFF(getPositionRad(), setpoint.velocity, accelerationSetpoint);
+        // if (setpoint.velocity == 0) {
+        //     // have the kS help the PID when stationary
+        //     feedforward = Math.signum(feedback) * ArmConstants.stowedkS * 0.9;
+        // }
+
+        // setVoltage(feedforward + feedback);
 
         // double volts = 0;
         // volts += Math.signum(setpoint.velocity) * kSData.get();
@@ -157,6 +156,30 @@ public class Arm extends SubsystemBase {
         // volts += Math.cos(data.positionRad) * kGData.get();
         // volts += (setpoint.position - data.positionRad) * kPData.get();
         // setVoltage(volts);
+    }
+
+    public void moveToGoalStowed() {
+        State setpoint = getSetpoint();
+        double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
+        prevSetpointVelocity = setpoint.velocity;
+        double feedback = calculatePID(getPositionRad());
+
+        if (setpoint.position == ArmConstants.stowPositionRad
+                && UtilityFunctions.withinMargin(0.035, getPositionRad(), ArmConstants.stowPositionRad)
+                && UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0)) {
+            setVoltage(0);
+            return;
+        }
+
+        double feedforward;
+        feedforward = calculateFF(getPositionRad(), setpoint.velocity, accelerationSetpoint);
+        if (setpoint.velocity == 0) {
+            // have the kS help the PID when stationary
+            feedforward = Math.signum(feedback) * ArmConstants.stowedkS * 0.9;
+        }
+
+        setVoltage(feedforward + feedback);
+
 
     }
 
@@ -166,12 +189,12 @@ public class Arm extends SubsystemBase {
 
     public double calculateFF(double currentPositionRad, double setpointVelocityRadPerSec,
             double setpointAccelerationRadPerSecSquared) {
-        return feedForwardController.calculate(currentPositionRad, setpointVelocityRadPerSec, accelerationSetpoint);
+        return feedforwaredStowed.calculate(currentPositionRad, setpointVelocityRadPerSec, accelerationSetpoint);
 
     }
 
     public double calculatePID(double currentPositionRad) {
-        return profiledFeedbackController.calculate(currentPositionRad);
+        return feedbackStowed.calculate(currentPositionRad);
     }
 
     // runs every 0.02 sec
@@ -188,15 +211,15 @@ public class Arm extends SubsystemBase {
         leftCurrentLog.set(data.leftCurrentAmps);
         rightCurrentLog.set(data.rightCurrentAmps);
 
-        goalLog.set(Units.radiansToDegrees(profiledFeedbackController.getGoal().position));
-        setpointPositionLog.set(Units.radiansToDegrees(profiledFeedbackController.getSetpoint().position));
-        setpointVelocityLog.set(Units.radiansToDegrees(profiledFeedbackController.getSetpoint().velocity));
+        goalLog.set(Units.radiansToDegrees(feedbackStowed.getGoal().position));
+        setpointPositionLog.set(Units.radiansToDegrees(feedbackStowed.getSetpoint().position));
+        setpointVelocityLog.set(Units.radiansToDegrees(feedbackStowed.getSetpoint().velocity));
         setpointAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint));
 
         errorPositionLog
-                .set(Units.radiansToDegrees(profiledFeedbackController.getSetpoint().position - data.positionRad));
+                .set(Units.radiansToDegrees(feedbackStowed.getSetpoint().position - data.positionRad));
         errorVelocityLog.set(
-                Units.radiansToDegrees(profiledFeedbackController.getSetpoint().velocity - data.velocityRadPerSec));
+                Units.radiansToDegrees(feedbackStowed.getSetpoint().velocity - data.velocityRadPerSec));
         errorAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint - data.accelerationRadPerSecSquared));
 
         // mechanismArm.setAngle();

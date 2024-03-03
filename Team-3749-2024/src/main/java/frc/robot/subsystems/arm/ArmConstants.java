@@ -35,18 +35,22 @@ public final class ArmConstants {
         private static final double simkV = 6.616; // max volts - kG / max velocity
         private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-        private static final double realkS = 0.12;
-        private static final double realkG = 0.247; //0.37
-        private static final double realkV = 3.9;
-        private static final double realkA = 0.165;
-
-        public static final double kS = Robot.isReal() ? realkS : simkS;
-        public static final double kG = Robot.isReal() ? realkG : simkG;
-        public static final double kV = Robot.isReal() ? realkV : simkV;
-        public static final double kA = Robot.isReal() ? realkA : simkA;
-        public static final double deployedKG = 0.57;
-        public static final double deployedKP = 1.32;
-
+        private static final double realStowedkS = 0.12;
+        private static final double realStowedkG = 0.247; //0.37
+        private static final double realStowedkV = 3.9;
+        private static final double realStowedkA = 0.165;
+        
+        public static final double stowedkS = Robot.isReal() ? realStowedkS : simkS;
+        public static final double stowedkG = Robot.isReal() ? realStowedkG : simkG;
+        public static final double stowedkV = Robot.isReal() ? realStowedkV : simkV;
+        public static final double stowedkA = Robot.isReal() ? realStowedkA : simkA;
+        
+        
+        private static final double realDeployedkS = 0.12;
+        private static final double realDeployedkG = 0.247; //0.37
+        private static final double realDeployedkV = 3.9;
+        private static final double realDeployedkA = 0.165;
+                
         // private static final Constraints simConstraints = new Constraints(2.36,
         // 71.58);
         private static final Constraints simConstraints = new Constraints(
