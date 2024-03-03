@@ -427,9 +427,6 @@ public class Constants {
                 1.37,
                 4.51,
                 Rotation2d.fromDegrees(-22.62));
-        // will eventally be easier to change values from here than poke around through
-        // files
-
     }
 
     public static final class AutoConstants {
