@@ -1,8 +1,12 @@
 package frc.robot.subsystems.arm;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -19,63 +23,59 @@ public class ArmSparkMax implements ArmIO {
     private CANSparkMax leftMotor = new CANSparkMax(ArmConstants.leftID, CANSparkMax.MotorType.kBrushless);
     private CANSparkMax rightMotor = new CANSparkMax(ArmConstants.rightID, CANSparkMax.MotorType.kBrushless);
 
-    private RelativeEncoder leftEncoder = leftMotor.getEncoder();
-    private RelativeEncoder rightEncoder = rightMotor.getEncoder();
-
-    private final DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(ArmConstants.encoderID);
+    // private RelativeEncoder leftEncoder = leftMotor.getEncoder();
+    private AbsoluteEncoder absoluteEncoder;
 
     private double appliedVolts = 0;
     private double previousVelocity = 0;
 
     public ArmSparkMax() {
-        System.out.println("[Init] Creating ExampleIOSim");
-        // absoluteEncoder.setPositionOffset(ArmConstants.encoderOffsetRad / (2 * Math.PI));
-        // absoluteEncoder.setDistancePerRotation(Math.PI * 2);
-        
-        leftEncoder.setVelocityConversionFactor(1 / ArmConstants.gearRatio * Units.rotationsPerMinuteToRadiansPerSecond(1));
-        leftEncoder.setPositionConversionFactor(1 / ArmConstants.gearRatio * Units.rotationsToRadians(1));
+        System.out.println("[Init] Creating Arm Spark Max");
+        absoluteEncoder = leftMotor.getAbsoluteEncoder();
+        absoluteEncoder.setPositionConversionFactor(Math.PI * 2 / ArmConstants.sprocketRatio);
+        absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / ArmConstants.sprocketRatio);
+        absoluteEncoder.setZeroOffset(ArmConstants.encoderOffsetRad);
 
-        rightEncoder.setVelocityConversionFactor(1 / ArmConstants.gearRatio * Units.rotationsPerMinuteToRadiansPerSecond(1));
-        rightEncoder.setPositionConversionFactor(1 / ArmConstants.gearRatio * Units.rotationsToRadians(1));
-
+        // leftEncoder.setPositionConversionFactor(Math.PI * 2 / ArmConstants.gearRatio);
 
         rightMotor.setInverted(true);
-
         rightMotor.setSmartCurrentLimit(40);
         leftMotor.setSmartCurrentLimit(40);
         rightMotor.setIdleMode(IdleMode.kCoast);
         leftMotor.setIdleMode(IdleMode.kCoast);
 
-
     }
-
+    // the arm will break if it ever goes past 120 degrees... should fix that lmao ;-;
+    // technically would also break if we go past -60 but im much less concerned about that. 
     private double getAbsolutePositionRad() {
-        return (absoluteEncoder.getAbsolutePosition() - absoluteEncoder.getPositionOffset())
-                * absoluteEncoder.getDistancePerRotation();
+        double pos = absoluteEncoder.getPosition();
+
+        if (pos > 2.0/3.0 *Math.PI ){
+            pos -= absoluteEncoder.getPositionConversionFactor();
+        }
+        else if (pos < -1/3 * Math.PI){
+            pos +=  absoluteEncoder.getPositionConversionFactor();
+        }
+
+        return pos ;
     }
 
-    private double getRelativePositionRad(){
-        SmartDashboard.putNumber("Left", leftEncoder.getPosition());
-        SmartDashboard.putNumber("right", rightEncoder.getPosition());
-        
-        return (rightEncoder.getPosition() + leftEncoder.getPosition())/2;
+    private double getAbsoluteVelocityRadPerSec() {
+        return absoluteEncoder.getVelocity();
     }
-
-    private double getVelocityRadPerSec(){
-        return (leftEncoder.getVelocity()+rightEncoder.getVelocity())/2;
-    }
-
 
     @Override
     public void updateData(ArmData data) {
+        SmartDashboard.putNumber("abs encoder", absoluteEncoder.getPosition());
+
         previousVelocity = data.velocityRadPerSec;
         // distance traveled + Rad/Time * Time * diameter
-        data.positionRad = getRelativePositionRad();
+        data.positionRad = getAbsolutePositionRad();
 
-        data.velocityRadPerSec = getVelocityRadPerSec();
+        data.velocityRadPerSec = getAbsoluteVelocityRadPerSec();
 
-        data.accelerationRadPerSecSquared = (getVelocityRadPerSec() - previousVelocity) / 0.02;
-       
+        data.accelerationRadPerSecSquared = (data.velocityRadPerSec - previousVelocity) / 0.02;
+
         data.appliedVolts = appliedVolts;
 
         data.leftCurrentAmps = Math.abs(leftMotor.getOutputCurrent());
@@ -95,12 +95,13 @@ public class ArmSparkMax implements ArmIO {
     }
 
     @Override
-    public void setBreakMode(){
+    public void setBreakMode() {
         leftMotor.setIdleMode(IdleMode.kBrake);
         rightMotor.setIdleMode(IdleMode.kBrake);
     }
+
     @Override
-    public void setCoastMode(){
+    public void setCoastMode() {
         leftMotor.setIdleMode(IdleMode.kCoast);
         rightMotor.setIdleMode(IdleMode.kCoast);
 

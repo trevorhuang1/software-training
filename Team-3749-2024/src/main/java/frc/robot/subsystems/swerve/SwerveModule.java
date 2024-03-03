@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
@@ -91,8 +92,10 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState state) {
+        if (DriverStation.isAutonomous()){
 
-        state = SwerveModuleState.optimize(state, getState().angle);
+            state = SwerveModuleState.optimize(state, getState().angle);
+        }
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             state.speedMetersPerSecond = 0;
         }
