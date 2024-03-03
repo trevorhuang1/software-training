@@ -26,7 +26,6 @@ public class SwerveTeleop extends Command {
 
   private final Swerve swerve;
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction;
-  private final SlewRateLimiter driveLimiter, turningLimiter;
 
   public SwerveTeleop(
       Supplier<Double> xSpdFunction,
@@ -37,10 +36,7 @@ public class SwerveTeleop extends Command {
     this.ySpdFunction = ySpdFunction;
     this.xTurningSpdFunction = xTurningSpdFunction;
 
-    // This should be max Acceleration! I think.
-    this.driveLimiter = new SlewRateLimiter(DriveConstants.maxAccelerationMetersPerSecondSquared);
-    this.turningLimiter = new SlewRateLimiter(
-        DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);
+  
     addRequirements(swerve);
   }
 

@@ -1,7 +1,9 @@
 package frc.robot.utils;
 
+import org.photonvision.estimation.RotTrlTransform3d;
+
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -90,7 +92,9 @@ public class JoystickIO {
         // ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(1, 0, 0),
         // Robot.swerve.getRotation2d())),
         // Robot.swerve));
-        Robot.pilot.povDown().onTrue(Commands.runOnce(() -> Robot.swerve.resetOdometry(new Pose2d())));
+
+        Robot.pilot.povDown().onTrue(Commands.runOnce(
+                () -> Robot.swerve.resetOdometry(new Pose2d(new Translation2d(13.95,5.55), Robot.swerve.getRotation2d()))));
     }
 
     public void simBindings() {
