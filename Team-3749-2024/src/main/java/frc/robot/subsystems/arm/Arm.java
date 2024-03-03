@@ -163,7 +163,15 @@ public class Arm extends SubsystemBase {
             feedforward = Math.signum(feedback) * ArmConstants.stowedkS * 0.9;
         }
 
-        setVoltage(feedforward + feedback);
+        // setVoltage(feedforward + feedback);
+
+        double volts = 0;
+        volts += kSData.get();
+        volts += Math.cos(getPositionRad()) * kGData.get();
+        volts += setpoint.velocity * kVData.get();
+        volts += accelerationSetpoint * kAData.get();
+        volts += (setpoint.position - getPositionRad()) * kPData.get();
+        setVoltage(volts);
 
     }
 
