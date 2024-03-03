@@ -94,7 +94,7 @@ public class JoystickIO {
         // Robot.swerve));
 
         Robot.pilot.povDown().onTrue(Commands.runOnce(
-                () -> Robot.swerve.resetOdometry(new Pose2d(new Translation2d(), Robot.swerve.getRotation2d()))));
+                () -> Robot.swerve.resetOdometry(new Pose2d(new Translation2d(13.95,5.55), Robot.swerve.getRotation2d()))));
     }
 
     public void simBindings() {
