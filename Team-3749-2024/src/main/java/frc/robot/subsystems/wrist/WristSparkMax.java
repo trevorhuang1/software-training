@@ -67,7 +67,7 @@ private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorTy
     @Override
     public void setVoltage(double volts) {
         appliedVolts = MathUtil.clamp(volts, -12, 12);
-        wristMotor.setVoltage(appliedVolts);
+        // wristMotor.setVoltage(appliedVolts);
     }
 
 }
