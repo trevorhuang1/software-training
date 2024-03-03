@@ -449,13 +449,13 @@ public class Constants {
 
                 // +X is forward, +Y is right, +Z is up
                 public static final Transform3d ROBOT_TO_LEFT_CAM = new Transform3d(
-                                new Translation3d(Units.inchesToMeters(-10.381), Units.inchesToMeters(-10.172),
+                                new Translation3d(Units.inchesToMeters(-10.381), Units.inchesToMeters(10.172),
                                                 Units.inchesToMeters(10.691)),
                                 new Rotation3d(0, 45, 128.845));
                 public static final Transform3d LEFT_CAM_TO_ROBOT = ROBOT_TO_LEFT_CAM.inverse();
 
                 public static final Transform3d ROBOT_TO_RIGHT_CAM = new Transform3d(
-                                new Translation3d(Units.inchesToMeters(-10.381), Units.inchesToMeters(10.172),
+                                new Translation3d(Units.inchesToMeters(-10.381), Units.inchesToMeters(+10.172),
                                                 Units.inchesToMeters(10.691)),
                                 new Rotation3d(0, 45, 231.155));
                 public static final Transform3d RIGHT_CAM_TO_ROBOT = ROBOT_TO_RIGHT_CAM.inverse();
@@ -463,8 +463,6 @@ public class Constants {
                 public static final Transform3d SIM_LEFT_ROBOT_TO_CAM = new Transform3d(1, 0, 0, new Rotation3d());
                 public static final Transform3d SIM_RIGHT_ROBOT_TO_CAM = new Transform3d(1, 0, 0, new Rotation3d());
 
-                public static final int REFLECTIVE_PIPELINE_INDEX = 0;
-                public static final int APRILTAG_PIPELINE_INDEX = 1;
 
                 public static final double CAM_HEIGHT = Units.inchesToMeters(20); // meters
                 public static final double SIM_CAM_HEIGHT = 1;
