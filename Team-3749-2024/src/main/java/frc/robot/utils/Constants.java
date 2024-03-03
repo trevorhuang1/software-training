@@ -108,7 +108,7 @@ public class Constants {
 
     public static final class ShooterConstants {
 
-        public static final int shooterBottomId = 19;
+        public static final int shooterBottomId = 20;
         public static final int shooterTopId = 18;
 
         public static final double shooterVelocityRadPerSec = 100;
