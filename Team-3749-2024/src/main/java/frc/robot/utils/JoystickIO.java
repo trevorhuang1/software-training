@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -7,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.Robot;
+import frc.robot.commands.swerve.TeleopJoystickRelative;
 import frc.robot.commands.GroundIntake;
 import frc.robot.commands.arm.Climb;
 import frc.robot.commands.arm.GetConstraints;
@@ -19,6 +21,7 @@ import frc.robot.subsystems.arm.ShootKinematics;
 // import frc.robot.commands.swerve.Teleop;
 // import frc.robot.commands.swerve.TeleopJoystickRelative;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.Robot;
 
 /**
  * Util class for button bindings
@@ -27,12 +30,8 @@ import frc.robot.subsystems.swerve.Swerve;
  */
 public class JoystickIO {
 
-    private Xbox pilot;
-    private Xbox operator;
-
     public JoystickIO() {
-        pilot = Robot.pilot;
-        operator = Robot.operator;
+
     }
 
     /**
@@ -64,41 +63,38 @@ public class JoystickIO {
     }
 
     public void pilotBindings() {
-        // shooter
-        pilot.rightTrigger().whileTrue(Commands.run(() -> Robot.shooter.setShooterVelocity(400.0),
-                Robot.shooter));
-        pilot.rightTrigger().onFalse(Commands.runOnce(() -> Robot.shooter.setVoltage(0, 0),
-                Robot.shooter));
 
         // intake
-        pilot.leftTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(60),
+        Robot.pilot.leftTrigger().whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(60),
                 Robot.intake));
-        pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
+        Robot.pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.setVoltage(0),
                 Robot.intake));
 
-        pilot.leftBumper().whileTrue(new GroundIntake());
+        Robot.pilot.leftBumper().whileTrue(new GroundIntake());
 
-        pilot.x().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(0))));
-        // pilot.b().onTrue(Commands.runOnce(() ->
+        Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(0))));
+        // Robot.pilot.b().onTrue(Commands.runOnce(() ->
         // Robot.arm.setGoal(Units.degreesToRadians(6))));
 
-        pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(40))));
-        pilot.back().whileTrue(new Climb());
+        Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(40))));
+        Robot.pilot.back().whileTrue(new Climb());
 
         // gyro
-        pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
+        Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
         // // 4bar
 
-        pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalGround()));
-        pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalStow()));
+        Robot.pilot.rightBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalGround()));
+        Robot.pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.wrist.setGoalStow()));
         // operator.a().whileTrue(Commands.run(() -> Robot.swerve.setChassisSpeeds(
-        //         ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(1, 0, 0), Robot.swerve.getRotation2d())),
-        //         Robot.swerve));
+        // ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(1, 0, 0),
+        // Robot.swerve.getRotation2d())),
+        // Robot.swerve));
+        Robot.pilot.povDown().onTrue(Commands.runOnce(() -> Robot.swerve.resetOdometry(new Pose2d())));
     }
 
     public void simBindings() {
-        // pilot.aWhileHeld(new MoveToPose(new Pose2d(5, 5, new Rotation2d())));
+        // Robot.pilot.aWhileHeld(new MoveToPose(new Pose2d(5, 5, new Rotation2d())));
     }
 
     /**
@@ -108,8 +104,9 @@ public class JoystickIO {
 
         Robot.swerve.setDefaultCommand(
                 new SwerveTeleop(
-                        () -> -pilot.getLeftX(),
-                        () -> -pilot.getLeftY(),
-                        () -> -pilot.getRightX()));
+                        () -> -Robot.pilot.getLeftX(),
+                        () -> -Robot.pilot.getLeftY(),
+                        () -> -Robot.pilot.getRightX()));
     }
+
 }

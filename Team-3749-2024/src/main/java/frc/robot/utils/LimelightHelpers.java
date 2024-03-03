@@ -27,7 +27,26 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LimelightHelpers {
-
+    public static class LimelightPose{
+        public Pose2d pose;
+        public double timestamp;
+        public LimelightPose(Pose2d pose, double timestamp){
+            this.pose = pose;
+            this.timestamp = timestamp;
+        }
+        public void setPose(Pose2d pose){
+            this.pose = pose;
+        }
+        public void setTimestamp(double timestamp){
+            this.timestamp = timestamp;
+        }
+        public Pose2d getPose(){
+            return pose;
+        }
+        public double getTimestamp(){
+            return timestamp;
+        }
+    }
     public static class LimelightTarget_Retro {
 
         @JsonProperty("t6c_ts")

@@ -89,8 +89,8 @@ public class ArmSparkMax implements ArmIO {
     @Override
     public void setVoltage(double volts) {
         appliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
-        leftMotor.setVoltage(appliedVolts);
-        rightMotor.setVoltage(appliedVolts);
+        // leftMotor.setVoltage(appliedVolts);
+        // rightMotor.setVoltage(appliedVolts);
 
     }
 
