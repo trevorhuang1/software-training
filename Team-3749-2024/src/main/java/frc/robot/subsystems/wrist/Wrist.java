@@ -1,14 +1,8 @@
 package frc.robot.subsystems.wrist;
 
 import java.util.HashMap;
-import java.util.function.DoubleSupplier;
-
-import org.opencv.core.RotatedRect;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -18,23 +12,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.wrist.WristIO.WristData;
-import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
-import frc.robot.utils.SmartData;
 import frc.robot.utils.UtilityFunctions;
-import frc.robot.utils.Constants.WristConstants;
 
 public class Wrist extends SubsystemBase {
     // hello test
     private WristIO wristIO;
     private WristData data = new WristData();
 
-    private ProfiledPIDController wristController = new ProfiledPIDController(Constants.WristConstants.PID.kP,
-            Constants.WristConstants.PID.kI, Constants.WristConstants.PID.kD,
-            Constants.WristConstants.trapezoidConstraint);
+    private ProfiledPIDController wristController = new ProfiledPIDController(WristConstants.PID.kP,
+            WristConstants.PID.kI, WristConstants.PID.kD,
+            WristConstants.trapezoidConstraint);
 
-    private ArmFeedforward wristFF = new ArmFeedforward(Constants.WristConstants.simkS, Constants.WristConstants.simkG,
-            Constants.WristConstants.simkV);
+    private ArmFeedforward wristFF = new ArmFeedforward(WristConstants.simkS, WristConstants.simkG,
+            WristConstants.simkV);
 
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean, Double>();
 
@@ -70,8 +61,8 @@ public class Wrist extends SubsystemBase {
             0.0);
 
     public Wrist() {
-        setpointToggle.put(true, Constants.WristConstants.groundGoalRad);
-        setpointToggle.put(false, Constants.WristConstants.stowGoalRad);
+        setpointToggle.put(true, WristConstants.groundGoalRad);
+        setpointToggle.put(false, WristConstants.stowGoalRad);
         wristIO = new WristSparkMax();
         if (Robot.isSimulation()) {
             wristIO = new WristSim();
@@ -90,7 +81,6 @@ public class Wrist extends SubsystemBase {
         wristController.setGoal(setpointToggle.get(true));
         isDeployed = true;
     }
-
 
     public void setGoalStow() {
         System.out.println("stow");
@@ -124,7 +114,7 @@ public class Wrist extends SubsystemBase {
 
     public void moveWristToAngle() {
         double pidGain = wristController.calculate(data.positionRad);
-        
+
         State setpoint = Robot.wrist.getWristSetpoint();
         double velocityRadPerSec = setpoint.velocity;
         double positionRad = setpoint.position;

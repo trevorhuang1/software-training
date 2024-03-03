@@ -3,7 +3,7 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.robot.utils.Constants.Sim;
+import frc.robot.utils.MiscConstants.Sim;
 
 public class IntakeSim implements IntakeIO {
 

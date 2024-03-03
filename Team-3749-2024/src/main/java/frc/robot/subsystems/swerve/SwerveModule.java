@@ -4,12 +4,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
+import frc.robot.subsystems.swerve.SwerveConstants.ModuleConstants;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.ShuffleData;
-import frc.robot.utils.Constants.ModuleConstants;
 
 public class SwerveModule {
 
@@ -161,17 +158,17 @@ public class SwerveModule {
     public void periodic() {
         moduleIO.updateData(moduleData);
 
-        // driveSpeed.set(moduleData.driveVelocityMPerSec);
-        // drivePosition.set(moduleData.drivePositionM);
-        // driveTemp.set(moduleData.driveTempCelcius);
-        // driveVolts.set(moduleData.driveAppliedVolts);
-        // driveCurrent.set(moduleData.driveCurrentAmps);
+        driveSpeed.set(moduleData.driveVelocityMPerSec);
+        drivePosition.set(moduleData.drivePositionM);
+        driveTemp.set(moduleData.driveTempCelcius);
+        driveVolts.set(moduleData.driveAppliedVolts);
+        driveCurrent.set(moduleData.driveCurrentAmps);
 
-        // turningSpeed.set(moduleData.turnVelocityRadPerSec);
-        // turningPosition.set(moduleData.turnAbsolutePositionRad);
-        // turningTemp.set(moduleData.turnTempCelcius);
-        // turningVolts.set(moduleData.turnAppliedVolts);
-        // turningCurrent.set(moduleData.turnCurrentAmps);
+        turningSpeed.set(moduleData.turnVelocityRadPerSec);
+        turningPosition.set(moduleData.turnAbsolutePositionRad);
+        turningTemp.set(moduleData.turnTempCelcius);
+        turningVolts.set(moduleData.turnAppliedVolts);
+        turningCurrent.set(moduleData.turnCurrentAmps);
 
 
 

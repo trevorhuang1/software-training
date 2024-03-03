@@ -4,28 +4,19 @@
 
 package frc.robot.subsystems.swerve;
 
-import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.*;
-
-import java.util.Timer;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
+import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
 import frc.robot.subsystems.swerve.real.*;
 import frc.robot.subsystems.swerve.sim.*;
 import frc.robot.utils.*;
-import frc.robot.utils.Constants.*;
 
 /***
  * @author Noah Simon
@@ -111,7 +102,7 @@ public class Swerve extends SubsystemBase {
     }
 
     swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(
-        Constants.DriveConstants.driveKinematics,
+        DriveConstants.driveKinematics,
         new Rotation2d(0),
         new SwerveModulePosition[] {
             modules[0].getPosition(),
@@ -134,7 +125,7 @@ public class Swerve extends SubsystemBase {
     // take shortest path to destination
     SwerveDriveKinematics.desaturateWheelSpeeds(
         moduleStates,
-        Constants.DriveConstants.maxSpeedMetersPerSecond);
+        DriveConstants.maxSpeedMetersPerSecond);
     // 6. Output each module states to wheels
 
     setModuleStates(moduleStates);

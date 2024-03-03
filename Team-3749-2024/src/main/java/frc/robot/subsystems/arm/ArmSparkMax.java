@@ -15,8 +15,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.utils.Constants.ArmConstants;
-import frc.robot.utils.Constants.Sim;
+import frc.robot.utils.MiscConstants.Sim;
 
 public class ArmSparkMax implements ArmIO {
 

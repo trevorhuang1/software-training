@@ -2,11 +2,9 @@ package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterData;
-import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 
 public class Shooter extends SubsystemBase {
@@ -15,23 +13,23 @@ public class Shooter extends SubsystemBase {
   private ShooterData data = new ShooterData();
 
   private PIDController bottomFeedback = new PIDController(
-      Constants.ShooterConstants.shooterBottomPID.kP,
-      Constants.ShooterConstants.shooterBottomPID.kI,
-      Constants.ShooterConstants.shooterBottomPID.kD);
+      ShooterConstants.shooterBottomPID.kP,
+      ShooterConstants.shooterBottomPID.kI,
+      ShooterConstants.shooterBottomPID.kD);
 
   private PIDController topFeedback = new PIDController(
-      Constants.ShooterConstants.shooterTopPID.kP,
-      Constants.ShooterConstants.shooterTopPID.kI,
-      Constants.ShooterConstants.shooterTopPID.kD);
+      ShooterConstants.shooterTopPID.kP,
+      ShooterConstants.shooterTopPID.kI,
+      ShooterConstants.shooterTopPID.kD);
 
   private SimpleMotorFeedforward topShooterFF = new SimpleMotorFeedforward(
       0,
-      Constants.ShooterConstants.topkV,
+      ShooterConstants.topkV,
       0);
 
   private SimpleMotorFeedforward bottomShooterFF = new SimpleMotorFeedforward(
       0,
-      Constants.ShooterConstants.bottomkV,
+      ShooterConstants.bottomkV,
       0);
 
   private ShuffleData<Double> topShooterVelocityLog = new ShuffleData<Double>(this.getName(), "top shooter velocity",

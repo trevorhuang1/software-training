@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
-import frc.robot.utils.Constants.WristConstants;
 
 /*
  * note from jonathan:

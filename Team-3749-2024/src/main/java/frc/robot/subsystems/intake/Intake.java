@@ -2,11 +2,9 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.intake.IntakeIO.IntakeData;
-import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 
 public class Intake extends SubsystemBase {
@@ -15,13 +13,13 @@ public class Intake extends SubsystemBase {
     private IntakeData data = new IntakeData();
 
     private PIDController feedback = new PIDController(
-            Constants.IntakeConstants.intakePID.kP,
-            Constants.IntakeConstants.intakePID.kI,
-            Constants.IntakeConstants.intakePID.kD);
+            IntakeConstants.intakePID.kP,
+            IntakeConstants.intakePID.kI,
+            IntakeConstants.intakePID.kD);
 
     private SimpleMotorFeedforward intakeFF = new SimpleMotorFeedforward(
             0,
-            Constants.IntakeConstants.kV,
+            IntakeConstants.kV,
             0);
 
     private ShuffleData<Double> IntakeVelocityLog = new ShuffleData<Double>(this.getName(), " intake velocity", 0.0);

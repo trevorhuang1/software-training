@@ -19,8 +19,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
-import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.DriveConstants;
+import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
+import frc.robot.utils.AutoConstants;
+import frc.robot.utils.MiscConstants;
 
 public class AutoUtils {
   private static Swerve swerve = Robot.swerve;
@@ -38,7 +39,7 @@ public class AutoUtils {
         },
         swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
-        Constants.AutoConstants.cfgHolonomicFollower,
+        AutoConstants.cfgHolonomicFollower,
         () -> {
           // get alliance
           if (DriverStation.getAlliance().isEmpty())
@@ -87,7 +88,7 @@ public class AutoUtils {
         path,
         swerve::getPose,
         swerve::getChassisSpeeds, swerve::setChassisSpeeds,
-        Constants.AutoConstants.cfgHolonomicFollower,
+        AutoConstants.cfgHolonomicFollower,
         () -> {
           if (DriverStation.getAlliance().isEmpty())
             return true;

@@ -12,9 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.utils.Constants;
+import frc.robot.utils.MiscConstants;
 import frc.robot.utils.ShuffleData;
-import frc.robot.utils.Constants.ArmConstants;
 
 public class Climb extends Command {
 
