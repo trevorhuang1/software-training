@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.superstructure;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,19 +9,12 @@ import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.SuperStructureStates;
 
-public class GroundIntake extends Command {
+public class GroundIntake implements SuperStructureCommandInterface {
 
-    private boolean stowedWrist;
-    private boolean stowedArm;
+    private boolean stowedWrist = false;
+    private boolean stowedArm = false;
 
     public GroundIntake() {
-        addRequirements(Robot.wrist, Robot.arm, Robot.intake);
-    }
-
-    @Override
-    public void initialize() {
-        Robot.state = SuperStructureStates.GROUND_INTAKE;
-
     }
 
     @Override
@@ -44,23 +37,19 @@ public class GroundIntake extends Command {
             Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
 
         }
-
+        
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
        
     }
-
+    
     @Override
-    public void end(boolean interupted) {
+    public void reset(){
+        stowedArm = false;
+        stowedWrist = false;
         Robot.intake.stop();
-        Robot.wrist.setGoal(WristStates.STOW);
-        Robot.state = SuperStructureStates.STOW;
     }
 
-    @Override
-    public boolean isFinished() {
-        return false;
-
-    }
+ 
 
 }

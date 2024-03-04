@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.swerve.TeleopJoystickRelative;
-import frc.robot.commands.GroundIntake;
 import frc.robot.commands.arm.Climb;
 import frc.robot.commands.arm.GetConstraints;
 import frc.robot.commands.arm.MoveArmToGoal;
+import frc.robot.commands.superstructure.GroundIntake;
 // import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.SwerveTeleop;
 import frc.robot.commands.wrist.MoveWristToGoal;
@@ -87,10 +87,17 @@ public class JoystickIO {
             Robot.intake.stop();
         }, Robot.shooter));
 
-        Robot.pilot.a().whileTrue(new GroundIntake());
-        // Robot.pilot.x().onTrue(Commands.runOnce(() -> SetRobotStates.setAmp(), Robot.wrist, Robot.arm));
-        // Robot.pilot.y().onTrue(Commands.runOnce(() -> SetRobotStates.setClimb(), Robot.wrist, Robot.arm));
+        // Robot.pilot.x().onTrue(Commands.runOnce(() -> SetRobotStates.setAmp(),
+        // Robot.wrist, Robot.arm));
+        Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE, Robot.wrist,
+                Robot.arm, Robot.intake));
+        Robot.pilot.y().onFalse(
+                Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm, Robot.intake));
 
+        Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP, Robot.wrist,
+                Robot.arm, Robot.intake, Robot.shooter));
+        Robot.pilot.x().onFalse(
+                Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm, Robot.intake));
         // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
@@ -107,8 +114,6 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        Robot.arm.setDefaultCommand(new MoveArmToGoal());
-        Robot.wrist.setDefaultCommand(new MoveWristToGoal());
 
         Robot.swerve.setDefaultCommand(
                 new SwerveTeleop(

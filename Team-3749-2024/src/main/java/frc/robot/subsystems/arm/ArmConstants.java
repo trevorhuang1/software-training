@@ -21,7 +21,7 @@ public final class ArmConstants {
         public static final double stowPositionRad = Units.degreesToRadians(1);
         public static final double climbPositionRad = Units.degreesToRadians(90);
         public static final double subWooferPositionRad = Units.degreesToRadians(20);
-        public static final double ampPositionRad = Units.degreesToRadians(25);
+        public static final double ampPositionRad = Units.degreesToRadians(50);
 
         // Control - PID, FF, and Trapezoidal Constraints
         private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0

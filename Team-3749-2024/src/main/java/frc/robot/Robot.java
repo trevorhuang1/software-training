@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.commands.superstructure.SuperStructureCommands;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
 
@@ -37,7 +38,7 @@ public class Robot extends TimedRobot {
   public static final Shooter shooter = new Shooter();
   public static final Limelight limelight = (new Limelight());
   public static SuperStructureStates state = SuperStructureStates.STOW;
-
+  public static SuperStructureCommands centralCommand = new SuperStructureCommands();
   public static Timer timer = new Timer();
 
 
@@ -53,6 +54,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    centralCommand.execute();
+
   }
 
   @Override
@@ -87,7 +90,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+  }
 
   @Override
   public void teleopExit() {}

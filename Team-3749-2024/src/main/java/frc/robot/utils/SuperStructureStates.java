@@ -10,8 +10,8 @@ public enum SuperStructureStates{
     SHOOT(WristStates.FULL_DEPLOYED, ArmStates.SHOOT),
     CLIMB(WristStates.STOW, ArmStates.CLIMB);
 
-    WristStates wristState;
-    ArmStates armState;
+    public WristStates wristState;
+    public ArmStates armState;
 
     private SuperStructureStates(WristStates wristState, ArmStates armState){
         this.wristState = wristState;

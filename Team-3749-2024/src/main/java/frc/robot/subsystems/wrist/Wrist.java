@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.ShuffleData;
@@ -71,7 +72,6 @@ public class Wrist extends SubsystemBase {
 
     public void setGoal(WristStates state) {
         if (state == WristStates.GROUND_INTAKE) {
-            System.out.println("ground goal");
             wristController.setGoal(WristConstants.groundGoalRad);
         }
         if (state == WristStates.STOW) {
@@ -107,6 +107,16 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> kVData = new ShuffleData(this.getName(), "kVdata", 0.0);
 
     public void moveWristToGoal() {
+
+        if ((getState() == WristStates.FULL_DEPLOYED || getState() == WristStates.GROUND_INTAKE)
+                && Robot.arm.getState() != ArmStates.STOW
+                && (Math.abs(Robot.arm.getVelocityRadPerSec()) > 0.05)) {
+            setGoal(WristStates.FULL_DEPLOYED);
+            Robot.wrist.setVoltage(1);
+            return;
+
+        }
+
         double pidGain = wristController.calculate(data.positionRad);
 
         State setpoint = Robot.wrist.getWristSetpoint();
@@ -172,7 +182,7 @@ public class Wrist extends SubsystemBase {
     }
 
     private boolean atGoal() {
-        return (Math.abs(data.positionRad - getWristGoal().position) < 0.1);
+        return (Math.abs(data.positionRad - getWristGoal().position) < 0.175);
     }
 
     private void updateState() {

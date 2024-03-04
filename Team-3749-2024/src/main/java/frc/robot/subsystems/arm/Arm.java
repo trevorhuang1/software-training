@@ -99,7 +99,7 @@ public class Arm extends SubsystemBase {
 
     public void setGoal(ArmStates state) {
         if (state == ArmStates.AMP) {
-            feedback.setGoal(Units.degreesToRadians(25));
+            feedback.setGoal(ArmConstants.ampPositionRad);
         }
         if (state == ArmStates.STOW) {
             feedback.setGoal(ArmConstants.stowPositionRad);
@@ -146,17 +146,17 @@ public class Arm extends SubsystemBase {
         }
     }
 
-    // private ShuffleData<Double> kPData = new ShuffleData(this.getName(),
-    // "kpdata", 0.0);
-    // private ShuffleData<Double> kVData = new ShuffleData(this.getName(),
-    // "kVdata", 0.0);
+    private ShuffleData<Double> kPData = new ShuffleData(this.getName(),
+            "kpdata", 0.0);
+    private ShuffleData<Double> kVData = new ShuffleData(this.getName(),
+            "kVdata", 0.0);
 
-    // private ShuffleData<Double> kAData = new ShuffleData(this.getName(),
-    // "kAdata", 0.0);
-    // private ShuffleData<Double> kSData = new ShuffleData(this.getName(),
-    // "kSdata", 0.0);
-    // private ShuffleData<Double> kGData = new ShuffleData(this.getName(),
-    // "kGdata", 0.0);
+    private ShuffleData<Double> kAData = new ShuffleData(this.getName(),
+            "kAdata", 0.0);
+    private ShuffleData<Double> kSData = new ShuffleData(this.getName(),
+            "kSdata", 0.0);
+    private ShuffleData<Double> kGData = new ShuffleData(this.getName(),
+            "kGdata", 0.0);
     // private ShuffleData<Double> kDData = new ShuffleData(this.getName(),
     // "kDdata", 0.0);
 
@@ -180,7 +180,7 @@ public class Arm extends SubsystemBase {
             // have the kS help the PID when stationary
             feedforward = Math.signum(feedback) * ArmConstants.stowedkS * 0.9;
         }
-
+        
         setVoltage(feedforward + feedback);
 
         // double volts = 0;
@@ -255,7 +255,6 @@ public class Arm extends SubsystemBase {
                 deployedModeLog.set(true);
             }
         }
-
 
         positionLog.set(Units.radiansToDegrees(getPositionRad()));
         velocityLog.set(Units.radiansToDegrees(data.velocityRadPerSec));
