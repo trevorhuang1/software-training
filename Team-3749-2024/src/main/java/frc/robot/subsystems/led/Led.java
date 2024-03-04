@@ -23,6 +23,7 @@ public class Led extends SubsystemBase {
        LEDs.setLength(LEDBuffer.getLength());
        LEDs.setData(LEDBuffer);
        LEDs.start();
+       setLEDPattern(teamColorLED());
     }
 
     private LEDPattern teamColorLED()
