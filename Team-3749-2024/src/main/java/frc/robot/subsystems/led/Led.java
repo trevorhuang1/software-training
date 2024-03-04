@@ -16,6 +16,8 @@ public class Led extends SubsystemBase {
     private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
     private LEDPattern currentPattern = LEDPattern.WHITE;
     private int hue = 0;
+    private boolean blink = true;
+    private int blinkCooldown = 0;
 
     public Led()
     {
@@ -57,6 +59,23 @@ public class Led extends SubsystemBase {
         }
     }
 
+    private void blinkLED()
+    {
+        //for the sake of not triggering peoples epilispy:
+        blinkCooldown++;
+        if(blinkCooldown == 50) // 50*0.02=1 second between color changes
+        {
+            blink=!blink;
+            blinkCooldown = 0;
+        }
+        if(blink)
+        {
+           setLEDOneColorRGB(0,255,0); 
+           return;
+        }
+        setLEDOneColorRGB(0,0,255);
+    }
+
     public void setLEDPattern(LEDPattern pattern)
     {
         this.currentPattern = pattern;
@@ -90,6 +109,10 @@ public class Led extends SubsystemBase {
 
             case NOTHING:
                 setLEDOneColorRGB(0, 0, 0);
+            break;
+
+            case BLINK:
+                blinkLED();
             break;
 
             default:
