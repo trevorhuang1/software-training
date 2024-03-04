@@ -1,5 +1,6 @@
 package frc.robot.commands.superstructure;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -47,6 +48,9 @@ public class ScoreAmp implements SuperStructureCommandInterface {
                 || (fullDeployedWrist)) {
             // System.out.println("arm to amp");
             Robot.arm.setGoal(ArmStates.AMP);
+            if (Robot.arm.getPositionRad()> Units.degreesToRadians(5)){
+                Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+            }
 
         }
 

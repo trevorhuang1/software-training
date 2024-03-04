@@ -320,7 +320,7 @@ public class Limelight extends SubsystemBase {
     public void periodic() {
         logging();
 
-        PhotonPipelineResult latestResultLeft = Robot.limelight.getLatestResult(Cam.LEFT);
+        PhotonPipelineResult latestResultLeft = getLatestResult(Cam.LEFT);
         MultiTargetPNPResult multiResultLeft = latestResultLeft.getMultiTagResult();
         if (multiResultLeft.estimatedPose.isPresent) {
             // Logging information to SmartDashboard
@@ -328,11 +328,11 @@ public class Limelight extends SubsystemBase {
             SmartDashboard.putBoolean("Running Limelight Left", true);
 
             try {
-                Robot.limelight.estimatedPose2dLeft = new Pose2d(multiResultLeft.estimatedPose.best.getX(),
+                estimatedPose2dLeft = new Pose2d(multiResultLeft.estimatedPose.best.getX(),
                         multiResultLeft.estimatedPose.best.getY(),
                         multiResultLeft.estimatedPose.best.getRotation().toRotation2d());
                         
-                Robot.limelight.estimatedPose2dLeft
+                estimatedPose2dLeft
                         .transformBy(new Transform2d(VisionConstants.LEFT_CAM_TO_ROBOT.getX(),
                                 VisionConstants.LEFT_CAM_TO_ROBOT.getY(), VisionConstants.LEFT_CAM_TO_ROBOT.getRotation().toRotation2d()));
                 // update swerve pose estimator
@@ -341,15 +341,15 @@ public class Limelight extends SubsystemBase {
                                 latestResultLeft.getTimestampSeconds()));
                 // Logging Limelight odometry information to SmartDashboard
                 SmartDashboard.putNumberArray("Left Limelight Odometry",
-                        new double[] { Robot.limelight.estimatedPose2dLeft.getX(),
-                                Robot.limelight.estimatedPose2dLeft.getY(),
-                                Robot.limelight.estimatedPose2dLeft.getRotation().getRadians() });
+                        new double[] { estimatedPose2dLeft.getX(),
+                                estimatedPose2dLeft.getY(),
+                                estimatedPose2dLeft.getRotation().getRadians() });
             } catch (Exception e) {
                 SmartDashboard.putString("Left Error", e.toString());
 
             }
         }
-        PhotonPipelineResult latestResultRight = Robot.limelight.getLatestResult(Cam.RIGHT);
+        PhotonPipelineResult latestResultRight = getLatestResult(Cam.RIGHT);
         MultiTargetPNPResult multiResultRight = latestResultRight.getMultiTagResult();
         if (multiResultRight.estimatedPose.isPresent) {
             // Logging information to SmartDashboard
@@ -357,10 +357,10 @@ public class Limelight extends SubsystemBase {
             SmartDashboard.putBoolean("Running Limelight Right", true);
 
             try {
-                Robot.limelight.estimatedPose2dRight = new Pose2d(multiResultRight.estimatedPose.best.getX(),
+                estimatedPose2dRight = new Pose2d(multiResultRight.estimatedPose.best.getX(),
                         multiResultRight.estimatedPose.best.getY(),
                         multiResultRight.estimatedPose.best.getRotation().toRotation2d());
-                Robot.limelight.estimatedPose2dRight
+                estimatedPose2dRight
                         .transformBy(new Transform2d(VisionConstants.RIGHT_CAM_TO_ROBOT.getX(),
                                 VisionConstants.RIGHT_CAM_TO_ROBOT.getY(), VisionConstants.RIGHT_CAM_TO_ROBOT.getRotation().toRotation2d()));
                 // update swerve pose esimtator
@@ -370,9 +370,9 @@ public class Limelight extends SubsystemBase {
 
                 // Logging Limelight odometry information to SmartDashboard
                 SmartDashboard.putNumberArray("Right Limelight Odometry",
-                        new double[] { Robot.limelight.estimatedPose2dRight.getX(),
-                                Robot.limelight.estimatedPose2dRight.getY(),
-                                Robot.limelight.estimatedPose2dRight.getRotation().getRadians() });
+                        new double[] { estimatedPose2dRight.getX(),
+                                estimatedPose2dRight.getY(),
+                                estimatedPose2dRight.getRotation().getRadians() });
             } catch (Exception e) {
                 SmartDashboard.putString("Right Error", e.toString());
 

@@ -178,8 +178,9 @@ public class Arm extends SubsystemBase {
         feedforward = calculateFF(getPositionRad(), setpoint.velocity, accelerationSetpoint);
         if (setpoint.velocity == 0) {
             // have the kS help the PID when stationary
-            feedforward = Math.signum(feedback) * ArmConstants.stowedkS * 0.9;
+            feedforward += Math.signum(feedback) * ArmConstants.stowedkS * 0.9;
         }
+        
         
         setVoltage(feedforward + feedback);
 
