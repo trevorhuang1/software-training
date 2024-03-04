@@ -147,6 +147,16 @@ public class Constants {
     public static final double kV = 0.101;
   }
 
+  public static final class LEDConstants
+  {
+    public static final int photoElectricPort = 0;
+      public static final int length = 49;
+      public static enum LEDPattern {
+          RAINBOW, RED, BLUE, GREEN, WHITE, NOTHING
+      };
+  }
+
+
   public static class VisionConstants {
 
     // See
