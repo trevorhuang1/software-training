@@ -110,6 +110,11 @@ public class Arm extends SubsystemBase {
 
     }
 
+    public void setGoal(double goalRad){
+        // state = ArmStates.SHOOT;
+        feedback.setGoal(goalRad);
+    }
+
     public double getGoal() {
         return feedback.getGoal().position;
     }

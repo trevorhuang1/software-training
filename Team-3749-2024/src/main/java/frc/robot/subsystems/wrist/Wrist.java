@@ -106,16 +106,9 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> kPData = new ShuffleData(this.getName(), "kpdata", 0.0);
     private ShuffleData<Double> kVData = new ShuffleData(this.getName(), "kVdata", 0.0);
 
+
     public void moveWristToGoal() {
 
-        if ((getState() == WristStates.FULL_DEPLOYED || getState() == WristStates.GROUND_INTAKE)
-                && Robot.arm.getState() != ArmStates.STOW
-                && (Math.abs(Robot.arm.getVelocityRadPerSec()) > 0.05)) {
-            setGoal(WristStates.FULL_DEPLOYED);
-            Robot.wrist.setVoltage(1);
-            return;
-
-        }
 
         double pidGain = wristController.calculate(data.positionRad);
 
