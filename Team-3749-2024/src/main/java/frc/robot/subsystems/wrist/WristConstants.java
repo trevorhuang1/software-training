@@ -13,7 +13,7 @@ public final class WristConstants {
 
     public static final double groundGoalRad = Units.degreesToRadians(141);
     public static final double stowGoalRad = Units.degreesToRadians(3);
-    public static final double fullDeployed = Units.degreesToRadians(160);
+    public static final double fullDeployedRad = Units.degreesToRadians(152);
 
     public static final double wristOffsetRad = Units.degreesToRadians(257.4);
 

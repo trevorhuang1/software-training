@@ -21,6 +21,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.Wrist;
 import frc.robot.utils.ShuffleData;
+import frc.robot.utils.SuperStructureStates;
 import frc.robot.utils.Xbox;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
@@ -35,7 +36,7 @@ public class Robot extends TimedRobot {
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
   public static final Limelight limelight = (new Limelight());
-
+  public static SuperStructureStates state = SuperStructureStates.STOW;
 
   public static Timer timer = new Timer();
 

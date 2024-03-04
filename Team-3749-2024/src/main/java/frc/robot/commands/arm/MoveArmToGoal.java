@@ -21,6 +21,7 @@ public class MoveArmToGoal extends Command  {
 
     @Override
     public void execute() {
+        
         Robot.arm.moveToGoal();
 
     }

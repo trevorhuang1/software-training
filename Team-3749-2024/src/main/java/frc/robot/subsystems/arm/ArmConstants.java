@@ -21,6 +21,7 @@ public final class ArmConstants {
         public static final double stowPositionRad = Units.degreesToRadians(1);
         public static final double climbPositionRad = Units.degreesToRadians(90);
         public static final double subWooferPositionRad = Units.degreesToRadians(20);
+        public static final double ampPositionRad = Units.degreesToRadians(25);
 
         // Control - PID, FF, and Trapezoidal Constraints
         private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
@@ -46,10 +47,10 @@ public final class ArmConstants {
         public static final double stowedkV = Robot.isReal() ? realStowedkV : simkV;
         public static final double stowedkA = Robot.isReal() ? realStowedkA : simkA;
 
-        private static final double realDeployedkS = 0.12;
-        private static final double realDeployedkG = 0.247; // 0.37
+        private static final double realDeployedkS = 0.255;
+        private static final double realDeployedkG = 0.505; // 0.76 - 0.25
         private static final double realDeployedkV = 3.9;
-        private static final double realDeployedkA = 0.165;
+        private static final double realDeployedkA = 0.2;
 
         public static final double deployedkS = Robot.isReal() ? realDeployedkS : simkS;
         public static final double deployedkG = Robot.isReal() ? realDeployedkG : simkG;
@@ -70,11 +71,25 @@ public final class ArmConstants {
                         : simStowedConstraints;
 
         private static final Constraints realDeployedConstraints = new Constraints(
-                        2.662,
-                        6);
-        public static final Constraints deployedConstraints = Robot.isReal()
-                        ? realStowedConstraints
+                        2.442,
+                        6
+
+                        );
+        public static final Constraints 
+        deployedConstraints = Robot.isReal()
+                        ? realDeployedConstraints
                         : new Constraints(0, 0);
+
+        public enum ArmStates {
+                
+                STOW,
+                AMP,
+                SHOOT,
+                CLIMB,
+                IN_TRANIST;
+        }
+
+
 
         // Field Parameters
         public static final double armHeightOffset = 0.2159;

@@ -69,12 +69,17 @@ public class Wrist extends SubsystemBase {
         wristController.setGoal(WristConstants.stowGoalRad);
     }
 
-    public void setGoalGround() {
-        wristController.setGoal(setpointToggle.get(true));
-    }
-
-    public void setGoalStow() {
-        wristController.setGoal(setpointToggle.get(false));
+    public void setGoal(WristStates state) {
+        if (state == WristStates.GROUND_INTAKE) {
+            System.out.println("ground goal");
+            wristController.setGoal(WristConstants.groundGoalRad);
+        }
+        if (state == WristStates.STOW) {
+            wristController.setGoal(WristConstants.stowGoalRad);
+        }
+        if (state == WristStates.FULL_DEPLOYED) {
+            wristController.setGoal(WristConstants.fullDeployedRad);
+        }
 
     }
 
@@ -170,12 +175,9 @@ public class Wrist extends SubsystemBase {
         return (Math.abs(data.positionRad - getWristGoal().position) < 0.1);
     }
 
-
     private void updateState() {
-        SmartDashboard.putBoolean("at goal", wristController.atGoal());
-        SmartDashboard.putBoolean(" moving", Math.abs(getVelocityRadPerSec()) > 0.1);
-        SmartDashboard.putNumber("vel rad", getVelocityRadPerSec());
-        if (!wristController.atGoal() || Math.abs(getVelocityRadPerSec()) > 0.1) {
+
+        if (!atGoal() || Math.abs(getVelocityRadPerSec()) > 0.1) {
             state = WristStates.IN_TRANIST;
             return;
         }
@@ -183,7 +185,7 @@ public class Wrist extends SubsystemBase {
             state = WristStates.GROUND_INTAKE;
             return;
         }
-        if (getWristGoal().position == WristConstants.fullDeployed) {
+        if (getWristGoal().position == WristConstants.fullDeployedRad) {
             state = WristStates.FULL_DEPLOYED;
             return;
 
