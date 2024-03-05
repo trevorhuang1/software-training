@@ -205,6 +205,7 @@ public class Wrist extends SubsystemBase {
     public void periodic() {
         wristIO.updateData(data);
         updateState();
+        moveWristToGoal();
         // mechanismArm.setAngle(data.positionRad);
         // SmartDashboard.putData("Mech2d", mechanism);
         // mechanismArm.setAngle(Math.toDegrees(data.positionRad));

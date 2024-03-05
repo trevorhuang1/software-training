@@ -97,12 +97,14 @@ public class JoystickIO {
 
     public void pilotBindings() {
 
-        // intake
-        Robot.pilot.leftTrigger()
+        Robot.pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.wrist.setGoal(WristStates.GROUND_INTAKE)))
+                .onFalse(Commands.runOnce(() -> Robot.wrist.setGoal(WristStates.STOW)))
                 .whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec),
                         Robot.intake));
         Robot.pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.stop(),
                 Robot.intake));
+        Robot.pilot.leftBumper().whileTrue(Commands.run(()->Robot.intake.setVoltage(-3))).onFalse(Commands.run(()->Robot.intake.setVoltage(0)));
+
 
         Robot.pilot.rightTrigger().whileTrue(Commands.run(() -> {
             Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec);
@@ -113,33 +115,39 @@ public class JoystickIO {
             Robot.intake.stop();
         }, Robot.shooter));
 
-        Robot.pilot.leftStick().whileTrue(Commands.run(() -> Robot.intake.setVoltage(12)))
-                .onFalse(Commands.runOnce(() -> Robot.intake.stop()));
+        // Robot.pilot.leftStick().whileTrue(Commands.run(() ->
+        // Robot.intake.setVoltage(12)))
+        // .onFalse(Commands.runOnce(() -> Robot.intake.stop()));
 
-        // Robot.pilot.x().onTrue(Commands.runOnce(() -> SetRobotStates.setAmp(),
-        // Robot.wrist, Robot.arm));
-        Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE, Robot.wrist,
-                Robot.arm, Robot.intake));
-        Robot.pilot.y().onFalse(
-                Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm, Robot.intake));
+        // // Robot.pilot.x().onTrue(Commands.runOnce(() -> SetRobotStates.setAmp(),
+        // // Robot.wrist, Robot.arm));
+        // Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.state =
+        // SuperStructureStates.GROUND_INTAKE, Robot.wrist,
+        // Robot.arm, Robot.intake));
+        // Robot.pilot.y().onFalse(
+        // Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist,
+        // Robot.arm, Robot.intake));
 
-        Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP, Robot.wrist,
-                Robot.arm, Robot.intake, Robot.shooter));
-        Robot.pilot.x().onFalse(
-                Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm, Robot.intake));
-        Robot.pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER, Robot.wrist,
-                Robot.arm, Robot.intake, Robot.shooter));
-        Robot.pilot.x().onFalse(
-                Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm, Robot.intake));
-      
-      
-      
-                // gyro
+        // Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.state =
+        // SuperStructureStates.AMP, Robot.wrist,
+        // Robot.arm, Robot.intake, Robot.shooter));
+        // Robot.pilot.x().onFalse(
+        // Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist,
+        // Robot.arm, Robot.intake));
+        // Robot.pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.state =
+        // SuperStructureStates.SUBWOOFER, Robot.wrist,
+        // Robot.arm, Robot.intake, Robot.shooter));
+        // Robot.pilot.x().onFalse(
+        // Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist,
+        // Robot.arm, Robot.intake));
+
+        // // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
-        Robot.pilot.povDown().onTrue(Commands.runOnce(
-                () -> Robot.swerve
-                        .resetOdometry(new Pose2d(new Translation2d(13.95, 5.55), Robot.swerve.getRotation2d()))));
+        // Robot.pilot.povDown().onTrue(Commands.runOnce(
+        // () -> Robot.swerve
+        // .resetOdometry(new Pose2d(new Translation2d(13.95, 5.55),
+        // Robot.swerve.getRotation2d()))));
     }
 
     public void simBindings() {
