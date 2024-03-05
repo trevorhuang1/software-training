@@ -20,8 +20,21 @@ public final class ArmConstants {
 
         public static final double stowPositionRad = Units.degreesToRadians(1);
         public static final double climbPositionRad = Units.degreesToRadians(90);
-        public static final double subWooferPositionRad = Units.degreesToRadians(20);
         public static final double ampPositionRad = Units.degreesToRadians(95);
+        public static final double subwooferPositionRad = Units.degreesToRadians(30);
+
+
+        public enum ArmStates {
+                STOW,
+                AMP,
+                SHOOT,
+                SUBWOOFER, 
+                CLIMB,
+                IN_TRANIST;
+        }
+
+
+
 
         // Control - PID, FF, and Trapezoidal Constraints
         private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
@@ -80,14 +93,6 @@ public final class ArmConstants {
                         ? realDeployedConstraints
                         : new Constraints(0, 0);
 
-        public enum ArmStates {
-                
-                STOW,
-                AMP,
-                SHOOT,
-                CLIMB,
-                IN_TRANIST;
-        }
 
 
 

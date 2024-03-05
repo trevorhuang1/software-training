@@ -11,7 +11,7 @@ public final class WristConstants {
     public static final int wristId = 17;
     public static final double gearRatio = 1;
 
-    public static final double groundGoalRad = Units.degreesToRadians(141);
+    public static final double groundGoalRad = Units.degreesToRadians(141); // 141
     public static final double stowGoalRad = Units.degreesToRadians(3);
     public static final double fullDeployedRad = Units.degreesToRadians(152);
 

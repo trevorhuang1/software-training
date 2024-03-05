@@ -8,7 +8,9 @@ public interface SuperStructureCommandInterface {
     public default void execute() {
 
     };
+    public default void execute(double goalRad) {
 
+    };
     public default void reset(){
 
     };

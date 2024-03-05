@@ -236,6 +236,10 @@ public class Arm extends SubsystemBase {
             state = ArmStates.AMP;
             return;
         }
+        if (getGoal() == ArmConstants.subwooferPositionRad){
+            state = ArmStates.SUBWOOFER;
+            return;
+        }
         if (Robot.state == SuperStructureStates.SHOOT) {
             state = ArmStates.SHOOT;
             return;

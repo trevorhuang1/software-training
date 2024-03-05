@@ -29,6 +29,7 @@ public class SuperStructureCommands {
         SmartDashboard.putString("state", Robot.state.name());
         SmartDashboard.putString("current command", currentCommand.getClass().getName());
         SuperStructureStates state = Robot.state;
+       
         switch (Robot.state) {
             case STOW:
                 // System.out.println("stow");

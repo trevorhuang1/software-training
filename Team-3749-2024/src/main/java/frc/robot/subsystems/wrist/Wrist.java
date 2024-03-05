@@ -121,7 +121,7 @@ public class Wrist extends SubsystemBase {
                 : 0;
 
         if ((positionRad == WristConstants.stowGoalRad
-                && UtilityFunctions.withinMargin(0.15, positionRad, data.positionRad))
+                && UtilityFunctions.withinMargin(0.25, positionRad, data.positionRad))
                 && Math.abs(data.velocityRadPerSec) < 0.05) {
             setVoltage(-Math.signum(pidGain) * 0.05);
             return;
@@ -175,12 +175,12 @@ public class Wrist extends SubsystemBase {
     }
 
     private boolean atGoal() {
-        return (Math.abs(data.positionRad - getWristGoal().position) < 0.175);
+        return (Math.abs(data.positionRad - getWristGoal().position) < 0.075);
     }
 
     private void updateState() {
 
-        if (!atGoal() || Math.abs(getVelocityRadPerSec()) > 0.1) {
+        if (!atGoal() || Math.abs(getVelocityRadPerSec()) > 0.125) {
             state = WristStates.IN_TRANIST;
             return;
         }
