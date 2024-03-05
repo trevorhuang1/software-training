@@ -30,9 +30,9 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
                 ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2) && Robot.wrist.getPositionRad() > 130)) {
             groundIntakeWrist = true;
         }
-        if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
-            subwoofedArm = true;
-        }
+        // if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
+        //     subwoofedArm = true;
+        // }
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
         }
@@ -48,7 +48,7 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
         if ((!fullDeployedWrist && groundIntakeWrist && stowedArm)
                 || (fullDeployedWrist)) {
             // System.out.println("arm to amp");
-            Robot.arm.setGoal(ArmStates.SUBWOOFER);
+            // Robot.arm.setGoal(ArmStates.SUBWOOFER);
             staticWrist = true;
             if (Robot.arm.getPositionRad() > Units.degreesToRadians(5)) {
                 Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);

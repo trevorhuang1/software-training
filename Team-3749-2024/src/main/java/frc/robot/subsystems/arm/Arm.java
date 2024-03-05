@@ -218,6 +218,8 @@ public class Arm extends SubsystemBase {
         return (Math.abs(data.positionRad - getGoal()) < 0.1);
     }
 
+
+
     public void updateState() {
         if (!atGoal() || Math.abs(getVelocityRadPerSec()) > 0.1) {
             state = ArmStates.IN_TRANIST;
@@ -253,6 +255,7 @@ public class Arm extends SubsystemBase {
         armIO.updateData(data);
         updateState();
         stateLog.set(state.name());
+        // moveToGoal();
 
         if (Robot.wrist.getState() == WristStates.IN_TRANIST) {
             if (Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {

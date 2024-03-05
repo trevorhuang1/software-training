@@ -103,8 +103,8 @@ public class JoystickIO {
                         Robot.intake));
         Robot.pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.stop(),
                 Robot.intake));
-        Robot.pilot.leftBumper().whileTrue(Commands.run(()->Robot.intake.setVoltage(-3))).onFalse(Commands.run(()->Robot.intake.setVoltage(0)));
-
+        Robot.pilot.leftBumper().whileTrue(Commands.run(() -> Robot.intake.setVoltage(-3)))
+                .onFalse(Commands.run(() -> Robot.intake.setVoltage(0)));
 
         Robot.pilot.rightTrigger().whileTrue(Commands.run(() -> {
             Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec);
@@ -114,6 +114,16 @@ public class JoystickIO {
             Robot.shooter.stop();
             Robot.intake.stop();
         }, Robot.shooter));
+
+        Robot.pilot.y().onTrue(Commands.runOnce(
+                () -> Robot.arm.setGoal(Units.degreesToRadians(90))));
+        Robot.pilot.back().whileTrue(new Climb());
+
+        Robot.pilot.a().whileTrue(new getRegressionData(true))
+                .onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0)));
+        Robot.pilot.b().whileTrue(new getRegressionData(false))
+                .onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0)));
+        
 
         // Robot.pilot.leftStick().whileTrue(Commands.run(() ->
         // Robot.intake.setVoltage(12)))

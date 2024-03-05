@@ -34,17 +34,17 @@ public class Climb extends Command {
     @Override
     public void execute() {
         // Can only climb if arm starts straight up
-        if (Robot.arm.getGoal() != Math.PI/2){
-            return;
-        }
+        // if (Robot.arm.getGoal() != Math.PI/2){
+        //     return;
+        // }
         // Stop/slow down at 2 degrees
-        if (Units.radiansToDegrees(Robot.arm.getPositionRad()) > 2) {
+        // if (Units.radiansToDegrees(Robot.arm.getPositionRad()) > 2) {
 
-            Robot.arm.setVoltage(-3);
-        }
-        else {
-            Robot.arm.setVoltage(-1.5);
-        }
+        //     Robot.arm.setVoltage(-4.5);
+        // }
+        // else {
+            Robot.arm.setVoltage(-4.5);
+        // }
 
     }
 

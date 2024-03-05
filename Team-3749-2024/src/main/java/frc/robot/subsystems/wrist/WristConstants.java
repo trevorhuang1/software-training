@@ -42,8 +42,8 @@ public final class WristConstants {
     public static final double simkA = 0;
 
     public static final double realkS = 0.1;
-    public static final double realkVForward = 3.1;// 1.6 // radians
-    public static final double realkVBackward = 2.75     ; // radians
+    public static final double realkVForward = 2.2;// 1.6 // radians
+    public static final double realkVBackward = 2.2     ; // radians
 
     public static final double kYIntercept = 0.2500;
     public static final double kBar = 1.2051170442485861;

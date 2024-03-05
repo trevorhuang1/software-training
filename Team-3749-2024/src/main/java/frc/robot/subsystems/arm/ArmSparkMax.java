@@ -68,6 +68,7 @@ public class ArmSparkMax implements ArmIO {
 
     @Override
     public void updateData(ArmData data) {
+        SmartDashboard.putString("break mode", leftMotor.getIdleMode().name());
         SmartDashboard.putNumber("abs encoder", absoluteEncoder.getPosition());
 
         previousVelocity = data.velocityRadPerSec;
