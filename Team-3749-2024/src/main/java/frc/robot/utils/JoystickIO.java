@@ -82,7 +82,7 @@ public class JoystickIO {
         // pilot.b().onTrue(Commands.runOnce(() ->
         // Robot.arm.setGoal(Units.degreesToRadians(6))));
 
-        pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(40))));
+        pilot.y().onTrue(Commands.runOnce(() -> Robot.arm.setGoal(Units.degreesToRadians(90))));
         pilot.back().whileTrue(new Climb());
 
         // gyro
