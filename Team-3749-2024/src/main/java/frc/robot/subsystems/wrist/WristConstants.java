@@ -45,18 +45,10 @@ public final class WristConstants {
     public static final double realkVForward = 2.2;// 1.6 // radians
     public static final double realkVBackward = 2.2     ; // radians
 
-    public static final double kYIntercept = 0.2500;
-    public static final double kBar = 1.2051170442485861;
-    public static final double kBarSquared = -1.8766465126496676;
-    public static final double kBarCubed = 0.48841621426762893;
-    public static final double kArm = -0.08453955731495624;
-    public static final double kArmSquared = -0.020323277876598187;
-    public static final double kBarArm = 3.7070918562599866;
-    public static final double kBarSquaredArm = -2.6560157465636793;
-    public static final double kBarCubedArm = 0.47800105908391155;
-    public static final double kBarArmSquared = -2.132368908319232;
-    public static final double kBarSquaredArmSquared = 2.148987748059586;
-    public static final double kBarCubedArmSquared = -0.496866520545201;
+    public static final double kYIntercept = 0.0654;
+    public static final double kBar =0.6353305811670058;
+    public static final double kBarSquared = -0.898369590468488;
+    public static final double kBarCubed = 0.23675874031389005;
 
 
     public enum WristStates{

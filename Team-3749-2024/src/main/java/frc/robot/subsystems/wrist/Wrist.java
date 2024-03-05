@@ -106,9 +106,7 @@ public class Wrist extends SubsystemBase {
     private ShuffleData<Double> kPData = new ShuffleData(this.getName(), "kpdata", 0.0);
     private ShuffleData<Double> kVData = new ShuffleData(this.getName(), "kVdata", 0.0);
 
-
     public void moveWristToGoal() {
-
 
         double pidGain = wristController.calculate(data.positionRad);
 
@@ -160,18 +158,10 @@ public class Wrist extends SubsystemBase {
         // variable arm angle. Yes, that kinda defeats some of the purpose of the
         // regression, but due to other decisions, we will not really be moving the 4bar
         // at variable angles anyway. The thing can be retuned and made cool again later
-        return 0.5 * (WristConstants.kYIntercept
+        return (WristConstants.kYIntercept
                 + WristConstants.kBar * wristPositionRad
                 + WristConstants.kBarSquared * Math.pow(wristPositionRad, 2)
-                + WristConstants.kBarCubed * Math.pow(wristPositionRad, 3)
-                + WristConstants.kArm * armPositionRad
-                + WristConstants.kArmSquared * Math.pow(armPositionRad, 2)
-                + WristConstants.kBarArm * wristPositionRad * armPositionRad
-                + WristConstants.kBarSquaredArm * Math.pow(wristPositionRad, 2) * armPositionRad
-                + WristConstants.kBarCubedArm * Math.pow(wristPositionRad, 3) * armPositionRad
-                + WristConstants.kBarArmSquared * wristPositionRad * Math.pow(armPositionRad, 2)
-                + WristConstants.kBarSquaredArmSquared * Math.pow(wristPositionRad, 2) * Math.pow(armPositionRad, 2)
-                + WristConstants.kBarCubedArmSquared * Math.pow(wristPositionRad, 3) * Math.pow(armPositionRad, 2));
+                + WristConstants.kBarCubed * Math.pow(wristPositionRad, 3));
     }
 
     private boolean atGoal() {
