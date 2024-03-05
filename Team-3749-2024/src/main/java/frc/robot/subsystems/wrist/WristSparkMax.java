@@ -20,7 +20,7 @@ public class WristSparkMax implements WristIO {
 
 private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorType.kBrushless);
     private AbsoluteEncoder wristEncoder = wristMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-    // private RelativeEncoder relativeEncoder = wristMotor.getEncoder();
+    private RelativeEncoder relativeEncoder = wristMotor.getEncoder();
     private double appliedVolts = 0;
     private double previousVelocity = 0;
 
@@ -28,7 +28,7 @@ private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorTy
         
         wristEncoder.setPositionConversionFactor(2 * Math.PI );
         wristEncoder.setVelocityConversionFactor(2 * Math.PI);
-
+        relativeEncoder.setVelocityConversionFactor(2*Math.PI / 150.0);
         wristMotor.setInverted(true);
         wristMotor.setSmartCurrentLimit(40);
         wristMotor.setIdleMode(IdleMode.kCoast);
@@ -57,8 +57,8 @@ private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorTy
         previousVelocity = data.velocityRadPerSec;
 
         data.positionRad = getAbsolutePosition() ;
-        data.velocityRadPerSec = wristEncoder.getVelocity();
-        data.accelerationRadPerSecSquared = (wristEncoder.getVelocity() - previousVelocity) / 0.02;
+        data.velocityRadPerSec = relativeEncoder.getVelocity();
+        data.accelerationRadPerSecSquared = (relativeEncoder.getVelocity() - previousVelocity) / 0.02;
 
         data.appliedVolts = wristMotor.getBusVoltage() * wristMotor.getAppliedOutput();
         data.currentAmps = wristMotor.getOutputCurrent();

@@ -65,7 +65,33 @@ public class JoystickIO {
      * If both controllers are plugged in (pi and op)
      */
     public void pilotAndOperatorBindings() {
-        pilotBindings();
+
+        Robot.operator.b()
+                .whileTrue(Commands.run(() -> Robot.intake.setVoltage(12)))
+                .onFalse(Commands.runOnce(() -> Robot.intake.stop()));
+
+        Robot.operator.rightTrigger().whileTrue(Commands
+                .run(() -> Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec), Robot.shooter))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.shooter.stop();
+                    Robot.intake.stop();
+                }, Robot.shooter));
+
+        Robot.operator.leftBumper()
+                .onTrue(Commands.run(() -> Robot.intake.setVoltage(-1)));
+
+        Robot.operator.x().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP, Robot.wrist,
+                Robot.arm, Robot.intake, Robot.shooter))
+                .onFalse(
+                        Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm,
+                                Robot.intake));
+
+        Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
+        Robot.pilot.leftTrigger()
+                .onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE, Robot.wrist, Robot.arm,
+                        Robot.intake))
+                .onFalse(Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm));
+
         // op bindings
     }
 
@@ -80,12 +106,15 @@ public class JoystickIO {
 
         Robot.pilot.rightTrigger().whileTrue(Commands.run(() -> {
             Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec);
-            Robot.intake.setVoltage(12);
         }, Robot.shooter));
+
         Robot.pilot.rightTrigger().onFalse(Commands.runOnce(() -> {
             Robot.shooter.stop();
             Robot.intake.stop();
         }, Robot.shooter));
+
+        Robot.pilot.leftStick().whileTrue(Commands.run(() -> Robot.intake.setVoltage(12)))
+                .onFalse(Commands.runOnce(() -> Robot.intake.stop()));
 
         // Robot.pilot.x().onTrue(Commands.runOnce(() -> SetRobotStates.setAmp(),
         // Robot.wrist, Robot.arm));
@@ -98,7 +127,14 @@ public class JoystickIO {
                 Robot.arm, Robot.intake, Robot.shooter));
         Robot.pilot.x().onFalse(
                 Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm, Robot.intake));
-        // gyro
+        Robot.pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER, Robot.wrist,
+                Robot.arm, Robot.intake, Robot.shooter));
+        Robot.pilot.x().onFalse(
+                Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm, Robot.intake));
+      
+      
+      
+                // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
         Robot.pilot.povDown().onTrue(Commands.runOnce(

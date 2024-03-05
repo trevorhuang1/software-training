@@ -160,7 +160,7 @@ public class Wrist extends SubsystemBase {
         // variable arm angle. Yes, that kinda defeats some of the purpose of the
         // regression, but due to other decisions, we will not really be moving the 4bar
         // at variable angles anyway. The thing can be retuned and made cool again later
-        return 0.6 * (WristConstants.kYIntercept
+        return 0.5 * (WristConstants.kYIntercept
                 + WristConstants.kBar * wristPositionRad
                 + WristConstants.kBarSquared * Math.pow(wristPositionRad, 2)
                 + WristConstants.kBarCubed * Math.pow(wristPositionRad, 3)
@@ -175,7 +175,7 @@ public class Wrist extends SubsystemBase {
     }
 
     private boolean atGoal() {
-        return (Math.abs(data.positionRad - getWristGoal().position) < 0.075);
+        return (Math.abs(data.positionRad - getWristGoal().position) < 0.175);
     }
 
     private void updateState() {

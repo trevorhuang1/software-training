@@ -8,7 +8,8 @@ public enum SuperStructureStates{
     GROUND_INTAKE(WristStates.GROUND_INTAKE, ArmStates.STOW),
     AMP(WristStates.FULL_DEPLOYED, ArmStates.AMP),
     SHOOT(WristStates.FULL_DEPLOYED, ArmStates.SHOOT),
-    CLIMB(WristStates.STOW, ArmStates.CLIMB);
+    CLIMB(WristStates.STOW, ArmStates.CLIMB),
+    SUBWOOFER(WristStates.FULL_DEPLOYED, ArmStates.SUBWOOFER);
 
     public WristStates wristState;
     public ArmStates armState;

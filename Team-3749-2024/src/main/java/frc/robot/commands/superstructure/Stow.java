@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.SuperStructureStates;
 import frc.robot.utils.UtilityFunctions;
@@ -23,13 +24,13 @@ public class Stow implements SuperStructureCommandInterface {
     public Stow() {
     }
 
-    private double maxArmRadForStow = Units.degreesToRadians(15);
+    private double maxArmRadForStow = Units.degreesToRadians(30);
 
     @Override
     public void execute() {
 
         if (Robot.arm.getPositionRad() > maxArmRadForStow) {
-            Robot.arm.setGoal(Units.degreesToRadians(10));
+            Robot.arm.setGoal(Units.degreesToRadians(25));
             armWasRaised = true;
         } else {
             loweredArm = true;
@@ -57,6 +58,11 @@ public class Stow implements SuperStructureCommandInterface {
         if (stowedWrist) {
             Robot.arm.setGoal(ArmStates.STOW);
 
+        }
+
+        if (Robot.wrist.getState() == WristStates.IN_TRANIST && Robot.arm.getState() == ArmStates.STOW
+                && Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
+            Robot.wrist.setGoal(WristStates.GROUND_INTAKE);
         }
 
         Robot.arm.moveToGoal();

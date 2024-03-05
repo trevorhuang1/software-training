@@ -11,6 +11,7 @@ public class SuperStructureCommands {
     private GroundIntake groundIntake = new GroundIntake();
     private Stow stow = new Stow();
     private ScoreAmp scoreAmp= new ScoreAmp();
+    private ScoreSubwoofer scoreSubwoofer = new ScoreSubwoofer();
 
     private SuperStructureCommandInterface currentCommand = stow;
 
@@ -41,6 +42,9 @@ public class SuperStructureCommands {
                 break;
             case AMP:
                 switchCommands(scoreAmp);
+                break;
+            case SUBWOOFER:
+                switchCommands(scoreSubwoofer);
                 break;
         }
         currentCommand.execute();
