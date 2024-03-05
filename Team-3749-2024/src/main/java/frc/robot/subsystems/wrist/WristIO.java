@@ -32,6 +32,12 @@ public interface WristIO {
     public default void setVoltage(double volts) {
         
     }
+    public default void setBrakeMode(){
+
+    }
+    public default void setCoastMode(){
+        
+    }
 
 
 }

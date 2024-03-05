@@ -20,7 +20,9 @@ import frc.robot.commands.superstructure.GroundIntake;
 import frc.robot.commands.swerve.SwerveTeleop;
 import frc.robot.commands.wrist.MoveWristToGoal;
 import frc.robot.commands.wrist.getRegressionData;
+import frc.robot.subsystems.arm.ArmSim;
 import frc.robot.subsystems.arm.ShootKinematics;
+import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
 // import frc.robot.commands.swerve.MoveToPose;
@@ -116,14 +118,31 @@ public class JoystickIO {
         }, Robot.shooter));
 
         Robot.pilot.y().onTrue(Commands.runOnce(
-                () -> Robot.arm.setGoal(Units.degreesToRadians(90))));
+                () -> Robot.arm.setGoal(ArmStates.STOW))).whileTrue(Commands.run(() -> Robot.wrist.setVoltage(1),
+                        Robot.wrist))
+                .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
+                        Robot.wrist));
+
+        Robot.pilot.x().onTrue(Commands.runOnce(
+                () -> Robot.arm.setGoal(ArmStates.AMP))).whileTrue(Commands.run(() -> Robot.wrist.setVoltage(1),
+                        Robot.wrist))
+                .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
+                        Robot.wrist));
+        ;
+
+        Robot.pilot.povRight().onTrue(Commands.runOnce(
+                () -> Robot.arm.setGoal(ArmStates.CLIMB))).whileTrue(Commands.run(() -> Robot.wrist.setVoltage(1),
+                        Robot.wrist))
+                .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
+                        Robot.wrist));
+        ;
         Robot.pilot.back().whileTrue(new Climb());
 
-        Robot.pilot.a().whileTrue(new getRegressionData(true))
-                .onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0)));
-        Robot.pilot.b().whileTrue(new getRegressionData(false))
-                .onFalse(Commands.runOnce(() -> Robot.wrist.setVoltage(0)));
-        
+        // Robot.pilot.a().whileTrue(Commands.run(() -> Robot.arm.setVoltage(4),
+        // Robot.arm))
+        // .whileFalse(Commands.run(() -> Robot.arm.moveToGoal(), Robot.arm));
+        // Robot.pilot.b().whileTrue(Commands.run(() -> Robot.wrist.runShuffleData(),
+        // Robot.wrist));
 
         // Robot.pilot.leftStick().whileTrue(Commands.run(() ->
         // Robot.intake.setVoltage(12)))

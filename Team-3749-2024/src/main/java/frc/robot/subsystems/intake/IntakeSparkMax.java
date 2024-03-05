@@ -44,4 +44,5 @@ public class IntakeSparkMax implements IntakeIO {
     intakeGoalVolts = MathUtil.clamp(intakeVolts, -12, 12);
     intakeMotor.setVoltage(intakeGoalVolts);
   }
+  
 }

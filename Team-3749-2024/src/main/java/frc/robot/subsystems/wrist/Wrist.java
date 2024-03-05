@@ -32,6 +32,8 @@ public class Wrist extends SubsystemBase {
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean, Double>();
 
     private WristStates state = WristConstants.WristStates.STOW;
+    private double prevSetpointVelocity = 0;
+
 
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
@@ -103,16 +105,28 @@ public class Wrist extends SubsystemBase {
         return (data.velocityRadPerSec);
     }
 
-    private ShuffleData<Double> kPData = new ShuffleData(this.getName(), "kpdata", 0.0);
-    private ShuffleData<Double> kVData = new ShuffleData(this.getName(), "kVdata", 0.0);
+    private ShuffleData<Double> kPData = new ShuffleData(this.getName(),
+            "kpdata", 0.0);
+    private ShuffleData<Double> kVData = new ShuffleData(this.getName(),
+            "kVdata", 0.0);
+
+    private ShuffleData<Double> kAData = new ShuffleData(this.getName(),
+            "kAdata", 0.0);
+    private ShuffleData<Double> kSData = new ShuffleData(this.getName(),
+            "kSdata", 0.0);
+    private ShuffleData<Double> kGData = new ShuffleData(this.getName(),
+            "kGdata", 0.0);
 
     public void moveWristToGoal() {
 
         double pidGain = wristController.calculate(data.positionRad);
 
         State setpoint = Robot.wrist.getWristSetpoint();
+        double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
         double velocityRadPerSec = setpoint.velocity;
         double positionRad = setpoint.position;
+        prevSetpointVelocity = setpoint.velocity;
+
 
         double voltage = UtilityFunctions.withinMargin(0.35, getWristGoal().position, data.positionRad)
                 ? pidGain
@@ -138,6 +152,29 @@ public class Wrist extends SubsystemBase {
         }
 
         setVoltage(voltage);
+        // double volts = 0;
+        // volts += calculateGravityFeedForward(data.positionRad, Robot.arm.getPositionRad());
+        // volts += kSData.get()* Math.signum(pidGain) ;
+        // volts += setpoint.velocity * kVData.get();
+        // volts += accelerationSetpoint * kAData.get();
+        // volts += (setpoint.position - getPositionRad()) * kPData.get();
+        // setVoltage(volts);
+
+    }
+
+    public void runShuffleData() {
+        double pidGain = wristController.calculate(data.positionRad);
+        State setpoint = Robot.wrist.getWristSetpoint();
+        double velocityRadPerSec = setpoint.velocity;
+        double positionRad = setpoint.position;
+
+        double volts = 0;
+        volts += calculateGravityFeedForward(data.positionRad, Robot.arm.getPositionRad());
+        volts += kSData.get();// Math.signum(setpoint.velocity)
+        volts += setpoint.velocity * kVData.get();
+        // volts += accelerationSetpoint * kAData.get();
+        volts += (setpoint.position - getPositionRad()) * kPData.get();
+        setVoltage(volts);
     }
 
     public void setVoltage(double volts) {
@@ -191,6 +228,13 @@ public class Wrist extends SubsystemBase {
 
     }
 
+    public void setBrakeMode(){
+        wristIO.setBrakeMode();
+    }
+
+    public void setCoastMode(){
+        wristIO.setCoastMode();
+    }
     @Override
     public void periodic() {
         wristIO.updateData(data);
@@ -212,6 +256,7 @@ public class Wrist extends SubsystemBase {
 
         stateLog.set(state.name());
         // test
+        
     }
 
 }

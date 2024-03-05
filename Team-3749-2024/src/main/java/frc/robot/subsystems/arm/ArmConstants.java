@@ -16,19 +16,30 @@ public final class ArmConstants {
 
         public static final double sprocketRatio = 64.0 / 24.0;
         public static final int encoderID = 7;
-        public static final double encoderOffsetRad = Units.degreesToRadians(89.15);
+        public static final double encoderOffsetRad = Units.degreesToRadians(89.55);
 
         public static final double stowPositionRad = Units.degreesToRadians(1);
         public static final double climbPositionRad = Units.degreesToRadians(90);
         public static final double subwooferPositionRad = Units.degreesToRadians(20);
         public static final double ampPositionRad = Units.degreesToRadians(50);
+        
+        public enum ArmStates {
+                
+                STOW,
+                AMP,
+                SHOOT,
+                CLIMB,
+                SUBWOOFER,
+                IN_TRANIST;
+        }
+
 
         // Control - PID, FF, and Trapezoidal Constraints
         private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
-        private static final PIDConstants realStowedPID = new PIDConstants(0.4, 0, 0.05);
+        private static final PIDConstants realStowedPID = new PIDConstants(0.5, 0, 0.05);
         public static final PIDConstants stowedPID = Robot.isReal() ? realStowedPID : simPID;
        
-        private static final PIDConstants realDeployedPID = new PIDConstants(0.4, 0, 0.05);
+        private static final PIDConstants realDeployedPID = new PIDConstants(0.5, 0, 0.05);
         public static final PIDConstants deployedPID = Robot.isReal() ? realDeployedPID : new PIDConstants(0);
 
         private static final double simkS = 0.0;
@@ -37,9 +48,9 @@ public final class ArmConstants {
         private static final double simkV = 6.616; // max volts - kG / max velocity
         private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-        private static final double realStowedkS = 0.12;
-        private static final double realStowedkG = 0.247; // 0.37
-        private static final double realStowedkV = 3.9;
+        private static final double realStowedkS = 0.375;
+        private static final double realStowedkG = 0.675; // 1.05 - 0.3
+        private static final double realStowedkV = 3.75;
         private static final double realStowedkA = 0.165;
 
         public static final double stowedkS = Robot.isReal() ? realStowedkS : simkS;
@@ -63,33 +74,23 @@ public final class ArmConstants {
                         1.783,
                         89.175);
 
-        private static final Constraints realStowedConstraints = new Constraints(
+        private static final Constraints realStowedConstraints = new Constraints(        
                         2.662,
-                        6);
-        public static final Constraints stowedConstraints = Robot.isReal()
+                        5.5);
+        public static final Constraints stowedConstraints = Robot.isReal()                
                         ? realStowedConstraints
                         : simStowedConstraints;
 
-        private static final Constraints realDeployedConstraints = new Constraints(
+        private static final Constraints realDeployedConstraints = new Constraints(        
                         2.442,
-                        6
+                        5.5
 
                         );
-        public static final Constraints 
+        public static final Constraints                 
         deployedConstraints = Robot.isReal()
                         ? realDeployedConstraints
                         : new Constraints(0, 0);
-
-        public enum ArmStates {
                 
-                STOW,
-                AMP,
-                SHOOT,
-                CLIMB,
-                SUBWOOFER,
-                IN_TRANIST;
-        }
-
 
 
         // Field Parameters
