@@ -204,7 +204,7 @@ public class Swerve extends SubsystemBase {
         });
   }
   public void visionUpdateOdometry(LimelightHelpers.LimelightPose visionPose){
-      swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose, visionPose.timestamp);
+      // swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose, visionPose.timestamp);
   }
   
 
@@ -294,7 +294,7 @@ public class Swerve extends SubsystemBase {
             getPose().getRotation().getDegrees()
         });
 
-    // yawLog.set(gyroData.yawDeg);
+    yawLog.set(gyroData.yawDeg);
     // pitchLog.set(gyroData.pitchDeg);
     // rollLog.set(gyroData.rollDeg);
     gyroConnectedLog.set(gyroData.isConnected);
