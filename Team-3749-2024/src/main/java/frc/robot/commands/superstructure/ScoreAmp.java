@@ -13,7 +13,7 @@ import frc.robot.utils.UtilityFunctions;
 
 public class ScoreAmp implements SuperStructureCommandInterface {
     private boolean fullDeployedWrist = false;
-    private boolean groundIntakeWrist = false;
+    private boolean almostDeployedWrist = false;
     private boolean ampedArm = false;
     private boolean stowedArm = false;
     private boolean staticWrist = false;
@@ -32,7 +32,7 @@ public class ScoreAmp implements SuperStructureCommandInterface {
 
         if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
                 ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2) && Robot.wrist.getPositionRad() > 130)) {
-            groundIntakeWrist = true;
+            almostDeployedWrist = true;
         }
         if (Robot.arm.getState() == ArmStates.AMP) {
             ampedArm = true;
@@ -44,13 +44,12 @@ public class ScoreAmp implements SuperStructureCommandInterface {
             Robot.arm.setGoal(ArmStates.STOW);
         }
 
-        if (!fullDeployedWrist && !groundIntakeWrist && stowedArm) {
+        if (!fullDeployedWrist && !almostDeployedWrist && stowedArm) {
             // System.out.println("wrist to ground");
             Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
         }
 
-        if ((!fullDeployedWrist && groundIntakeWrist && stowedArm)
-                || (fullDeployedWrist)) {
+        if ((!fullDeployedWrist && almostDeployedWrist && stowedArm)) {
             // System.out.println("arm to amp");
             Robot.arm.setGoal(ArmStates.AMP);
             staticWrist = true;
@@ -65,12 +64,10 @@ public class ScoreAmp implements SuperStructureCommandInterface {
         }
 
         if (ampedArm && fullDeployedWrist) {
-            System.out.println("release note");
-            Robot.intake.setVoltage(3);
-            Robot.shooter.setVoltage(1, 1);
+
         }
         if (staticWrist) {
-            Robot.wrist.setVoltage(1.25);
+            Robot.wrist.setVoltage(1.5);
         } else {
             Robot.wrist.moveWristToGoal();
         }
@@ -89,7 +86,7 @@ public class ScoreAmp implements SuperStructureCommandInterface {
 
         fullDeployedWrist = false;
         staticWrist = false;
-        groundIntakeWrist = false;
+        almostDeployedWrist = false;
         ampedArm = false;
         stowedArm = false;
     }

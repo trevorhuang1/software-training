@@ -7,6 +7,8 @@ import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import frc.robot.subsystems.led.LEDConstants.LEDPattern;
+import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.SuperStructureStates;
@@ -17,7 +19,7 @@ public class GroundIntake implements SuperStructureCommandInterface {
     private boolean stowedArm = false;
     private boolean almostDeployedWrist = false;
     private boolean deployedWrist = false;
-    private boolean groundIntakeArm = false;
+    private boolean startedRollers = false;
 
     public GroundIntake() {
     }
@@ -37,9 +39,7 @@ public class GroundIntake implements SuperStructureCommandInterface {
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
         }
-        if (Robot.arm.getState() == ArmStates.GROUND_INTAKE) {
-            groundIntakeArm = true;
-        }
+
 
         if (!stowedWrist && !almostDeployedWrist && !deployedWrist) {
             Robot.wrist.setGoal(WristStates.STOW);
@@ -49,7 +49,11 @@ public class GroundIntake implements SuperStructureCommandInterface {
         }
         if (stowedWrist && stowedArm) {
             Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
-            Robot.intake.setState(IntakeStates.INTAKE);
+            if (!startedRollers){
+                startedRollers = true;
+                Robot.intake.setState(IntakeStates.INTAKE);
+                Robot.shooter.setState(ShooterStates.INTAKE);
+            }
         }
         if (almostDeployedWrist) {
             Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
@@ -60,6 +64,11 @@ public class GroundIntake implements SuperStructureCommandInterface {
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
 
+        if (Robot.intake.getState() == IntakeStates.INDEX){
+            Robot.led.setLEDPattern(LEDPattern.GREEN);
+            Robot.state = SuperStructureStates.STOW;
+        }
+
     }
 
     @Override
@@ -68,7 +77,7 @@ public class GroundIntake implements SuperStructureCommandInterface {
         stowedArm = false;
         almostDeployedWrist = false;
         deployedWrist = false;
-        groundIntakeArm = false;
+        startedRollers = false;
         Robot.intake.stop();
         Robot.shooter.stop();
     }

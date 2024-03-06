@@ -4,6 +4,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.UtilityFunctions;
 
@@ -21,7 +23,7 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
     @Override
     public void execute() {
-
+        Robot.shooter.setState(ShooterStates.SPOOL);
         if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
             fullDeployedWrist = true;
         }
@@ -74,8 +76,8 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
     @Override
     public void reset() {
-        Robot.intake.stop();
-        Robot.shooter.stop();
+        Robot.intake.setState(IntakeStates.STOP);
+        Robot.shooter.setState(ShooterStates.STOP);
         Robot.wrist.setVoltage(0);
 
         fullDeployedWrist = false;
@@ -84,4 +86,6 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
         subwoofedArm = false;
         stowedArm = false;
     }
+
+   
 }

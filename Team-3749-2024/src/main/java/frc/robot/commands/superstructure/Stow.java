@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.SuperStructureStates;
@@ -57,6 +59,11 @@ public class Stow implements SuperStructureCommandInterface {
         }
         if (stowedWrist) {
             Robot.arm.setGoal(ArmStates.STOW);
+            if (Robot.intake.getState() == IntakeStates.INTAKE){
+                Robot.intake.setState(IntakeStates.STOP);
+                Robot.shooter.setState(ShooterStates.STOP);
+
+            }
 
         }
 

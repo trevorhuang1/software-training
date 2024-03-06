@@ -104,7 +104,7 @@ public class JoystickIO {
     }
 
     public void pilotBindings() {
-        /// ground intake (some is redundant)
+        /// ground intake
         Robot.pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
@@ -118,23 +118,27 @@ public class JoystickIO {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist));
 
-        Robot.pilot.rightTrigger().whileTrue(
-                Commands.run(() -> Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec)))
-                .onFalse(Commands.runOnce(() -> Robot.shooter.stop(), Robot.shooter));
+        // Robot.pilot.rightTrigger().whileTrue(
+        // Commands.run(() ->
+        // Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec)))
+        // .onFalse(Commands.runOnce(() -> Robot.shooter.stop(), Robot.shooter));
 
-        Robot.pilot.b().whileTrue(Commands.run(() -> Robot.intake.setVoltage(12)))
-                .onFalse(Commands.runOnce(() -> Robot.intake.stop(), Robot.intake));
+        Robot.pilot.b().whileTrue(Commands.run(() -> Robot.intake.setState(IntakeStates.FEED)))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.intake.setState(IntakeStates.STOP);
+                    Robot.shooter.setState(ShooterStates.STOP);
+                }, Robot.intake));
         // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
-        Robot.pilot.rightBumper().whileTrue(Commands.run(() -> {
-            Robot.intake.setVoltage(-2);
-            Robot.shooter.setVoltage(-2, -2);
-        })).onFalse(Commands.runOnce(() -> {
-            Robot.intake.setVoltage(0);
-            Robot.shooter.setVoltage(0, 0);
-
+        Robot.pilot.rightBumper().onTrue(Commands.runOnce(() -> {
+            Robot.intake.setState(IntakeStates.INTAKE);
+            Robot.shooter.setState(ShooterStates.INTAKE);
         }));
+
+        Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.OUTTAKE), Robot.intake))
+                .onFalse(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake));
+
     }
 
     public void simBindings() {
