@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,9 +14,6 @@ import frc.robot.commands.superstructure.SuperStructureCommands;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
 
-
-
-
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.Wrist;
@@ -25,6 +21,7 @@ import frc.robot.utils.SuperStructureStates;
 import frc.robot.utils.Xbox;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.led.Led;
 
 public class Robot extends TimedRobot {
   public static final Xbox pilot = new Xbox(0);
@@ -40,6 +37,7 @@ public class Robot extends TimedRobot {
   public static SuperStructureCommands centralCommand = new SuperStructureCommands();
 
 
+  public static final Led led = new Led();
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
