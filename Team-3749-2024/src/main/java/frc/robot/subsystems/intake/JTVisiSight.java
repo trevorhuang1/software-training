@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JTVisiSight implements PhotoelectricIO{
 
-    private DigitalInput photoelectricSensor = new DigitalInput(0);
+    private DigitalInput photoelectricSensor = new DigitalInput(1);
 
     public JTVisiSight(){
 
@@ -14,6 +14,7 @@ public class JTVisiSight implements PhotoelectricIO{
     @Override
     public void updateData(PhotoelectricData data){
         data.sensing = photoelectricSensor.get();
+        System.out.println("updating data");
     }
     
     

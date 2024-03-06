@@ -5,12 +5,14 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.intake.IntakeIO.IntakeData;
+import frc.robot.subsystems.intake.PhotoelectricIO.PhotoelectricData;
 import frc.robot.utils.ShuffleData;
 
 public class Intake extends SubsystemBase {
 
     private IntakeIO intakeIO;
     private IntakeData data = new IntakeData();
+    private PhotoelectricData sensorData = new PhotoelectricData();
     private PhotoelectricIO photoeletricIO;
 
     private PIDController feedback = new PIDController(
@@ -23,22 +25,23 @@ public class Intake extends SubsystemBase {
             IntakeConstants.kV,
             0);
 
-    private ShuffleData<Double> IntakeVelocityLog = new ShuffleData<Double>(this.getName(), " intake velocity", 0.0);
-    private ShuffleData<Double> IntakevoltageLog = new ShuffleData<Double>(this.getName(), " intake voltage", 0.0);
-    private ShuffleData<Double> IntakecurrentLog = new ShuffleData<Double>(this.getName(), " intake current", 0.0);
+    private ShuffleData<Double> IntakeVelocityLog = new ShuffleData<Double>(this.getName(), "intake velocity", 0.0);
+    private ShuffleData<Double> IntakevoltageLog = new ShuffleData<Double>(this.getName(), "intake voltage", 0.0);
+    private ShuffleData<Double> IntakecurrentLog = new ShuffleData<Double>(this.getName(), "intake current", 0.0);
+    private ShuffleData<Boolean> photoelectricLog = new ShuffleData<Boolean>(this.getName(),
+            "photoelectric sensor tripped", false);
 
     public Intake() {
         if (Robot.isSimulation()) {
             intakeIO = new IntakeSim();
-            photoeletricIO= new PhotoelectricIO(){};
-            
-        }
-        else {
+            photoeletricIO = new PhotoelectricIO() {
+            };
+
+        } else {
             intakeIO = new IntakeSparkMax();
             photoeletricIO = new JTVisiSight();
         }
     }
-
 
     public void setIntakeVelocity(double velocityRadPerSec) {
 
@@ -68,6 +71,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
 
         intakeIO.updateData(data);
+        photoeletricIO.updateData(sensorData);
 
         IntakeVelocityLog.set(data.intakeVelocityRadPerSec);
 
@@ -75,7 +79,7 @@ public class Intake extends SubsystemBase {
 
         IntakecurrentLog.set(data.currentAmps);
 
-        
+        photoelectricLog.set(sensorData.sensing);
     }
 
 }
