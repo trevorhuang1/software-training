@@ -14,5 +14,8 @@ public interface SuperStructureCommandInterface {
     public default void reset(){
 
     };
+    public default void start(){
+        
+    }
     
 }

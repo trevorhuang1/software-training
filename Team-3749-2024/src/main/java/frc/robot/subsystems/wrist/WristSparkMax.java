@@ -28,7 +28,7 @@ private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorTy
         
         wristEncoder.setPositionConversionFactor(2 * Math.PI );
         wristEncoder.setVelocityConversionFactor(2 * Math.PI);
-        relativeEncoder.setVelocityConversionFactor(2*Math.PI / 150.0);
+        relativeEncoder.setVelocityConversionFactor(2*Math.PI / 150.0 / 60.0);
         wristMotor.setInverted(true);
         wristMotor.setSmartCurrentLimit(40);
         wristMotor.setIdleMode(IdleMode.kCoast);
@@ -71,6 +71,15 @@ private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorTy
     public void setVoltage(double volts) {
         appliedVolts = MathUtil.clamp(volts, -12, 12);
         wristMotor.setVoltage(appliedVolts);
+    }
+    @Override
+    public void setBrakeMode() {
+        wristMotor.setIdleMode(IdleMode.kBrake);
+    }
+
+        @Override
+    public void setCoastMode() {
+        wristMotor.setIdleMode(IdleMode.kCoast);
     }
 
 }

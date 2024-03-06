@@ -11,6 +11,7 @@ public final class ShooterConstants {
 
     public static final double shooterVelocityRadPerSec = 560;
 
+    public static final double ampVelocityRadPerSec = 60;
     private static final PIDConstants simShooterTopPID = new PIDConstants(
             0,
 
@@ -39,6 +40,14 @@ public final class ShooterConstants {
     public static final double topkV = 0.02025; // volts/radPerSec
 
     public static final double bottomkV = 0.02035;
+
+    public enum ShooterStates {
+        STOP,
+        INTAKE,
+        SPOOL,
+        INDEX,
+        AMP
+    }
 }
 
 

@@ -52,7 +52,7 @@ public class ArmSparkMax implements ArmIO {
     private double getAbsolutePositionRad() {
         double pos = absoluteEncoder.getPosition();
 
-        if (pos > 2.0/3.0 *Math.PI ){
+        if (pos > Units.degreesToRadians(128) ){
             pos -= absoluteEncoder.getPositionConversionFactor();
         }
         else if (pos < -1/3 * Math.PI){
@@ -68,6 +68,7 @@ public class ArmSparkMax implements ArmIO {
 
     @Override
     public void updateData(ArmData data) {
+        SmartDashboard.putString("break mode", leftMotor.getIdleMode().name());
         SmartDashboard.putNumber("abs encoder", absoluteEncoder.getPosition());
 
         previousVelocity = data.velocityRadPerSec;

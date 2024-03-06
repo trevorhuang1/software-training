@@ -44,8 +44,8 @@ public class Limelight extends SubsystemBase {
 
     public boolean targeting = false;
     // PhotonCamera instance
-    private final PhotonCamera cameraLeft = new PhotonCamera("LL2");
-    private final PhotonCamera cameraRight = new PhotonCamera("LL3");
+    private final PhotonCamera cameraLeft;
+    private final PhotonCamera cameraRight;
     // private final PhotonCamera cameraBack = new PhotonCamera("limelight2");
 
     private AprilTagFieldLayout aprilTagFieldLayout;
@@ -75,22 +75,28 @@ public class Limelight extends SubsystemBase {
 
     // Constructor
     public Limelight() {
+
+        cameraLeft = new PhotonCamera("LL2");
+        cameraRight = new PhotonCamera("LL3");
         try {
             // Loading AprilTag field layout
             aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
 
             // Initializing PhotonPoseEstimator based on robot type
-            if (Robot.isSimulation()){
-                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraLeft, VisionConstants.SIM_LEFT_ROBOT_TO_CAM);
-                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraRight, VisionConstants.SIM_RIGHT_ROBOT_TO_CAM);
-            }
-            else{
-                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraLeft, VisionConstants.ROBOT_TO_LEFT_CAM);
-                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    cameraRight, VisionConstants.ROBOT_TO_RIGHT_CAM);
+            if (Robot.isSimulation()) {
+                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout,
+                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                        cameraLeft, VisionConstants.SIM_LEFT_ROBOT_TO_CAM);
+                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout,
+                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                        cameraRight, VisionConstants.SIM_RIGHT_ROBOT_TO_CAM);
+            } else {
+                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout,
+                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                        cameraLeft, VisionConstants.ROBOT_TO_LEFT_CAM);
+                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout,
+                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                        cameraRight, VisionConstants.ROBOT_TO_RIGHT_CAM);
             }
             photonPoseEstimatorLeft.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
             photonPoseEstimatorRight.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
@@ -331,10 +337,11 @@ public class Limelight extends SubsystemBase {
                 estimatedPose2dLeft = new Pose2d(multiResultLeft.estimatedPose.best.getX(),
                         multiResultLeft.estimatedPose.best.getY(),
                         multiResultLeft.estimatedPose.best.getRotation().toRotation2d());
-                        
+
                 estimatedPose2dLeft
                         .transformBy(new Transform2d(VisionConstants.LEFT_CAM_TO_ROBOT.getX(),
-                                VisionConstants.LEFT_CAM_TO_ROBOT.getY(), VisionConstants.LEFT_CAM_TO_ROBOT.getRotation().toRotation2d()));
+                                VisionConstants.LEFT_CAM_TO_ROBOT.getY(),
+                                VisionConstants.LEFT_CAM_TO_ROBOT.getRotation().toRotation2d()));
                 // update swerve pose estimator
                 Robot.swerve.visionUpdateOdometry(
                         new LimelightHelpers.LimelightPose(estimatedPose2dLeft,
@@ -362,7 +369,8 @@ public class Limelight extends SubsystemBase {
                         multiResultRight.estimatedPose.best.getRotation().toRotation2d());
                 estimatedPose2dRight
                         .transformBy(new Transform2d(VisionConstants.RIGHT_CAM_TO_ROBOT.getX(),
-                                VisionConstants.RIGHT_CAM_TO_ROBOT.getY(), VisionConstants.RIGHT_CAM_TO_ROBOT.getRotation().toRotation2d()));
+                                VisionConstants.RIGHT_CAM_TO_ROBOT.getY(),
+                                VisionConstants.RIGHT_CAM_TO_ROBOT.getRotation().toRotation2d()));
                 // update swerve pose esimtator
                 Robot.swerve.visionUpdateOdometry(
                         new LimelightHelpers.LimelightPose(estimatedPose2dRight,
@@ -386,7 +394,7 @@ public class Limelight extends SubsystemBase {
         double smallestDistance = Double.POSITIVE_INFINITY;
         for (var target : estimation.targetsUsed) {
             var t3d = target.getBestCameraToTarget();
-            var distance = Math.sqrt(Math.pow(t3d.getX(), 2) + Math.pow(t3d.getY(), 2) + Math.pow(t3d.getZ(), 2));
+            var distance = Math.sqrt(t3d.getX() * t3d.getX() + t3d.getY() * t3d.getY() + t3d.getZ() * t3d.getZ());
             if (distance < smallestDistance)
                 smallestDistance = distance;
         }

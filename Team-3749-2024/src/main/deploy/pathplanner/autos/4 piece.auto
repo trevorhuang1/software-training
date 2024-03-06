@@ -5,33 +5,20 @@
       "x": 1.472,
       "y": 4.124
     },
-    "rotation": -4.875357475171979e-27
+    "rotation": 2.459879680462261e-27
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "bottom-speaker-3xwing_speaker-center.1"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "bottom-speaker-3xwing_speaker-center.2"
-                }
-              }
-            ]
+            "pathName": "bottom-speaker-3xwing_speaker-center.1"
           }
         },
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
             "commands": [
               {

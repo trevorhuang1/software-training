@@ -57,7 +57,6 @@ public class AutoUtils {
 
     autoChooser = AutoBuilder.buildAutoChooser("Test");
 
-    SmartDashboard.putData("Choose Auto", autoChooser);
   }
 
   public static void initAuto(HashMap<String, Command> commandList) {

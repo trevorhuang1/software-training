@@ -30,9 +30,12 @@ public class Arm extends SubsystemBase {
             ArmConstants.stowedPID.kD,
             ArmConstants.deployedConstraints);
 
-    private ArmFeedforward feedforward = new ArmFeedforward(ArmConstants.stowedkS,
+    private ArmFeedforward stowedFeedforward = new ArmFeedforward(ArmConstants.stowedkS,
             ArmConstants.stowedkG,
             ArmConstants.stowedkV);
+    private ArmFeedforward deployedFeedforward = new ArmFeedforward(ArmConstants.deployedkS,
+            ArmConstants.deployedkG,
+            ArmConstants.deployedkV);
 
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
@@ -58,15 +61,7 @@ public class Arm extends SubsystemBase {
             0.0);
     private ShuffleData<Double> setpointAccelerationLog = new ShuffleData<Double>(this.getName(),
             "setpoint acceleration", 0.0);
-    private ShuffleData<Double> errorPositionLog = new ShuffleData<Double>(this.getName(), "error position",
-            0.0);
-    private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>(this.getName(), "error velocity",
-            0.0);
-    private ShuffleData<Double> errorAccelerationLog = new ShuffleData<Double>(this.getName(), "error acceleration",
-            0.0);
 
-    private ShuffleData<Boolean> deployedModeLog = new ShuffleData<Boolean>(this.getName(), "deployed mode",
-            false);
     private ShuffleData<String> stateLog = new ShuffleData<String>(this.getName(), "state",
             ArmStates.STOW.name());
 
@@ -107,10 +102,15 @@ public class Arm extends SubsystemBase {
         if (state == ArmStates.CLIMB) {
             feedback.setGoal(ArmConstants.climbPositionRad);
         }
-
+        if (state == ArmStates.GROUND_INTAKE) {
+            feedback.setGoal(ArmConstants.groundIntakepositionRad);
+        }
+        if (state == ArmStates.SUBWOOFER) {
+            feedback.setGoal(ArmConstants.subwooferPositionRad);
+        }
     }
 
-    public void setGoal(double goalRad){
+    public void setGoal(double goalRad) {
         // state = ArmStates.SHOOT;
         feedback.setGoal(goalRad);
     }
@@ -132,36 +132,21 @@ public class Arm extends SubsystemBase {
         deployedMode = isDeployed;
         if (isDeployed) {
             feedback.setConstraints(ArmConstants.deployedConstraints);
-            feedforward = new ArmFeedforward(ArmConstants.deployedkS,
-                    ArmConstants.deployedkG,
-                    ArmConstants.deployedkV);
+
         } else {
             feedback.setConstraints(ArmConstants.stowedConstraints);
-            feedforward = new ArmFeedforward(ArmConstants.stowedkS,
-                    ArmConstants.stowedkG,
-                    ArmConstants.stowedkV);
+
         }
     }
 
     public void setVoltage(double volts) {
-        if (isKilled) {
-            armIO.setVoltage(0);
-        } else {
-            armIO.setVoltage(volts);
-        }
+        // if (isKilled) {
+        // armIO.setVoltage(0);
+        // } else {
+        armIO.setVoltage(volts);
+        // }
     }
 
-    private ShuffleData<Double> kPData = new ShuffleData(this.getName(),
-            "kpdata", 0.0);
-    private ShuffleData<Double> kVData = new ShuffleData(this.getName(),
-            "kVdata", 0.0);
-
-    private ShuffleData<Double> kAData = new ShuffleData(this.getName(),
-            "kAdata", 0.0);
-    private ShuffleData<Double> kSData = new ShuffleData(this.getName(),
-            "kSdata", 0.0);
-    private ShuffleData<Double> kGData = new ShuffleData(this.getName(),
-            "kGdata", 0.0);
     // private ShuffleData<Double> kDData = new ShuffleData(this.getName(),
     // "kDdata", 0.0);
 
@@ -173,29 +158,19 @@ public class Arm extends SubsystemBase {
         prevSetpointVelocity = setpoint.velocity;
 
         if (setpoint.position == ArmConstants.stowPositionRad
-                && UtilityFunctions.withinMargin(0.035, getPositionRad(), ArmConstants.stowPositionRad)
-                && UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0)) {
+                && UtilityFunctions.withinMargin(0.05, getVelocityRadPerSec(), 0)) {
             setVoltage(0);
             return;
         }
 
         double feedforward;
-        feedforward = calculateFF(getPositionRad(), setpoint.velocity, accelerationSetpoint);
+        feedforward = calculateFF(getPositionRad(), setpoint.velocity,
+                accelerationSetpoint);
         if (setpoint.velocity == 0) {
             // have the kS help the PID when stationary
-            feedforward += Math.signum(feedback) * ArmConstants.stowedkS * 0.9;
+            feedforward += Math.signum(feedback) * ArmConstants.stowedkS * 0.85;
         }
-        
-        
         setVoltage(feedforward + feedback);
-
-        // double volts = 0;
-        // volts += Math.signum(setpoint.velocity) * kSData.get();
-        // volts += Math.cos(getPositionRad()) * kGData.get();
-        // volts += setpoint.velocity * kVData.get();
-        // volts += accelerationSetpoint * kAData.get();
-        // volts += (setpoint.position - getPositionRad()) * kPData.get();
-        // setVoltage(volts);
 
     }
 
@@ -203,14 +178,39 @@ public class Arm extends SubsystemBase {
         isKilled = !isKilled;
     }
 
+    double lengthCFSToAxleX = Units.inchesToMeters(14);
+    double lengthCFSToAxleY = Units.inchesToMeters(7);
+    double lengthAxleToCFSAttatched = Units.inchesToMeters(15);
+
+    double lengthCFSToAxle = Math.hypot(lengthCFSToAxleX, lengthCFSToAxleY);
+    double axleToCFSTheta = Math.atan(lengthCFSToAxleY / lengthCFSToAxleX);
+
     public double calculateFF(double currentPositionRad, double setpointVelocityRadPerSec,
             double setpointAccelerationRadPerSecSquared) {
-        return feedforward.calculate(currentPositionRad, setpointVelocityRadPerSec, accelerationSetpoint);
+        // mathing the constant force spring angle for a seperate kG since its a
+        // changing vector angle of constant magnitude
+        double lengthCFS = Math.sqrt(lengthAxleToCFSAttatched * lengthAxleToCFSAttatched
+                + lengthCFSToAxle * lengthCFSToAxle
+                - 2 * lengthAxleToCFSAttatched * lengthCFSToAxle * Math.cos(currentPositionRad + axleToCFSTheta));
 
+        double cosAngleCFS = (lengthCFS * lengthCFS + lengthAxleToCFSAttatched * lengthAxleToCFSAttatched
+                - lengthCFSToAxle * lengthCFSToAxle) / (2 * lengthAxleToCFSAttatched * lengthCFSToAxle);
+
+        double CFSFF = cosAngleCFS * ArmConstants.stowedkG *0.3;
+        double armFF;
+        if (deployedMode) {
+            armFF = deployedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
+                    accelerationSetpoint);
+        } else {
+
+            armFF = stowedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
+                    accelerationSetpoint);
+                }
+
+        return armFF + CFSFF;
     }
 
     public double calculatePID(double currentPositionRad) {
-        feedback.setConstraints(ArmConstants.deployedConstraints);
         return feedback.calculate(currentPositionRad);
     }
 
@@ -236,13 +236,17 @@ public class Arm extends SubsystemBase {
             state = ArmStates.AMP;
             return;
         }
-        if (getGoal() == ArmConstants.subwooferPositionRad){
+        if (getGoal() == ArmConstants.subwooferPositionRad) {
             state = ArmStates.SUBWOOFER;
             return;
         }
-        if (Robot.state == SuperStructureStates.SHOOT) {
-            state = ArmStates.SHOOT;
-            return;
+        // if (Robot.state == SuperStructureStates.SHOOT) {
+        // state = ArmStates.SHOOT;
+        // return;
+        // }
+
+        if (getGoal() == ArmConstants.groundIntakepositionRad) {
+            state = ArmStates.GROUND_INTAKE;
         }
     }
 
@@ -253,22 +257,10 @@ public class Arm extends SubsystemBase {
         armIO.updateData(data);
         updateState();
         stateLog.set(state.name());
-
-        if (Robot.wrist.getState() == WristStates.IN_TRANIST) {
-            if (Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
-
-                setDeployedMode(false);
-                deployedModeLog.set(false);
-
-            } else {
-                setDeployedMode(true);
-                deployedModeLog.set(true);
-            }
-        }
-
+        // moveToGoal();
         positionLog.set(Units.radiansToDegrees(getPositionRad()));
         velocityLog.set(Units.radiansToDegrees(data.velocityRadPerSec));
-        accelerationLog.set(Units.radiansToDegrees(data.accelerationRadPerSecSquared));
+        // accelerationLog.set(Units.radiansToDegrees(data.accelerationRadPerSecSquared));
         voltageLog.set(data.appliedVolts);
         leftCurrentLog.set(data.leftCurrentAmps);
         rightCurrentLog.set(data.rightCurrentAmps);
@@ -278,24 +270,15 @@ public class Arm extends SubsystemBase {
         setpointVelocityLog.set(Units.radiansToDegrees(feedback.getSetpoint().velocity));
         setpointAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint));
 
-        errorPositionLog
-                .set(Units.radiansToDegrees(feedback.getSetpoint().position - data.positionRad));
-        errorVelocityLog.set(
-                Units.radiansToDegrees(feedback.getSetpoint().velocity - data.velocityRadPerSec));
-        errorAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint - data.accelerationRadPerSecSquared));
-
-        // mechanismArm.setAngle();
-        // SmartDashboard.putData("mech", mechanism);
-
-        boolean driverStationStatus = DriverStation.isEnabled();
-        if (driverStationStatus && !isEnabled) {
-            isEnabled = driverStationStatus;
-            armIO.setBreakMode();
-        }
-        if (!driverStationStatus && isEnabled) {
-            armIO.setCoastMode();
-            isEnabled = driverStationStatus;
-        }
+        // boolean driverStationStatus = DriverStation.isEnabled();
+        // if (driverStationStatus && !isEnabled) {
+        // isEnabled = driverStationStatus;
+        // armIO.setBreakMode();
+        // }
+        // if (!driverStationStatus && isEnabled) {
+        // armIO.setCoastMode();
+        // isEnabled = driverStationStatus;
+        // }
 
     }
 

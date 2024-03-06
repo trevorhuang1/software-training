@@ -19,6 +19,15 @@ public final class IntakeConstants {
             : simIntakePID;
     public static final double kV = 0.102;
 
-    public static final double intakeVelocityRadPerSec = 60;
+    public static final double intakeVelocityRadPerSec = 125;
     public static final double outtakeVelocityRadPerSec = -30;
+
+    public enum IntakeStates {
+        STOP,
+        INTAKE,
+        OUTTAKE,
+        INDEX,
+        FEED,
+        AMP
+    }
 }

@@ -12,7 +12,7 @@ public class SuperStructureCommands {
     private Stow stow = new Stow();
     private ScoreAmp scoreAmp= new ScoreAmp();
     private ScoreSubwoofer scoreSubwoofer = new ScoreSubwoofer();
-
+    private Reset reset = new Reset();
     private SuperStructureCommandInterface currentCommand = stow;
 
     public SuperStructureCommands() {
@@ -22,8 +22,10 @@ public class SuperStructureCommands {
         // System.out.println("ground intake");
         if (currentCommand != command) {
             currentCommand.reset();
+            currentCommand = command;
+            currentCommand.start();
         }
-        currentCommand = command;
+        
     }
 
     public void execute() {
@@ -33,11 +35,9 @@ public class SuperStructureCommands {
        
         switch (Robot.state) {
             case STOW:
-                // System.out.println("stow");
                 switchCommands(stow);
                 break;
             case GROUND_INTAKE:
-                // System.out.println("ground intake");
                 switchCommands(groundIntake);
                 break;
             case AMP:
@@ -46,6 +46,10 @@ public class SuperStructureCommands {
             case SUBWOOFER:
                 switchCommands(scoreSubwoofer);
                 break;
+            case RESET:
+                switchCommands(reset);
+                break;
+            
         }
         currentCommand.execute();
     }

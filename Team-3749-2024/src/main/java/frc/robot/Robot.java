@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,17 +14,14 @@ import frc.robot.commands.superstructure.SuperStructureCommands;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
 
-
-
-
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.Wrist;
-import frc.robot.utils.ShuffleData;
 import frc.robot.utils.SuperStructureStates;
 import frc.robot.utils.Xbox;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.led.Led;
 
 public class Robot extends TimedRobot {
   public static final Xbox pilot = new Xbox(0);
@@ -39,9 +35,9 @@ public class Robot extends TimedRobot {
   // public static final Limelight limelight = (new Limelight());
   public static SuperStructureStates state = SuperStructureStates.STOW;
   public static SuperStructureCommands centralCommand = new SuperStructureCommands();
-  public static Timer timer = new Timer();
 
 
+  public static final Led led = new Led();
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
@@ -54,12 +50,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    // centralCommand.execute();
+    centralCommand.execute();
 
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    wrist.setCoastMode();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -87,6 +85,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+      wrist.setBrakeMode();
+
   }
 
   @Override

@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import frc.robot.subsystems.led.LEDConstants.LEDPattern;
+import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.SuperStructureStates;
@@ -24,13 +27,13 @@ public class Stow implements SuperStructureCommandInterface {
     public Stow() {
     }
 
-    private double maxArmRadForStow = Units.degreesToRadians(30);
+    private double maxArmRadForStow = Units.degreesToRadians(8);
 
     @Override
     public void execute() {
 
         if (Robot.arm.getPositionRad() > maxArmRadForStow) {
-            Robot.arm.setGoal(Units.degreesToRadians(25));
+            Robot.arm.setGoal(Units.degreesToRadians(6));
             armWasRaised = true;
         } else {
             loweredArm = true;
@@ -57,22 +60,25 @@ public class Stow implements SuperStructureCommandInterface {
         }
         if (stowedWrist) {
             Robot.arm.setGoal(ArmStates.STOW);
+            if (Robot.intake.getState() == IntakeStates.INTAKE) {
+                Robot.intake.setState(IntakeStates.STOP);
+                Robot.shooter.setState(ShooterStates.STOP);
+
+            }
+            if (Robot.led.getCurrentPattern() != LEDPattern.WHITE) {
+                Robot.led.setLEDPattern(LEDPattern.WHITE);
+            }
 
         }
 
-        if (Robot.wrist.getState() == WristStates.IN_TRANIST && Robot.arm.getState() == ArmStates.STOW
-                && Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
-            Robot.wrist.setGoal(WristStates.GROUND_INTAKE);
-        }
+        // if (Robot.wrist.getState() == WristStates.IN_TRANIST && Robot.arm.getState()
+        // == ArmStates.STOW
+        // && Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
+        // Robot.wrist.setGoal(WristStates.GROUND_INTAKE);
+        // }
 
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
-        Robot.intake.stop();
-        Robot.shooter.stop();
-
-        SmartDashboard.putBoolean("lowering arm", loweringArm);
-        SmartDashboard.putBoolean("lowered arm", loweredArm);
-        SmartDashboard.putBoolean("Stowed wrist", stowedWrist);
 
     }
 
@@ -84,6 +90,13 @@ public class Stow implements SuperStructureCommandInterface {
         armWasRaised = false;
         timer.stop();
         timer.reset();
+    }
+
+    @Override
+    public void start() {
+        Robot.intake.stop();
+        Robot.shooter.stop();
+
     }
 
 }
