@@ -108,6 +108,8 @@ public class Shooter extends SubsystemBase {
       case SPOOL:
         setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec);
         break;
+      case AMP:
+        setShooterVelocity(ShooterConstants.ampVelocityRadPerSec);
     }
   }
 

@@ -119,12 +119,20 @@ public class Intake extends SubsystemBase {
                 break;
             case OUTTAKE:
                 outtake();
-                ;
                 break;
+            case AMP:
+                setVoltage(4);  
+                hasPiece = false;
+                indexedPiece = false;
+
         }
     }
 
     private void feed() {
+        if (Robot.arm.getState() == ArmStates.AMP){
+            Robot.shooter.setState(ShooterStates.AMP);
+            setState(IntakeStates.AMP);
+        }
         setVoltage(12);
         if (Robot.shooter.getState() == ShooterStates.STOP){
             Robot.shooter.setState(ShooterStates.SPOOL);

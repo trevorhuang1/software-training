@@ -27,6 +27,7 @@ public final class IntakeConstants {
         INTAKE,
         OUTTAKE,
         INDEX,
-        FEED
+        FEED,
+        AMP
     }
 }
