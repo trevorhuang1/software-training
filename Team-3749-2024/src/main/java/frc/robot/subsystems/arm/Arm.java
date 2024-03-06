@@ -158,9 +158,7 @@ public class Arm extends SubsystemBase {
         prevSetpointVelocity = setpoint.velocity;
 
         if (setpoint.position == ArmConstants.stowPositionRad
-                && UtilityFunctions.withinMargin(Units.degreesToRadians(5), getPositionRad(),
-                        ArmConstants.stowPositionRad)
-                && UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0)) {
+                && UtilityFunctions.withinMargin(0.05, getVelocityRadPerSec(), 0)) {
             setVoltage(0);
             return;
         }
