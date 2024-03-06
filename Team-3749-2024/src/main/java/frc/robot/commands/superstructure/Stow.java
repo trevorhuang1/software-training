@@ -27,13 +27,13 @@ public class Stow implements SuperStructureCommandInterface {
     public Stow() {
     }
 
-    private double maxArmRadForStow = Units.degreesToRadians(30);
+    private double maxArmRadForStow = Units.degreesToRadians(12);
 
     @Override
     public void execute() {
 
         if (Robot.arm.getPositionRad() > maxArmRadForStow) {
-            Robot.arm.setGoal(Units.degreesToRadians(25));
+            Robot.arm.setGoal(Units.degreesToRadians(8));
             armWasRaised = true;
         } else {
             loweredArm = true;

@@ -30,7 +30,7 @@ public class GroundIntake implements SuperStructureCommandInterface {
             stowedWrist = true;
         }
         if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
-                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2) && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.175)) {
+                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2) && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
             almostDeployedWrist = true;
         }
         if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {

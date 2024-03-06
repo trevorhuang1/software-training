@@ -6,6 +6,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
+import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.UtilityFunctions;
 
@@ -29,10 +30,9 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
         }
 
         if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
-                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2) && Robot.wrist.getPositionRad() > 130)) {
+                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2) && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
             almostDeployedWrist = true;
         }
-
         if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
             subwoofedArm = true;
         }
