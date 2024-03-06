@@ -16,13 +16,13 @@ public final class ArmConstants {
 
         public static final double sprocketRatio = 64.0 / 24.0;
         public static final int encoderID = 7;
-        public static final double encoderOffsetRad = Units.degreesToRadians(206.25);
+        public static final double encoderOffsetRad = Units.degreesToRadians(71.77);
 
         public static final double stowPositionRad = Units.degreesToRadians(1);
-        public static final double climbPositionRad = Units.degreesToRadians(90);
-        public static final double subwooferPositionRad = Units.degreesToRadians(20);
+        public static final double climbPositionRad = Units.degreesToRadians(97);
+        public static final double subwooferPositionRad = Units.degreesToRadians(25);
         public static final double ampPositionRad = Units.degreesToRadians(50);
-        public static final double groundIntakepositionRad = Units.degreesToRadians(15);
+        public static final double groundIntakepositionRad = Units.degreesToRadians(5.5);
 
         public enum ArmStates {
                 
@@ -50,9 +50,9 @@ public final class ArmConstants {
         private static final double simkV = 6.616; // max volts - kG / max velocity
         private static final double simkA = 0; // (max volts - kG - vel@maxacceleration*kV )/max acceleration
 
-        private static final double realStowedkS = 0.375;
-        private static final double realStowedkG = 0.675; // 1.05 - 0.3
-        private static final double realStowedkV = 3.75;
+        private static final double realStowedkS = 0.205;
+        private static final double realStowedkG = 0.375; // 0.58 - 0.17
+        private static final double realStowedkV = 3.9;
         private static final double realStowedkA = 0.165;
 
         public static final double stowedkS = Robot.isReal() ? realStowedkS : simkS;
@@ -60,10 +60,10 @@ public final class ArmConstants {
         public static final double stowedkV = Robot.isReal() ? realStowedkV : simkV;
         public static final double stowedkA = Robot.isReal() ? realStowedkA : simkA;
 
-        private static final double realDeployedkS = 0.255;
-        private static final double realDeployedkG = 0.505; // 0.76 - 0.25
+        private static final double realDeployedkS = 0.315;
+        private static final double realDeployedkG = 0.585; // 0.90 - 0.28
         private static final double realDeployedkV = 3.9;
-        private static final double realDeployedkA = 0.2;
+        private static final double realDeployedkA = 0.165;
 
         public static final double deployedkS = Robot.isReal() ? realDeployedkS : simkS;
         public static final double deployedkG = Robot.isReal() ? realDeployedkG : simkG;

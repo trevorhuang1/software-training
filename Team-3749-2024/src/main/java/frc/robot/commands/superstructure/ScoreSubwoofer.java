@@ -9,7 +9,7 @@ import frc.robot.utils.UtilityFunctions;
 
 public class ScoreSubwoofer implements SuperStructureCommandInterface {
     private boolean fullDeployedWrist = false;
-    private boolean groundIntakeWrist = false;
+    private boolean almostDeployedWrist = false;
     private boolean subwoofedArm = false;
     private boolean stowedArm = false;
     private boolean staticWrist = false;
@@ -28,11 +28,12 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
         if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
                 ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2) && Robot.wrist.getPositionRad() > 130)) {
-            groundIntakeWrist = true;
+            almostDeployedWrist = true;
         }
-        // if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
-        //     subwoofedArm = true;
-        // }
+
+        if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
+            subwoofedArm = true;
+        }
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
         }
@@ -40,37 +41,34 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
             Robot.arm.setGoal(ArmStates.STOW);
         }
 
-        if (!fullDeployedWrist && !groundIntakeWrist && stowedArm) {
+        if (!almostDeployedWrist) {
             // System.out.println("wrist to ground");
             Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
         }
 
-        if ((!fullDeployedWrist && groundIntakeWrist && stowedArm)
-                || (fullDeployedWrist)) {
+        if ((!fullDeployedWrist && almostDeployedWrist && stowedArm)) {
             // System.out.println("arm to amp");
-            // Robot.arm.setGoal(ArmStates.SUBWOOFER);
-            staticWrist = true;
-            if (Robot.arm.getPositionRad() > Units.degreesToRadians(5)) {
-                Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
-            }
+            Robot.arm.setGoal(ArmStates.SUBWOOFER);
+            Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+            
 
         }
-        if (UtilityFunctions.isStopped(Robot.arm.getVelocityRadPerSec())
-                && UtilityFunctions.isStopped(Robot.wrist.getVelocityRadPerSec()) && staticWrist) {
-            staticWrist = false;
-        }
+        // if (UtilityFunctions.isStopped(Robot.arm.getVelocityRadPerSec())
+        //         && UtilityFunctions.isStopped(Robot.wrist.getVelocityRadPerSec()) && staticWrist) {
+        //     staticWrist = false;
+        // }
 
 
-        if (staticWrist) {
-            Robot.wrist.setVoltage(1.25);
-        } else {
+        // if (staticWrist) {
+        //     Robot.wrist.setVoltage(1.25);
+        // } else {
             Robot.wrist.moveWristToGoal();
-        }
+        // }
 
         Robot.arm.moveToGoal();
 
         SmartDashboard.putBoolean("full dep", fullDeployedWrist);
-        SmartDashboard.putBoolean("ground int", groundIntakeWrist);
+        SmartDashboard.putBoolean("ground int", almostDeployedWrist);
         SmartDashboard.putBoolean("amp arm", subwoofedArm);
         SmartDashboard.putBoolean("amp stow", stowedArm);
         // SmartDashboard.putBoolean("full dep", fullDeployedWrist);
@@ -85,7 +83,7 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
         fullDeployedWrist = false;
         staticWrist = false;
-        groundIntakeWrist = false;
+        almostDeployedWrist = false;
         subwoofedArm = false;
         stowedArm = false;
     }

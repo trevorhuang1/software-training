@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.SuperStructureStates;
 
@@ -25,7 +26,8 @@ public class GroundIntake implements SuperStructureCommandInterface {
         if (Robot.wrist.getState() == WristStates.STOW) {
             stowedWrist = true;
         }
-        if (Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) {
+        if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
+                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2) && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.175)) {
             almostDeployedWrist = true;
         }
         if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
@@ -33,12 +35,11 @@ public class GroundIntake implements SuperStructureCommandInterface {
         }
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
-        }        
+        }
         if (Robot.arm.getState() == ArmStates.GROUND_INTAKE) {
             groundIntakeArm = true;
         }
 
-        
         if (!stowedWrist && !almostDeployedWrist && !deployedWrist) {
             Robot.wrist.setGoal(WristStates.STOW);
         }
@@ -49,11 +50,11 @@ public class GroundIntake implements SuperStructureCommandInterface {
             Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
             Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
         }
-        if (almostDeployedWrist){
+        if (almostDeployedWrist) {
             Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
-        }
-        if (groundIntakeArm){
+        
             Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+            Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
         }
 
         Robot.arm.moveToGoal();
@@ -63,9 +64,13 @@ public class GroundIntake implements SuperStructureCommandInterface {
 
     @Override
     public void reset() {
-        stowedArm = false;
         stowedWrist = false;
+        stowedArm = false;
+        almostDeployedWrist = false;
+        deployedWrist = false;
+        groundIntakeArm = false;
         Robot.intake.stop();
+        Robot.shooter.stop();
     }
 
 }

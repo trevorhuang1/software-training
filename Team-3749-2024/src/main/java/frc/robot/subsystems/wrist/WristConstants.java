@@ -13,7 +13,7 @@ public final class WristConstants {
 
     public static final double almostDeployedRad = Units.degreesToRadians(135); // 141
     public static final double stowGoalRad = Units.degreesToRadians(2);
-    public static final double fullDeployedRad = Units.degreesToRadians(156);
+    public static final double fullDeployedRad = Units.degreesToRadians(160);
     public static final double subwooferRad = Units.degreesToRadians(125);
 
     public enum WristStates{
@@ -53,7 +53,7 @@ public final class WristConstants {
 
     public static final double realkS = 0.0;
     public static final double realkVForward = 2.7;// 1.6 // radians
-    public static final double realkVBackward = 2.48     ; // radians
+    public static final double realkVBackward = 2.5     ; // radians
 
     public static final double kYIntercept = 0.0654;
     public static final double kBar =0.6353305811670058;

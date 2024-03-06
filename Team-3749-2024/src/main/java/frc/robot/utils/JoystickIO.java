@@ -98,97 +98,28 @@ public class JoystickIO {
     }
 
     public void pilotBindings() {
+        /// ground intake (some is redundant)
+        Robot.pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist, Robot.intake));
+                // .whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec),
+                //         Robot.intake));
+        // score subwoofer
+        Robot.pilot.a().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist));
 
-        // Robot.pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state =
-        // SuperStructureStates.GROUND_INTAKE))
-        // .onFalse(Commands.runOnce(() -> {
-        // Robot.state = SuperStructureStates.STOW;
-        // Robot.intake.stop();
-        // }, Robot.wrist, Robot.intake))
-        // .whileTrue(Commands.run(() ->
-        // Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec),
-        // Robot.intake));
+        Robot.pilot.rightTrigger().whileTrue(
+                Commands.run(() -> Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec)))
+                .onFalse(Commands.runOnce(() -> Robot.shooter.stop(), Robot.shooter));
 
-        // Robot.pilot.leftBumper().whileTrue(Commands.run(() ->
-        // Robot.intake.setVoltage(-3)))
-        // .onFalse(Commands.run(() -> Robot.intake.setVoltage(0)));
-
-        // Robot.pilot.rightTrigger().whileTrue(Commands.run(() -> {
-        // Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec);
-        // }, Robot.shooter));
-
-        // Robot.pilot.a().onTrue(Commands.runOnce(() -> Robot.state =
-        // SuperStructureStates.SUBWOOFER))
-        // .onFalse(Commands.runOnce(() -> {
-        // Robot.state = SuperStructureStates.STOW;
-        // Robot.shooter.stop();
-        // }, Robot.wrist, Robot.intake));
-
-        // Robot.pilot.b().whileTrue(Commands.run(() -> Robot.intake.setVoltage(12),
-        // Robot.intake));
-        // Robot.pilot.rightTrigger().onFalse(Commands.runOnce(() -> {
-        // Robot.shooter.stop();
-        // Robot.intake.stop();
-        // }, Robot.shooter));
-
-        // Robot.pilot.back().whileTrue(new Climb());
-
-        Robot.pilot.y().onTrue(Commands.runOnce(
-                () -> Robot.arm.setGoal(ArmStates.STOW)))
-                .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
-                        Robot.wrist));
-
-        Robot.pilot.x().onTrue(Commands.runOnce(
-                () -> Robot.arm.setGoal(ArmStates.AMP)))
-                .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
-                        Robot.wrist));
-        ;
-
-        Robot.pilot.povRight().onTrue(Commands.runOnce(
-                () -> Robot.arm.setGoal(ArmStates.CLIMB)))
-                .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
-                        Robot.wrist));
-        ;
-
-        // Robot.pilot.a().whileTrue(Commands.run(() -> Robot.arm.setVoltage(4),
-        // Robot.arm))
-        // .whileFalse(Commands.run(() -> Robot.arm.moveToGoal(), Robot.arm));
-        // Robot.pilot.b().whileTrue(Commands.run(() -> Robot.wrist.runShuffleData(),
-        // Robot.wrist));
-
-        // Robot.pilot.leftStick().whileTrue(Commands.run(() ->
-        // Robot.intake.setVoltage(12)))
-        // .onFalse(Commands.runOnce(() -> Robot.intake.stop()));
-
-        // // Robot.pilot.x().onTrue(Commands.runOnce(() -> SetRobotStates.setAmp(),
-        // // Robot.wrist, Robot.arm));
-        // Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.state =
-        // SuperStructureStates.GROUND_INTAKE, Robot.wrist,
-        // Robot.arm, Robot.intake));
-        // Robot.pilot.y().onFalse(
-        // Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist,
-        // Robot.arm, Robot.intake));
-
-        // Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.state =
-        // SuperStructureStates.AMP, Robot.wrist,
-        // Robot.arm, Robot.intake, Robot.shooter));
-        // Robot.pilot.x().onFalse(
-        // Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist,
-        // Robot.arm, Robot.intake));
-        // Robot.pilot.leftBumper().onTrue(Commands.runOnce(() -> Robot.state =
-        // SuperStructureStates.SUBWOOFER, Robot.wrist,
-        // Robot.arm, Robot.intake, Robot.shooter));
-        // Robot.pilot.x().onFalse(
-        // Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist,
-        // Robot.arm, Robot.intake));
-
-        // // gyro
+        Robot.pilot.b().whileTrue(Commands.run(() -> Robot.intake.setVoltage(12)))
+                .onFalse(Commands.runOnce(() -> Robot.intake.stop(), Robot.intake));
+        // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
-        // Robot.pilot.povDown().onTrue(Commands.runOnce(
-        // () -> Robot.swerve
-        // .resetOdometry(new Pose2d(new Translation2d(13.95, 5.55),
-        // Robot.swerve.getRotation2d()))));
     }
 
     public void simBindings() {

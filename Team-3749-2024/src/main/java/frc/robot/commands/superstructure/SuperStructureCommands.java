@@ -22,8 +22,10 @@ public class SuperStructureCommands {
         // System.out.println("ground intake");
         if (currentCommand != command) {
             currentCommand.reset();
+            currentCommand = command;
+            currentCommand.start();
         }
-        currentCommand = command;
+        
     }
 
     public void execute() {
@@ -46,6 +48,7 @@ public class SuperStructureCommands {
             case SUBWOOFER:
                 switchCommands(scoreSubwoofer);
                 break;
+            
         }
         currentCommand.execute();
     }

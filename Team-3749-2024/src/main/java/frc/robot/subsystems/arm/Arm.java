@@ -30,9 +30,12 @@ public class Arm extends SubsystemBase {
             ArmConstants.stowedPID.kD,
             ArmConstants.deployedConstraints);
 
-    private ArmFeedforward feedforward = new ArmFeedforward(ArmConstants.stowedkS,
+    private ArmFeedforward stowedFeedforward = new ArmFeedforward(ArmConstants.stowedkS,
             ArmConstants.stowedkG,
             ArmConstants.stowedkV);
+    private ArmFeedforward deployedFeedforward = new ArmFeedforward(ArmConstants.deployedkS,
+            ArmConstants.deployedkG,
+            ArmConstants.deployedkV);
 
     private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
     private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
@@ -107,7 +110,12 @@ public class Arm extends SubsystemBase {
         if (state == ArmStates.CLIMB) {
             feedback.setGoal(ArmConstants.climbPositionRad);
         }
-
+        if (state == ArmStates.GROUND_INTAKE) {
+            feedback.setGoal(ArmConstants.groundIntakepositionRad);
+        }
+        if (state == ArmStates.SUBWOOFER) {
+            feedback.setGoal(ArmConstants.subwooferPositionRad);
+        }
     }
 
     public void setGoal(double goalRad) {
@@ -132,22 +140,18 @@ public class Arm extends SubsystemBase {
         deployedMode = isDeployed;
         if (isDeployed) {
             feedback.setConstraints(ArmConstants.deployedConstraints);
-            feedforward = new ArmFeedforward(ArmConstants.deployedkS,
-                    ArmConstants.deployedkG,
-                    ArmConstants.deployedkV);
+
         } else {
             feedback.setConstraints(ArmConstants.stowedConstraints);
-            feedforward = new ArmFeedforward(ArmConstants.stowedkS,
-                    ArmConstants.stowedkG,
-                    ArmConstants.stowedkV);
+
         }
     }
 
     public void setVoltage(double volts) {
         // if (isKilled) {
-        //     armIO.setVoltage(0);
+        // armIO.setVoltage(0);
         // } else {
-            armIO.setVoltage(volts);
+        armIO.setVoltage(volts);
         // }
     }
 
@@ -173,30 +177,35 @@ public class Arm extends SubsystemBase {
         prevSetpointVelocity = setpoint.velocity;
 
         if (setpoint.position == ArmConstants.stowPositionRad
-                && UtilityFunctions.withinMargin(0.035, getPositionRad(), ArmConstants.stowPositionRad)
+                && UtilityFunctions.withinMargin(Units.degreesToRadians(5), getPositionRad(),
+                        ArmConstants.stowPositionRad)
                 && UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0)) {
             setVoltage(0);
             return;
         }
 
         double feedforward;
-        feedforward = calculateFF(getPositionRad(), setpoint.velocity, accelerationSetpoint);
+        feedforward = calculateFF(getPositionRad(), setpoint.velocity,
+                accelerationSetpoint);
         if (setpoint.velocity == 0) {
             // have the kS help the PID when stationary
             feedforward += Math.signum(feedback) * ArmConstants.stowedkS * 0.6;
         }
-
+        SmartDashboard.putNumber("FF", feedforward);
+        SmartDashboard.putNumber("Feedback", feedback);
         setVoltage(feedforward + feedback);
 
         // double volts = 0;
-        // volts +=kSData.get(); //Math.signum(setpoint.velocity)
+        // volts += Math.signum(setpoint.velocity) * kSData.get(); //
+        // Math.signum(setpoint.velocity)
         // volts += Math.cos(getPositionRad()) * kGData.get();
         // volts += setpoint.velocity * kVData.get();
         // volts += accelerationSetpoint * kAData.get();
         // volts += (setpoint.position - getPositionRad()) * kPData.get();
         // if (setpoint.velocity == 0) {
-        //     // have the kS help the PID when stationary
-        //     volts += Math.signum((setpoint.position - getPositionRad()) * kPData.get()) * kSData.get() * 0.5;
+        // // have the kS help the PID when stationary
+        // volts += Math.signum((setpoint.position - getPositionRad()) * kPData.get()) *
+        // kSData.get() * 0.5;
         // }
         // setVoltage(volts);
 
@@ -213,33 +222,41 @@ public class Arm extends SubsystemBase {
     double lengthCFSToAxle = Math.hypot(lengthCFSToAxleX, lengthCFSToAxleY);
     double axleToCFSTheta = Math.atan(lengthCFSToAxleY / lengthCFSToAxleX);
 
-
     public double calculateFF(double currentPositionRad, double setpointVelocityRadPerSec,
             double setpointAccelerationRadPerSecSquared) {
         // mathing the constant force spring angle for a seperate kG since its a
         // changing vector angle of constant magnitude
-
         double lengthCFS = Math.sqrt(Math.pow(lengthAxleToCFSAttatched, 2) + Math.pow(lengthCFSToAxle, 2)
                 - 2 * lengthAxleToCFSAttatched * lengthCFSToAxle * Math.cos(currentPositionRad + axleToCFSTheta));
 
-        double angleCFS = Math.acos((Math.pow(lengthAxleToCFSAttatched, 2) + Math.pow(lengthCFSToAxle, 2)
-                - Math.pow(lengthAxleToCFSAttatched, 2)) / (2 * lengthCFS * lengthCFSToAxle));
+        double angleCFS = Math.acos((Math.pow(lengthCFS, 2) + Math.pow(lengthAxleToCFSAttatched, 2)
+                - Math.pow(lengthCFSToAxle, 2)) / (2 * lengthAxleToCFSAttatched * lengthCFSToAxle));
 
         SmartDashboard.putNumber("angle cfs", angleCFS);
-
-        double armFF = feedforward.calculate(currentPositionRad, setpointVelocityRadPerSec, accelerationSetpoint);
+        SmartDashboard.putNumber("angle axle to CFS", axleToCFSTheta);
+        SmartDashboard.putNumber("lengthAxleToCFS", lengthAxleToCFSAttatched);
+        SmartDashboard.putNumber("length cfs", lengthCFS);
+        // SmartDashboard.putNumber("angle cfs", angleCFS);
 
         double CFSFF;
+        double armFF;
         if (deployedMode) {
+            armFF = deployedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
+                    accelerationSetpoint);
             CFSFF = Math.cos(angleCFS) * ArmConstants.deployedkG;
         } else {
+
+            armFF = stowedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
+                    accelerationSetpoint);
             CFSFF = Math.cos(angleCFS) * ArmConstants.stowedkG;
         }
+
+        SmartDashboard.putNumber("armFF", armFF);
+        SmartDashboard.putNumber("CFS", CFSFF);
         return armFF + CFSFF;
     }
 
     public double calculatePID(double currentPositionRad) {
-        feedback.setConstraints(ArmConstants.deployedConstraints);
         return feedback.calculate(currentPositionRad);
     }
 
@@ -270,11 +287,11 @@ public class Arm extends SubsystemBase {
             return;
         }
         // if (Robot.state == SuperStructureStates.SHOOT) {
-        //     state = ArmStates.SHOOT;
-        //     return;
+        // state = ArmStates.SHOOT;
+        // return;
         // }
 
-        if (getGoal() == ArmConstants.groundIntakepositionRad){
+        if (getGoal() == ArmConstants.groundIntakepositionRad) {
             state = ArmStates.GROUND_INTAKE;
         }
     }
@@ -286,7 +303,7 @@ public class Arm extends SubsystemBase {
         armIO.updateData(data);
         updateState();
         stateLog.set(state.name());
-        moveToGoal();
+        // moveToGoal();
 
         if (Robot.wrist.getState() == WristStates.IN_TRANIST) {
             if (Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {

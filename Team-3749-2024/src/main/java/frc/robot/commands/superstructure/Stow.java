@@ -67,8 +67,6 @@ public class Stow implements SuperStructureCommandInterface {
 
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
-        Robot.intake.stop();
-        Robot.shooter.stop();
 
         SmartDashboard.putBoolean("lowering arm", loweringArm);
         SmartDashboard.putBoolean("lowered arm", loweredArm);
@@ -84,6 +82,13 @@ public class Stow implements SuperStructureCommandInterface {
         armWasRaised = false;
         timer.stop();
         timer.reset();
+    }
+
+    @Override
+    public void start(){
+        Robot.intake.stop();
+        Robot.shooter.stop();
+
     }
 
 }
