@@ -82,6 +82,9 @@ public class Wrist extends SubsystemBase {
         if (state == WristStates.FULL_DEPLOYED) {
             wristController.setGoal(WristConstants.fullDeployedRad);
         }
+        if (state == WristStates.SUBWOOFER){
+            wristController.setGoal(WristConstants.subwooferRad);
+        }
 
     }
 
@@ -135,7 +138,7 @@ public class Wrist extends SubsystemBase {
         if ((positionRad == WristConstants.stowGoalRad
                 && UtilityFunctions.withinMargin(0.25, positionRad, data.positionRad))
                 && Math.abs(data.velocityRadPerSec) < 0.05) {
-            setVoltage(-Math.signum(pidGain) * 0.05);
+            setVoltage(pidGain);
             return;
         }
 
@@ -206,7 +209,8 @@ public class Wrist extends SubsystemBase {
     }
 
     private void updateState() {
-
+        // System.out.println(!atGoal());
+        // System.out.println(Math.abs(getVelocityRadPerSec()) > 0.125);
         if (!atGoal() || Math.abs(getVelocityRadPerSec()) > 0.125) {
             state = WristStates.IN_TRANIST;
             return;
@@ -224,6 +228,9 @@ public class Wrist extends SubsystemBase {
             state = WristStates.STOW;
             return;
 
+        }
+        if (getWristGoal().position == WristConstants.subwooferRad){
+            state = WristStates.SUBWOOFER;
         }
 
     }

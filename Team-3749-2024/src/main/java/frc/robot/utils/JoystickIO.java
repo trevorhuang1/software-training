@@ -99,44 +99,56 @@ public class JoystickIO {
 
     public void pilotBindings() {
 
-        Robot.pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.wrist.setGoal(WristStates.GROUND_INTAKE)))
-                .onFalse(Commands.runOnce(() -> Robot.wrist.setGoal(WristStates.STOW)))
+        Robot.pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                    Robot.intake.stop();
+                }, Robot.wrist, Robot.intake))
                 .whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec),
                         Robot.intake));
-        Robot.pilot.leftTrigger().onFalse(Commands.runOnce(() -> Robot.intake.stop(),
-                Robot.intake));
+
         Robot.pilot.leftBumper().whileTrue(Commands.run(() -> Robot.intake.setVoltage(-3)))
                 .onFalse(Commands.run(() -> Robot.intake.setVoltage(0)));
 
         Robot.pilot.rightTrigger().whileTrue(Commands.run(() -> {
             Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec);
         }, Robot.shooter));
+        Robot.pilot.a().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                    Robot.shooter.stop();
+                }, Robot.wrist, Robot.intake));
 
+        Robot.pilot.b().whileTrue(Commands.run(() -> Robot.intake.setVoltage(12), Robot.intake));
         Robot.pilot.rightTrigger().onFalse(Commands.runOnce(() -> {
             Robot.shooter.stop();
             Robot.intake.stop();
         }, Robot.shooter));
 
-        Robot.pilot.y().onTrue(Commands.runOnce(
-                () -> Robot.arm.setGoal(ArmStates.STOW))).whileTrue(Commands.run(() -> Robot.wrist.setVoltage(1),
-                        Robot.wrist))
-                .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
-                        Robot.wrist));
+        // Robot.pilot.back().whileTrue(new Climb());
 
-        Robot.pilot.x().onTrue(Commands.runOnce(
-                () -> Robot.arm.setGoal(ArmStates.AMP))).whileTrue(Commands.run(() -> Robot.wrist.setVoltage(1),
-                        Robot.wrist))
-                .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
-                        Robot.wrist));
-        ;
+        // Robot.pilot.y().onTrue(Commands.runOnce(
+        // () -> Robot.arm.setGoal(ArmStates.STOW))).whileTrue(Commands.run(() ->
+        // Robot.wrist.setVoltage(1),
+        // Robot.wrist))
+        // .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
+        // Robot.wrist));
 
-        Robot.pilot.povRight().onTrue(Commands.runOnce(
-                () -> Robot.arm.setGoal(ArmStates.CLIMB))).whileTrue(Commands.run(() -> Robot.wrist.setVoltage(1),
-                        Robot.wrist))
-                .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
-                        Robot.wrist));
-        ;
-        Robot.pilot.back().whileTrue(new Climb());
+        // Robot.pilot.x().onTrue(Commands.runOnce(
+        // () -> Robot.arm.setGoal(ArmStates.AMP))).whileTrue(Commands.run(() ->
+        // Robot.wrist.setVoltage(1),
+        // Robot.wrist))
+        // .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
+        // Robot.wrist));
+        // ;
+
+        // Robot.pilot.povRight().onTrue(Commands.runOnce(
+        // () -> Robot.arm.setGoal(ArmStates.CLIMB))).whileTrue(Commands.run(() ->
+        // Robot.wrist.setVoltage(1),
+        // Robot.wrist))
+        // .onFalse(Commands.run(() -> Robot.wrist.setVoltage(0),
+        // Robot.wrist));
+        // ;
 
         // Robot.pilot.a().whileTrue(Commands.run(() -> Robot.arm.setVoltage(4),
         // Robot.arm))

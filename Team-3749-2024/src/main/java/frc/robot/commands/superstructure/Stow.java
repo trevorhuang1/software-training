@@ -60,10 +60,10 @@ public class Stow implements SuperStructureCommandInterface {
 
         }
 
-        if (Robot.wrist.getState() == WristStates.IN_TRANIST && Robot.arm.getState() == ArmStates.STOW
-                && Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
-            Robot.wrist.setGoal(WristStates.GROUND_INTAKE);
-        }
+        // if (Robot.wrist.getState() == WristStates.IN_TRANIST && Robot.arm.getState() == ArmStates.STOW
+        //         && Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
+        //     Robot.wrist.setGoal(WristStates.GROUND_INTAKE);
+        // }
 
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();

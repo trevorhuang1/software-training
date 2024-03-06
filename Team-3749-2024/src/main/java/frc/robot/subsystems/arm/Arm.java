@@ -206,12 +206,13 @@ public class Arm extends SubsystemBase {
         isKilled = !isKilled;
     }
 
-    double lengthCFSToAxleX = Units.inchesToMeters(13);
-    double lengthCFSToAxleY = Units.inchesToMeters(8);
+    double lengthCFSToAxleX = Units.inchesToMeters(14);
+    double lengthCFSToAxleY = Units.inchesToMeters(7);
+    double lengthAxleToCFSAttatched = Units.inchesToMeters(15);
+    
     double lengthCFSToAxle = Math.hypot(lengthCFSToAxleX, lengthCFSToAxleY);
     double axleToCFSTheta = Math.atan(lengthCFSToAxleY / lengthCFSToAxleX);
 
-    double lengthAxleToCFSAttatched = Units.inchesToMeters(15.5);
 
     public double calculateFF(double currentPositionRad, double setpointVelocityRadPerSec,
             double setpointAccelerationRadPerSecSquared) {
