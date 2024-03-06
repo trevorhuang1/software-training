@@ -72,8 +72,8 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-            new WaitCommand(2), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
-            new WaitCommand(0.1), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE));
+            new WaitCommand(3), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
+            new WaitCommand(0.25), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE));
     // return new PrintCommand("no auto");
     // return Commands.run(() -> {
     //   Robot.intake.setIntakeVelocity(100);

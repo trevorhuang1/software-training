@@ -1,9 +1,11 @@
 package frc.robot.commands.superstructure;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Robot;
+import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
@@ -86,51 +88,19 @@ public class GroundIntake implements SuperStructureCommandInterface {
 
     @Override
     public void autoExecute() {
-        if (Robot.wrist.getState() == WristStates.STOW) {
-            stowedWrist = true;
-        }
-        if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
-                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2)
-                        && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
-            almostDeployedWrist = true;
-        }
-        if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
-            deployedWrist = true;
-        }
-        if (Robot.arm.getState() == ArmStates.STOW) {
-            stowedArm = true;
-        }
-        if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
-            atShoot = true;
-        }
-
-        if (!stowedWrist && !almostDeployedWrist && !deployedWrist && !atShoot) {
-            Robot.wrist.setGoal(WristStates.STOW);
-        }
-        if (!stowedArm&& !atShoot) {
-            Robot.arm.setGoal(ArmStates.STOW);
-        }
-        if (stowedWrist && stowedArm && !atShoot) {
-            Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
-            if (!startedRollers) {
-                startedRollers = true;
-                Robot.intake.setState(IntakeStates.INTAKE);
-                Robot.shooter.setState(ShooterStates.INTAKE);
-            }
-        }
-        if (almostDeployedWrist || atShoot) {
-            Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
-
-            Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
-        }
+      
+        Robot.arm.setGoal(ArmConstants.groundIntakepositionRad + Units.degreesToRadians(3));
+        Robot.intake.setState(IntakeStates.INTAKE);
+        Robot.shooter.setState(ShooterStates.INTAKE);
+        // System.out.println(atShoot);
 
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
 
-
     }
+
     @Override
-    public void autoReset(){
+    public void autoReset() {
         reset();
         atShoot = false;
     }
