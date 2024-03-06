@@ -103,8 +103,9 @@ public class JoystickIO {
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist, Robot.intake));
-                // .whileTrue(Commands.run(() -> Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec),
-                //         Robot.intake));
+        // .whileTrue(Commands.run(() ->
+        // Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec),
+        // Robot.intake));
         // score subwoofer
         Robot.pilot.a().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
                 .onFalse(Commands.runOnce(() -> {
@@ -120,6 +121,22 @@ public class JoystickIO {
         // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
+        Robot.pilot.leftBumper().whileTrue(Commands.run(() -> {
+            Robot.intake.setVoltage(2);
+            Robot.shooter.setVoltage(-0.2, -0.2);
+        })).onFalse(Commands.runOnce(() -> {
+            Robot.intake.setVoltage(0);
+            Robot.shooter.setVoltage(0, 0);
+
+        }));
+                Robot.pilot.rightBumper().whileTrue(Commands.run(() -> {
+            Robot.intake.setVoltage(-2);
+            Robot.shooter.setVoltage(-2, -2);
+        })).onFalse(Commands.runOnce(() -> {
+            Robot.intake.setVoltage(0);
+            Robot.shooter.setVoltage(0, 0);
+
+        }));
     }
 
     public void simBindings() {

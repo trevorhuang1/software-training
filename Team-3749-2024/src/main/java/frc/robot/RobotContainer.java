@@ -19,13 +19,12 @@ public class RobotContainer {
 
   private final JoystickIO joystickIO = new JoystickIO();
 
-
-
   public RobotContainer() {
-    if(Robot.isSimulation()) {
+    if (Robot.isSimulation()) {
       NetworkTableInstance inst = NetworkTableInstance.getDefault();
       inst.stopServer();
-      // Change the IP address in the below function to the IP address you use to connect to the PhotonVision UI.
+      // Change the IP address in the below function to the IP address you use to
+      // connect to the PhotonVision UI.
       inst.setServer("127.0.0.1");
       inst.startClient4("Robot Simulation");
     }
@@ -33,7 +32,7 @@ public class RobotContainer {
     DriverStation.removeRefreshedDataEventHandle(44000);
 
     configureBindings();
-  
+
     // DataLogManager.start(".wpilog");
     // DataLogManager.logNetworkTables(true);
     // DriverStation.startDataLog(DataLogManager.getLog(), true);
@@ -43,9 +42,9 @@ public class RobotContainer {
     RobotController.setBrownoutVoltage(7.0);
 
     // Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
-    // Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY, pilot::getRightX, pilot::getRightY));
+    // Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY,
+    // pilot::getRightX, pilot::getRightY));
   }
-
 
   private void configureBindings() {
     // joystickIO.getButtonBindings();
@@ -66,7 +65,11 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     // return new PrintCommand("no auto");
-    return Autos.get4Piece();
+    return Commands.run(() -> {
+      Robot.intake.setIntakeVelocity(100);
+      Robot.shooter.setShooterVelocity(150);
+    });
+    // return Autos.get4Piece();
     // return Robot.swerve.getSysIdDynamic(Direction.kForward);
   }
 }
