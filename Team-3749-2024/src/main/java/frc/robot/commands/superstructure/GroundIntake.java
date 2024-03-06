@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.SuperStructureStates;
@@ -48,13 +49,12 @@ public class GroundIntake implements SuperStructureCommandInterface {
         }
         if (stowedWrist && stowedArm) {
             Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
-            Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
+            Robot.intake.setState(IntakeStates.INTAKE);
         }
         if (almostDeployedWrist) {
             Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
         
             Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
-            Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
         }
 
         Robot.arm.moveToGoal();

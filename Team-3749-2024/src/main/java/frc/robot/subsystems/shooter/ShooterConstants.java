@@ -39,6 +39,13 @@ public final class ShooterConstants {
     public static final double topkV = 0.02025; // volts/radPerSec
 
     public static final double bottomkV = 0.02035;
+
+    public enum ShooterStates {
+        STOP,
+        INTAKE,
+        SPOOL,
+        INDEX,
+    }
 }
 
 

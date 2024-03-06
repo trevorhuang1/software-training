@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.intake.IntakeIO.IntakeData;
 import frc.robot.subsystems.intake.PhotoelectricIO.PhotoelectricData;
 import frc.robot.utils.ShuffleData;
@@ -25,11 +26,16 @@ public class Intake extends SubsystemBase {
             IntakeConstants.kV,
             0);
 
+    private IntakeStates state = IntakeStates.STOP;
+
     private ShuffleData<Double> IntakeVelocityLog = new ShuffleData<Double>(this.getName(), "intake velocity", 0.0);
     private ShuffleData<Double> IntakevoltageLog = new ShuffleData<Double>(this.getName(), "intake voltage", 0.0);
     private ShuffleData<Double> IntakecurrentLog = new ShuffleData<Double>(this.getName(), "intake current", 0.0);
     private ShuffleData<Boolean> photoelectricLog = new ShuffleData<Boolean>(this.getName(),
             "photoelectric sensor tripped", false);
+
+
+    private boolean hasPiece = false;
 
     public Intake() {
         if (Robot.isSimulation()) {
@@ -41,6 +47,13 @@ public class Intake extends SubsystemBase {
             intakeIO = new IntakeSparkMax();
             photoeletricIO = new JTVisiSight();
         }
+    }
+
+    public void setHasPiece(boolean has){
+        hasPiece = has;
+    }
+    public boolean getHasPiece(){
+        return hasPiece;
     }
 
     public void setIntakeVelocity(double velocityRadPerSec) {
@@ -67,9 +80,48 @@ public class Intake extends SubsystemBase {
 
     }
 
+    public void setState(IntakeStates state){
+        this.state = state;
+    }
+
+
+    public void runIntakeState(){
+        switch (state){
+            case STOP:
+                stop();
+                break;
+            case INTAKE:
+                intake();
+                break;
+            case INDEX:
+                index();
+                break;
+            case FEED:
+                setVoltage(12);
+                break;
+            case OUTTAKE:
+                setVoltage(-6);
+                break;
+        }
+    }
+
+
+
+    private void intake(){
+        if (!hasPiece){
+            setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
+        }
+
+    }
+
+    private void index(){
+            setVoltage(1);
+
+    }
+
     @Override
     public void periodic() {
-
+        runIntakeState();
         intakeIO.updateData(data);
         photoeletricIO.updateData(sensorData);
 

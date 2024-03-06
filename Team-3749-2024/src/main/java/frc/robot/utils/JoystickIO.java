@@ -24,7 +24,9 @@ import frc.robot.subsystems.arm.ArmSim;
 import frc.robot.subsystems.arm.ShootKinematics;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 // import frc.robot.commands.swerve.MoveToPose;
 // import frc.robot.commands.swerve.Teleop;
 // import frc.robot.commands.swerve.TeleopJoystickRelative;
@@ -125,15 +127,7 @@ public class JoystickIO {
         // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
-        Robot.pilot.leftBumper().whileTrue(Commands.run(() -> {
-            Robot.intake.setVoltage(2);
-            Robot.shooter.setVoltage(-0.2, -0.2);
-        })).onFalse(Commands.runOnce(() -> {
-            Robot.intake.setVoltage(0);
-            Robot.shooter.setVoltage(0, 0);
-
-        }));
-                Robot.pilot.rightBumper().whileTrue(Commands.run(() -> {
+        Robot.pilot.rightBumper().whileTrue(Commands.run(() -> {
             Robot.intake.setVoltage(-2);
             Robot.shooter.setVoltage(-2, -2);
         })).onFalse(Commands.runOnce(() -> {

@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterData;
 import frc.robot.utils.ShuffleData;
 
@@ -11,7 +12,7 @@ public class Shooter extends SubsystemBase {
 
   private ShooterIO shooterIO;
   private ShooterData data = new ShooterData();
-
+  private ShooterStates state = ShooterStates.STOP;
   private PIDController bottomFeedback = new PIDController(
       ShooterConstants.shooterBottomPID.kP,
       ShooterConstants.shooterBottomPID.kI,
@@ -52,7 +53,6 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-
   public void setShooterVelocity(double velocityRadPerSec) {
 
     double topVoltage = topFeedback.calculate(
@@ -76,6 +76,34 @@ public class Shooter extends SubsystemBase {
 
   public void stop() {
     shooterIO.setVoltage(0, 0);
+
+  }
+
+  public void runShooterState() {
+    switch (state) {
+      case STOP:
+        stop();
+        break;
+      case INTAKE:
+        break;
+      case INDEX:
+        index();
+        break;
+      case SPOOL:
+        setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec);
+        break;
+    }
+  }
+
+  public void setState(ShooterStates state) {
+    this.state = state;
+  }
+  private void intake(){
+    
+    setVoltage(-0.2, -0.2);
+
+  }
+  private void index() {
 
   }
 
