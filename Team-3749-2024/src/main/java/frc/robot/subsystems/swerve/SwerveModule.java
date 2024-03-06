@@ -23,15 +23,15 @@ public class SwerveModule {
     // private double previousSetpointVelocity = 0;
 
     private ShuffleData<Double> driveSpeed;
-    // private ShuffleData<Double> drivePosition;
-    // private ShuffleData<Double> driveTemp;
-    // private ShuffleData<Double> driveVolts;
+    private ShuffleData<Double> drivePosition;
+    private ShuffleData<Double> driveTemp;
+    private ShuffleData<Double> driveVolts;
     private ShuffleData<Double> driveCurrent;
 
-    // private ShuffleData<Double> turningSpeed;
+    private ShuffleData<Double> turningSpeed;
     private ShuffleData<Double> turningPosition;
-    // private ShuffleData<Double> turningTemp;
-    // private ShuffleData<Double> turningVolts;
+    private ShuffleData<Double> turningTemp;
+    private ShuffleData<Double> turningVolts;
     private ShuffleData<Double> turningCurrent;
 
     public SwerveModule(int i, SwerveModuleIO SwerveModule) {
@@ -56,22 +56,22 @@ public class SwerveModule {
 
         // Tab, name, data
         driveSpeed = new ShuffleData<>("swerve/" + name, name + " drive speed", moduleData.driveVelocityMPerSec);
-        // drivePosition = new ShuffleData<>("swerve/" + name, name + " drive position",
-        // moduleData.driveVelocityMPerSec);
-        // driveTemp = new ShuffleData<>("swerve/" + name, name + " drive temp",
-        // moduleData.driveVelocityMPerSec);
-        // driveVolts = new ShuffleData<>("swerve/" + name, name + " drive volts",
-        // moduleData.driveVelocityMPerSec);
+        drivePosition = new ShuffleData<>("swerve/" + name, name + " drive position",
+        moduleData.driveVelocityMPerSec);
+        driveTemp = new ShuffleData<>("swerve/" + name, name + " drive temp",
+        moduleData.driveVelocityMPerSec);
+        driveVolts = new ShuffleData<>("swerve/" + name, name + " drive volts",
+        moduleData.driveVelocityMPerSec);
         driveCurrent = new ShuffleData<>("swerve/" + name, name + " drive current", moduleData.driveVelocityMPerSec);
 
-        // turningSpeed = new ShuffleData<>("swerve/" + name, name + " turning speed",
-        // moduleData.driveVelocityMPerSec);
+        turningSpeed = new ShuffleData<>("swerve/" + name, name + " turning speed",
+        moduleData.driveVelocityMPerSec);
         turningPosition = new ShuffleData<>("swerve/" + name, name + " turning position",
                 moduleData.driveVelocityMPerSec);
-        // turningTemp = new ShuffleData<>("swerve/" + name, name + " turning temp",
-        // moduleData.driveVelocityMPerSec);
-        // turningVolts = new ShuffleData<>("swerve/" + name, name + " turning volts",
-        // moduleData.driveVelocityMPerSec);
+        turningTemp = new ShuffleData<>("swerve/" + name, name + " turning temp",
+        moduleData.driveVelocityMPerSec);
+        turningVolts = new ShuffleData<>("swerve/" + name, name + " turning volts",
+        moduleData.driveVelocityMPerSec);
         turningCurrent = new ShuffleData<>("swerve/" + name, name + " turning current", moduleData.turnCurrentAmps);
     }
 
@@ -163,15 +163,15 @@ public class SwerveModule {
         moduleIO.updateData(moduleData);
 
         driveSpeed.set(moduleData.driveVelocityMPerSec);
-        // drivePosition.set(moduleData.drivePositionM);
-        // driveTemp.set(moduleData.driveTempCelcius);
-        // driveVolts.set(moduleData.driveAppliedVolts);
+        drivePosition.set(moduleData.drivePositionM);
+        driveTemp.set(moduleData.driveTempCelcius);
+        driveVolts.set(moduleData.driveAppliedVolts);
         driveCurrent.set(moduleData.driveCurrentAmps);
 
-        // turningSpeed.set(moduleData.turnVelocityRadPerSec);
+        turningSpeed.set(moduleData.turnVelocityRadPerSec);
         turningPosition.set(moduleData.turnAbsolutePositionRad);
-        // turningTemp.set(moduleData.turnTempCelcius);
-        // turningVolts.set(moduleData.turnAppliedVolts);
+        turningTemp.set(moduleData.turnTempCelcius);
+        turningVolts.set(moduleData.turnAppliedVolts);
         turningCurrent.set(moduleData.turnCurrentAmps);
 
     }

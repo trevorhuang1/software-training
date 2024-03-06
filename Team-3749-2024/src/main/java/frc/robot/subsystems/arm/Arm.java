@@ -57,12 +57,10 @@ public class Arm extends SubsystemBase {
             0.0);
     private ShuffleData<Double> setpointPositionLog = new ShuffleData<Double>(this.getName(), "setpoint position",
             0.0);
-    // private ShuffleData<Double> setpointVelocityLog = new
-    // ShuffleData<Double>(this.getName(), "setpoint velocity",
-    // 0.0);
-    // private ShuffleData<Double> setpointAccelerationLog = new
-    // ShuffleData<Double>(this.getName(),
-    // "setpoint acceleration", 0.0);
+    private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>(this.getName(), "setpoint velocity",
+            0.0);
+    private ShuffleData<Double> setpointAccelerationLog = new ShuffleData<Double>(this.getName(),
+            "setpoint acceleration", 0.0);
 
     private ShuffleData<String> stateLog = new ShuffleData<String>(this.getName(), "state",
             ArmStates.STOW.name());
@@ -176,20 +174,6 @@ public class Arm extends SubsystemBase {
         }
         setVoltage(feedforward + feedback);
 
-        // double volts = 0;
-        // volts += Math.signum(setpoint.velocity) * kSData.get(); //
-        // Math.signum(setpoint.velocity)
-        // volts += Math.cos(getPositionRad()) * kGData.get();
-        // volts += setpoint.velocity * kVData.get();
-        // volts += accelerationSetpoint * kAData.get();
-        // volts += (setpoint.position - getPositionRad()) * kPData.get();
-        // if (setpoint.velocity == 0) {
-        // // have the kS help the PID when stationary
-        // volts += Math.signum((setpoint.position - getPositionRad()) * kPData.get()) *
-        // kSData.get() * 0.5;
-        // }
-        // setVoltage(volts);
-
     }
 
     public void toggleKill() {
@@ -287,20 +271,8 @@ public class Arm extends SubsystemBase {
 
         goalLog.set(Units.radiansToDegrees(feedback.getGoal().position));
         setpointPositionLog.set(Units.radiansToDegrees(feedback.getSetpoint().position));
-        // setpointVelocityLog.set(Units.radiansToDegrees(feedback.getSetpoint().velocity));
-        // setpointAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint));
-
-        // errorPositionLog
-        // .set(Units.radiansToDegrees(feedback.getSetpoint().position -
-        // data.positionRad));
-        // errorVelocityLog.set(
-        // Units.radiansToDegrees(feedback.getSetpoint().velocity -
-        // data.velocityRadPerSec));
-        // errorAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint -
-        // data.accelerationRadPerSecSquared));
-
-        // mechanismArm.setAngle();
-        // SmartDashboard.putData("mech", mechanism);
+        setpointVelocityLog.set(Units.radiansToDegrees(feedback.getSetpoint().velocity));
+        setpointAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint));
 
         // boolean driverStationStatus = DriverStation.isEnabled();
         // if (driverStationStatus && !isEnabled) {
