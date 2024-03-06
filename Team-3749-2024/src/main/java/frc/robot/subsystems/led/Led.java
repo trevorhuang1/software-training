@@ -21,7 +21,7 @@ public class Led extends SubsystemBase {
        LEDs.setLength(LEDBuffer.getLength());
        LEDs.setData(LEDBuffer);
        LEDs.start();
-       setLEDPattern(teamColorLED());
+       setLEDPattern(LEDPattern.WHITE);
     }
 
     private LEDPattern teamColorLED()
@@ -59,6 +59,10 @@ public class Led extends SubsystemBase {
     public void setLEDPattern(LEDPattern pattern)
     {
         this.currentPattern = pattern;
+    }
+
+    public LEDPattern getCurrentPattern(){
+        return currentPattern;
     }
 
     // runs every 0.02 sec

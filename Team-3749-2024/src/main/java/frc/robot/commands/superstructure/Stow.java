@@ -9,6 +9,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import frc.robot.subsystems.led.LEDConstants.LEDPattern;
 import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
@@ -59,22 +60,25 @@ public class Stow implements SuperStructureCommandInterface {
         }
         if (stowedWrist) {
             Robot.arm.setGoal(ArmStates.STOW);
-            if (Robot.intake.getState() == IntakeStates.INTAKE){
+            if (Robot.intake.getState() == IntakeStates.INTAKE) {
                 Robot.intake.setState(IntakeStates.STOP);
                 Robot.shooter.setState(ShooterStates.STOP);
 
             }
+            if (Robot.led.getCurrentPattern() != LEDPattern.WHITE) {
+                Robot.led.setLEDPattern(LEDPattern.WHITE);
+            }
 
         }
 
-        // if (Robot.wrist.getState() == WristStates.IN_TRANIST && Robot.arm.getState() == ArmStates.STOW
-        //         && Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
-        //     Robot.wrist.setGoal(WristStates.GROUND_INTAKE);
+        // if (Robot.wrist.getState() == WristStates.IN_TRANIST && Robot.arm.getState()
+        // == ArmStates.STOW
+        // && Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
+        // Robot.wrist.setGoal(WristStates.GROUND_INTAKE);
         // }
 
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
-
 
     }
 
@@ -89,7 +93,7 @@ public class Stow implements SuperStructureCommandInterface {
     }
 
     @Override
-    public void start(){
+    public void start() {
         Robot.intake.stop();
         Robot.shooter.stop();
 
