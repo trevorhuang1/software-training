@@ -63,7 +63,7 @@ public class Wrist extends SubsystemBase {
             WristStates.STOW.name());
 
     public Wrist() {
-        setpointToggle.put(true, WristConstants.groundGoalRad);
+        setpointToggle.put(true, WristConstants.almostDeployedRad);
         setpointToggle.put(false, WristConstants.stowGoalRad);
         wristIO = new WristSparkMax();
         if (Robot.isSimulation()) {
@@ -73,8 +73,8 @@ public class Wrist extends SubsystemBase {
     }
 
     public void setGoal(WristStates state) {
-        if (state == WristStates.GROUND_INTAKE) {
-            wristController.setGoal(WristConstants.groundGoalRad);
+        if (state == WristStates.ALMOST_DEPLOYED) {
+            wristController.setGoal(WristConstants.almostDeployedRad);
         }
         if (state == WristStates.STOW) {
             wristController.setGoal(WristConstants.stowGoalRad);
@@ -147,7 +147,7 @@ public class Wrist extends SubsystemBase {
             voltage += wristFF.calculate(data.positionRad, velocityRadPerSec); // is getting the goal redundant?
         } else {
             voltage += Math.signum(pidGain) * WristConstants.realkS;
-            voltage += getWristGoal().position == WristConstants.groundGoalRad
+            voltage += getWristGoal().position == WristConstants.almostDeployedRad
 
                     ? velocityRadPerSec * WristConstants.realkVForward
                     : velocityRadPerSec * WristConstants.realkVBackward;
@@ -215,8 +215,8 @@ public class Wrist extends SubsystemBase {
             state = WristStates.IN_TRANIST;
             return;
         }
-        if (getWristGoal().position == WristConstants.groundGoalRad) {
-            state = WristStates.GROUND_INTAKE;
+        if (getWristGoal().position == WristConstants.almostDeployedRad) {
+            state = WristStates.ALMOST_DEPLOYED;
             return;
         }
         if (getWristGoal().position == WristConstants.fullDeployedRad) {

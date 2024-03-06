@@ -5,7 +5,7 @@ import frc.robot.subsystems.wrist.WristConstants.WristStates;
 
 public enum SuperStructureStates{
     STOW(WristStates.STOW, ArmStates.STOW),
-    GROUND_INTAKE(WristStates.GROUND_INTAKE, ArmStates.STOW),
+    GROUND_INTAKE(WristStates.ALMOST_DEPLOYED, ArmStates.STOW),
     AMP(WristStates.FULL_DEPLOYED, ArmStates.AMP),
     SHOOT(WristStates.FULL_DEPLOYED, ArmStates.SHOOT),
     CLIMB(WristStates.STOW, ArmStates.CLIMB),

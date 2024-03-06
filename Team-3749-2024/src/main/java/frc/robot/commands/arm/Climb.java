@@ -43,6 +43,8 @@ public class Climb extends Command {
         //     Robot.arm.setVoltage(-4.5);
         // }
         // else {
+
+            System.out.println("CLIMB");
             Robot.arm.setVoltage(-4.5);
         // }
 

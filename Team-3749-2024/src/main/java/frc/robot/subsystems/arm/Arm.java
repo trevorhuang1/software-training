@@ -144,11 +144,11 @@ public class Arm extends SubsystemBase {
     }
 
     public void setVoltage(double volts) {
-        if (isKilled) {
-            armIO.setVoltage(0);
-        } else {
+        // if (isKilled) {
+        //     armIO.setVoltage(0);
+        // } else {
             armIO.setVoltage(volts);
-        }
+        // }
     }
 
     private ShuffleData<Double> kPData = new ShuffleData(this.getName(),
@@ -172,33 +172,33 @@ public class Arm extends SubsystemBase {
         double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
         prevSetpointVelocity = setpoint.velocity;
 
-        // if (setpoint.position == ArmConstants.stowPositionRad
-        //         && UtilityFunctions.withinMargin(0.035, getPositionRad(), ArmConstants.stowPositionRad)
-        //         && UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0)) {
-        //     setVoltage(0);
-        //     return;
-        // }
+        if (setpoint.position == ArmConstants.stowPositionRad
+                && UtilityFunctions.withinMargin(0.035, getPositionRad(), ArmConstants.stowPositionRad)
+                && UtilityFunctions.withinMargin(0.1, getVelocityRadPerSec(), 0)) {
+            setVoltage(0);
+            return;
+        }
 
-        // double feedforward;
-        // feedforward = calculateFF(getPositionRad(), setpoint.velocity, accelerationSetpoint);
-        // if (setpoint.velocity == 0) {
-        //     // have the kS help the PID when stationary
-        //     feedforward += Math.signum(feedback) * ArmConstants.stowedkS * 0.6;
-        // }
-
-        // setVoltage(feedforward + feedback);
-
-        double volts = 0;
-        volts +=kSData.get(); //Math.signum(setpoint.velocity)
-        volts += Math.cos(getPositionRad()) * kGData.get();
-        volts += setpoint.velocity * kVData.get();
-        volts += accelerationSetpoint * kAData.get();
-        volts += (setpoint.position - getPositionRad()) * kPData.get();
+        double feedforward;
+        feedforward = calculateFF(getPositionRad(), setpoint.velocity, accelerationSetpoint);
         if (setpoint.velocity == 0) {
             // have the kS help the PID when stationary
-            volts += Math.signum((setpoint.position - getPositionRad()) * kPData.get()) * kSData.get() * 0.5;
+            feedforward += Math.signum(feedback) * ArmConstants.stowedkS * 0.6;
         }
-        setVoltage(volts);
+
+        setVoltage(feedforward + feedback);
+
+        // double volts = 0;
+        // volts +=kSData.get(); //Math.signum(setpoint.velocity)
+        // volts += Math.cos(getPositionRad()) * kGData.get();
+        // volts += setpoint.velocity * kVData.get();
+        // volts += accelerationSetpoint * kAData.get();
+        // volts += (setpoint.position - getPositionRad()) * kPData.get();
+        // if (setpoint.velocity == 0) {
+        //     // have the kS help the PID when stationary
+        //     volts += Math.signum((setpoint.position - getPositionRad()) * kPData.get()) * kSData.get() * 0.5;
+        // }
+        // setVoltage(volts);
 
     }
 
@@ -209,7 +209,7 @@ public class Arm extends SubsystemBase {
     double lengthCFSToAxleX = Units.inchesToMeters(14);
     double lengthCFSToAxleY = Units.inchesToMeters(7);
     double lengthAxleToCFSAttatched = Units.inchesToMeters(15);
-    
+
     double lengthCFSToAxle = Math.hypot(lengthCFSToAxleX, lengthCFSToAxleY);
     double axleToCFSTheta = Math.atan(lengthCFSToAxleY / lengthCFSToAxleX);
 
@@ -269,9 +269,13 @@ public class Arm extends SubsystemBase {
             state = ArmStates.SUBWOOFER;
             return;
         }
-        if (Robot.state == SuperStructureStates.SHOOT) {
-            state = ArmStates.SHOOT;
-            return;
+        // if (Robot.state == SuperStructureStates.SHOOT) {
+        //     state = ArmStates.SHOOT;
+        //     return;
+        // }
+
+        if (getGoal() == ArmConstants.groundIntakepositionRad){
+            state = ArmStates.GROUND_INTAKE;
         }
     }
 

@@ -13,6 +13,9 @@ public class GroundIntake implements SuperStructureCommandInterface {
 
     private boolean stowedWrist = false;
     private boolean stowedArm = false;
+    private boolean almostDeployedWrist = false;
+    private boolean deployedWrist = false;
+    private boolean groundIntakeArm = false;
 
     public GroundIntake() {
     }
@@ -22,34 +25,47 @@ public class GroundIntake implements SuperStructureCommandInterface {
         if (Robot.wrist.getState() == WristStates.STOW) {
             stowedWrist = true;
         }
-        if (!stowedWrist) {
-            Robot.wrist.setGoal(WristStates.STOW);
+        if (Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) {
+            almostDeployedWrist = true;
+        }
+        if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
+            deployedWrist = true;
         }
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
+        }        
+        if (Robot.arm.getState() == ArmStates.GROUND_INTAKE) {
+            groundIntakeArm = true;
         }
-        if (stowedWrist && !stowedArm) {
-            Robot.arm.setGoal(ArmStates.STOW);
 
+        
+        if (!stowedWrist && !almostDeployedWrist && !deployedWrist) {
+            Robot.wrist.setGoal(WristStates.STOW);
+        }
+        if (!stowedArm) {
+            Robot.arm.setGoal(ArmStates.STOW);
         }
         if (stowedWrist && stowedArm) {
-            Robot.wrist.setGoal(WristStates.GROUND_INTAKE);
+            Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
             Robot.intake.setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
-
         }
-        
+        if (almostDeployedWrist){
+            Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
+        }
+        if (groundIntakeArm){
+            Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+        }
+
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
-       
+
     }
-    
+
     @Override
-    public void reset(){
+    public void reset() {
         stowedArm = false;
         stowedWrist = false;
         Robot.intake.stop();
     }
-
- 
 
 }
