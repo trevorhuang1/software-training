@@ -81,11 +81,15 @@ public class ArmSparkMax implements ArmIO {
    * @param angle Reported encoder angle
    */
   public double sanitizeArmAngle(double angle) {
-    if ((previousAngle < 60) && (Math.abs(previousAngle - angle) < 90)) {
+    if (previousAngle < 60 && Math.abs(previousAngle - angle) < 90) {
       return angle;
     }
 
-    if ((Math.abs(previousAngle - angle) < 90)) {
+    if (Math.abs(previousAngle - angle) < 20) {
+      return angle;
+    }
+
+    if (previousAngle < 120 && Math.abs(previousAngle - angle) < 90) {
       return angle;
     } else {
       return angle + 120;
