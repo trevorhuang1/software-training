@@ -13,7 +13,7 @@ import frc.robot.utils.Constants.LEDConstants.LEDPattern;
 
 public class Led extends SubsystemBase {
 
-    private AddressableLED LEDs = new AddressableLED(6); //port
+    private AddressableLED LEDs = new AddressableLED(9); //port
     private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
     private LEDPattern currentPattern = LEDPattern.WHITE;
     private int hue = 0;
