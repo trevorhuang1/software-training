@@ -21,7 +21,7 @@ public final class ArmConstants {
         public static final double stowPositionRad = Units.degreesToRadians(1);
         public static final double climbPositionRad = Units.degreesToRadians(97);
         public static final double subwooferPositionRad = Units.degreesToRadians(22);
-        public static final double ampPositionRad = Units.degreesToRadians(70);
+        public static final double ampPositionRad = Units.degreesToRadians(97);
         
         public static final double groundIntakepositionRad = Units.degreesToRadians(4.75);
 
@@ -39,10 +39,10 @@ public final class ArmConstants {
 
         // Control - PID, FF, and Trapezoidal Constraints
         private static final PIDConstants simPID = new PIDConstants(0, 0, 0); // 2.2,0,0
-        private static final PIDConstants realStowedPID = new PIDConstants(0.5, 0, 0.05);
+        private static final PIDConstants realStowedPID = new PIDConstants(0.55, 0, 0.05);
         public static final PIDConstants stowedPID = Robot.isReal() ? realStowedPID : simPID;
        
-        private static final PIDConstants realDeployedPID = new PIDConstants(0.5, 0, 0.05);
+        private static final PIDConstants realDeployedPID = new PIDConstants(0.55, 0, 0.05);
         public static final PIDConstants deployedPID = Robot.isReal() ? realDeployedPID : new PIDConstants(0);
 
         private static final double simkS = 0.0;

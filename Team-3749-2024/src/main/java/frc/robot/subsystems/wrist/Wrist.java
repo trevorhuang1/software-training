@@ -109,8 +109,7 @@ public class Wrist extends SubsystemBase {
                 ? pidGain
                 : 0;
 
-        if ((positionRad == WristConstants.stowGoalRad
-                && UtilityFunctions.withinMargin(0.25, positionRad, data.positionRad))
+        if ((positionRad == WristConstants.stowGoalRad)
                 && Math.abs(data.velocityRadPerSec) < 0.05) {
             setVoltage(pidGain);
             return;

@@ -168,7 +168,7 @@ public class Arm extends SubsystemBase {
                 accelerationSetpoint);
         if (setpoint.velocity == 0) {
             // have the kS help the PID when stationary
-            feedforward += Math.signum(feedback) * ArmConstants.stowedkS * 0.6;
+            feedforward += Math.signum(feedback) * ArmConstants.stowedkS * 0.85;
         }
         setVoltage(feedforward + feedback);
 
@@ -196,18 +196,16 @@ public class Arm extends SubsystemBase {
         double cosAngleCFS = (lengthCFS * lengthCFS + lengthAxleToCFSAttatched * lengthAxleToCFSAttatched
                 - lengthCFSToAxle * lengthCFSToAxle) / (2 * lengthAxleToCFSAttatched * lengthCFSToAxle);
 
-        double CFSFF;
+        double CFSFF = cosAngleCFS * ArmConstants.stowedkG *0.3;
         double armFF;
         if (deployedMode) {
             armFF = deployedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
                     accelerationSetpoint);
-            CFSFF = cosAngleCFS * ArmConstants.deployedkG;
         } else {
 
             armFF = stowedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
                     accelerationSetpoint);
-            CFSFF = cosAngleCFS * ArmConstants.stowedkG;
-        }
+                }
 
         return armFF + CFSFF;
     }
