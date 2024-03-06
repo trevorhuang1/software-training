@@ -8,13 +8,12 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.LEDConstants.LEDPattern;
+import frc.robot.subsystems.led.LEDConstants.LEDConstants.LEDPattern;
 
 public class Led extends SubsystemBase {
 
     private AddressableLED LEDs = new AddressableLED(9); //port
-    private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
+    private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(frc.robot.subsystems.led.LEDConstants.length);
     private LEDPattern currentPattern = LEDPattern.WHITE;
     private int hue = 0;
 
