@@ -60,6 +60,8 @@ public class ArmSparkMax implements ArmIO {
     leftMotor.setIdleMode(IdleMode.kCoast);
   }
 
+  static double previousAngle = 0;
+
   // the arm will break if it ever goes past 120 degrees... should fix that lmao ;-;
   // technically would also break if we go past -60 but im much less concerned about that.
   private double getAbsolutePositionRad() {
@@ -70,17 +72,21 @@ public class ArmSparkMax implements ArmIO {
     // } else if (pos < -1 / 3 * Math.PI) {
     //   pos += absoluteEncoder.getPositionConversionFactor();
     // }
+    pos = (Units.rotationsToDegrees(pos) + 360) % 360;
 
-    return sanitizeArmAngle(pos);
+    previousAngle = sanitizeArmAngle(pos, previousAngle);
+    return Units.degreesToRadians(previousAngle);
   }
 
-  static double previousAngle = 0;
-
+  //help name pls
   /***
    * prevents the encoder from reporting incorrect angle when rotatated >120deg
-   * @param angle Reported encoder angle
+   * @param angle Reported encoder angle in Degrees
+   * @param previousAngle previous angle returned by this function
+   *
+   * @return Sanitized Encoder angle in degrees
    */
-  public double sanitizeArmAngle(double angle) {
+  public double sanitizeArmAngle(double angle, double previousAngle) {
     if (previousAngle < 60 && Math.abs(previousAngle - angle) < 90) {
       return angle;
     }
