@@ -8,14 +8,23 @@ public interface SuperStructureCommandInterface {
     public default void execute() {
 
     };
-    public default void execute(double goalRad) {
+
+    public default void autoExecute() {
 
     };
-    public default void reset(){
+
+    public default void reset() {
 
     };
-    public default void start(){
+
+    public default void autoReset(){
+
+    }
+
+    public default void start() {
+
+    }
+    public default void autoStart(){
         
     }
-    
 }

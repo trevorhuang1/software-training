@@ -9,11 +9,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import java.util.HashMap;
 
 import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.commands.swerve.Autos;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.utils.JoystickIO;
+import frc.robot.utils.SuperStructureStates;
 
 public class RobotContainer {
 
@@ -56,19 +61,24 @@ public class RobotContainer {
     HashMap<String, Command> commandList = new HashMap<String, Command>();
 
     commandList.put("PrintCMD-hello", Commands.print("hewlow"));
-    commandList.put("shoot", Commands.print("shot a thing"));
+    commandList.put("cycle",
+        new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+            new WaitCommand(1.5), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
+            new WaitCommand(0.1), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
     commandList.put("shoot-amp", Commands.print("shot a thing"));
 
     AutoUtils.initAuto(commandList);
   }
 
   public Command getAutonomousCommand() {
-
+    return new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+            new WaitCommand(2), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
+            new WaitCommand(0.1), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE));
     // return new PrintCommand("no auto");
-    return Commands.run(() -> {
-      Robot.intake.setIntakeVelocity(100);
-      Robot.shooter.setShooterVelocity(150);
-    });
+    // return Commands.run(() -> {
+    //   Robot.intake.setIntakeVelocity(100);
+    //   Robot.shooter.setShooterVelocity(150);
+    // });
     // return Autos.get4Piece();
     // return Robot.swerve.getSysIdDynamic(Direction.kForward);
   }

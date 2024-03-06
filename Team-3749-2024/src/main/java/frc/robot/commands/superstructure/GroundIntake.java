@@ -30,7 +30,8 @@ public class GroundIntake implements SuperStructureCommandInterface {
             stowedWrist = true;
         }
         if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
-                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2) && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
+                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2)
+                        && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
             almostDeployedWrist = true;
         }
         if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
@@ -40,7 +41,6 @@ public class GroundIntake implements SuperStructureCommandInterface {
             stowedArm = true;
         }
 
-
         if (!stowedWrist && !almostDeployedWrist && !deployedWrist) {
             Robot.wrist.setGoal(WristStates.STOW);
         }
@@ -49,7 +49,7 @@ public class GroundIntake implements SuperStructureCommandInterface {
         }
         if (stowedWrist && stowedArm) {
             Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
-            if (!startedRollers){
+            if (!startedRollers) {
                 startedRollers = true;
                 Robot.intake.setState(IntakeStates.INTAKE);
                 Robot.shooter.setState(ShooterStates.INTAKE);
@@ -57,14 +57,14 @@ public class GroundIntake implements SuperStructureCommandInterface {
         }
         if (almostDeployedWrist) {
             Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
-        
+
             Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
         }
 
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
 
-        if (Robot.intake.getState() == IntakeStates.INDEX){
+        if (Robot.intake.getState() == IntakeStates.INDEX) {
             Robot.led.setLEDPattern(LEDPattern.GREEN);
             Robot.state = SuperStructureStates.STOW;
         }
@@ -82,4 +82,56 @@ public class GroundIntake implements SuperStructureCommandInterface {
         Robot.shooter.stop();
     }
 
+    private boolean atShoot = false;
+
+    @Override
+    public void autoExecute() {
+        if (Robot.wrist.getState() == WristStates.STOW) {
+            stowedWrist = true;
+        }
+        if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
+                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2)
+                        && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
+            almostDeployedWrist = true;
+        }
+        if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
+            deployedWrist = true;
+        }
+        if (Robot.arm.getState() == ArmStates.STOW) {
+            stowedArm = true;
+        }
+        if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
+            atShoot = true;
+        }
+
+        if (!stowedWrist && !almostDeployedWrist && !deployedWrist && !atShoot) {
+            Robot.wrist.setGoal(WristStates.STOW);
+        }
+        if (!stowedArm&& !atShoot) {
+            Robot.arm.setGoal(ArmStates.STOW);
+        }
+        if (stowedWrist && stowedArm && !atShoot) {
+            Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
+            if (!startedRollers) {
+                startedRollers = true;
+                Robot.intake.setState(IntakeStates.INTAKE);
+                Robot.shooter.setState(ShooterStates.INTAKE);
+            }
+        }
+        if (almostDeployedWrist || atShoot) {
+            Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
+
+            Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+        }
+
+        Robot.arm.moveToGoal();
+        Robot.wrist.moveWristToGoal();
+
+
+    }
+    @Override
+    public void autoReset(){
+        reset();
+        atShoot = false;
+    }
 }
