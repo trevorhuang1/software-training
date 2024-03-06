@@ -11,6 +11,7 @@ public class Intake extends SubsystemBase {
 
     private IntakeIO intakeIO;
     private IntakeData data = new IntakeData();
+    private PhotoelectricIO photoeletricIO;
 
     private PIDController feedback = new PIDController(
             IntakeConstants.intakePID.kP,
@@ -27,15 +28,17 @@ public class Intake extends SubsystemBase {
     private ShuffleData<Double> IntakecurrentLog = new ShuffleData<Double>(this.getName(), " intake current", 0.0);
 
     public Intake() {
-        intakeIO = new IntakeSparkMax();
         if (Robot.isSimulation()) {
             intakeIO = new IntakeSim();
+            photoeletricIO= new PhotoelectricIO(){};
+            
+        }
+        else {
+            intakeIO = new IntakeSparkMax();
+            photoeletricIO = new JTVisiSight();
         }
     }
 
-    ShuffleData<Double> kVData = new ShuffleData<Double>(this.getName(), "kVData", 0.0);
-    ShuffleData<Double> kPData = new ShuffleData<Double>(this.getName(), "kPData", 0.0);
-    ShuffleData<Double> velData = new ShuffleData<Double>(this.getName(), "velData", 0.0);
 
     public void setIntakeVelocity(double velocityRadPerSec) {
 
@@ -71,6 +74,8 @@ public class Intake extends SubsystemBase {
         IntakevoltageLog.set(data.intakeVolts);
 
         IntakecurrentLog.set(data.currentAmps);
+
+        
     }
 
 }

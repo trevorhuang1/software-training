@@ -57,19 +57,13 @@ public class Arm extends SubsystemBase {
             0.0);
     private ShuffleData<Double> setpointPositionLog = new ShuffleData<Double>(this.getName(), "setpoint position",
             0.0);
-    private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>(this.getName(), "setpoint velocity",
-            0.0);
-    private ShuffleData<Double> setpointAccelerationLog = new ShuffleData<Double>(this.getName(),
-            "setpoint acceleration", 0.0);
-    private ShuffleData<Double> errorPositionLog = new ShuffleData<Double>(this.getName(), "error position",
-            0.0);
-    private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>(this.getName(), "error velocity",
-            0.0);
-    private ShuffleData<Double> errorAccelerationLog = new ShuffleData<Double>(this.getName(), "error acceleration",
-            0.0);
+    // private ShuffleData<Double> setpointVelocityLog = new
+    // ShuffleData<Double>(this.getName(), "setpoint velocity",
+    // 0.0);
+    // private ShuffleData<Double> setpointAccelerationLog = new
+    // ShuffleData<Double>(this.getName(),
+    // "setpoint acceleration", 0.0);
 
-    private ShuffleData<Boolean> deployedModeLog = new ShuffleData<Boolean>(this.getName(), "deployed mode",
-            false);
     private ShuffleData<String> stateLog = new ShuffleData<String>(this.getName(), "state",
             ArmStates.STOW.name());
 
@@ -155,17 +149,6 @@ public class Arm extends SubsystemBase {
         // }
     }
 
-    private ShuffleData<Double> kPData = new ShuffleData(this.getName(),
-            "kpdata", 0.0);
-    private ShuffleData<Double> kVData = new ShuffleData(this.getName(),
-            "kVdata", 0.0);
-
-    private ShuffleData<Double> kAData = new ShuffleData(this.getName(),
-            "kAdata", 0.0);
-    private ShuffleData<Double> kSData = new ShuffleData(this.getName(),
-            "kSdata", 0.0);
-    private ShuffleData<Double> kGData = new ShuffleData(this.getName(),
-            "kGdata", 0.0);
     // private ShuffleData<Double> kDData = new ShuffleData(this.getName(),
     // "kDdata", 0.0);
 
@@ -191,8 +174,6 @@ public class Arm extends SubsystemBase {
             // have the kS help the PID when stationary
             feedforward += Math.signum(feedback) * ArmConstants.stowedkS * 0.6;
         }
-        SmartDashboard.putNumber("FF", feedforward);
-        SmartDashboard.putNumber("Feedback", feedback);
         setVoltage(feedforward + feedback);
 
         // double volts = 0;
@@ -226,33 +207,26 @@ public class Arm extends SubsystemBase {
             double setpointAccelerationRadPerSecSquared) {
         // mathing the constant force spring angle for a seperate kG since its a
         // changing vector angle of constant magnitude
-        double lengthCFS = Math.sqrt(Math.pow(lengthAxleToCFSAttatched, 2) + Math.pow(lengthCFSToAxle, 2)
+        double lengthCFS = Math.sqrt(lengthAxleToCFSAttatched * lengthAxleToCFSAttatched
+                + lengthCFSToAxle * lengthCFSToAxle
                 - 2 * lengthAxleToCFSAttatched * lengthCFSToAxle * Math.cos(currentPositionRad + axleToCFSTheta));
 
-        double angleCFS = Math.acos((Math.pow(lengthCFS, 2) + Math.pow(lengthAxleToCFSAttatched, 2)
-                - Math.pow(lengthCFSToAxle, 2)) / (2 * lengthAxleToCFSAttatched * lengthCFSToAxle));
-
-        SmartDashboard.putNumber("angle cfs", angleCFS);
-        SmartDashboard.putNumber("angle axle to CFS", axleToCFSTheta);
-        SmartDashboard.putNumber("lengthAxleToCFS", lengthAxleToCFSAttatched);
-        SmartDashboard.putNumber("length cfs", lengthCFS);
-        // SmartDashboard.putNumber("angle cfs", angleCFS);
+        double cosAngleCFS = (lengthCFS * lengthCFS + lengthAxleToCFSAttatched * lengthAxleToCFSAttatched
+                - lengthCFSToAxle * lengthCFSToAxle) / (2 * lengthAxleToCFSAttatched * lengthCFSToAxle);
 
         double CFSFF;
         double armFF;
         if (deployedMode) {
             armFF = deployedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
                     accelerationSetpoint);
-            CFSFF = Math.cos(angleCFS) * ArmConstants.deployedkG;
+            CFSFF = cosAngleCFS * ArmConstants.deployedkG;
         } else {
 
             armFF = stowedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
                     accelerationSetpoint);
-            CFSFF = Math.cos(angleCFS) * ArmConstants.stowedkG;
+            CFSFF = cosAngleCFS * ArmConstants.stowedkG;
         }
 
-        SmartDashboard.putNumber("armFF", armFF);
-        SmartDashboard.putNumber("CFS", CFSFF);
         return armFF + CFSFF;
     }
 
@@ -304,49 +278,39 @@ public class Arm extends SubsystemBase {
         updateState();
         stateLog.set(state.name());
         // moveToGoal();
-
-        if (Robot.wrist.getState() == WristStates.IN_TRANIST) {
-            if (Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
-
-                setDeployedMode(false);
-                deployedModeLog.set(false);
-
-            } else {
-                setDeployedMode(true);
-                deployedModeLog.set(true);
-            }
-        }
-
         positionLog.set(Units.radiansToDegrees(getPositionRad()));
         velocityLog.set(Units.radiansToDegrees(data.velocityRadPerSec));
-        accelerationLog.set(Units.radiansToDegrees(data.accelerationRadPerSecSquared));
+        // accelerationLog.set(Units.radiansToDegrees(data.accelerationRadPerSecSquared));
         voltageLog.set(data.appliedVolts);
         leftCurrentLog.set(data.leftCurrentAmps);
         rightCurrentLog.set(data.rightCurrentAmps);
 
         goalLog.set(Units.radiansToDegrees(feedback.getGoal().position));
         setpointPositionLog.set(Units.radiansToDegrees(feedback.getSetpoint().position));
-        setpointVelocityLog.set(Units.radiansToDegrees(feedback.getSetpoint().velocity));
-        setpointAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint));
+        // setpointVelocityLog.set(Units.radiansToDegrees(feedback.getSetpoint().velocity));
+        // setpointAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint));
 
-        errorPositionLog
-                .set(Units.radiansToDegrees(feedback.getSetpoint().position - data.positionRad));
-        errorVelocityLog.set(
-                Units.radiansToDegrees(feedback.getSetpoint().velocity - data.velocityRadPerSec));
-        errorAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint - data.accelerationRadPerSecSquared));
+        // errorPositionLog
+        // .set(Units.radiansToDegrees(feedback.getSetpoint().position -
+        // data.positionRad));
+        // errorVelocityLog.set(
+        // Units.radiansToDegrees(feedback.getSetpoint().velocity -
+        // data.velocityRadPerSec));
+        // errorAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint -
+        // data.accelerationRadPerSecSquared));
 
         // mechanismArm.setAngle();
         // SmartDashboard.putData("mech", mechanism);
 
-        boolean driverStationStatus = DriverStation.isEnabled();
-        if (driverStationStatus && !isEnabled) {
-            isEnabled = driverStationStatus;
-            armIO.setBreakMode();
-        }
-        if (!driverStationStatus && isEnabled) {
-            armIO.setCoastMode();
-            isEnabled = driverStationStatus;
-        }
+        // boolean driverStationStatus = DriverStation.isEnabled();
+        // if (driverStationStatus && !isEnabled) {
+        // isEnabled = driverStationStatus;
+        // armIO.setBreakMode();
+        // }
+        // if (!driverStationStatus && isEnabled) {
+        // armIO.setCoastMode();
+        // isEnabled = driverStationStatus;
+        // }
 
     }
 

@@ -59,14 +59,7 @@ public class Swerve extends SubsystemBase {
       "swerve",
       "yaw",
       0.0);
-  private ShuffleData<Double> pitchLog = new ShuffleData<Double>(
-      "swerve",
-      "pitch",
-      0.0);
-  private ShuffleData<Double> rollLog = new ShuffleData<Double>(
-      "swerve",
-      "roll",
-      0.0);
+
   private ShuffleData<Boolean> gyroConnectedLog = new ShuffleData<Boolean>(
       "swerve",
       "gyro connected",
@@ -80,13 +73,10 @@ public class Swerve extends SubsystemBase {
       "swerve",
       "heading",
       0.0);
-  private ShuffleData<Double> rotationalVelocityLog = new ShuffleData<Double>(
-      "swerve",
-      "rotational velocity",
-      0.0);
 
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
   public double prevVelocity = 0;
+
   public Swerve() {
     if (Robot.isSimulation()) {
       gyro = new GyroSim();
@@ -203,10 +193,11 @@ public class Swerve extends SubsystemBase {
             modules[3].getPosition()
         });
   }
-  public void visionUpdateOdometry(LimelightHelpers.LimelightPose visionPose){
-      // swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose, visionPose.timestamp);
+
+  public void visionUpdateOdometry(LimelightHelpers.LimelightPose visionPose) {
+    // swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose,
+    // visionPose.timestamp);
   }
-  
 
   public void logDesiredOdometry(Pose2d desiredPose) {
     this.desiredPose = desiredPose;
@@ -285,8 +276,7 @@ public class Swerve extends SubsystemBase {
 
     realStatesLog.set(realStates);
     desiredStatesLog.set(desiredStates);
-    rotationalVelocityLog.set(
-        Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond));
+
     odometryLog.set(
         new Double[] {
             getPose().getX(),
@@ -300,25 +290,23 @@ public class Swerve extends SubsystemBase {
     gyroConnectedLog.set(gyroData.isConnected);
     gyroCalibratingLog.set(gyroData.isCalibrating);
     headingLog.set(getRotation2d().getDegrees());
-    
 
-  
-
-    // double robotVelocity = Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
-    //     Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
+    // double robotVelocity =
+    // Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
+    // Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
 
     // SmartDashboard.putNumber("robot velocity", robotVelocity);
 
-    boolean driverStationStatus = DriverStation.isEnabled();
-    if (driverStationStatus && !isEnabled) {
-      isEnabled = driverStationStatus;
-      modules[0].setBreakMode(true);
-      ;
-    }
-    if (!driverStationStatus && isEnabled) {
-      modules[0].setBreakMode(false);;
-      isEnabled = driverStationStatus;
-    }
+    // boolean driverStationStatus = DriverStation.isEnabled();
+    // if (driverStationStatus && !isEnabled) {
+    // isEnabled = driverStationStatus;
+    // modules[0].setBreakMode(true);
+    // ;
+    // }
+    // if (!driverStationStatus && isEnabled) {
+    // modules[0].setBreakMode(false);;
+    // isEnabled = driverStationStatus;
+    // }
 
   }
 

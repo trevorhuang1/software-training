@@ -32,13 +32,6 @@ public class Wrist extends SubsystemBase {
     private HashMap<Boolean, Double> setpointToggle = new HashMap<Boolean, Double>();
 
     private WristStates state = WristConstants.WristStates.STOW;
-    private double prevSetpointVelocity = 0;
-
-
-    private Mechanism2d mechanism = new Mechanism2d(2.5, 2);
-    private MechanismRoot2d mechanismArmPivot = mechanism.getRoot("mechanism arm pivot", 1, 0.5);
-    private MechanismLigament2d mechanismArm = mechanismArmPivot
-            .append(new MechanismLigament2d("mechanism arm", .93, 0));
 
     private ShuffleData<Double> positionLog = new ShuffleData<Double>(this.getName(), "position",
             0.0);
@@ -52,13 +45,9 @@ public class Wrist extends SubsystemBase {
             0.0);
     private ShuffleData<Double> setpointPositionLog = new ShuffleData<Double>(this.getName(), "setpoint position",
             0.0);
-    private ShuffleData<Double> setpointVelocityLog = new ShuffleData<Double>(this.getName(), "setpoint velocity",
-            0.0);
-
-    private ShuffleData<Double> errorPositionLog = new ShuffleData<Double>(this.getName(), "error position",
-            0.0);
-    private ShuffleData<Double> errorVelocityLog = new ShuffleData<Double>(this.getName(), "error velocity",
-            0.0);
+    // private ShuffleData<Double> setpointVelocityLog = new
+    // ShuffleData<Double>(this.getName(), "setpoint velocity",
+    // 0.0);
     private ShuffleData<String> stateLog = new ShuffleData<String>(this.getName(), "state",
             WristStates.STOW.name());
 
@@ -82,7 +71,7 @@ public class Wrist extends SubsystemBase {
         if (state == WristStates.FULL_DEPLOYED) {
             wristController.setGoal(WristConstants.fullDeployedRad);
         }
-        if (state == WristStates.SUBWOOFER){
+        if (state == WristStates.SUBWOOFER) {
             wristController.setGoal(WristConstants.subwooferRad);
         }
 
@@ -108,28 +97,13 @@ public class Wrist extends SubsystemBase {
         return (data.velocityRadPerSec);
     }
 
-    private ShuffleData<Double> kPData = new ShuffleData(this.getName(),
-            "kpdata", 0.0);
-    private ShuffleData<Double> kVData = new ShuffleData(this.getName(),
-            "kVdata", 0.0);
-
-    private ShuffleData<Double> kAData = new ShuffleData(this.getName(),
-            "kAdata", 0.0);
-    private ShuffleData<Double> kSData = new ShuffleData(this.getName(),
-            "kSdata", 0.0);
-    private ShuffleData<Double> kGData = new ShuffleData(this.getName(),
-            "kGdata", 0.0);
-
     public void moveWristToGoal() {
 
         double pidGain = wristController.calculate(data.positionRad);
 
         State setpoint = Robot.wrist.getWristSetpoint();
-        double accelerationSetpoint = (setpoint.velocity - prevSetpointVelocity) / 0.02;
         double velocityRadPerSec = setpoint.velocity;
         double positionRad = setpoint.position;
-        prevSetpointVelocity = setpoint.velocity;
-
 
         double voltage = UtilityFunctions.withinMargin(0.35, getWristGoal().position, data.positionRad)
                 ? pidGain
@@ -156,28 +130,14 @@ public class Wrist extends SubsystemBase {
 
         setVoltage(voltage);
         // double volts = 0;
-        // volts += calculateGravityFeedForward(data.positionRad, Robot.arm.getPositionRad());
+        // volts += calculateGravityFeedForward(data.positionRad,
+        // Robot.arm.getPositionRad());
         // volts += kSData.get()* Math.signum(pidGain) ;
         // volts += setpoint.velocity * kVData.get();
         // volts += accelerationSetpoint * kAData.get();
         // volts += (setpoint.position - getPositionRad()) * kPData.get();
         // setVoltage(volts);
 
-    }
-
-    public void runShuffleData() {
-        double pidGain = wristController.calculate(data.positionRad);
-        State setpoint = Robot.wrist.getWristSetpoint();
-        double velocityRadPerSec = setpoint.velocity;
-        double positionRad = setpoint.position;
-
-        double volts = 0;
-        volts += calculateGravityFeedForward(data.positionRad, Robot.arm.getPositionRad());
-        volts += kSData.get();// Math.signum(setpoint.velocity)
-        volts += setpoint.velocity * kVData.get();
-        // volts += accelerationSetpoint * kAData.get();
-        volts += (setpoint.position - getPositionRad()) * kPData.get();
-        setVoltage(volts);
     }
 
     public void setVoltage(double volts) {
@@ -200,8 +160,8 @@ public class Wrist extends SubsystemBase {
         // at variable angles anyway. The thing can be retuned and made cool again later
         return (WristConstants.kYIntercept
                 + WristConstants.kBar * wristPositionRad
-                + WristConstants.kBarSquared * Math.pow(wristPositionRad, 2)
-                + WristConstants.kBarCubed * Math.pow(wristPositionRad, 3));
+                + WristConstants.kBarSquared * wristPositionRad * wristPositionRad
+                + WristConstants.kBarCubed * wristPositionRad * wristPositionRad * wristPositionRad);
     }
 
     private boolean atGoal() {
@@ -213,8 +173,10 @@ public class Wrist extends SubsystemBase {
         // System.out.println(Math.abs(getVelocityRadPerSec()) > 0.125);
         if (!atGoal() || Math.abs(getVelocityRadPerSec()) > 0.125) {
             state = WristStates.IN_TRANIST;
+            Robot.arm.setDeployedMode(true);
             return;
         }
+
         if (getWristGoal().position == WristConstants.almostDeployedRad) {
             state = WristStates.ALMOST_DEPLOYED;
             return;
@@ -226,22 +188,24 @@ public class Wrist extends SubsystemBase {
         }
         if (getWristGoal().position == WristConstants.stowGoalRad) {
             state = WristStates.STOW;
+            Robot.arm.setDeployedMode(false);
             return;
 
         }
-        if (getWristGoal().position == WristConstants.subwooferRad){
+        if (getWristGoal().position == WristConstants.subwooferRad) {
             state = WristStates.SUBWOOFER;
         }
 
     }
 
-    public void setBrakeMode(){
+    public void setBrakeMode() {
         wristIO.setBrakeMode();
     }
 
-    public void setCoastMode(){
+    public void setCoastMode() {
         wristIO.setCoastMode();
     }
+
     @Override
     public void periodic() {
         wristIO.updateData(data);
@@ -255,15 +219,17 @@ public class Wrist extends SubsystemBase {
         velocityLog.set(Units.radiansToDegrees(data.velocityRadPerSec));
         goalLog.set(Units.radiansToDegrees(getWristGoal().position));
         setpointPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position));
-        setpointVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity));
+        // setpointVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity));
         voltageLog.set(data.appliedVolts);
         currentLog.set(data.currentAmps);
-        errorPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position - data.positionRad));
-        errorVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity - data.velocityRadPerSec));
+        // errorPositionLog.set(Units.radiansToDegrees(getWristSetpoint().position -
+        // data.positionRad));
+        // errorVelocityLog.set(Units.radiansToDegrees(getWristSetpoint().velocity -
+        // data.velocityRadPerSec));
 
         stateLog.set(state.name());
         // test
-        
+
     }
 
 }

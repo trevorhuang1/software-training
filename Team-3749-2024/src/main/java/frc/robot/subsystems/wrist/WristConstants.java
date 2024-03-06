@@ -56,9 +56,9 @@ public final class WristConstants {
     public static final double realkVBackward = 2.5     ; // radians
 
     public static final double kYIntercept = 0.0654;
-    public static final double kBar =0.6353305811670058;
-    public static final double kBarSquared = -0.898369590468488;
-    public static final double kBarCubed = 0.23675874031389005;
+    public static final double kBar =0.635;
+    public static final double kBarSquared = -0.898;
+    public static final double kBarCubed = 0.237;
 
 
 

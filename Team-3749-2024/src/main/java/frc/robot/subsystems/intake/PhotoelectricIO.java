@@ -16,7 +16,6 @@ package frc.robot.subsystems.intake;
  */
 public interface PhotoelectricIO {
     public static class PhotoelectricData {
-        public boolean connected = false;
         public boolean sensing = false;
     }
     /** Updates the set of loggable inputs. */

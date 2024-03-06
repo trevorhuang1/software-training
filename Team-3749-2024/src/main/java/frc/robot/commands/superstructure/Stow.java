@@ -68,9 +68,6 @@ public class Stow implements SuperStructureCommandInterface {
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
 
-        SmartDashboard.putBoolean("lowering arm", loweringArm);
-        SmartDashboard.putBoolean("lowered arm", loweredArm);
-        SmartDashboard.putBoolean("Stowed wrist", stowedWrist);
 
     }
 

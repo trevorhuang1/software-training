@@ -12,7 +12,6 @@ public class IntakeSparkMax implements IntakeIO {
   private CANSparkMax intakeMotor = new CANSparkMax(
       IntakeConstants.intakeId,
       MotorType.kBrushless);
-  private DigitalInput photoelectricSensor = new DigitalInput(0);
   private RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
   private double intakeGoalVolts = 0;
 
@@ -30,7 +29,6 @@ public class IntakeSparkMax implements IntakeIO {
     data.intakeVolts = intakeMotor.getBusVoltage() * intakeMotor.getAppliedOutput();
     data.intakeVelocityRadPerSec = intakeEncoder.getVelocity();
     data.intakeTempCelcius = intakeMotor.getMotorTemperature();
-    data.sensorTripped = photoelectricSensor.get();
     /*
      * if(data.sensorTripped)
      * {

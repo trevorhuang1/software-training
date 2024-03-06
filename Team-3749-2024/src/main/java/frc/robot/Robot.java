@@ -21,7 +21,6 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.Wrist;
-import frc.robot.utils.ShuffleData;
 import frc.robot.utils.SuperStructureStates;
 import frc.robot.utils.Xbox;
 import frc.robot.subsystems.arm.Arm;
@@ -39,7 +38,6 @@ public class Robot extends TimedRobot {
   // public static final Limelight limelight = (new Limelight());
   public static SuperStructureStates state = SuperStructureStates.STOW;
   public static SuperStructureCommands centralCommand = new SuperStructureCommands();
-  public static Timer timer = new Timer();
 
 
 
@@ -54,7 +52,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    centralCommand.execute();
+    // centralCommand.execute();
 
   }
 

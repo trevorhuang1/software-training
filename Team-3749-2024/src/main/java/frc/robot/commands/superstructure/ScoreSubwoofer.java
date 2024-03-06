@@ -67,10 +67,7 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
         Robot.arm.moveToGoal();
 
-        SmartDashboard.putBoolean("full dep", fullDeployedWrist);
-        SmartDashboard.putBoolean("ground int", almostDeployedWrist);
-        SmartDashboard.putBoolean("amp arm", subwoofedArm);
-        SmartDashboard.putBoolean("amp stow", stowedArm);
+
         // SmartDashboard.putBoolean("full dep", fullDeployedWrist);
 
     }

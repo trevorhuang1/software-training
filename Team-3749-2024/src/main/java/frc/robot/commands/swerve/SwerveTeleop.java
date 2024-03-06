@@ -50,12 +50,6 @@ public class SwerveTeleop extends Command {
     double yMagnitude = ySpdFunction.get();
     double turningSpeed = xTurningSpdFunction.get();
 
-
-    SmartDashboard.putNumberArray(
-        "inputs",
-        new Double[] { xMagnitude, yMagnitude, turningSpeed });
-
-
   
     double linearMagnitude = Math.hypot(xMagnitude, yMagnitude);
     Rotation2d linearDirection = new Rotation2d(xMagnitude, yMagnitude);
@@ -67,16 +61,14 @@ public class SwerveTeleop extends Command {
         : 0.0;
 
     // squaring the inputs for smoother driving at low speeds
-    linearMagnitude = Math.copySign(Math.pow(Math.abs(linearMagnitude), 2.5), linearMagnitude);
-    turningSpeed = Math.copySign(Math.pow(Math.abs(turningSpeed), 2.5), turningSpeed);
+    linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
+    turningSpeed = Math.copySign(turningSpeed * turningSpeed, turningSpeed);
 
     double driveSpeedMPS = linearMagnitude * DriveConstants.maxSpeedMetersPerSecond;
 
     turningSpeed =  
         turningSpeed * DriveConstants.maxAngularSpeedRadiansPerSecond;
 
-    SmartDashboard.putNumber("drive speed", driveSpeedMPS);
-    SmartDashboard.putNumber("turn speed", turningSpeed);
 
     // Calcaulate new linear components
     double xSpeed = driveSpeedMPS * Math.cos(linearDirection.getRadians());

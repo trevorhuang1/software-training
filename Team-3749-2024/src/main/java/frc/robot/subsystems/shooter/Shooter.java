@@ -52,9 +52,6 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  // ShuffleData<Double> kVData = new ShuffleData<Double>(this.getName(), "kVData", 0.0);
-  // ShuffleData<Double> kPData = new ShuffleData<Double>(this.getName(), "kPData", 0.0);
-  // ShuffleData<Double> velData = new ShuffleData<Double>(this.getName(), "velData", 0.0);
 
   public void setShooterVelocity(double velocityRadPerSec) {
 

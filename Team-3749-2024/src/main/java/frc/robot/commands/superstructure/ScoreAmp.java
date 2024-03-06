@@ -77,10 +77,6 @@ public class ScoreAmp implements SuperStructureCommandInterface {
 
         Robot.arm.moveToGoal();
 
-        SmartDashboard.putBoolean("full dep", fullDeployedWrist);
-        SmartDashboard.putBoolean("ground int", groundIntakeWrist);
-        SmartDashboard.putBoolean("amp arm", ampedArm);
-        SmartDashboard.putBoolean("amp stow", stowedArm);
         // SmartDashboard.putBoolean("full dep", fullDeployedWrist);
 
     }
