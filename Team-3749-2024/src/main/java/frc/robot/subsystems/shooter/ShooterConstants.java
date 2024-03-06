@@ -11,7 +11,7 @@ public final class ShooterConstants {
 
     public static final double shooterVelocityRadPerSec = 560;
 
-    public static final double ampVelocityRadPerSec = 100;
+    public static final double ampVelocityRadPerSec = 60;
     private static final PIDConstants simShooterTopPID = new PIDConstants(
             0,
 

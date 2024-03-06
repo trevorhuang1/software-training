@@ -52,7 +52,7 @@ public class ArmSparkMax implements ArmIO {
     private double getAbsolutePositionRad() {
         double pos = absoluteEncoder.getPosition();
 
-        if (pos > 2.0/3.0 *Math.PI ){
+        if (pos > Units.degreesToRadians(128) ){
             pos -= absoluteEncoder.getPositionConversionFactor();
         }
         else if (pos < -1/3 * Math.PI){

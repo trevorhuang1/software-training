@@ -121,7 +121,7 @@ public class Intake extends SubsystemBase {
                 outtake();
                 break;
             case AMP:
-                setVoltage(4);  
+                setVoltage(3);  
                 hasPiece = false;
                 indexedPiece = false;
 
