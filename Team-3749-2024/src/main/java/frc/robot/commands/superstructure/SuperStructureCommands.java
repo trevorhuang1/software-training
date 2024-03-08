@@ -16,7 +16,10 @@ public class SuperStructureCommands {
     private ScoreAmp scoreAmp = new ScoreAmp();
     private ScoreSubwoofer scoreSubwoofer = new ScoreSubwoofer();
     private Reset reset = new Reset();
+    private Climb climb = new Climb();
+    private ClimbDown climbDown = new ClimbDown();
     private SuperStructureCommandInterface currentCommand = stow;
+
 
     public SuperStructureCommands() {
     }
@@ -57,6 +60,12 @@ public class SuperStructureCommands {
                 break;
             case RESET:
                 switchCommands(reset);
+                break;
+            case CLIMB:
+                switchCommands(climb);
+                break;
+            case CLIMBDOWN:
+                switchCommands(climbDown);
                 break;
 
         }

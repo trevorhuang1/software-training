@@ -9,9 +9,10 @@ public enum SuperStructureStates{
     AMP(WristStates.FULL_DEPLOYED, ArmStates.AMP),
     SHOOT(WristStates.FULL_DEPLOYED, ArmStates.SHOOT),
     CLIMB(WristStates.STOW, ArmStates.CLIMB),
+    CLIMBDOWN(WristStates.STOW, ArmStates.STOW),
     SUBWOOFER(WristStates.FULL_DEPLOYED, ArmStates.SUBWOOFER),
     RESET(WristStates.STOW, ArmStates.STOW);
-
+    
     public WristStates wristState;
     public ArmStates armState;
 

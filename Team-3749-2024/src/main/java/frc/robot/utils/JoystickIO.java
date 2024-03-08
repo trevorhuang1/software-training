@@ -110,6 +110,9 @@ public class JoystickIO {
 
         Robot.operator.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.SPOOL)))
                 .onFalse(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP)));
+        Robot.operator.back().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMB))
+                .onFalse(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMBDOWN));
+
     }
 
     public void pilotBindings() {
@@ -152,6 +155,7 @@ public class JoystickIO {
                 }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter));
 
         Robot.pilot.povDown().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.RESET));
+
     }
 
     public void simBindings() {
