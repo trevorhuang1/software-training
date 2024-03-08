@@ -6,16 +6,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.Robot;
-import frc.robot.utils.Constants.IntakeConstants;
-import frc.robot.utils.Constants.LEDConstants.LEDPattern;
 
 public class IntakeSparkMax implements IntakeIO {
 
   private CANSparkMax intakeMotor = new CANSparkMax(
       IntakeConstants.intakeId,
       MotorType.kBrushless);
-  private DigitalInput photoelectricSensor = new DigitalInput(0);
   private RelativeEncoder intakeEncoder = intakeMotor.getEncoder();
   private double intakeGoalVolts = 0;
 
@@ -33,11 +29,12 @@ public class IntakeSparkMax implements IntakeIO {
     data.intakeVolts = intakeMotor.getBusVoltage() * intakeMotor.getAppliedOutput();
     data.intakeVelocityRadPerSec = intakeEncoder.getVelocity();
     data.intakeTempCelcius = intakeMotor.getMotorTemperature();
-    data.sensorTripped = photoelectricSensor.get();
-    if(data.sensorTripped)
-    {
-      Robot.led.setLEDPattern(LEDPattern.GREEN);
-    }
+    /*
+     * if(data.sensorTripped)
+     * {
+     * Robot.led.setLEDPattern(LEDPattern.GREEN);
+     * }
+     */
   }
 
   @Override
@@ -45,4 +42,5 @@ public class IntakeSparkMax implements IntakeIO {
     intakeGoalVolts = MathUtil.clamp(intakeVolts, -12, 12);
     intakeMotor.setVoltage(intakeGoalVolts);
   }
+  
 }

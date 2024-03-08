@@ -4,26 +4,19 @@
 
 package frc.robot.subsystems.swerve;
 
-import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
+import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
 import frc.robot.subsystems.swerve.real.*;
 import frc.robot.subsystems.swerve.sim.*;
 import frc.robot.utils.*;
-import frc.robot.utils.Constants.*;
 
 /***
  * @author Noah Simon
@@ -46,7 +39,6 @@ public class Swerve extends SubsystemBase {
 
   private boolean isEnabled = false;
 
-
   private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>(
       "swerve",
       "odometry",
@@ -67,14 +59,7 @@ public class Swerve extends SubsystemBase {
       "swerve",
       "yaw",
       0.0);
-  private ShuffleData<Double> pitchLog = new ShuffleData<Double>(
-      "swerve",
-      "pitch",
-      0.0);
-  private ShuffleData<Double> rollLog = new ShuffleData<Double>(
-      "swerve",
-      "roll",
-      0.0);
+
   private ShuffleData<Boolean> gyroConnectedLog = new ShuffleData<Boolean>(
       "swerve",
       "gyro connected",
@@ -88,13 +73,9 @@ public class Swerve extends SubsystemBase {
       "swerve",
       "heading",
       0.0);
-  private ShuffleData<Double> rotationalVelocityLog = new ShuffleData<Double>(
-      "swerve",
-      "rotational velocity",
-      0.0);
 
   public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-
+  public double prevVelocity = 0;
 
   public Swerve() {
     if (Robot.isSimulation()) {
@@ -112,7 +93,7 @@ public class Swerve extends SubsystemBase {
     }
 
     swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(
-        Constants.DriveConstants.driveKinematics,
+        DriveConstants.driveKinematics,
         new Rotation2d(0),
         new SwerveModulePosition[] {
             modules[0].getPosition(),
@@ -135,10 +116,11 @@ public class Swerve extends SubsystemBase {
     // take shortest path to destination
     SwerveDriveKinematics.desaturateWheelSpeeds(
         moduleStates,
-        Constants.DriveConstants.maxSpeedMetersPerSecond);
+        DriveConstants.maxSpeedMetersPerSecond);
     // 6. Output each module states to wheels
 
     setModuleStates(moduleStates);
+
   }
 
   public ChassisSpeeds getChassisSpeeds() {
@@ -213,6 +195,11 @@ public class Swerve extends SubsystemBase {
         });
   }
 
+  public void visionUpdateOdometry(LimelightHelpers.LimelightPose visionPose) {
+    // swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose,
+    // visionPose.timestamp);
+  }
+
   public void logDesiredOdometry(Pose2d desiredPose) {
     this.desiredPose = desiredPose;
     desiredOdometryLog.set(
@@ -234,9 +221,11 @@ public class Swerve extends SubsystemBase {
         desiredStates,
         DriveConstants.maxSpeedMetersPerSecond);
 
-    for (int i = 0; i < 4; i++) {
-      modules[i].setDesiredState(desiredStates[i]);
-    }
+    modules[0].setDesiredState(desiredStates[0]);
+    modules[1].setDesiredState(desiredStates[1]);
+    modules[2].setDesiredState(desiredStates[2]);
+    modules[3].setDesiredState(desiredStates[3]);
+
   }
 
   public double getVerticalTilt() {
@@ -245,13 +234,15 @@ public class Swerve extends SubsystemBase {
 
   public void resetGyro() {
     gyro.resetGyro();
-    swerveDrivePoseEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[] {
+    swerveDrivePoseEstimator.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
         modules[0].getPosition(),
         modules[1].getPosition(),
         modules[2].getPosition(),
         modules[3].getPosition()
     }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
   }
+
+  public double totalAcceleration = 0;
 
   @Override
   public void periodic() {
@@ -286,8 +277,7 @@ public class Swerve extends SubsystemBase {
 
     realStatesLog.set(realStates);
     desiredStatesLog.set(desiredStates);
-    rotationalVelocityLog.set(
-        Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond));
+
     odometryLog.set(
         new Double[] {
             getPose().getX(),
@@ -296,22 +286,28 @@ public class Swerve extends SubsystemBase {
         });
 
     yawLog.set(gyroData.yawDeg);
-    pitchLog.set(gyroData.pitchDeg);
-    rollLog.set(gyroData.rollDeg);
+    // pitchLog.set(gyroData.pitchDeg);
+    // rollLog.set(gyroData.rollDeg);
     gyroConnectedLog.set(gyroData.isConnected);
     gyroCalibratingLog.set(gyroData.isCalibrating);
     headingLog.set(getRotation2d().getDegrees());
 
-    boolean driverStationStatus = DriverStation.isEnabled();
+    // double robotVelocity =
+    // Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
+    // Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
 
-    if (driverStationStatus && !isEnabled) {
-      isEnabled = driverStationStatus;
-      modules[0].setBreakMode(true);;
-    }
-    if (!driverStationStatus && isEnabled) {
-      modules[0].setBreakMode(false);;
-      isEnabled = driverStationStatus;
-    }
+    // SmartDashboard.putNumber("robot velocity", robotVelocity);
+
+    // boolean driverStationStatus = DriverStation.isEnabled();
+    // if (driverStationStatus && !isEnabled) {
+    // isEnabled = driverStationStatus;
+    // modules[0].setBreakMode(true);
+    // ;
+    // }
+    // if (!driverStationStatus && isEnabled) {
+    // modules[0].setBreakMode(false);;
+    // isEnabled = driverStationStatus;
+    // }
 
   }
 

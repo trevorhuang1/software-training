@@ -1,5 +1,6 @@
 package frc.robot.subsystems.led;
 
+import java.sql.Driver;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -7,24 +8,20 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.LEDConstants.LEDPattern;
-
+import frc.robot.subsystems.led.LEDConstants.LEDPattern;
 public class Led extends SubsystemBase {
 
-    private AddressableLED LEDs = new AddressableLED(Constants.LEDConstants.photoElectricPort); //port
-    private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
+    private AddressableLED LEDs = new AddressableLED(9); //port
+    private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(frc.robot.subsystems.led.LEDConstants.length);
     private LEDPattern currentPattern = LEDPattern.WHITE;
     private int hue = 0;
-    private boolean blink = true;
-    private int blinkCooldown = 0;
 
     public Led()
     {
        LEDs.setLength(LEDBuffer.getLength());
        LEDs.setData(LEDBuffer);
        LEDs.start();
-       setLEDPattern(teamColorLED());
+       setLEDPattern(LEDPattern.WHITE);
     }
 
     private LEDPattern teamColorLED()
@@ -59,26 +56,13 @@ public class Led extends SubsystemBase {
         }
     }
 
-    private void blinkLED()
-    {
-        //for the sake of not triggering peoples epilispy:
-        blinkCooldown++;
-        if(blinkCooldown == 50) // 50*0.02=1 second between color changes
-        {
-            blink=!blink;
-            blinkCooldown = 0;
-        }
-        if(blink)
-        {
-           setLEDOneColorRGB(0,255,0); 
-           return;
-        }
-        setLEDOneColorRGB(0,0,255);
-    }
-
     public void setLEDPattern(LEDPattern pattern)
     {
         this.currentPattern = pattern;
+    }
+
+    public LEDPattern getCurrentPattern(){
+        return currentPattern;
     }
 
     // runs every 0.02 sec
@@ -109,10 +93,6 @@ public class Led extends SubsystemBase {
 
             case NOTHING:
                 setLEDOneColorRGB(0, 0, 0);
-            break;
-
-            case BLINK:
-                blinkLED();
             break;
 
             default:

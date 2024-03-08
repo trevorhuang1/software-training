@@ -4,10 +4,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
-import frc.robot.Robot;
+import frc.robot.subsystems.swerve.SwerveConstants.ModuleConstants;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.ShuffleData;
-import frc.robot.utils.Constants.ModuleConstants;
 
 public class SwerveModule {
 
@@ -20,6 +19,8 @@ public class SwerveModule {
 
     private ModuleData moduleData = new ModuleData();
     private SwerveModuleIO moduleIO;
+
+    // private double previousSetpointVelocity = 0;
 
     private ShuffleData<Double> driveSpeed;
     private ShuffleData<Double> drivePosition;
@@ -45,38 +46,32 @@ public class SwerveModule {
             name = "BR Module";
         }
 
-        if (Robot.isSimulation()) {
+        moduleIO = SwerveModule;
 
-            moduleIO = SwerveModule;
+        drivingPidController = new PIDController(ModuleConstants.kPDriving, 0, 0);
+        drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDriving,
+                ModuleConstants.kVDriving);
+        turningPidController = new PIDController(ModuleConstants.kPturning, 0, ModuleConstants.kDTurning);
+        turningPidController.enableContinuousInput(0, 2 * Math.PI);
 
-            drivingPidController = new PIDController(ModuleConstants.kPDrivingSim, 0, 0);
-            drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDrivingSim,
-                    ModuleConstants.kVDrivingSim);
-            turningPidController = new PIDController(ModuleConstants.kPTurningSim, 0, 0);
-            turningPidController.enableContinuousInput(0, 2 * Math.PI);
-
-        } else {
-            moduleIO = SwerveModule;
-
-            drivingPidController = new PIDController(ModuleConstants.kPDrivingReal, 0, 0);
-            drivingFeedFordward = new SimpleMotorFeedforward(ModuleConstants.kSDrivingReal,
-                    ModuleConstants.kVDrivingReal);
-            turningPidController = new PIDController(ModuleConstants.kPTurningReal, 0, 0);
-            turningPidController.enableContinuousInput(0, 2 * Math.PI);
-
-        }
         // Tab, name, data
         driveSpeed = new ShuffleData<>("swerve/" + name, name + " drive speed", moduleData.driveVelocityMPerSec);
-        drivePosition = new ShuffleData<>("swerve/" + name, name + " drive position", moduleData.driveVelocityMPerSec);
-        driveTemp = new ShuffleData<>("swerve/" + name, name + " drive temp", moduleData.driveVelocityMPerSec);
-        driveVolts = new ShuffleData<>("swerve/" + name, name + " drive volts", moduleData.driveVelocityMPerSec);
+        drivePosition = new ShuffleData<>("swerve/" + name, name + " drive position",
+        moduleData.driveVelocityMPerSec);
+        driveTemp = new ShuffleData<>("swerve/" + name, name + " drive temp",
+        moduleData.driveVelocityMPerSec);
+        driveVolts = new ShuffleData<>("swerve/" + name, name + " drive volts",
+        moduleData.driveVelocityMPerSec);
         driveCurrent = new ShuffleData<>("swerve/" + name, name + " drive current", moduleData.driveVelocityMPerSec);
 
-        turningSpeed = new ShuffleData<>("swerve/" + name, name + " turning speed", moduleData.driveVelocityMPerSec);
+        turningSpeed = new ShuffleData<>("swerve/" + name, name + " turning speed",
+        moduleData.driveVelocityMPerSec);
         turningPosition = new ShuffleData<>("swerve/" + name, name + " turning position",
                 moduleData.driveVelocityMPerSec);
-        turningTemp = new ShuffleData<>("swerve/" + name, name + " turning temp", moduleData.driveVelocityMPerSec);
-        turningVolts = new ShuffleData<>("swerve/" + name, name + " turning volts", moduleData.driveVelocityMPerSec);
+        turningTemp = new ShuffleData<>("swerve/" + name, name + " turning temp",
+        moduleData.driveVelocityMPerSec);
+        turningVolts = new ShuffleData<>("swerve/" + name, name + " turning volts",
+        moduleData.driveVelocityMPerSec);
         turningCurrent = new ShuffleData<>("swerve/" + name, name + " turning current", moduleData.turnCurrentAmps);
     }
 
@@ -102,9 +97,11 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState state) {
 
         state = SwerveModuleState.optimize(state, getState().angle);
+
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             state.speedMetersPerSecond = 0;
         }
+
         this.desiredState = state;
 
         setDriveSpeed(state.speedMetersPerSecond);
@@ -113,10 +110,23 @@ public class SwerveModule {
     }
 
     public void setDriveSpeed(double speedMetersPerSecond) {
-        double drive_volts = drivingFeedFordward.calculate(speedMetersPerSecond)
+        double drive_volts = 0;
+
+        drive_volts = drivingFeedFordward.calculate(speedMetersPerSecond)
                 + drivingPidController.calculate(moduleData.driveVelocityMPerSec, speedMetersPerSecond);
+
+        // drive_volts += Robot.kSdata.get() * Math.signum(speedMetersPerSecond);
+        // drive_volts += Robot.kVdata.get() *(speedMetersPerSecond);
+        // drive_volts += Robot.kAdata.get() * (speedMetersPerSecond -
+        // previousSetpointVelocity) / 0.02;
+        // previousSetpointVelocity = speedMetersPerSecond;
+
+        // SmartDashboard.putNumber("acceleration", (speedMetersPerSecond -
+        // previousSetpointVelocity) / 0.02);
         setDriveVoltage(drive_volts);
+
     }
+
     public void setTurnPosition(double positionRad) {
         double turning_volts = turningPidController.calculate(moduleData.turnAbsolutePositionRad,
                 positionRad);
@@ -138,14 +148,14 @@ public class SwerveModule {
         setTurnVoltage(0);
     }
 
-    public ModuleData getModuleData(){
+    public ModuleData getModuleData() {
         return moduleData;
     }
 
-    public void setBreakMode(boolean enabled){
+    public void setBreakMode(boolean enabled) {
         moduleIO.setDriveBrakeMode(enabled);
         moduleIO.setTurningBrakeMode(enabled);
-    
+
     }
 
     // called within the swerve subsystem's periodic

@@ -6,12 +6,9 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.swerve.SwerveModuleIO;
-import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.DriveConstants;
-import frc.robot.utils.Constants.ModuleConstants;
-
+import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
+import frc.robot.subsystems.swerve.SwerveConstants.ModuleConstants;
 public class SwerveModuleSparkMax implements SwerveModuleIO {
     private CANSparkMax driveMotor;
     private CANSparkMax turnMotor;
@@ -25,17 +22,18 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
     private int index;
 
     public SwerveModuleSparkMax(int index) {
-        driveMotor = new CANSparkMax(Constants.DriveConstants.driveMotorPorts[index], CANSparkMax.MotorType.kBrushless);
-        turnMotor = new CANSparkMax(Constants.DriveConstants.turningMotorPorts[index],
+        driveMotor = new CANSparkMax(DriveConstants.driveMotorPorts[index], CANSparkMax.MotorType.kBrushless);
+        turnMotor = new CANSparkMax(DriveConstants.turningMotorPorts[index],
                 CANSparkMax.MotorType.kBrushless);
 
-        absoluteEncoder = new CANcoder(Constants.DriveConstants.absoluteEncoderPorts[index]);
+        absoluteEncoder = new CANcoder(DriveConstants.absoluteEncoderPorts[index]);
         absoluteEncoderOffsetRad = Units.degreesToRadians(DriveConstants.absoluteEncoderOffsetDeg[index]);
 
-        turnMotor.setInverted(Constants.DriveConstants.turningMotorReversed[index]);
+        turnMotor.setInverted(DriveConstants.turningMotorReversed[index]);
         turnMotor.getEncoder().setPositionConversionFactor(1 / ModuleConstants.turnMotorGearRatio * (2 * Math.PI));
         turnMotor.getEncoder()
-                .setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Units.rotationsPerMinuteToRadiansPerSecond(1));
+                .setVelocityConversionFactor(
+                        (1 / ModuleConstants.driveMotorGearRatio) * Units.rotationsPerMinuteToRadiansPerSecond(1));
         // turnMotor.getEncoder().setPosition(Units.radiansToRotations(getAbsoluteTurningPositionRad()));
 
         driveMotor.setInverted(DriveConstants.driveMotorReversed[index]);
@@ -43,16 +41,17 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         driveMotor.getEncoder().setPositionConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Math.PI
                 * ModuleConstants.wheelDiameterMeters);
 
-        driveMotor.getEncoder().setVelocityConversionFactor((1 / ModuleConstants.driveMotorGearRatio) * Units.rotationsPerMinuteToRadiansPerSecond(1)
-                * (ModuleConstants.wheelDiameterMeters / 2.0));
+        driveMotor.getEncoder().setVelocityConversionFactor(
+                (1 / ModuleConstants.driveMotorGearRatio) * Units.rotationsPerMinuteToRadiansPerSecond(1)
+                        * (ModuleConstants.wheelDiameterMeters / 2.0));
 
-        driveMotor.setSmartCurrentLimit(Constants.DriveConstants.driveMotorStallLimit,
-                Constants.DriveConstants.driveMotorFreeLimit);
-        turnMotor.setSmartCurrentLimit(Constants.DriveConstants.turnMotorStallLimit,
-                Constants.DriveConstants.turnMotorFreeLimit);
+        driveMotor.setSmartCurrentLimit(DriveConstants.driveMotorStallLimit,
+                DriveConstants.driveMotorFreeLimit);
+        turnMotor.setSmartCurrentLimit(DriveConstants.turnMotorStallLimit,
+                DriveConstants.turnMotorFreeLimit);
 
-        driveMotor.setIdleMode(IdleMode.kCoast);
-        turnMotor.setIdleMode(IdleMode.kCoast);
+        driveMotor.setIdleMode(IdleMode.kBrake);
+        turnMotor.setIdleMode(IdleMode.kBrake);
 
         this.index = index;
     };
@@ -78,15 +77,17 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
 
     @Override
     public void setDriveVoltage(double volts) {
-        driveAppliedVolts = MathUtil.clamp(volts, -Constants.DriveConstants.maxMotorVolts,
-                Constants.DriveConstants.maxMotorVolts);
+
+        driveAppliedVolts = MathUtil.clamp(volts, -DriveConstants.maxMotorVolts,
+                DriveConstants.maxMotorVolts);
+
         driveMotor.setVoltage(driveAppliedVolts);
     };
 
     @Override
     public void setTurnVoltage(double volts) {
-        turnAppliedVolts = MathUtil.clamp(volts, -Constants.DriveConstants.maxMotorVolts,
-                Constants.DriveConstants.maxMotorVolts);
+        turnAppliedVolts = MathUtil.clamp(volts, -DriveConstants.maxMotorVolts,
+                DriveConstants.maxMotorVolts);
         turnMotor.setVoltage(turnAppliedVolts);
     };
 

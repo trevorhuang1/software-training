@@ -5,15 +5,24 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+// import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.vision.Limelight;
+import frc.robot.commands.superstructure.SuperStructureCommands;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.swerve.Swerve;
+
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.led.Led;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.Wrist;
+import frc.robot.utils.SuperStructureStates;
 import frc.robot.utils.Xbox;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.led.Led;
 
 public class Robot extends TimedRobot {
   public static final Xbox pilot = new Xbox(0);
@@ -24,6 +33,11 @@ public class Robot extends TimedRobot {
   public static final Wrist wrist = new Wrist();
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
+  // public static final Limelight limelight = (new Limelight());
+  public static SuperStructureStates state = SuperStructureStates.STOW;
+  public static SuperStructureCommands centralCommand = new SuperStructureCommands();
+
+
   public static final Led led = new Led();
 
   private Command m_autonomousCommand;
@@ -37,10 +51,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    centralCommand.execute();
+
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    wrist.setCoastMode();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -68,10 +86,14 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+      wrist.setBrakeMode();
+
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+  }
 
   @Override
   public void teleopExit() {}

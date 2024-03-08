@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3179652690887451,
+      "y": 5.436100959777832
+    },
+    "rotation": -1.2805354266892438e-22
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle-speaker-3xwing_speaker.1"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4 piece",
+  "choreoAuto": true
+}

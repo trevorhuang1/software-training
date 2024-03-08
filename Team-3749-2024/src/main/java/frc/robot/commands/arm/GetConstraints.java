@@ -5,7 +5,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.utils.Constants;
+import frc.robot.utils.MiscConstants;
 
 public class GetConstraints extends Command {
 

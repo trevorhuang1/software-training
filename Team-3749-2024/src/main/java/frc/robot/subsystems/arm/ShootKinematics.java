@@ -13,15 +13,15 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.utils.Constants;
+import frc.robot.utils.MiscConstants;
 import edu.wpi.first.wpilibj.Filesystem;
 
 public class ShootKinematics {
-    private static final Translation2d redSpeakerPosition = Constants.ArmConstants.redSpeakerPosition;
-    private static final Translation2d blueSpeakerPosition = Constants.ArmConstants.blueSpeakerPosition;
+    private static final Translation2d redSpeakerPosition = ArmConstants.redSpeakerPosition;
+    private static final Translation2d blueSpeakerPosition = ArmConstants.blueSpeakerPosition;
 
-    private static final Translation2d[] redStagePoints = Constants.ArmConstants.redStagePoints;
-    private static final Translation2d[] blueStagePoints = Constants.ArmConstants.blueStagePoints;
+    private static final Translation2d[] redStagePoints = ArmConstants.redStagePoints;
+    private static final Translation2d[] blueStagePoints = ArmConstants.blueStagePoints;
 
     // 10.00 m = 1000
     // angle 0.0 = impossible to shoot from here
@@ -40,13 +40,13 @@ public class ShootKinematics {
         //double distAngle = getAngle(distanceVector.getNorm());
         
         // Case 0: We are in angle
-        if (angle.getDegrees() < Constants.ArmConstants.maxAngle && distanceVector.getNorm() <= maxDist){ 
+        if (angle.getDegrees() < ArmConstants.maxAngle && distanceVector.getNorm() <= maxDist){ 
             // System.out.println("Case 0");
             return moveOutOfStage(changeRotation(currentPose2d.getTranslation(), distanceVector));
             // return changeRotation(currentPose2d.getTranslation(), distanceVector);
         } 
         // Case 1: We are out of angle
-        else if (angle.getDegrees() >= Constants.ArmConstants.maxAngle) {
+        else if (angle.getDegrees() >= ArmConstants.maxAngle) {
             // System.out.println("Case 1");
 
             // TODO: Check if positive/negative x coord check is correct
@@ -54,10 +54,10 @@ public class ShootKinematics {
 
             if ((distanceVector.getAngle().getRadians() < 0 && DriverStation.getAlliance().get() == Alliance.Red) || (distanceVector.getAngle().getRadians() > 0 && DriverStation.getAlliance().get() == Alliance.Blue)) {
                 // System.out.println("case 1a");
-                radiusVector = new Translation2d(Math.cos(Constants.ArmConstants.maxAngleRad), Math.sin(Constants.ArmConstants.maxAngleRad));
+                radiusVector = new Translation2d(Math.cos(ArmConstants.maxAngleRad), Math.sin(ArmConstants.maxAngleRad));
             } else {
                 // System.out.println("case 1b");
-                radiusVector = new Translation2d(Math.cos(-Constants.ArmConstants.maxAngleRad), Math.sin(-Constants.ArmConstants.maxAngleRad));
+                radiusVector = new Translation2d(Math.cos(-ArmConstants.maxAngleRad), Math.sin(-ArmConstants.maxAngleRad));
             }
  
             Translation2d perpVector = projection(distanceVector, radiusVector).minus(distanceVector);
@@ -157,7 +157,7 @@ public class ShootKinematics {
             distToAngle[(int)(curDist * 100)] = Double.parseDouble(values[1]);
         }
 
-        maxDist -= Constants.ArmConstants.distMargin;
+        maxDist -= ArmConstants.distMargin;
 
         reader.close();
     }

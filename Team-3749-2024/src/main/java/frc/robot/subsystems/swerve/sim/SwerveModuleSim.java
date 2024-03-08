@@ -1,21 +1,22 @@
 package frc.robot.subsystems.swerve.sim;
 
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.robot.subsystems.swerve.SwerveModuleIO;
-import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.ModuleConstants;
-import frc.robot.utils.Constants.Sim;
+import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
+import frc.robot.subsystems.swerve.SwerveConstants.ModuleConstants;
+import frc.robot.utils.MiscConstants.Sim;
 
 /* 
 Very closely inspired by 6328's Swerve Sim code,
  https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/drive/ModuleIOSim.java
 */
 public class SwerveModuleSim implements SwerveModuleIO {
-    private FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), Constants.ModuleConstants.driveMotorGearRatio,
+    private FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), ModuleConstants.driveMotorGearRatio,
             0.02931);
-    private FlywheelSim turnSim = new FlywheelSim(DCMotor.getNEO(1), Constants.ModuleConstants.turnMotorGearRatio,
+    private FlywheelSim turnSim = new FlywheelSim(DCMotor.getNEO(1), ModuleConstants.turnMotorGearRatio,
             0.04);
 
     private double turnPositionRad = 0;
@@ -61,15 +62,15 @@ public class SwerveModuleSim implements SwerveModuleIO {
 
     @Override
     public void setDriveVoltage(double volts) {
-        driveAppliedVolts = MathUtil.clamp(volts, -Constants.DriveConstants.maxMotorVolts,
-                Constants.DriveConstants.maxMotorVolts);
+        driveAppliedVolts = MathUtil.clamp(volts, -DriveConstants.maxMotorVolts,
+                DriveConstants.maxMotorVolts);
         driveSim.setInputVoltage(driveAppliedVolts);
     }
 
     @Override
     public void setTurnVoltage(double volts) {
-        turnAppliedVolts = MathUtil.clamp(volts, -Constants.DriveConstants.maxMotorVolts,
-                Constants.DriveConstants.maxMotorVolts);
+        turnAppliedVolts = MathUtil.clamp(volts, -DriveConstants.maxMotorVolts,
+                DriveConstants.maxMotorVolts);
         turnSim.setInputVoltage(turnAppliedVolts);
     }
 }

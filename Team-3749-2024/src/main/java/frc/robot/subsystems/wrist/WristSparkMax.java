@@ -1,12 +1,13 @@
 package frc.robot.subsystems.wrist;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
-import frc.robot.utils.Constants.WristConstants;
 
 /*
  * note from jonathan:
@@ -17,8 +18,9 @@ import frc.robot.utils.Constants.WristConstants;
 
 public class WristSparkMax implements WristIO {
 
-    private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorType.kBrushless);
-    private SparkAbsoluteEncoder wristEncoder = wristMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorType.kBrushless);
+    private AbsoluteEncoder wristEncoder = wristMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+    private RelativeEncoder relativeEncoder = wristMotor.getEncoder();
     private double appliedVolts = 0;
     private double previousVelocity = 0;
 
@@ -26,6 +28,7 @@ public class WristSparkMax implements WristIO {
         
         wristEncoder.setPositionConversionFactor(2 * Math.PI );
         wristEncoder.setVelocityConversionFactor(2 * Math.PI);
+        relativeEncoder.setVelocityConversionFactor(2*Math.PI / 150.0 / 60.0);
         wristMotor.setInverted(true);
         wristMotor.setSmartCurrentLimit(40);
         wristMotor.setIdleMode(IdleMode.kCoast);
@@ -54,8 +57,8 @@ public class WristSparkMax implements WristIO {
         previousVelocity = data.velocityRadPerSec;
 
         data.positionRad = getAbsolutePosition() ;
-        data.velocityRadPerSec = wristEncoder.getVelocity();
-        data.accelerationRadPerSecSquared = (wristEncoder.getVelocity() - previousVelocity) / 0.02;
+        data.velocityRadPerSec = relativeEncoder.getVelocity();
+        data.accelerationRadPerSecSquared = (relativeEncoder.getVelocity() - previousVelocity) / 0.02;
 
         data.appliedVolts = wristMotor.getBusVoltage() * wristMotor.getAppliedOutput();
         data.currentAmps = wristMotor.getOutputCurrent();
@@ -68,6 +71,15 @@ public class WristSparkMax implements WristIO {
     public void setVoltage(double volts) {
         appliedVolts = MathUtil.clamp(volts, -12, 12);
         wristMotor.setVoltage(appliedVolts);
+    }
+    @Override
+    public void setBrakeMode() {
+        wristMotor.setIdleMode(IdleMode.kBrake);
+    }
+
+        @Override
+    public void setCoastMode() {
+        wristMotor.setIdleMode(IdleMode.kCoast);
     }
 
 }

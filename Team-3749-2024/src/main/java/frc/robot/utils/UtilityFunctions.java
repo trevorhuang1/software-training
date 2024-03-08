@@ -15,4 +15,10 @@ public class UtilityFunctions {
         }
         return false;
     }
+
+    public static boolean isStopped(double velocity){
+        return withinMargin(0.05, velocity, 0);
+    }
+
+
 }
