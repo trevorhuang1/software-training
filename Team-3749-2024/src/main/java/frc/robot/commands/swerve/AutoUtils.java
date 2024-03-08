@@ -67,9 +67,7 @@ public class AutoUtils {
   public static void initAuto(HashMap<String, Command> commandList) {
     initPPUtils();
 
-    commandList.forEach((String cmdName, Command cmd) -> {
-      NamedCommands.registerCommand(cmdName, cmd);
-    });
+    NamedCommands.registerCommands(commandList);
   }
 
   public static Command getAutoPath() {

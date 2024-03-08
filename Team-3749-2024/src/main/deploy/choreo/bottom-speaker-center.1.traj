@@ -631,5 +631,24 @@
       "timestamp": 4.597448161055752
     }
   ],
-  "eventMarkers": []
+  "eventMarkers": [
+    {
+      "timestamp": 2.597448161055752,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "intake"
+        }
+      }
+    },
+    {
+      "timestamp": 4.597448161055752,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "stow"
+        }
+      }
+    }
+  ]
 }

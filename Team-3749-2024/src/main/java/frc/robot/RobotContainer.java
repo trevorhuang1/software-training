@@ -11,14 +11,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-
-import java.util.HashMap;
-
 import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.commands.swerve.Autos;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.SuperStructureStates;
+import java.util.HashMap;
 
 public class RobotContainer {
 
@@ -45,7 +43,6 @@ public class RobotContainer {
     initAuto();
 
     RobotController.setBrownoutVoltage(7.0);
-
     // Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
     // Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY,
     // pilot::getRightX, pilot::getRightY));
@@ -60,10 +57,46 @@ public class RobotContainer {
   public void initAuto() {
     HashMap<String, Command> commandList = new HashMap<String, Command>();
 
-    commandList.put("cycle",
-       new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-            new WaitCommand(3), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
-            new WaitCommand(0.25), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
+    commandList.put(
+      "cycle",
+      new SequentialCommandGroup(
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+        new WaitCommand(3),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
+        new WaitCommand(0.25),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)
+      )
+    );
+
+    commandList.put(
+      "intake&feed",
+      new SequentialCommandGroup(
+        Commands.runOnce(() -> {
+          Robot.state = SuperStructureStates.GROUND_INTAKE;
+        }),
+        new WaitCommand(2),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))
+      )
+    );
+
+    commandList.put(
+      "intake",
+      new SequentialCommandGroup(
+        Commands.runOnce(() -> {
+          Robot.state = SuperStructureStates.GROUND_INTAKE;
+        }),
+        new WaitCommand(2),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE))
+      )
+    );
+
+    commandList.put(
+      "stow",
+      new SequentialCommandGroup(
+        new WaitCommand(0.5),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW)
+      )
+    );
 
     AutoUtils.initAuto(commandList);
   }
