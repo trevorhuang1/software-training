@@ -10,14 +10,14 @@ import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.UtilityFunctions;
 
-public class ScoreSubwoofer implements SuperStructureCommandInterface {
+public class Podium implements SuperStructureCommandInterface {
     private boolean fullDeployedWrist = false;
     private boolean almostDeployedWrist = false;
-    private boolean subwoofedArm = false;
+    private boolean podiumedArm = false;
     private boolean stowedArm = false;
     private boolean staticWrist = false;
 
-    public ScoreSubwoofer() {
+    public Podium() {
     }
 
     @Override
@@ -32,8 +32,8 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
                         && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
             almostDeployedWrist = true;
         }
-        if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
-            subwoofedArm = true;
+        if (Robot.arm.getState() == ArmStates.PODIUM) {
+            podiumedArm = true;
         }
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
@@ -49,7 +49,7 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
         if ((!fullDeployedWrist && almostDeployedWrist && stowedArm)) {
             // System.out.println("arm to amp");
-            Robot.arm.setGoal(ArmStates.SUBWOOFER);
+            Robot.arm.setGoal(ArmStates.PODIUM);
             Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
 
         }
@@ -80,8 +80,9 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
         fullDeployedWrist = false;
         staticWrist = false;
         almostDeployedWrist = false;
-        subwoofedArm = false;
+        podiumedArm = false;
         stowedArm = false;
+        atIntake = false;
     }
 
     private boolean atIntake = false;
@@ -98,8 +99,8 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
                         && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
             almostDeployedWrist = true;
         }
-        if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
-            subwoofedArm = true;
+        if (Robot.arm.getState() == ArmStates.PODIUM) {
+            podiumedArm = true;
         }
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
@@ -115,12 +116,12 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
         if ((!fullDeployedWrist && almostDeployedWrist && stowedArm)) {
             // System.out.println("arm to amp");
-            Robot.arm.setGoal(ArmStates.SUBWOOFER);
+            Robot.arm.setGoal(ArmStates.PODIUM);
             Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
 
         }
         if (fullDeployedWrist){
-            Robot.arm.setGoal(ArmStates.SUBWOOFER);
+            Robot.arm.setGoal(ArmStates.PODIUM);
             Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
         }
         // if (UtilityFunctions.isStopped(Robot.arm.getVelocityRadPerSec())
@@ -140,12 +141,12 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
         // SmartDashboard.putBoolean("full dep", fullDeployedWrist);
     }
     @Override
-    public void autoStart(){
-        start();
-    }
-    @Override
     public void autoReset() {
         reset();
         atIntake = false;
+    }
+    @Override
+    public void autoStart(){
+        start();
     }
 }

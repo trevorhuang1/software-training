@@ -98,10 +98,14 @@ public class GroundIntake implements SuperStructureCommandInterface {
         Robot.wrist.moveWristToGoal();
 
     }
-
+    @Override
+    public void autoStart(){
+        start();
+    }
     @Override
     public void autoReset() {
         reset();
         atShoot = false;
     }
+    
 }

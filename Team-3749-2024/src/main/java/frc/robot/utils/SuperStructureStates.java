@@ -11,6 +11,7 @@ public enum SuperStructureStates{
     CLIMB(WristStates.STOW, ArmStates.CLIMB),
     CLIMBDOWN(WristStates.STOW, ArmStates.STOW),
     SUBWOOFER(WristStates.FULL_DEPLOYED, ArmStates.SUBWOOFER),
+    PODIUM(WristStates.FULL_DEPLOYED,ArmStates.PODIUM),
     RESET(WristStates.STOW, ArmStates.STOW);
     
     public WristStates wristState;

@@ -14,13 +14,14 @@ public final class WristConstants {
     public static final double almostDeployedRad = Units.degreesToRadians(140); // 141
     public static final double stowGoalRad = Units.degreesToRadians(2);
     public static final double fullDeployedRad = Units.degreesToRadians(160);
-    public static final double subwooferRad = Units.degreesToRadians(125);
-
+    public static final double subwooferRad = fullDeployedRad;
+    public static final double podiumRad = fullDeployedRad;
     public enum WristStates{
         IN_TRANIST,
         ALMOST_DEPLOYED,
         FULL_DEPLOYED,
         SUBWOOFER,
+        PODIUM,
         STOW;
     }
 

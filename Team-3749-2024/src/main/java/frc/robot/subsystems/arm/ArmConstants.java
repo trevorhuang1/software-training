@@ -22,7 +22,7 @@ public final class ArmConstants {
         public static final double climbPositionRad = Units.degreesToRadians(97);
         public static final double subwooferPositionRad = Units.degreesToRadians(18);
         public static final double ampPositionRad = Units.degreesToRadians(108);
-        
+        public static final double podiumPositionRad = Units.degreesToRadians(40);
         public static final double groundIntakepositionRad = Units.degreesToRadians(4.75);
 
         public enum ArmStates {
@@ -32,6 +32,7 @@ public final class ArmConstants {
                 SHOOT,
                 CLIMB,
                 SUBWOOFER,
+                PODIUM,
                 GROUND_INTAKE,
                 IN_TRANIST;
         }

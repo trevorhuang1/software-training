@@ -10,7 +10,7 @@ public interface SuperStructureCommandInterface {
     };
 
     public default void autoExecute() {
-
+        execute();
     };
 
     public default void reset() {
@@ -18,6 +18,7 @@ public interface SuperStructureCommandInterface {
     };
 
     public default void autoReset(){
+        reset();
 
     }
 
@@ -25,6 +26,7 @@ public interface SuperStructureCommandInterface {
 
     }
     public default void autoStart(){
+        start();
         
     }
 }

@@ -15,9 +15,11 @@ public class SuperStructureCommands {
     private Stow stow = new Stow();
     private ScoreAmp scoreAmp = new ScoreAmp();
     private ScoreSubwoofer scoreSubwoofer = new ScoreSubwoofer();
+    private Podium podium = new Podium();
     private Reset reset = new Reset();
     private Climb climb = new Climb();
     private ClimbDown climbDown = new ClimbDown();
+
     private SuperStructureCommandInterface currentCommand = stow;
 
 
@@ -67,7 +69,9 @@ public class SuperStructureCommands {
             case CLIMBDOWN:
                 switchCommands(climbDown);
                 break;
-
+            case PODIUM:
+                switchCommands(podium);
+                break;
         }
         if (DriverStation.isAutonomous()) {
             currentCommand.autoExecute();
