@@ -58,6 +58,13 @@ public class Intake extends SubsystemBase {
 
     public void setHasPiece(boolean has) {
         hasPiece = has;
+        if (has){
+            Robot.led.setLEDPattern(LEDPattern.GREEN);
+
+        } else{
+            Robot.led.setLEDPattern(LEDPattern.WHITE);
+
+        }
     }
 
     public boolean getHasPiece() {
