@@ -32,6 +32,10 @@ public class ScoreAmp implements SuperStructureCommandInterface {
         
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
+
+
+
+        
     }
 
     @Override

@@ -52,28 +52,24 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // joystickIO.getButtonBindings();
-    joystickIO.pilotBindings();
+    // joystickIO.pilotBindings();
+    joystickIO.pilotAndOperatorBindings();
     joystickIO.setDefaultCommands();
   }
 
   public void initAuto() {
     HashMap<String, Command> commandList = new HashMap<String, Command>();
 
-    commandList.put("PrintCMD-hello", Commands.print("hewlow"));
     commandList.put("cycle",
-        new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-            new WaitCommand(1.5), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
-            new WaitCommand(0.1), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
-    commandList.put("shoot-amp", Commands.print("shot a thing"));
+       new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+            new WaitCommand(3), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
+            new WaitCommand(0.25), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
 
     AutoUtils.initAuto(commandList);
   }
 
   public Command getAutonomousCommand() {
-    return new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-            new WaitCommand(3), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
-            new WaitCommand(0.25), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE));
+    return Autos.get4Piece();
     // return new PrintCommand("no auto");
     // return Commands.run(() -> {
     //   Robot.intake.setIntakeVelocity(100);

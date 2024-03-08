@@ -17,11 +17,16 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
 import frc.robot.utils.AutoConstants;
 import frc.robot.utils.MiscConstants;
+import frc.robot.utils.SuperStructureStates;
 
 public class AutoUtils {
   private static Swerve swerve = Robot.swerve;
@@ -76,6 +81,7 @@ public class AutoUtils {
     Command path = AutoBuilder.buildAuto(autoPathName);
     return path.andThen(() -> swerve.stopModules());
   }
+
   public static Command getAutoPath(String autoPathName, Pose2d startingPose) {
     Robot.swerve.resetOdometry(startingPose);
     Command path = AutoBuilder.buildAuto(autoPathName);
@@ -138,5 +144,12 @@ public class AutoUtils {
           timer.stop();
           System.out.println(timer.get());
         });
+  }
+
+  public static Command getCycle(double wait) {
+    return new SequentialCommandGroup(new WaitCommand(wait),
+        new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+            new WaitCommand(3), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
+            new WaitCommand(0.25), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
   }
 }

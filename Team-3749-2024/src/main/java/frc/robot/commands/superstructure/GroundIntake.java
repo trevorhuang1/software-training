@@ -89,7 +89,7 @@ public class GroundIntake implements SuperStructureCommandInterface {
     @Override
     public void autoExecute() {
       
-        Robot.arm.setGoal(ArmConstants.groundIntakepositionRad + Units.degreesToRadians(3));
+        Robot.arm.setGoal(ArmConstants.groundIntakepositionRad);
         Robot.intake.setState(IntakeStates.INTAKE);
         Robot.shooter.setState(ShooterStates.INTAKE);
         // System.out.println(atShoot);

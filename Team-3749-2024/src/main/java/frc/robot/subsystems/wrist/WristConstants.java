@@ -38,7 +38,7 @@ public final class WristConstants {
             2 * Math.PI); // we stealing from arm with
     // this one
     private static final Constraints realConstraint = new Constraints(
-            0.8*Math.PI,
+            1.5*Math.PI,
             1.25*Math.PI);
 
     public static final Constraints trapezoidConstraint = Robot.isReal()

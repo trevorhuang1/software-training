@@ -2,45 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.472,
-      "y": 4.124
+      "x": 1.3179652690887451,
+      "y": 5.436100959777832
     },
-    "rotation": -7.617388131323534e-24
+    "rotation": -1.2805354266892438e-22
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "bottom-speaker-3xwing_speaker-center.1"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "bottom-speaker-3xwing_speaker-center.2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
+            "pathName": "middle-speaker-3xwing_speaker.1"
           }
         }
       ]

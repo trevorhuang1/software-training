@@ -74,33 +74,42 @@ public class JoystickIO {
      */
     public void pilotAndOperatorBindings() {
 
-        Robot.operator.b()
-                .whileTrue(Commands.run(() -> Robot.intake.setVoltage(12)))
-                .onFalse(Commands.runOnce(() -> Robot.intake.stop()));
-
-        Robot.operator.rightTrigger().whileTrue(Commands
-                .run(() -> Robot.shooter.setShooterVelocity(ShooterConstants.shooterVelocityRadPerSec), Robot.shooter))
-                .onFalse(Commands.runOnce(() -> {
-                    Robot.shooter.stop();
-                    Robot.intake.stop();
-                }, Robot.shooter));
-
-        Robot.operator.leftBumper()
-                .onTrue(Commands.run(() -> Robot.intake.setVoltage(-1)));
-
-        Robot.operator.x().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP, Robot.wrist,
-                Robot.arm, Robot.intake, Robot.shooter))
-                .onFalse(
-                        Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm,
-                                Robot.intake));
-
+        // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
-        Robot.pilot.leftTrigger()
-                .onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE, Robot.wrist, Robot.arm,
-                        Robot.intake))
-                .onFalse(Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW, Robot.wrist, Robot.arm));
+        // intake
+        Robot.pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist, Robot.intake));
+        // outtake
+        Robot.pilot.leftBumper()
+                .onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.OUTTAKE), Robot.intake))
+                .onFalse(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake));
 
-        // op bindings
+        // shoot
+        Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist));
+
+        // amp
+        Robot.operator.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter));
+
+        // feed
+        Robot.operator.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.intake.setState(IntakeStates.STOP);
+                    Robot.shooter.setState(ShooterStates.STOP);
+                }, Robot.intake));
+
+        // reset
+        Robot.operator.povDown().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.RESET));
+
+        Robot.operator.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.SPOOL)))
+                .onFalse(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP)));
     }
 
     public void pilotBindings() {
