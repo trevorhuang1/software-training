@@ -65,9 +65,7 @@ public class Stow implements SuperStructureCommandInterface {
                 Robot.shooter.setState(ShooterStates.STOP);
 
             }
-            if (Robot.led.getCurrentPattern() != LEDPattern.WHITE) {
-                Robot.led.setLEDPattern(LEDPattern.WHITE);
-            }
+
 
         }
 

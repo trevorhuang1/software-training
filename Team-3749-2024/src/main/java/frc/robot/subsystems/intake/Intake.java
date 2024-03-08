@@ -8,6 +8,7 @@ import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.intake.IntakeIO.IntakeData;
 import frc.robot.subsystems.intake.PhotoelectricIO.PhotoelectricData;
+import frc.robot.subsystems.led.LEDConstants.LEDPattern;
 import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.ShuffleData;
@@ -71,7 +72,7 @@ public class Intake extends SubsystemBase {
         return indexedPiece;
     }
 
-    public IntakeStates getState(){
+    public IntakeStates getState() {
         return state;
     }
 
@@ -121,24 +122,27 @@ public class Intake extends SubsystemBase {
                 outtake();
                 break;
             case AMP:
-                setVoltage(-8);  
+                setVoltage(-8);
                 hasPiece = false;
                 indexedPiece = false;
+                Robot.led.setLEDPattern(LEDPattern.WHITE);
+
 
         }
     }
 
     private void feed() {
-        if (Robot.arm.getState() == ArmStates.AMP){
+        if (Robot.arm.getState() == ArmStates.AMP) {
             Robot.shooter.setState(ShooterStates.AMP);
             setState(IntakeStates.AMP);
         }
         setVoltage(12);
-        if (Robot.shooter.getState() == ShooterStates.STOP){
+        if (Robot.shooter.getState() == ShooterStates.STOP) {
             Robot.shooter.setState(ShooterStates.SPOOL);
         }
         hasPiece = false;
         indexedPiece = false;
+        Robot.led.setLEDPattern(LEDPattern.WHITE);
 
     }
 
@@ -146,6 +150,8 @@ public class Intake extends SubsystemBase {
         setVoltage(-12);
         hasPiece = false;
         indexedPiece = false;
+        Robot.led.setLEDPattern(LEDPattern.WHITE);
+
     }
 
     private void intake() {
@@ -153,7 +159,8 @@ public class Intake extends SubsystemBase {
             setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
         } else {
             state = IntakeStates.INDEX;
-            
+            Robot.led.setLEDPattern(LEDPattern.GREEN);
+
         }
 
     }
@@ -167,8 +174,6 @@ public class Intake extends SubsystemBase {
         }
 
     }
-
-
 
     @Override
     public void periodic() {
@@ -185,6 +190,7 @@ public class Intake extends SubsystemBase {
         photoelectricLog.set(sensorData.sensing);
 
         stateLog.set(state.name());
+
     }
 
 }

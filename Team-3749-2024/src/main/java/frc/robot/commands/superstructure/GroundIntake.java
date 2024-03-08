@@ -67,7 +67,6 @@ public class GroundIntake implements SuperStructureCommandInterface {
         Robot.wrist.moveWristToGoal();
 
         if (Robot.intake.getState() == IntakeStates.INDEX) {
-            Robot.led.setLEDPattern(LEDPattern.GREEN);
             Robot.state = SuperStructureStates.STOW;
         }
 
