@@ -139,7 +139,7 @@ public class Intake extends SubsystemBase {
     }
 
     private void feed() {
-        if (Robot.arm.getState() == ArmStates.AMP) {
+        if (Robot.state == SuperStructureStates.AMP) {
             Robot.shooter.setState(ShooterStates.AMP);
             setState(IntakeStates.AMP);
         }

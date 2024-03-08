@@ -32,42 +32,37 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
         if (Robot.wrist.getState() == WristStates.STOW) {
             stowedWrist = true;
         }
-        if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
-                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2)
-                        && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
-            almostDeployedWrist = true;
-        }
+
         if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
             deployedWrist = true;
         }
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
         }
-        if (stowedArm && Robot.arm.getPositionRad() > Units.degreesToRadians(10)){
+        if (stowedArm && Robot.arm.getPositionRad() > Units.degreesToRadians(22.5)){
             uppedArm = true;
         }
 
-        if (!stowedWrist && !almostDeployedWrist && !deployedWrist) {
+        if (!stowedWrist && !deployedWrist) {
             Robot.wrist.setGoal(WristStates.STOW);
         }
         if (!stowedArm) {
             Robot.arm.setGoal(ArmStates.STOW);
         }
         if (stowedArm && !uppedArm){
-            Robot.arm.setGoal(Units.degreesToRadians(15));
+            Robot.arm.setGoal(Units.degreesToRadians(20));
         }
         if (stowedWrist && uppedArm) {
-            Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
+            Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
             if (!startedRollers) {
                 startedRollers = true;
                 Robot.intake.setState(IntakeStates.INTAKE);
                 Robot.shooter.setState(ShooterStates.INTAKE);
             }
         }
-        if (almostDeployedWrist) {
+        if (deployedWrist) {
             Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
-            
-            Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+
         }
 
         Robot.arm.moveToGoal();
@@ -86,6 +81,7 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
         almostDeployedWrist = false;
         deployedWrist = false;
         startedRollers = false;
+        uppedArm = false;
         Robot.intake.stop();
         Robot.shooter.stop();
     }

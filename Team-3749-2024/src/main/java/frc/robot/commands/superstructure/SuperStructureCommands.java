@@ -11,7 +11,7 @@ import frc.robot.utils.SuperStructureStates;
 
 public class SuperStructureCommands {
 
-    private GroundIntake groundIntake = new GroundIntake();
+    private EmergencyIntake groundIntake = new EmergencyIntake();
     private Stow stow = new Stow();
     private ScoreAmp scoreAmp = new ScoreAmp();
     private ScoreSubwoofer scoreSubwoofer = new ScoreSubwoofer();
