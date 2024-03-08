@@ -152,4 +152,8 @@ public class AutoUtils {
             new WaitCommand(3), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
             new WaitCommand(0.25), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
   }
+
+  public static Command getTroll(){
+    return new SequentialCommandGroup();
+  }
 }

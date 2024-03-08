@@ -19,14 +19,33 @@ public class Autos {
     public static Command get4Piece() {
         // return AutoUtils.getCycle(0);
         return new SequentialCommandGroup(AutoUtils.getCycle(0),
-                AutoUtils.getAutoPath("4 piece middle", new Pose2d(1.32, 5.44, new Rotation2d())),
+                AutoUtils.getAutoPath("4 piece middle solo", new Pose2d(1.32, 5.44, new Rotation2d())),
                 AutoUtils.getCycle(8));
 
+        // return new SequentialCommandGroup(AutoUtils.getCycle(0),
+        // AutoUtils.getAutoPath("4 piece middle right", new Pose2d(1.32, 5.44, new
+        // Rotation2d())),
+        // AutoUtils.getCycle(2), AutoUtils.getCycle(10));
 
         // return new SequentialCommandGroup(AutoUtils.getCycle(0),
-        //         AutoUtils.getAutoPath("4 piece middle", new Pose2d(1.32, 5.44, new Rotation2d())),
-        //         AutoUtils.getCycle(2));
+        // AutoUtils.getAutoPath("4 piece middle wing", new Pose2d(1.32, 5.44, new
+        // Rotation2d())),
+        // AutoUtils.getCycle(2), AutoUtils.getCycle(6)), AutoUtils.getCycle(13);
+
+        // return new SequentialCommandGroup(AutoUtils.getCycle(0),
+        // AutoUtils.getAutoPath("4 piece middle", new Pose2d(1.32, 5.44, new
+        // Rotation2d())),
+        // AutoUtils.getCycle(2), AutoUtils.getCycle(6)), AutoUtils.getCycle(13);
+        
+        // return new SequentialCommandGroup(AutoUtils.getCycle(0),
+        // AutoUtils.getAutoPath("4 piece middle left", new Pose2d(1.32, 5.44, new
+        // Rotation2d())),
+        // AutoUtils.getCycle(2), AutoUtils.getCycle(10));
 
     }
 
+    public static Command getTroll() {
+        return new SequentialCommandGroup(AutoUtils.getCycle(0), AutoUtils.getTroll(),
+                AutoUtils.getAutoPath("top-speaker-troll", new Pose2d(1.32, 5.44, new Rotation2d())));
+    }
 }
