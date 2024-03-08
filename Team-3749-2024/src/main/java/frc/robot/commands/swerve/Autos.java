@@ -20,7 +20,12 @@ public class Autos {
         // return AutoUtils.getCycle(0);
         return new SequentialCommandGroup(AutoUtils.getCycle(0),
                 AutoUtils.getAutoPath("4 piece middle", new Pose2d(1.32, 5.44, new Rotation2d())),
-                AutoUtils.getCycle(2));
+                AutoUtils.getCycle(8));
+
+
+        // return new SequentialCommandGroup(AutoUtils.getCycle(0),
+        //         AutoUtils.getAutoPath("4 piece middle", new Pose2d(1.32, 5.44, new Rotation2d())),
+        //         AutoUtils.getCycle(2));
 
     }
 

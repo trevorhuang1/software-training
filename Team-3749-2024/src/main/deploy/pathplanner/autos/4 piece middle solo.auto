@@ -5,7 +5,7 @@
       "x": 1.3179652690887451,
       "y": 5.436100959777832
     },
-    "rotation": 1.4443952397909127e-27
+    "rotation": -8.075016507512042e-28
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middle-speaker-3xwing_speaker"
+            "pathName": "middle-speaker-3xwing_speaker.1"
           }
         }
       ]
