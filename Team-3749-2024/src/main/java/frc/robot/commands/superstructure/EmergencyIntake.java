@@ -82,8 +82,7 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
         deployedWrist = false;
         startedRollers = false;
         uppedArm = false;
-        Robot.intake.stop();
-        Robot.shooter.stop();
+
     }
 
     private boolean atShoot = false;

@@ -64,6 +64,7 @@ public class Swerve extends SubsystemBase {
   private ShuffleData<Boolean> gyroConnectedLog = new ShuffleData<Boolean>(
       "swerve",
       "gyro connected",
+
       false);
   private ShuffleData<Boolean> gyroCalibratingLog = new ShuffleData<Boolean>(
       "swerve",
@@ -115,9 +116,17 @@ public class Swerve extends SubsystemBase {
     SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(
         chassisSpeeds);
     // take shortest path to destination
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        moduleStates,
-        DriveConstants.maxSpeedMetersPerSecond);
+    if (DriverStation.isTeleopEnabled()) {
+
+      SwerveDriveKinematics.desaturateWheelSpeeds(
+          moduleStates,
+          DriveConstants.teleopMaxSpeedMetersPerSecond);
+    } else{
+
+      SwerveDriveKinematics.desaturateWheelSpeeds(
+          moduleStates,
+          DriveConstants.maxSpeedMetersPerSecond);
+    }
     // 6. Output each module states to wheels
 
     setModuleStates(moduleStates);
@@ -235,7 +244,7 @@ public class Swerve extends SubsystemBase {
 
   public void resetGyro() {
     gyro.resetGyro();
-    if (DriverStation.getAlliance().get() == Alliance.Red){
+    if (MiscConstants.isRedAlliance()) {
 
       swerveDrivePoseEstimator.resetPosition(new Rotation2d(180), new SwerveModulePosition[] {
           modules[0].getPosition(),
@@ -243,13 +252,14 @@ public class Swerve extends SubsystemBase {
           modules[2].getPosition(),
           modules[3].getPosition()
       }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d(180)));
-    } else{
-          swerveDrivePoseEstimator.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
+    } else {
+      swerveDrivePoseEstimator.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
           modules[0].getPosition(),
           modules[1].getPosition(),
           modules[2].getPosition(),
           modules[3].getPosition()
-      }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));}
+      }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
+    }
   }
 
   public double totalAcceleration = 0;

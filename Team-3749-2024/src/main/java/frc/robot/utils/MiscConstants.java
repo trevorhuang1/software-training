@@ -28,6 +28,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
@@ -55,6 +57,11 @@ public class MiscConstants {
                 public static final double deadband = 0.125;
         }
 
- 
-
+        public static boolean isRedAlliance() {
+                if (DriverStation.getAlliance().isEmpty()) {
+                        return false;
+                } else {
+                        return DriverStation.getAlliance().get() == Alliance.Red;
+                }
+        }
 }

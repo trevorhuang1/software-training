@@ -49,8 +49,8 @@ public class Stow implements SuperStructureCommandInterface {
 
     @Override
     public void start() {
-        Robot.intake.setState(IntakeStates.STOP);
-        Robot.shooter.setState(ShooterStates.STOP);
+        // Robot.intake.setState(IntakeStates.STOP);
+        // Robot.shooter.setState(ShooterStates.STOP);
     }
 
 }

@@ -13,8 +13,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
+import frc.robot.utils.MiscConstants;
 import frc.robot.utils.MiscConstants.*;
+
+import java.sql.Driver;
 import java.util.function.Supplier;
 
 /***
@@ -65,7 +69,10 @@ public class SwerveTeleop extends Command {
     // squaring the inputs for smoother driving at low speeds
     linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
     turningSpeed = Math.copySign(turningSpeed * turningSpeed, turningSpeed);
-
+    double maxSpeed;
+    if (DriverStation.isTeleopEnabled()){
+      maxSpeed = SwerveConstants.DriveConstants.teleopMaxSpeedMetersPerSecond;
+    }
     double driveSpeedMPS = linearMagnitude * DriveConstants.maxSpeedMetersPerSecond;
 
     turningSpeed =  
@@ -77,7 +84,7 @@ public class SwerveTeleop extends Command {
     double ySpeed = driveSpeedMPS * Math.sin(linearDirection.getRadians());
      ChassisSpeeds chassisSpeeds ;
 
-      if (DriverStation.getAlliance().get() == Alliance.Red){
+      if (MiscConstants.isRedAlliance()){
 
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 ySpeed,

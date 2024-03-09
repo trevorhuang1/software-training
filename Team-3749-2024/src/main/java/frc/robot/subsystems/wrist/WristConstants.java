@@ -30,7 +30,7 @@ public final class WristConstants {
 
     private static final PIDConstants simPID = new PIDConstants(35, 0, 1);
 
-    private static final PIDConstants realPID = new PIDConstants(0.7, 0.0, 0); // 0.35
+    private static final PIDConstants realPID = new PIDConstants(0.9, 0.0, 0); // 0.35
 
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
@@ -53,8 +53,8 @@ public final class WristConstants {
     public static final double simkA = 0;
 
     public static final double realkS = 0.0;
-    public static final double realkVForward = 3.2;// 1.6 // radians
-    public static final double realkVBackward = 2.7     ; // radians
+    public static final double realkVForward = 3.7;// 1.6 // radians
+    public static final double realkVBackward = 3    ; // radians
 
     public static final double kYIntercept = 0.0654;
     public static final double kBar =0.635;
