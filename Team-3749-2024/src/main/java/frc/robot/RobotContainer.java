@@ -17,20 +17,21 @@ import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.SuperStructureStates;
 import java.util.HashMap;
+import java.util.Map;
 
 public class RobotContainer {
 
   private final JoystickIO joystickIO = new JoystickIO();
 
   public RobotContainer() {
-    if (Robot.isSimulation()) {
-      NetworkTableInstance inst = NetworkTableInstance.getDefault();
-      inst.stopServer();
-      // Change the IP address in the below function to the IP address you use to
-      // connect to the PhotonVision UI.
-      inst.setServer("127.0.0.1");
-      inst.startClient4("Robot Simulation");
-    }
+    // if (Robot.isSimulation()) {
+    //   NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    //   inst.stopServer();
+    //   // Change the IP address in the below function to the IP address you use to
+    //   // connect to the PhotonVision UI.
+    //   inst.setServer("127.0.0.1");
+    //   inst.startClient4("Robot Simulation");
+    // }
     DriverStation.silenceJoystickConnectionWarning(true);
     DriverStation.removeRefreshedDataEventHandle(44000);
 
@@ -55,7 +56,7 @@ public class RobotContainer {
   }
 
   public void initAuto() {
-    HashMap<String, Command> commandList = new HashMap<String, Command>();
+    Map<String, Command> commandList = new HashMap<String, Command>();
 
     commandList.put(
       "cycle",
@@ -69,12 +70,8 @@ public class RobotContainer {
     );
 
     commandList.put(
-      "intake&feed",
+      "feed",
       new SequentialCommandGroup(
-        Commands.runOnce(() -> {
-          Robot.state = SuperStructureStates.GROUND_INTAKE;
-        }),
-        new WaitCommand(2),
         Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))
       )
     );
@@ -93,7 +90,6 @@ public class RobotContainer {
     commandList.put(
       "stow",
       new SequentialCommandGroup(
-        new WaitCommand(0.5),
         Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW)
       )
     );
@@ -103,7 +99,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return Autos.getTroll();
-    // return new PrintCommand("no auto");
+    // return new PrintCommand("no auto")
     // return Commands.run(() -> {
     //   Robot.intake.setIntakeVelocity(100);
     //   Robot.shooter.setShooterVelocity(150);

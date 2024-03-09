@@ -27,6 +27,7 @@ import frc.robot.utils.AutoConstants;
 import frc.robot.utils.MiscConstants;
 import frc.robot.utils.SuperStructureStates;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class AutoUtils {
@@ -48,16 +49,9 @@ public class AutoUtils {
       swerve::setChassisSpeeds,
       AutoConstants.cfgHolonomicFollower,
       () -> {
-        // get alliance
-        if (DriverStation.getAlliance().isEmpty()) return true;
+        if (DriverStation.getAlliance().isEmpty()) return false;
 
-        Alliance robotAlliance = DriverStation.getAlliance().get();
-
-        if (robotAlliance == Alliance.Red) {
-          return false;
-        } else {
-          return true;
-        }
+        return DriverStation.getAlliance().get() == Alliance.Red;
       },
       swerve
     );
@@ -65,10 +59,13 @@ public class AutoUtils {
     autoChooser = AutoBuilder.buildAutoChooser("Test");
   }
 
-  public static void initAuto(HashMap<String, Command> commandList) {
+  public static void initAuto(Map<String, Command> commandList) {
     initPPUtils();
 
-    NamedCommands.registerCommands(commandList);
+    commandList.forEach((String name, Command command) -> {
+      NamedCommands.registerCommand(name, command);
+    });
+    // NamedCommands.registerCommands(commandList);
   }
 
   public static Command getAutoPath() {
@@ -96,30 +93,20 @@ public class AutoUtils {
     return cmd.andThen(() -> swerve.stopModules());
   }
 
-
-
-
-  
-
   public static Command followPathCommand(PathPlannerPath path) {
     return new FollowPathHolonomic(
-        path,
-        swerve::getPose,
-        swerve::getChassisSpeeds, swerve::setChassisSpeeds,
-        AutoConstants.cfgHolonomicFollower,
-        () -> {
-          if (DriverStation.getAlliance().isEmpty())
-            return false;
+      path,
+      swerve::getPose,
+      swerve::getChassisSpeeds,
+      swerve::setChassisSpeeds,
+      AutoConstants.cfgHolonomicFollower,
+      () -> {
+        if (DriverStation.getAlliance().isEmpty()) return false;
 
-        Alliance robotAlliance = DriverStation.getAlliance().get();
-
-          if (robotAlliance == Alliance.Red) {
-            return true;
-          } else {
-            return false;
-          }
-        },
-        swerve);
+        return DriverStation.getAlliance().get() == Alliance.Red;
+      },
+      swerve
+    );
   }
 
   public static Command getPathFindToPoseCommand(
@@ -129,7 +116,6 @@ public class AutoUtils {
   ) {
     return AutoBuilder.pathfindToPose(targetPose, constraints, endingVelocity);
   }
-
 
   public static Command pathFindToThenFollowTraj(
     String trajName,
@@ -169,12 +155,19 @@ public class AutoUtils {
   }
 
   public static Command getCycle(double wait) {
-    return new SequentialCommandGroup(new WaitCommand(wait),
-        new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-            new WaitCommand(5), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
+    return new SequentialCommandGroup(
+      new WaitCommand(wait),
+      new SequentialCommandGroup(
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+        new WaitCommand(5),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)
+      )
+    );
   }
 
   public static Command getTroll() {
-    return new SequentialCommandGroup(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.TROLL)));
+    return new SequentialCommandGroup(
+      Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.TROLL))
+    );
   }
 }
