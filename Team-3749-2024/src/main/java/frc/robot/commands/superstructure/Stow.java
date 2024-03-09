@@ -32,48 +32,9 @@ public class Stow implements SuperStructureCommandInterface {
     @Override
     public void execute() {
 
-        if (Robot.arm.getPositionRad() > maxArmRadForStow) {
-            Robot.arm.setGoal(Units.degreesToRadians(6));
-            armWasRaised = true;
-        } else {
-            loweredArm = true;
+        Robot.wrist.setGoal(WristStates.STOW);
 
-        }
-
-        if (Robot.wrist.getState() == WristStates.STOW) {
-            stowedWrist = true;
-        }
-        if (!stowedWrist && loweredArm) {
-            if (armWasRaised) {
-
-                if (timer.get() == 0) {
-                    timer.start();
-                }
-                if (timer.get() > 1) {
-
-                    Robot.wrist.setGoal(WristStates.STOW);
-                }
-            } else {
-                Robot.wrist.setGoal(WristStates.STOW);
-
-            }
-        }
-        if (stowedWrist) {
-            Robot.arm.setGoal(ArmStates.STOW);
-            if (Robot.intake.getState() == IntakeStates.INTAKE) {
-                Robot.intake.setState(IntakeStates.STOP);
-                Robot.shooter.setState(ShooterStates.STOP);
-
-            }
-
-
-        }
-
-        // if (Robot.wrist.getState() == WristStates.IN_TRANIST && Robot.arm.getState()
-        // == ArmStates.STOW
-        // && Robot.wrist.getWristGoal().position == WristConstants.stowGoalRad) {
-        // Robot.wrist.setGoal(WristStates.GROUND_INTAKE);
-        // }
+        Robot.arm.setGoal(ArmStates.STOW);
 
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
@@ -82,20 +43,14 @@ public class Stow implements SuperStructureCommandInterface {
 
     @Override
     public void reset() {
-        stowedWrist = false;
-        loweredArm = false;
-        loweringArm = false;
-        armWasRaised = false;
         timer.stop();
         timer.reset();
     }
 
     @Override
     public void start() {
-        Robot.intake.stop();
-        Robot.shooter.stop();
-
+        Robot.intake.setState(IntakeStates.STOP);
+        Robot.shooter.setState(ShooterStates.STOP);
     }
-
 
 }
