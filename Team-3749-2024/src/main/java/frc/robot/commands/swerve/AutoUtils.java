@@ -153,6 +153,7 @@ public class AutoUtils {
         new SequentialCommandGroup(
             Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
             new WaitCommand(2.25),
+            Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
             Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
   }
 

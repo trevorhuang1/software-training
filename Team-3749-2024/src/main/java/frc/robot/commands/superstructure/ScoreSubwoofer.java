@@ -94,7 +94,7 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
     @Override
     public void autoReset() {
         reset();
-        Robot.intake.setState(IntakeStates.INTAKE);
+        // Robot.intake.setState(IntakeStates.INTAKE);
 
         atIntake = false;
     }

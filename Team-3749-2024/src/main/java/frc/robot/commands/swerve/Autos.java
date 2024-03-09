@@ -22,18 +22,25 @@ public class Autos {
         new Pose2d(4, 5, new Rotation2d()));
   }
 
+  public static Command getTaxi() {
+    return new SequentialCommandGroup(AutoUtils.getCycle(0), new WaitCommand(10), AutoUtils.getChoreoAutoPath("taxi",
+        new Pose2d(5.472554683685303, 7.105696201324463, new Rotation2d(1.051650028936967))));
+  }
+
   public static Command get4Piece() {
     Pose2d startingPos = new Pose2d(new Translation2d(1.318, 5.436), Rotation2d.fromRadians(0));
 
-    return AutoUtils.getChoreoAutoPath(
-        "middle-speaker-3xwing_speaker", startingPos);
+    return new SequentialCommandGroup(AutoUtils.getCycle(0), new ParallelCommandGroup(AutoUtils.getChoreoAutoPath(
+        "middle-speaker-3xwing_speaker", startingPos), AutoUtils.getCycle(3.5), AutoUtils.getCycle(6.5),
+        AutoUtils.getCycle(10)));
+
   }
 
   public static Command get4PieceNoRotation() {
     Pose2d startingPos = new Pose2d(new Translation2d(1.318, 5.436), Rotation2d.fromRadians(0));
 
-    return AutoUtils.getChoreoAutoPath(
-        "no rotation", startingPos);
+    return new SequentialCommandGroup(AutoUtils.getCycle(0), new ParallelCommandGroup(AutoUtils.getChoreoAutoPath(
+        "no rotation", startingPos), AutoUtils.getCycle(3.5), AutoUtils.getCycle(10), AutoUtils.getCycle(15)));
   }
 
   public static Command getTroll() {
