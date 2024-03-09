@@ -15,6 +15,7 @@ public class Led extends SubsystemBase {
     private AddressableLEDBuffer LEDBuffer = new AddressableLEDBuffer(frc.robot.subsystems.led.LEDConstants.length);
     private LEDPattern currentPattern = LEDPattern.WHITE;
     private int hue = 0;
+    private double brightness = 1;
 
     public Led()
     {
@@ -22,6 +23,15 @@ public class Led extends SubsystemBase {
        LEDs.setData(LEDBuffer);
        LEDs.start();
        setLEDPattern(LEDPattern.WHITE);
+    }
+
+    public Led(double brightness)
+    {
+       LEDs.setLength(LEDBuffer.getLength());
+       LEDs.setData(LEDBuffer);
+       LEDs.start();
+       setLEDPattern(LEDPattern.WHITE);
+       setBrightness(brightness);
     }
 
     private LEDPattern teamColorLED()
@@ -32,9 +42,14 @@ public class Led extends SubsystemBase {
 
     private void setLEDOneColorRGB(int R, int G, int B)
     {
+        int setR = (int)Math.round(R * brightness);
+        int setG = (int)Math.round(G * brightness);
+        int setB = (int)Math.round(B * brightness);
+
+
         for(int i=0;i<LEDBuffer.getLength();i++)
         {
-            LEDBuffer.setRGB(i, R, G, B);
+            LEDBuffer.setRGB(i, setR, setG, setB);
         }
     }
 
@@ -101,6 +116,14 @@ public class Led extends SubsystemBase {
             break;
         }
         LEDs.setData(LEDBuffer);
+        
     }
     
+    /***
+     * 
+     * @param setBrightness value from 1 - 0 for brightness
+     */
+    public void setBrightness(double setBrightness) {
+        brightness = setBrightness;
+    }
 }

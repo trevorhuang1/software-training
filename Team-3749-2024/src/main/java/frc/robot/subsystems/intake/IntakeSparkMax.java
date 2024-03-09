@@ -30,10 +30,7 @@ public class IntakeSparkMax implements IntakeIO {
     data.intakeVelocityRadPerSec = intakeEncoder.getVelocity();
     data.intakeTempCelcius = intakeMotor.getMotorTemperature();
     /*
-     * if(data.sensorTripped)
-     * {
-     * Robot.led.setLEDPattern(LEDPattern.GREEN);
-     * }
+
      */
   }
 

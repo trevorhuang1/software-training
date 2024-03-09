@@ -164,7 +164,7 @@ public class Wrist extends SubsystemBase {
     }
 
     private boolean atGoal() {
-        return (Math.abs(data.positionRad - getWristGoal().position) < 0.175);
+        return (Math.abs(data.positionRad - getWristGoal().position) < 0.24);
     }
 
     private void updateState() {

@@ -85,6 +85,10 @@ public class JoystickIO {
         Robot.pilot.leftBumper()
                 .onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.OUTTAKE), Robot.intake))
                 .onFalse(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake));
+     
+                // outtake
+        Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.OUTTAKE), Robot.intake))
+                .onFalse(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake));
 
         // shoot
         Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
@@ -104,7 +108,7 @@ public class JoystickIO {
                     Robot.intake.setState(IntakeStates.STOP);
                     Robot.shooter.setState(ShooterStates.STOP);
                 }, Robot.intake));
-
+        Robot.pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE)));
         // reset
         Robot.operator.povDown().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.RESET));
 

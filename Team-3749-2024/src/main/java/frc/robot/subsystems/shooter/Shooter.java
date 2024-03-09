@@ -110,6 +110,8 @@ public class Shooter extends SubsystemBase {
         break;
       case AMP:
         stop();;
+      case TROLL:
+        setShooterVelocity(150);
     }
   }
 

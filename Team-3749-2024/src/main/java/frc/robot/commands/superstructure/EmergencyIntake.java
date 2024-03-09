@@ -15,15 +15,16 @@ import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.SuperStructureStates;
 
-public class GroundIntake implements SuperStructureCommandInterface {
+public class EmergencyIntake implements SuperStructureCommandInterface {
 
     private boolean stowedWrist = false;
     private boolean stowedArm = false;
     private boolean almostDeployedWrist = false;
     private boolean deployedWrist = false;
     private boolean startedRollers = false;
+    private boolean uppedArm = false;
 
-    public GroundIntake() {
+    public EmergencyIntake() {
     }
 
     @Override
@@ -31,36 +32,37 @@ public class GroundIntake implements SuperStructureCommandInterface {
         if (Robot.wrist.getState() == WristStates.STOW) {
             stowedWrist = true;
         }
-        if ((Robot.wrist.getState() == WristStates.ALMOST_DEPLOYED) ||
-                ((Math.abs(Robot.wrist.getVelocityRadPerSec()) < 0.2)
-                        && Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad - 0.225)) {
-            almostDeployedWrist = true;
-        }
+
         if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
             deployedWrist = true;
         }
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
         }
+        if (stowedArm && Robot.arm.getPositionRad() > Units.degreesToRadians(20)){
+            uppedArm = true;
+        }
 
-        if (!stowedWrist && !almostDeployedWrist && !deployedWrist) {
+        if (!stowedWrist && !deployedWrist) {
             Robot.wrist.setGoal(WristStates.STOW);
         }
         if (!stowedArm) {
             Robot.arm.setGoal(ArmStates.STOW);
         }
-        if (stowedWrist && stowedArm) {
-            Robot.wrist.setGoal(WristStates.ALMOST_DEPLOYED);
+        if (stowedArm && !uppedArm){
+            Robot.arm.setGoal(Units.degreesToRadians(25));
+        }
+        if (stowedWrist && uppedArm) {
+            Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
             if (!startedRollers) {
                 startedRollers = true;
                 Robot.intake.setState(IntakeStates.INTAKE);
                 Robot.shooter.setState(ShooterStates.INTAKE);
             }
         }
-        if (almostDeployedWrist) {
+        if (deployedWrist) {
             Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
 
-            Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
         }
 
         Robot.arm.moveToGoal();
@@ -79,6 +81,7 @@ public class GroundIntake implements SuperStructureCommandInterface {
         almostDeployedWrist = false;
         deployedWrist = false;
         startedRollers = false;
+        uppedArm = false;
         Robot.intake.stop();
         Robot.shooter.stop();
     }
@@ -100,8 +103,6 @@ public class GroundIntake implements SuperStructureCommandInterface {
     @Override
     public void autoStart(){
         start();
-        Robot.intake.setState(IntakeStates.INTAKE);
-        Robot.shooter.setState(ShooterStates.INTAKE);
     }
     @Override
     public void autoReset() {

@@ -215,7 +215,7 @@ public class Arm extends SubsystemBase {
     }
 
     private boolean atGoal() {
-        return (Math.abs(data.positionRad - getGoal()) < 0.1);
+        return (Math.abs(data.positionRad - getGoal()) < 0.15);
     }
 
     public void updateState() {
@@ -273,7 +273,7 @@ public class Arm extends SubsystemBase {
         // boolean driverStationStatus = DriverStation.isEnabled();
         // if (driverStationStatus && !isEnabled) {
         // isEnabled = driverStationStatus;
-        // armIO.setBreakMode();
+        armIO.setBreakMode();
         // }
         // if (!driverStationStatus && isEnabled) {
         // armIO.setCoastMode();
