@@ -108,6 +108,9 @@ public class Arm extends SubsystemBase {
         if (state == ArmStates.SUBWOOFER) {
             feedback.setGoal(ArmConstants.subwooferPositionRad);
         }
+        if (state == ArmStates.PODIUM) {
+            feedback.setGoal(ArmConstants.podiumPositionRad);
+        }
     }
 
     public void setGoal(double goalRad) {
@@ -238,6 +241,10 @@ public class Arm extends SubsystemBase {
         }
         if (getGoal() == ArmConstants.subwooferPositionRad) {
             state = ArmStates.SUBWOOFER;
+            return;
+        }
+        if (getGoal() == ArmConstants.podiumPositionRad) {
+            state = ArmStates.PODIUM;
             return;
         }
         // if (Robot.state == SuperStructureStates.SHOOT) {

@@ -41,10 +41,14 @@ public class Led extends SubsystemBase {
     }
 
     private void setLEDOneColorRGB(int R, int G, int B)
-    {
-        int setR = (int)Math.round(R * brightness);
-        int setG = (int)Math.round(G * brightness);
-        int setB = (int)Math.round(B * brightness);
+    {   
+        double curBrightness = brightness;
+        if (DriverStation.isEnabled()){
+            curBrightness = 1;
+        }
+        int setR = (int)(R * curBrightness);
+        int setG = (int)(G * curBrightness);
+        int setB = (int)(B * curBrightness);
 
 
         for(int i=0;i<LEDBuffer.getLength();i++)
@@ -107,6 +111,8 @@ public class Led extends SubsystemBase {
             break;
 
             case NOTHING:
+
+
                 setLEDOneColorRGB(0, 0, 0);
             break;
 

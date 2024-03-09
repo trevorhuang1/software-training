@@ -116,6 +116,10 @@ public class JoystickIO {
                 .onFalse(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP)));
         Robot.operator.back().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMB))
                 .onFalse(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMBDOWN));
+        Robot.operator.y().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.PODIUM))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist));
 
     }
 

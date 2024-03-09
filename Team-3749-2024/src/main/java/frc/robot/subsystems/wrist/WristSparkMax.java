@@ -64,7 +64,6 @@ private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorTy
         data.currentAmps = wristMotor.getOutputCurrent();
         data.tempCelcius = wristMotor.getMotorTemperature();
 
-        System.out.println(data.positionRad);
     }
 
     @Override

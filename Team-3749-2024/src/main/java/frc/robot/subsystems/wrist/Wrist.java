@@ -164,13 +164,13 @@ public class Wrist extends SubsystemBase {
     }
 
     private boolean atGoal() {
-        return (Math.abs(data.positionRad - getWristGoal().position) < 0.24);
+        return (Math.abs(data.positionRad - getWristGoal().position) < 0.33);
     }
 
     private void updateState() {
         // System.out.println(!atGoal());
         // System.out.println(Math.abs(getVelocityRadPerSec()) > 0.125);
-        if (!atGoal() || Math.abs(getVelocityRadPerSec()) > 0.125) {
+        if (!atGoal() || Math.abs(getVelocityRadPerSec()) > 0.8) {
             state = WristStates.IN_TRANIST;
             Robot.arm.setDeployedMode(true);
             return;
