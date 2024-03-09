@@ -7,6 +7,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
@@ -73,12 +75,21 @@ public class SwerveTeleop extends Command {
     // Calcaulate new linear components
     double xSpeed = driveSpeedMPS * Math.cos(linearDirection.getRadians());
     double ySpeed = driveSpeedMPS * Math.sin(linearDirection.getRadians());
+     ChassisSpeeds chassisSpeeds ;
 
-    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        ySpeed,
-        xSpeed,
-        turningSpeed,
-        swerve.getRotation2d());
+      if (DriverStation.getAlliance().get() == Alliance.Red){
+
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                ySpeed,
+                xSpeed,
+                turningSpeed,
+                swerve.getRotation2d().plus(new Rotation2d(180)));
+      }
+      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+          ySpeed,
+          xSpeed,
+          turningSpeed,
+          swerve.getRotation2d());
 
     // set chassis speeds
     swerve.setChassisSpeeds(chassisSpeeds);

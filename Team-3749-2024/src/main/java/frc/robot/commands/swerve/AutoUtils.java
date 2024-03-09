@@ -26,8 +26,6 @@ import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
 import frc.robot.utils.AutoConstants;
 import frc.robot.utils.MiscConstants;
 import frc.robot.utils.SuperStructureStates;
-import java.util.HashMap;
-import java.util.function.Consumer;
 
 public class AutoUtils {
 
@@ -42,32 +40,37 @@ public class AutoUtils {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
 
     AutoBuilder.configureHolonomic(
-      swerve::getPose,
-      (Pose2d pose) -> {},
-      swerve::getChassisSpeeds,
-      swerve::setChassisSpeeds,
-      AutoConstants.cfgHolonomicFollower,
-      () -> {
-        try {
-          if (DriverStation.getAlliance().isEmpty()) throw new Error(
-            "SELECT AN ALLIANCE"
-          );
-        } catch (Exception e) {
-          System.out.println(e);
-        }
+        swerve::getPose,
+        (Pose2d pose) -> {
+        },
+        swerve::getChassisSpeeds,
+        swerve::setChassisSpeeds,
+        AutoConstants.cfgHolonomicFollower,
+        () -> {
+          // get alliance
+          if (DriverStation.getAlliance().isEmpty())
+            return true;
 
-        return DriverStation.getAlliance().get() == Alliance.Red;
-      },
-      swerve
-    );
+          Alliance robotAlliance = DriverStation.getAlliance().get();
+
+          if (robotAlliance == Alliance.Red) {
+            return false;
+          } else {
+            return true;
+          }
+        },
+        swerve);
 
     autoChooser = AutoBuilder.buildAutoChooser("SELECT AUTO");
   }
 
-  public static void initAuto(HashMap<String, Command> commandList) {
+  public static void initAuto(Map<String, Command> commandList) {
     initPPUtils();
 
-    NamedCommands.registerCommands(commandList);
+    commandList.forEach((String name, Command command) -> {
+      NamedCommands.registerCommand(name, command);
+    });
+    // NamedCommands.registerCommands(commandList);
   }
 
   public static Command getAutoPath() {
@@ -85,26 +88,30 @@ public class AutoUtils {
     return path.andThen(() -> swerve.stopModules());
   }
 
+
+
+
+  
+
   public static Command followPathCommand(PathPlannerPath path) {
     return new FollowPathHolonomic(
-      path,
-      swerve::getPose,
-      swerve::getChassisSpeeds,
-      swerve::setChassisSpeeds,
-      AutoConstants.cfgHolonomicFollower,
-      () -> {
-        try {
-          if (DriverStation.getAlliance().isEmpty()) throw new Error(
-            "SELECT AN ALLIANCE"
-          );
-        } catch (Exception e) {
-          System.out.println(e);
-        }
+        path,
+        swerve::getPose,
+        swerve::getChassisSpeeds, swerve::setChassisSpeeds,
+        AutoConstants.cfgHolonomicFollower,
+        () -> {
+          if (DriverStation.getAlliance().isEmpty())
+            return false;
 
-        return DriverStation.getAlliance().get() == Alliance.Red;
-      },
-      swerve
-    );
+          Alliance robotAlliance = DriverStation.getAlliance().get();
+
+          if (robotAlliance == Alliance.Red) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        swerve);
   }
 
   public static Command getPathFindToPoseCommand(

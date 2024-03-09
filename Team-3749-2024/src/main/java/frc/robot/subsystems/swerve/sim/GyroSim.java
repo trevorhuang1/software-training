@@ -12,11 +12,11 @@ public class GyroSim implements GyroIO {
   @Override
   public void updateData(GyroData data) {
 
-    // double angleDiffRad = Robot.swerve.getChassisSpeeds().omegaRadiansPerSecond * 0.02;
-    // Rotation2d currentRotationDiff = new Rotation2d(angleDiffRad);
+    double angleDiffRad = Robot.swerve.getChassisSpeeds().omegaRadiansPerSecond * 0.02;
+    Rotation2d currentRotationDiff = Rotation2d.fromRadians(angleDiffRad);
 
-    // yaw = (yaw + currentRotationDiff.getDegrees() + 360) % 360;
-    // data.yawDeg = yaw;
+    yaw = (yaw + currentRotationDiff.getDegrees() + 360) % 360;
+    data.yawDeg = yaw;
   }
 
   @Override
