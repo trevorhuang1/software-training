@@ -1,8 +1,5 @@
 package frc.robot.commands.swerve;
 
-import java.util.Map;
-import java.util.function.Consumer;
-
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -29,7 +26,9 @@ import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
 import frc.robot.utils.AutoConstants;
 import frc.robot.utils.MiscConstants;
 import frc.robot.utils.SuperStructureStates;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class AutoUtils {
 
@@ -44,28 +43,20 @@ public class AutoUtils {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
 
     AutoBuilder.configureHolonomic(
-        swerve::getPose,
-        (Pose2d pose) -> {
-        },
-        swerve::getChassisSpeeds,
-        swerve::setChassisSpeeds,
-        AutoConstants.cfgHolonomicFollower,
-        () -> {
-          // get alliance
-          if (DriverStation.getAlliance().isEmpty())
-            return true;
+      swerve::getPose,
+      (Pose2d pose) -> {},
+      swerve::getChassisSpeeds,
+      swerve::setChassisSpeeds,
+      AutoConstants.cfgHolonomicFollower,
+      () -> {
+        if (DriverStation.getAlliance().isEmpty()) return false;
 
-          Alliance robotAlliance = DriverStation.getAlliance().get();
+        return DriverStation.getAlliance().get() == Alliance.Red;
+      },
+      swerve
+    );
 
-          if (robotAlliance == Alliance.Red) {
-            return false;
-          } else {
-            return true;
-          }
-        },
-        swerve);
-
-    autoChooser = AutoBuilder.buildAutoChooser("SELECT AUTO");
+    autoChooser = AutoBuilder.buildAutoChooser("Test");
   }
 
   public static void initAuto(Map<String, Command> commandList) {
@@ -92,30 +83,30 @@ public class AutoUtils {
     return path.andThen(() -> swerve.stopModules());
   }
 
-
-
-
-  
+  public static Command getChoreoAutoPath(
+    String autoPathName,
+    Pose2d startingPose
+  ) {
+    Robot.swerve.resetOdometry(startingPose);
+    PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(autoPathName);
+    Command cmd = AutoBuilder.followPath(path);
+    return cmd.andThen(() -> swerve.stopModules());
+  }
 
   public static Command followPathCommand(PathPlannerPath path) {
     return new FollowPathHolonomic(
-        path,
-        swerve::getPose,
-        swerve::getChassisSpeeds, swerve::setChassisSpeeds,
-        AutoConstants.cfgHolonomicFollower,
-        () -> {
-          if (DriverStation.getAlliance().isEmpty())
-            return false;
+      path,
+      swerve::getPose,
+      swerve::getChassisSpeeds,
+      swerve::setChassisSpeeds,
+      AutoConstants.cfgHolonomicFollower,
+      () -> {
+        if (DriverStation.getAlliance().isEmpty()) return false;
 
-          Alliance robotAlliance = DriverStation.getAlliance().get();
-
-          if (robotAlliance == Alliance.Red) {
-            return true;
-          } else {
-            return false;
-          }
-        },
-        swerve);
+        return DriverStation.getAlliance().get() == Alliance.Red;
+      },
+      swerve
+    );
   }
 
   public static Command getPathFindToPoseCommand(
