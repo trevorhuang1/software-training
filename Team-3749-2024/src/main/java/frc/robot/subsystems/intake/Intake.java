@@ -58,10 +58,10 @@ public class Intake extends SubsystemBase {
 
     public void setHasPiece(boolean has) {
         hasPiece = has;
-        if (has){
+        if (has) {
             Robot.led.setLEDPattern(LEDPattern.GREEN);
 
-        } else{
+        } else {
             Robot.led.setLEDPattern(LEDPattern.WHITE);
 
         }
@@ -130,10 +130,11 @@ public class Intake extends SubsystemBase {
                 break;
             case AMP:
                 setVoltage(-8);
-                hasPiece = false;
-                indexedPiece = false;
+                setHasPiece(false);
+                ;
+                setIndexedPiece(false);
+                ;
                 Robot.led.setLEDPattern(LEDPattern.WHITE);
-
 
         }
     }
@@ -147,16 +148,16 @@ public class Intake extends SubsystemBase {
         if (Robot.shooter.getState() == ShooterStates.STOP) {
             Robot.shooter.setState(ShooterStates.SPOOL);
         }
-        hasPiece = false;
-        indexedPiece = false;
+        setHasPiece(false);
+        setIndexedPiece(false);
         Robot.led.setLEDPattern(LEDPattern.WHITE);
 
     }
 
     private void outtake() {
         setVoltage(-12);
-        hasPiece = false;
-        indexedPiece = false;
+        setHasPiece(false);
+        setIndexedPiece(false);
         Robot.led.setLEDPattern(LEDPattern.WHITE);
 
     }
@@ -166,7 +167,6 @@ public class Intake extends SubsystemBase {
             setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
         } else {
             state = IntakeStates.INDEX;
-            Robot.led.setLEDPattern(LEDPattern.GREEN);
 
         }
 

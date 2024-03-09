@@ -89,14 +89,14 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
 
     @Override
     public void autoExecute() {
-      
-        Robot.arm.setGoal(ArmConstants.groundIntakepositionRad);
-        Robot.intake.setState(IntakeStates.INTAKE);
-        Robot.shooter.setState(ShooterStates.INTAKE);
-        // System.out.println(atShoot);
+        execute();
+        // Robot.arm.setGoal(ArmConstants.groundIntakepositionRad);
+        // Robot.intake.setState(IntakeStates.INTAKE);
+        // Robot.shooter.setState(ShooterStates.INTAKE);
+        // // System.out.println(atShoot);
 
-        Robot.arm.moveToGoal();
-        Robot.wrist.moveWristToGoal();
+        // Robot.arm.moveToGoal();
+        // Robot.wrist.moveWristToGoal();
 
     }
     @Override
