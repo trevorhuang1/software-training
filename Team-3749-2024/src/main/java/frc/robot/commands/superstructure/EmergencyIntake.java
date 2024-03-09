@@ -39,7 +39,7 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
         }
-        if (stowedArm && Robot.arm.getPositionRad() > Units.degreesToRadians(22.5)){
+        if (stowedArm && Robot.arm.getPositionRad() > Units.degreesToRadians(20)){
             uppedArm = true;
         }
 
@@ -50,7 +50,7 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
             Robot.arm.setGoal(ArmStates.STOW);
         }
         if (stowedArm && !uppedArm){
-            Robot.arm.setGoal(Units.degreesToRadians(20));
+            Robot.arm.setGoal(Units.degreesToRadians(25));
         }
         if (stowedWrist && uppedArm) {
             Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);

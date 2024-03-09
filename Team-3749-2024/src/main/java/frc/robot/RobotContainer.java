@@ -69,7 +69,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new WaitCommand(1);
+    return Autos.getTroll();
     // return new PrintCommand("no auto");
     // return Commands.run(() -> {
     //   Robot.intake.setIntakeVelocity(100);

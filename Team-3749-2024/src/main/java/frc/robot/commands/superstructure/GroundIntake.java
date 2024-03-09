@@ -100,6 +100,8 @@ public class GroundIntake implements SuperStructureCommandInterface {
     @Override
     public void autoStart(){
         start();
+        Robot.intake.setState(IntakeStates.INTAKE);
+        Robot.shooter.setState(ShooterStates.INTAKE);
     }
     @Override
     public void autoReset() {

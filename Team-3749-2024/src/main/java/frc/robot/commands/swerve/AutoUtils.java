@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
 import frc.robot.utils.AutoConstants;
@@ -88,6 +89,11 @@ public class AutoUtils {
     return path.andThen(() -> swerve.stopModules());
   }
 
+
+
+
+  
+
   public static Command followPathCommand(PathPlannerPath path) {
     return new FollowPathHolonomic(
         path,
@@ -96,14 +102,14 @@ public class AutoUtils {
         AutoConstants.cfgHolonomicFollower,
         () -> {
           if (DriverStation.getAlliance().isEmpty())
-            return true;
+            return false;
 
           Alliance robotAlliance = DriverStation.getAlliance().get();
 
           if (robotAlliance == Alliance.Red) {
-            return false;
-          } else {
             return true;
+          } else {
+            return false;
           }
         },
         swerve);
@@ -114,6 +120,7 @@ public class AutoUtils {
 
     return AutoBuilder.pathfindToPose(targetPose, constraints, endingVelocity);
   }
+
 
   public static Command pathFindToThenFollowTraj(String trajName, PathConstraints constraints) {
     ChoreoTrajectory traj = AutoUtils.getTraj(trajName);
@@ -149,11 +156,10 @@ public class AutoUtils {
   public static Command getCycle(double wait) {
     return new SequentialCommandGroup(new WaitCommand(wait),
         new SequentialCommandGroup(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-            new WaitCommand(3), Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
-            new WaitCommand(0.25), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
+            new WaitCommand(5), Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
   }
 
-  public static Command getTroll(){
-    return new SequentialCommandGroup();
+  public static Command getTroll() {
+    return new SequentialCommandGroup(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.TROLL)));
   }
 }

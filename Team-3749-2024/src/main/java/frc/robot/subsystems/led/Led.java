@@ -101,6 +101,7 @@ public class Led extends SubsystemBase {
             break;
         }
         LEDs.setData(LEDBuffer);
+        
     }
     
 }

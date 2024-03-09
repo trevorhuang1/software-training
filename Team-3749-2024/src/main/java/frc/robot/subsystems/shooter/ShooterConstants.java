@@ -46,7 +46,8 @@ public final class ShooterConstants {
         INTAKE,
         SPOOL,
         INDEX,
-        AMP
+        AMP,
+        TROLL
     }
 }
 
