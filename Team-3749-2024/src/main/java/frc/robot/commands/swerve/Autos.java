@@ -43,7 +43,13 @@ public class Autos {
     // AutoUtils.getAutoPath("4 piece middle left", new Pose2d(1.32, 5.44, new
     // Rotation2d())),
     // AutoUtils.getCycle(2), AutoUtils.getCycle(10));
+  }
 
+  public static Command get4PieceNoRotation() {
+    return AutoUtils.getChoreoAutoPath(
+      "no rotation",
+      new Pose2d(new Translation2d(1.318, 5.436), Rotation2d.fromRadians(0))
+    );
   }
 
   public static Command getTroll() {

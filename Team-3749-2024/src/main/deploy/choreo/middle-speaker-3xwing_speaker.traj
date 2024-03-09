@@ -1387,42 +1387,5 @@
       "timestamp": 13.589884099469467
     }
   ],
-  "eventMarkers": [
-    {
-      "timestamp": 0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "cycle"
-        }
-      }
-    },
-    {
-      "timestamp": 10.129876895061818,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "cycle"
-        }
-      }
-    },
-    {
-      "timestamp": 6.451830985392098,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "cycle"
-        }
-      }
-    },
-    {
-      "timestamp": 2.927295576105934,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "cycle"
-        }
-      }
-    }
-  ]
+  "eventMarkers": []
 }

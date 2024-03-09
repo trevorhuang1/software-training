@@ -1639,42 +1639,5 @@
       "timestamp": 11.068088268364038
     }
   ],
-  "eventMarkers": [
-    {
-      "timestamp": 0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "cycle"
-        }
-      }
-    },
-    {
-      "timestamp": 2.010884011528017,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "intake"
-        }
-      }
-    },
-    {
-      "timestamp": 11.068088268364038,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "cycle"
-        }
-      }
-    },
-    {
-      "timestamp": 7.058750699654813,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "stow"
-        }
-      }
-    }
-  ]
+  "eventMarkers": []
 }

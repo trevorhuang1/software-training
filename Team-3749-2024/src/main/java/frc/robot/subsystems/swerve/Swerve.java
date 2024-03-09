@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
@@ -234,12 +235,21 @@ public class Swerve extends SubsystemBase {
 
   public void resetGyro() {
     gyro.resetGyro();
-    swerveDrivePoseEstimator.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
-        modules[0].getPosition(),
-        modules[1].getPosition(),
-        modules[2].getPosition(),
-        modules[3].getPosition()
-    }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));
+    if (DriverStation.getAlliance().get() == Alliance.Red){
+
+      swerveDrivePoseEstimator.resetPosition(new Rotation2d(180), new SwerveModulePosition[] {
+          modules[0].getPosition(),
+          modules[1].getPosition(),
+          modules[2].getPosition(),
+          modules[3].getPosition()
+      }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d(180)));
+    } else{
+          swerveDrivePoseEstimator.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
+          modules[0].getPosition(),
+          modules[1].getPosition(),
+          modules[2].getPosition(),
+          modules[3].getPosition()
+      }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d()));}
   }
 
   public double totalAcceleration = 0;
