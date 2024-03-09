@@ -37,7 +37,7 @@ public class IntakeSparkMax implements IntakeIO {
   @Override
   public void setVoltage(double intakeVolts) {
     intakeGoalVolts = MathUtil.clamp(intakeVolts, -12, 12);
-    // intakeMotor.setVoltage(intakeGoalVolts);
+    intakeMotor.setVoltage(intakeGoalVolts);
   }
   
 }
