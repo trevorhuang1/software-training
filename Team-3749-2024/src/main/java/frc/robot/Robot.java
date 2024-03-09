@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
   public static SuperStructureCommands centralCommand = new SuperStructureCommands();
 
 
-  public static final Led led = new Led();
+  public static final Led led = new Led(0.5);
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
