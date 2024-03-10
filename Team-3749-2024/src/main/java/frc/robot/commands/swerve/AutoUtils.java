@@ -149,11 +149,17 @@ public class AutoUtils {
 
   public static Command getCycle(double wait) {
     return new SequentialCommandGroup(
+        Commands.print("cycle"),
         new WaitCommand(wait),
         new SequentialCommandGroup(
             Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
             new WaitCommand(2.25),
             Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
+            new WaitCommand(0.25),
+            
+            Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE)),
+            Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.INTAKE)),
+
             Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
   }
 

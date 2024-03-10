@@ -46,9 +46,8 @@ public class Autos {
   public static Command getTroll() {
     return new SequentialCommandGroup(
         AutoUtils.getCycle(0),
-        new WaitCommand(3),
         AutoUtils.getTroll(),
-        AutoUtils.getAutoPath(
+        AutoUtils.getChoreoAutoPath(
             "top-speaker-troll",
             new Pose2d(1.32, 5.44, new Rotation2d())));
   }

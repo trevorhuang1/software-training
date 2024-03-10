@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
@@ -175,7 +176,7 @@ public class Intake extends SubsystemBase {
     private void index() {
         if (!indexedPiece) {
 
-            setVoltage(-2.5);
+            setVoltage(-3.75);
         } else {
             state = IntakeStates.STOP;
         }
@@ -197,7 +198,7 @@ public class Intake extends SubsystemBase {
         photoelectricLog.set(sensorData.sensing);
 
         stateLog.set(state.name());
-
+        SmartDashboard.putBoolean("has piece", hasPiece);
     }
 
 }

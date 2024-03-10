@@ -8,7 +8,7 @@ public final class IntakeConstants {
 
     public static final int intakeId = 20;
 
-    public static final double gearRatio = 5;
+    public static final double gearRatio = 4;
     private static final PIDConstants simIntakePID = new PIDConstants(0, 0, 0);
     private static final PIDConstants realIntakePID = new PIDConstants(
             0.01,

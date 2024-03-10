@@ -125,7 +125,7 @@ public class Shooter extends SubsystemBase {
     if (getVelocityRadPerSec() > 2) {
       intakeSpedUp = true;
     }
-    if (getVelocityRadPerSec() < 0.05 && intakeSpedUp) {
+    if (getVelocityRadPerSec() < 0.3 && intakeSpedUp) {
       Robot.intake.setHasPiece(true);
       state = ShooterStates.INDEX;
       // state
