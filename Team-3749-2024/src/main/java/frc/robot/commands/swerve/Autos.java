@@ -8,11 +8,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.utils.MiscConstants;
+import frc.robot.utils.SuperStructureStates;
 
 public class Autos {
 
@@ -43,13 +45,27 @@ public class Autos {
         "no rotation", startingPos), AutoUtils.getCycle(3.5), AutoUtils.getCycle(10), AutoUtils.getCycle(15)));
   }
 
+  public static Command get4PieceNoCommands() {
+    return AutoUtils.getChoreoAutoPath("no rotation", new Pose2d(new Translation2d(1.318, 5.436), Rotation2d.fromRadians(0)));
+  }
+
   public static Command getTroll() {
     return new SequentialCommandGroup(
         AutoUtils.getCycle(0),
-        AutoUtils.getTroll(),
+        Commands.run(() -> Robot.state = SuperStructureStates.STOW),
         AutoUtils.getChoreoAutoPath(
             "top-speaker-troll",
             new Pose2d(1.32, 5.44, new Rotation2d())));
+  }
+
+  public static Command getBottomRun() {
+    return new SequentialCommandGroup(AutoUtils.getCycle(0), new WaitCommand(6),
+        AutoUtils.getChoreoAutoPath("bottom-speaker",
+            new Pose2d(0.7692505121231079, 4.479482650756836, new Rotation2d(-1.0356489717435746))));
+  }
+
+  public static Command getTestPath() {
+    return AutoUtils.getChoreoAutoPath("testPath", new Pose2d());
   }
 }
 // public static Command getSide() {

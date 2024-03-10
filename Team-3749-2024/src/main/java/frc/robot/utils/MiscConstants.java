@@ -31,6 +31,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import java.util.HashMap;
@@ -60,8 +61,11 @@ public class MiscConstants {
         public static boolean isRedAlliance() {
                 if (DriverStation.getAlliance().isEmpty()) {
                         return false;
-                } else {
-                        return DriverStation.getAlliance().get() == Alliance.Red;
                 }
+
+                boolean isRedAlliance = DriverStation.getAlliance().get() == Alliance.Red;
+                SmartDashboard.putBoolean("isRedAlliance", isRedAlliance);
+
+                return isRedAlliance;
         }
 }

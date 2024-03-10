@@ -176,7 +176,7 @@ public class Intake extends SubsystemBase {
     private void index() {
         if (!indexedPiece) {
 
-            setVoltage(-3.75);
+            setVoltage(-3.5);
         } else {
             state = IntakeStates.STOP;
         }

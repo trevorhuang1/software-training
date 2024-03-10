@@ -95,7 +95,7 @@ public class JoystickIO {
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist));
-
+                
         // amp
         Robot.operator.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
                 .onFalse(Commands.runOnce(() -> {

@@ -135,6 +135,8 @@ public class Shooter extends SubsystemBase {
 
   private void index() {
     setVoltage(-1.2, -1.2);
+
+    
     if (Math.abs(getVelocityRadPerSec()) > 30) {
       state = ShooterStates.STOP;
       System.out.println("STOP INDEX");

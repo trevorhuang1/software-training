@@ -84,14 +84,13 @@ public class SwerveTeleop extends Command {
     double ySpeed = driveSpeedMPS * Math.sin(linearDirection.getRadians());
      ChassisSpeeds chassisSpeeds ;
 
-      if (MiscConstants.isRedAlliance()){
-
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                ySpeed,
-                xSpeed,
-                turningSpeed,
-                swerve.getRotation2d().plus(new Rotation2d(180)));
-      }
+      // if (MiscConstants.isRedAlliance()){
+      //   chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+      //           ySpeed,
+      //           xSpeed,
+      //           turningSpeed,
+      //           swerve.getRotation2d().plus(new Rotation2d(180)));
+      // }
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           ySpeed,
           xSpeed,

@@ -112,9 +112,19 @@ public class Swerve extends SubsystemBase {
   }
 
   public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+    ChassisSpeeds setChassisSpeeds = chassisSpeeds;
+
+    if(MiscConstants.isRedAlliance()) {
+      setChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                chassisSpeeds.vxMetersPerSecond,
+                chassisSpeeds.vyMetersPerSecond,
+                chassisSpeeds.omegaRadiansPerSecond,
+                Robot.swerve.getRotation2d().plus(Rotation2d.fromDegrees(180)));
+    }
+
     // Convert chassis speeds to individual module states
     SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(
-        chassisSpeeds);
+        setChassisSpeeds);
     // take shortest path to destination
     if (DriverStation.isTeleopEnabled()) {
 

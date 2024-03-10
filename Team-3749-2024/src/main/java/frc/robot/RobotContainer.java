@@ -107,7 +107,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new SequentialCommandGroup(AutoUtils.getCycle(0), AutoUtils.getCycle(5));
+    return AutoUtils.getCycle(0);
     // return new SequentialCommandGroup(Autos.get4Piece());
     // return new PrintCommand("no auto")
     // return Commands.run(() -> {
