@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
@@ -68,6 +69,15 @@ public class RobotContainer {
             new WaitCommand(0.25),
             Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
 
+    commandList.put(
+      "shoot",
+      new SequentialCommandGroup(
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+        new WaitCommand(3),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))
+      )
+    );
+    
     commandList.put(
         "feed",
         new SequentialCommandGroup(
