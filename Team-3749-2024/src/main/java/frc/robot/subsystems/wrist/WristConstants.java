@@ -23,10 +23,11 @@ public final class WristConstants {
         SUBWOOFER,
         PODIUM,
         STOW;
-    }
+    }   
 
 
-    public static final double wristOffsetRad = Units.degreesToRadians(252.7);
+    public static final double wristOffsetRad = Units.degreesToRadians(128.885       );
+    public static final boolean wristReversed = true;
 
     private static final PIDConstants simPID = new PIDConstants(35, 0, 1);
 

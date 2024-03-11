@@ -25,8 +25,8 @@ public class Autos {
   }
 
   public static Command getTaxi() {
-    return new SequentialCommandGroup(AutoUtils.getCycle(0), new WaitCommand(10), AutoUtils.getChoreoAutoPath("taxi",
-        new Pose2d(5.472554683685303, 7.105696201324463, new Rotation2d(1.051650028936967))));
+    return new SequentialCommandGroup(AutoUtils.getCycle(0), new WaitCommand(6), AutoUtils.getChoreoAutoPath("taxi",
+        new Pose2d(0.7623372673988342, 4.4742279052734375, new Rotation2d(-1.0465789848978129))));
   }
 
   public static Command get4Piece() {
@@ -55,7 +55,7 @@ public class Autos {
         Commands.run(() -> Robot.state = SuperStructureStates.STOW),
         AutoUtils.getChoreoAutoPath(
             "top-speaker-troll",
-            new Pose2d(1.32, 5.44, new Rotation2d())));
+            new Pose2d(0.7535725831985474, 4.482047080993652, new Rotation2d(-1.0074806999559232))));
   }
 
   public static Command getBottomRun() {

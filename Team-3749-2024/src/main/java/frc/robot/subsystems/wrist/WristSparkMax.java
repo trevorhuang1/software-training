@@ -42,7 +42,7 @@ private CANSparkMax wristMotor = new CANSparkMax(WristConstants.wristId, MotorTy
         if (pos >  3.0 / 2.0 * Math.PI){
             pos -= 2 * Math.PI;
         }
-        if (pos<-Math.PI/2){
+        if (pos<-Math.PI/6){
             pos += 2 * Math.PI;
         }
 
