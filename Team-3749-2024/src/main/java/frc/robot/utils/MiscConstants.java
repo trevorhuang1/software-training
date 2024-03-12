@@ -56,18 +56,16 @@ public class MiscConstants {
     public static final double deadband = 0.125;
   }
 
-  public static boolean isRedAlliance(boolean... forceColor) {
-    if (forceColor.length == 1) {
-      return forceColor[0];
-    }
+  public static boolean isRedAlliance() {
+    boolean isRed = false;
 
     if (DriverStation.getAlliance().isEmpty()) {
-      return false;
+      return isRed;
+    } else {
+      isRed = DriverStation.getAlliance().get() == Alliance.Red;
     }
 
-    boolean isRedAlliance = DriverStation.getAlliance().get() == Alliance.Red;
-    SmartDashboard.putBoolean("isRedAlliance", isRedAlliance);
-
-    return isRedAlliance;
+    SmartDashboard.putBoolean("isRedAlliance", isRed);
+    return isRed;
   }
 }
