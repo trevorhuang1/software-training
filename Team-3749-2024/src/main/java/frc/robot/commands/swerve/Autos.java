@@ -1,6 +1,7 @@
 package frc.robot.commands.swerve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.GeometryUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,8 +26,8 @@ public class Autos {
   }
 
   public static Command getTaxi() {
-    return new SequentialCommandGroup(AutoUtils.getCycle(0), new WaitCommand(6), AutoUtils.getChoreoAutoPath("taxi",
-        new Pose2d(0.7623372673988342, 4.4742279052734375, new Rotation2d(-1.0465789848978129))));
+    return new SequentialCommandGroup(NamedCommands.getCommand("shoot_subwoofer"), AutoUtils.getChoreoAutoPath("taxi",
+        new Pose2d(0.7623372673988342, 4.4742279052734375, Rotation2d.fromRadians(-1.0465789848978129))));
   }
 
   public static Command get4Piece() {

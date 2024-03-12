@@ -59,13 +59,15 @@ public class MiscConstants {
         }
 
         public static boolean isRedAlliance() {
-                if (DriverStation.getAlliance().isEmpty()) {
-                        return false;
-                }
+                return false;
 
-                boolean isRedAlliance = DriverStation.getAlliance().get() == Alliance.Red;
-                SmartDashboard.putBoolean("isRedAlliance", isRedAlliance);
+                // if (DriverStation.getAlliance().isEmpty()) {
+                //         return false;
+                // }
 
-                return isRedAlliance;
+                // boolean isRedAlliance = DriverStation.getAlliance().get() == Alliance.Red;
+                // SmartDashboard.putBoolean("isRedAlliance", isRedAlliance);
+
+                // return isRedAlliance;
         }
 }

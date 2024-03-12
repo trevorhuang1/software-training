@@ -17,7 +17,6 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveConstants.DriveConstants;
 import frc.robot.utils.MiscConstants;
 import frc.robot.utils.MiscConstants.*;
-
 import java.sql.Driver;
 import java.util.function.Supplier;
 
@@ -34,21 +33,20 @@ public class SwerveTeleop extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, xTurningSpdFunction;
 
   public SwerveTeleop(
-      Supplier<Double> xSpdFunction,
-      Supplier<Double> ySpdFunction,
-      Supplier<Double> xTurningSpdFunction) {
+    Supplier<Double> xSpdFunction,
+    Supplier<Double> ySpdFunction,
+    Supplier<Double> xTurningSpdFunction
+  ) {
     this.swerve = Robot.swerve;
     this.xSpdFunction = xSpdFunction;
     this.ySpdFunction = ySpdFunction;
     this.xTurningSpdFunction = xTurningSpdFunction;
 
-  
     addRequirements(swerve);
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
@@ -56,46 +54,51 @@ public class SwerveTeleop extends Command {
     double yMagnitude = ySpdFunction.get();
     double turningSpeed = xTurningSpdFunction.get();
 
-  
     double linearMagnitude = Math.hypot(xMagnitude, yMagnitude);
     Rotation2d linearDirection = new Rotation2d(xMagnitude, yMagnitude);
 
     // deadbands
-    linearMagnitude = MathUtil.applyDeadband(linearMagnitude, ControllerConstants.deadband);
-    turningSpeed = Math.abs(turningSpeed) > ControllerConstants.deadband
+    linearMagnitude =
+      MathUtil.applyDeadband(linearMagnitude, ControllerConstants.deadband);
+    turningSpeed =
+      Math.abs(turningSpeed) > ControllerConstants.deadband
         ? turningSpeed
         : 0.0;
 
     // squaring the inputs for smoother driving at low speeds
-    linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
+    linearMagnitude =
+      Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
     turningSpeed = Math.copySign(turningSpeed * turningSpeed, turningSpeed);
     double maxSpeed;
-    if (DriverStation.isTeleopEnabled()){
+    if (DriverStation.isTeleopEnabled()) {
       maxSpeed = SwerveConstants.DriveConstants.teleopMaxSpeedMetersPerSecond;
     }
-    double driveSpeedMPS = linearMagnitude * DriveConstants.maxSpeedMetersPerSecond;
+    double driveSpeedMPS =
+      linearMagnitude * DriveConstants.maxSpeedMetersPerSecond;
 
-    turningSpeed =  
-        turningSpeed * DriveConstants.maxAngularSpeedRadiansPerSecond;
-
+    turningSpeed =
+      turningSpeed * DriveConstants.maxAngularSpeedRadiansPerSecond;
 
     // Calcaulate new linear components
     double xSpeed = driveSpeedMPS * Math.cos(linearDirection.getRadians());
     double ySpeed = driveSpeedMPS * Math.sin(linearDirection.getRadians());
-     ChassisSpeeds chassisSpeeds ;
+    ChassisSpeeds chassisSpeeds;
 
-      if (MiscConstants.isRedAlliance()){
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                ySpeed,
-                xSpeed,
-                turningSpeed,
-                swerve.getRotation2d().plus(new Rotation2d(180)));
-      }
-      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-          ySpeed,
-          xSpeed,
-          turningSpeed,
-          swerve.getRotation2d());
+    chassisSpeeds =
+      ChassisSpeeds.fromFieldRelativeSpeeds(
+        ySpeed,
+        xSpeed,
+        turningSpeed,
+        swerve.getRotation2d()
+      );
+
+    // if (MiscConstants.isRedAlliance()){
+    //   chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+    //           ySpeed,
+    //           xSpeed,
+    //           turningSpeed,
+    //           swerve.getRotation2d().plus(new Rotation2d(180)));
+    // }
 
     // set chassis speeds
     swerve.setChassisSpeeds(chassisSpeeds);

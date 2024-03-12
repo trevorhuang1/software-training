@@ -1432,24 +1432,5 @@
       "timestamp": 11.22836993645624
     }
   ],
-  "eventMarkers": [
-    {
-      "timestamp": 0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "cycle"
-        }
-      }
-    },
-    {
-      "timestamp": 2.6246167846108728,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "stow"
-        }
-      }
-    }
-  ]
+  "eventMarkers": []
 }

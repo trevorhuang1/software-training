@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.commands.swerve.Autos;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.SuperStructureStates;
 import java.util.HashMap;
@@ -60,54 +61,67 @@ public class RobotContainer {
     Map<String, Command> commandList = new HashMap<String, Command>();
 
     commandList.put(
-        "cycle",
-        new SequentialCommandGroup(
-            Commands.print("cycle"),
-            Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-            new WaitCommand(2.25),
-            Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
-            new WaitCommand(0.25),
-            Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
+      "cycle",
+      new SequentialCommandGroup(
+        Commands.print("cycle"),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+        new WaitCommand(2.25),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
+        new WaitCommand(0.25),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)
+      )
+    );
 
     commandList.put(
-      "shoot",
+      "shoot_subwoofer",
       new SequentialCommandGroup(
         Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
         new WaitCommand(3),
         Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))
       )
     );
-    
-    commandList.put(
-        "feed",
-        new SequentialCommandGroup(
-            Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))));
 
     commandList.put(
-        "intake",
-        new SequentialCommandGroup(
-            Commands.runOnce(() -> {
-              Robot.state = SuperStructureStates.GROUND_INTAKE;
-            }),
-            new WaitCommand(2),
-            Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE))));
+      "shoot_podium",
+      new SequentialCommandGroup(
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.PODIUM),
+        new WaitCommand(3),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))
+      )
+    );
 
     commandList.put(
-        "stow",
-        new SequentialCommandGroup(
-            Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW)));
+      "feed",
+      new SequentialCommandGroup(
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))
+      )
+    );
 
-    commandList.put("shoot",
-        new SequentialCommandGroup(Commands.print("shot note"),
-            Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-            new WaitCommand(2.25),
-            Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))));
+    commandList.put(
+      "intake",
+      new SequentialCommandGroup(
+        Commands.runOnce(() -> {
+          Robot.state = SuperStructureStates.GROUND_INTAKE;
+        }),
+        new WaitCommand(2),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE))
+      )
+    );
+
+    commandList.put(
+      "stow",
+      new SequentialCommandGroup(
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake),
+        Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP), Robot.shooter)
+      )
+    );
 
     AutoUtils.initAuto(commandList);
   }
 
   public Command getAutonomousCommand() {
-    return Autos.getTroll();
+    return Autos.getTaxi();
     // return new SequentialCommandGroup(Autos.get4Piece());
     // return new PrintCommand("no auto")
     // return Commands.run(() -> {
