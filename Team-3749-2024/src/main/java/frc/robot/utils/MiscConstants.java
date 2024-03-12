@@ -1,21 +1,17 @@
 package frc.robot.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.MatBuilder;
-import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.Vector;
-import com.pathplanner.lib.util.PIDConstants;
-
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -35,39 +31,43 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import java.util.HashMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map;
 
 public class MiscConstants {
 
-        public static enum RobotType {
-                REAL,
-                SIM
-        }
+  public static enum RobotType {
+    REAL,
+    SIM
+  }
 
-        public static final RobotType ROBOT_TYPE = Robot.isReal()
-                        ? RobotType.REAL
-                        : RobotType.SIM;
+  public static final RobotType ROBOT_TYPE = Robot.isReal()
+    ? RobotType.REAL
+    : RobotType.SIM;
 
-        public static final class Sim {
+  public static final class Sim {
 
-                public static final double loopPeriodSec = 0.02;
-        }
+    public static final double loopPeriodSec = 0.02;
+  }
 
-        public static final class ControllerConstants {
+  public static final class ControllerConstants {
 
-                public static final double deadband = 0.125;
-        }
+    public static final double deadband = 0.125;
+  }
 
-        public static boolean isRedAlliance() {
-                return false;
+  public static boolean isRedAlliance(boolean... forceColor) {
+    if (forceColor.length == 1) {
+      return forceColor[0];
+    }
 
-                // if (DriverStation.getAlliance().isEmpty()) {
-                //         return false;
-                // }
+    if (DriverStation.getAlliance().isEmpty()) {
+      return false;
+    }
 
-                // boolean isRedAlliance = DriverStation.getAlliance().get() == Alliance.Red;
-                // SmartDashboard.putBoolean("isRedAlliance", isRedAlliance);
+    boolean isRedAlliance = DriverStation.getAlliance().get() == Alliance.Red;
+    SmartDashboard.putBoolean("isRedAlliance", isRedAlliance);
 
-                // return isRedAlliance;
-        }
+    return isRedAlliance;
+  }
 }

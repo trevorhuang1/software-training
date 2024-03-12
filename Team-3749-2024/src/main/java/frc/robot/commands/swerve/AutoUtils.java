@@ -49,7 +49,7 @@ public class AutoUtils {
         swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
         AutoConstants.cfgHolonomicFollower,
-        () -> MiscConstants.isRedAlliance(),
+        MiscConstants::isRedAlliance,
         swerve);
 
     autoChooser = AutoBuilder.buildAutoChooser("Test");
@@ -101,7 +101,7 @@ public class AutoUtils {
         swerve::getChassisSpeeds,
         swerve::setChassisSpeeds,
         AutoConstants.cfgHolonomicFollower,
-        () -> MiscConstants.isRedAlliance(),
+        MiscConstants::isRedAlliance,
         swerve);
   }
 
