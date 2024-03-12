@@ -121,7 +121,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Autos.getTaxi();
+    return Autos.get4Piece();
     // return new SequentialCommandGroup(Autos.get4Piece());
     // return new PrintCommand("no auto")
     // return Commands.run(() -> {

@@ -86,14 +86,6 @@ public class SwerveTeleop extends Command {
 
     //for the entirety of comp, this block of code meant nothing
 
-    // if (MiscConstants.isRedAlliance()){
-    //   chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-    //           ySpeed,
-    //           xSpeed,
-    //           turningSpeed,
-    //           swerve.getRotation2d().plus(new Rotation2d(180)));
-    // }
-
     chassisSpeeds =
       ChassisSpeeds.fromFieldRelativeSpeeds(
         ySpeed,
@@ -101,6 +93,16 @@ public class SwerveTeleop extends Command {
         turningSpeed,
         swerve.getRotation2d()
       );
+
+    if (MiscConstants.isRedAlliance()) {
+      chassisSpeeds =
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+          ySpeed,
+          xSpeed,
+          turningSpeed,
+          swerve.getRotation2d().plus(new Rotation2d(180))
+        );
+    }
 
     // set chassis speeds
     swerve.setChassisSpeeds(chassisSpeeds);

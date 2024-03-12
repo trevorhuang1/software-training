@@ -25243,7 +25243,7 @@
                     }
                 }
             ],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "bottom-speaker": {
             "waypoints": [

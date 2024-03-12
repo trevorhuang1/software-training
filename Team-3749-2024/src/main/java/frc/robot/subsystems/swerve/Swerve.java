@@ -251,7 +251,7 @@ public class Swerve extends SubsystemBase {
           modules[1].getPosition(),
           modules[2].getPosition(),
           modules[3].getPosition()
-      }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d(180)));
+      }, new Pose2d(swerveDrivePoseEstimator.getEstimatedPosition().getTranslation(), Rotation2d.fromDegrees(180)));
     } else {
       swerveDrivePoseEstimator.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
           modules[0].getPosition(),
