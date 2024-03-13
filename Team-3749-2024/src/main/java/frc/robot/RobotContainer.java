@@ -62,14 +62,7 @@ public class RobotContainer {
 
     commandList.put(
       "cycle",
-      new SequentialCommandGroup(
-        Commands.print("cycle"),
-        Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-        new WaitCommand(2.25),
-        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
-        new WaitCommand(0.25),
-        Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)
-      )
+      AutoUtils.getCycle(0)
     );
 
     commandList.put(

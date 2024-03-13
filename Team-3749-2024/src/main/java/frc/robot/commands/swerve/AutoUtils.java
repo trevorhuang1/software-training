@@ -86,13 +86,15 @@ public class AutoUtils {
   ) {
     Pose2d fieldStartingPose = startingPose;
 
-    if (MiscConstants.isRedAlliance()) {
-      SmartDashboard.putNumber("pose x before", fieldStartingPose.getX());
+    // if (MiscConstants.isRedAlliance()) {
+    //   SmartDashboard.putNumber("pose x before", fieldStartingPose.getX());
 
-      fieldStartingPose = GeometryUtil.flipFieldPose(startingPose);
+    //   fieldStartingPose = new Pose2d(GeometryUtil.flipFieldPosition(fieldStartingPose.getTranslation()), fieldStartingPose.getRotation());
 
-      SmartDashboard.putNumber("pose x after", fieldStartingPose.getX());
-    }
+    //   SmartDashboard.putNumber("pose x after", fieldStartingPose.getX());
+    //   SmartDashboard.putNumber("pose theta after", fieldStartingPose.getRotation().getDegrees());
+
+    // }
 
     Robot.swerve.resetOdometry(fieldStartingPose);
     PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(autoPathName);
