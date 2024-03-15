@@ -122,10 +122,10 @@ public class Shooter extends SubsystemBase {
   private void intake() {
     // this is just for the setpoint checker below
     setVoltage(-0.2, -0.2);
-    if (getVelocityRadPerSec() > 2) {
+    if (getVelocityRadPerSec() > 50) {
       intakeSpedUp = true;
     }
-    if (getVelocityRadPerSec() < 0.3 && intakeSpedUp) {
+    if (getVelocityRadPerSec() < 0.2 && intakeSpedUp) {
       Robot.intake.setHasPiece(true);
       state = ShooterStates.INDEX;
       // state

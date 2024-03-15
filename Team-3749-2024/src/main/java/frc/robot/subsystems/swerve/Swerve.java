@@ -123,7 +123,7 @@ public class Swerve extends SubsystemBase {
       SwerveDriveKinematics.desaturateWheelSpeeds(
           moduleStates,
           DriveConstants.teleopMaxSpeedMetersPerSecond);
-    } else{
+    } else {
 
       SwerveDriveKinematics.desaturateWheelSpeeds(
           moduleStates,
@@ -189,7 +189,7 @@ public class Swerve extends SubsystemBase {
             getPose().getRotation().getDegrees()
         });
 
-    resetGyro();
+    // resetGyro();
   }
 
   public void updateOdometry() {
@@ -208,8 +208,8 @@ public class Swerve extends SubsystemBase {
   }
 
   public void visionUpdateOdometry(LimelightHelpers.LimelightPose visionPose) {
-    // swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose,
-    // visionPose.timestamp);
+    swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose,
+        visionPose.timestamp);
   }
 
   public void logDesiredOdometry(Pose2d desiredPose) {
@@ -248,7 +248,7 @@ public class Swerve extends SubsystemBase {
     gyro.resetGyro();
     if (MiscConstants.isRedAlliance()) {
 
-      swerveDrivePoseEstimator.resetPosition(new Rotation2d(Math.PI), new SwerveModulePosition[] {
+      swerveDrivePoseEstimator.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
           modules[0].getPosition(),
           modules[1].getPosition(),
           modules[2].getPosition(),

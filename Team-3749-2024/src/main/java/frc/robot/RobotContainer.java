@@ -4,12 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.swerve.AutoUtils;
@@ -36,6 +38,7 @@ public class RobotContainer {
     // }
     DriverStation.silenceJoystickConnectionWarning(true);
     DriverStation.removeRefreshedDataEventHandle(44000);
+        initAuto();
 
     configureBindings();
 
@@ -43,10 +46,9 @@ public class RobotContainer {
     // DataLogManager.logNetworkTables(true);
     // DriverStation.startDataLog(DataLogManager.getLog(), true);
 
-    initAuto();
 
     RobotController.setBrownoutVoltage(7.0);
-    // Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
+    // Robot.swerve.resetOdometry(new Pose2d(-0.04, 5.55));
     // Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY,
     // pilot::getRightX, pilot::getRightY));
   }
@@ -58,70 +60,13 @@ public class RobotContainer {
   }
 
   public void initAuto() {
-    Map<String, Command> commandList = new HashMap<String, Command>();
+    System.out.println("Called");
 
-    commandList.put(
-      "cycle",
-      AutoUtils.getCycle(0)
-    );
-
-    commandList.put(
-      "shoot_subwoofer",
-      new SequentialCommandGroup(
-        Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-        new WaitCommand(3),
-        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))
-      )
-    );
-
-    commandList.put(
-      "shoot_podium",
-      new SequentialCommandGroup(
-        Commands.runOnce(() -> Robot.state = SuperStructureStates.PODIUM),
-        new WaitCommand(3),
-        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))
-      )
-    );
-
-    commandList.put(
-      "feed",
-      new SequentialCommandGroup(
-        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED))
-      )
-    );
-
-    commandList.put(
-      "intake",
-      new SequentialCommandGroup(
-        Commands.runOnce(() -> {
-          Robot.state = SuperStructureStates.GROUND_INTAKE;
-        }),
-        new WaitCommand(2),
-        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE))
-      )
-    );
-
-    commandList.put(
-      "stow",
-      new SequentialCommandGroup(
-        Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW),
-        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake),
-        Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP), Robot.shooter)
-      )
-    );
-
-    AutoUtils.initAuto(commandList);
+    AutoUtils.initAuto();
   }
 
   public Command getAutonomousCommand() {
     return Autos.get4Piece();
-    // return new SequentialCommandGroup(Autos.get4Piece());
-    // return new PrintCommand("no auto")
-    // return Commands.run(() -> {
-    // Robot.intake.setIntakeVelocity(100);
-    // Robot.shooter.setShooterVelocity(150);
-    // });
-    // return Autos.get4Piece();
-    // return Robot.swerve.getSysIdDynamic(Direction.kForward);
+
   }
 }

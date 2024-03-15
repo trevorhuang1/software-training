@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   public static final Wrist wrist = new Wrist();
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
-  // public static final Limelight limelight = (new Limelight());
+  public static final Limelight limelight = new Limelight();
   public static SuperStructureStates state = SuperStructureStates.STOW;
   public static SuperStructureCommands centralCommand = new SuperStructureCommands();
 

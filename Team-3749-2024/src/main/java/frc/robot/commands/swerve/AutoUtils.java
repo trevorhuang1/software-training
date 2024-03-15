@@ -34,8 +34,7 @@ import java.util.function.Consumer;
 public class AutoUtils {
 
   private static Swerve swerve = Robot.swerve;
-  public static Consumer<Pose2d> pathTargetPose = pose ->
-    swerve.logDesiredOdometry(pose);
+  public static Consumer<Pose2d> pathTargetPose = pose -> swerve.logDesiredOdometry(pose);
 
   static SendableChooser<Command> autoChooser;
   static SendableChooser<Alliance> allianceChooser;
@@ -44,24 +43,20 @@ public class AutoUtils {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
 
     AutoBuilder.configureHolonomic(
-      swerve::getPose,
-      (Pose2d pose) -> {},
-      swerve::getChassisSpeeds,
-      swerve::setChassisSpeeds,
-      AutoConstants.cfgHolonomicFollower,
-      MiscConstants::isRedAlliance,
-      swerve
-    );
-
+        swerve::getPose,
+        (Pose2d pose) -> {
+        },
+        swerve::getChassisSpeeds,
+        swerve::setChassisSpeeds,
+        AutoConstants.cfgHolonomicFollower,
+        MiscConstants::isRedAlliance,
+        swerve);
     autoChooser = AutoBuilder.buildAutoChooser("Test");
+
   }
 
-  public static void initAuto(Map<String, Command> commandList) {
+  public static void initAuto() {
     initPPUtils();
-
-    commandList.forEach((String name, Command command) -> {
-      NamedCommands.registerCommand(name, command);
-    });
     // NamedCommands.registerCommands(commandList);
   }
 
@@ -81,20 +76,19 @@ public class AutoUtils {
   }
 
   public static Command getChoreoAutoPath(
-    String autoPathName,
-    Pose2d startingPose
-  ) {
+      String autoPathName,
+      Pose2d startingPose) {
     Pose2d fieldStartingPose = startingPose;
 
-    // if (MiscConstants.isRedAlliance()) {
-    //   SmartDashboard.putNumber("pose x before", fieldStartingPose.getX());
+    if (MiscConstants.isRedAlliance()) {
+      SmartDashboard.putNumber("pose x before", fieldStartingPose.getX());
 
-    //   fieldStartingPose = new Pose2d(GeometryUtil.flipFieldPosition(fieldStartingPose.getTranslation()), fieldStartingPose.getRotation());
+      fieldStartingPose = GeometryUtil.flipFieldPose(fieldStartingPose);
 
-    //   SmartDashboard.putNumber("pose x after", fieldStartingPose.getX());
-    //   SmartDashboard.putNumber("pose theta after", fieldStartingPose.getRotation().getDegrees());
+      SmartDashboard.putNumber("pose x after", fieldStartingPose.getX());
+      SmartDashboard.putNumber("pose theta after", fieldStartingPose.getRotation().getDegrees());
 
-    // }
+    }
 
     Robot.swerve.resetOdometry(fieldStartingPose);
     PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(autoPathName);
@@ -104,28 +98,25 @@ public class AutoUtils {
 
   public static Command followPathCommand(PathPlannerPath path) {
     return new FollowPathHolonomic(
-      path,
-      swerve::getPose,
-      swerve::getChassisSpeeds,
-      swerve::setChassisSpeeds,
-      AutoConstants.cfgHolonomicFollower,
-      MiscConstants::isRedAlliance,
-      swerve
-    );
+        path,
+        swerve::getPose,
+        swerve::getChassisSpeeds,
+        swerve::setChassisSpeeds,
+        AutoConstants.cfgHolonomicFollower,
+        MiscConstants::isRedAlliance,
+        swerve);
   }
 
   public static Command getPathFindToPoseCommand(
-    Pose2d targetPose,
-    PathConstraints constraints,
-    double endingVelocity
-  ) {
+      Pose2d targetPose,
+      PathConstraints constraints,
+      double endingVelocity) {
     return AutoBuilder.pathfindToPose(targetPose, constraints, endingVelocity);
   }
 
   public static Command pathFindToThenFollowTraj(
-    String trajName,
-    PathConstraints constraints
-  ) {
+      String trajName,
+      PathConstraints constraints) {
     ChoreoTrajectory traj = AutoUtils.getTraj(trajName);
     PathPlannerPath ppPath = PathPlannerPath.fromChoreoTrajectory(trajName);
 
@@ -135,10 +126,9 @@ public class AutoUtils {
     // be exactly what the inital state will sxet the speeds to.
 
     Command returnCommand = getPathFindToPoseCommand(
-      traj.getInitialPose(),
-      constraints,
-      0
-    );
+        traj.getInitialPose(),
+        constraints,
+        0);
     Command pathCommand = followPathCommand(ppPath);
 
     return returnCommand.andThen(pathCommand);
@@ -152,32 +142,72 @@ public class AutoUtils {
     Timer timer = new Timer();
 
     return cmd
-      .beforeStarting(() -> timer.start())
-      .andThen(() -> {
-        timer.stop();
-        System.out.println(timer.get());
-      });
-  }
-
-  public static Command getCycle(double wait) {
-    return new SequentialCommandGroup(
-      Commands.print("cycle"),
-      new WaitCommand(wait),
-      new SequentialCommandGroup(
-        Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-        new WaitCommand(2.25),
-        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
-        new WaitCommand(0.25),
-        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE)),
-        Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.INTAKE)),
-        Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)
-      )
-    );
+        .beforeStarting(() -> timer.start())
+        .andThen(() -> {
+          timer.stop();
+          System.out.println(timer.get());
+        });
   }
 
   public static Command getTroll() {
     return new SequentialCommandGroup(
-      Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.TROLL))
-    );
+        Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.TROLL)));
   }
+
+  public static Command getCycle(double wait) {
+    return new SequentialCommandGroup(
+        Commands.print("cycle"),
+        new WaitCommand(wait),
+        new SequentialCommandGroup(
+            Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+            new WaitCommand(2.25),
+            Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)),
+            new WaitCommand(0.25),
+            Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE)),
+            Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.INTAKE)),
+            Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
+  }
+
+  public static Command getSubwooferShot(double wait) {
+    System.out.println("subwoofer");
+    return new SequentialCommandGroup(
+        new WaitCommand(wait),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
+        getFeed(1.7));
+  }
+
+  public static Command getPodiumShot(double wait) {
+    System.out.println("podium");
+    return new SequentialCommandGroup(
+        new WaitCommand(wait),
+
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.PODIUM),
+        getFeed(2));
+  }
+
+  public static Command getFeed(double wait) {
+    System.out.println("feed");
+    return new SequentialCommandGroup(
+        new WaitCommand(wait),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)));
+  }
+
+  public static Command getintake(double wait) {
+    System.out.println("intake");
+    return new SequentialCommandGroup(
+        new WaitCommand(wait),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE)),
+        Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.INTAKE)));
+  }
+
+  public static Command getStow(double wait) {
+    System.out.println("stow");
+    return new SequentialCommandGroup(
+        new WaitCommand(wait),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.STOW),
+        Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake),
+        Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP), Robot.shooter));
+  }
+
 }
