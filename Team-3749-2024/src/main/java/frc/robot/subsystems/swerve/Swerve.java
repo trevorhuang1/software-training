@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
@@ -208,8 +209,8 @@ public class Swerve extends SubsystemBase {
   }
 
   public void visionUpdateOdometry(LimelightHelpers.LimelightPose visionPose) {
-    swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose,
-        visionPose.timestamp);
+    // swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose,
+    //     visionPose.timestamp);
   }
 
   public void logDesiredOdometry(Pose2d desiredPose) {
@@ -314,11 +315,14 @@ public class Swerve extends SubsystemBase {
     gyroCalibratingLog.set(gyroData.isCalibrating);
     headingLog.set(getRotation2d().getDegrees());
 
-    // double robotVelocity =
-    // Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
-    // Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
+    double robotVelocity =
+    Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
+    Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
 
-    // SmartDashboard.putNumber("robot velocity", robotVelocity);
+    SmartDashboard.putNumber("robot velocity", robotVelocity);
+
+    SmartDashboard.putNumber("robot acceleration", (robotVelocity-prevVelocity)/.02);
+    prevVelocity = robotVelocity;
 
     // boolean driverStationStatus = DriverStation.isEnabled();
     // if (driverStationStatus && !isEnabled) {

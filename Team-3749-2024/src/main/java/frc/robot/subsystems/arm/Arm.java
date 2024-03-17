@@ -199,7 +199,7 @@ public class Arm extends SubsystemBase {
         double cosAngleCFS = (lengthCFS * lengthCFS + lengthAxleToCFSAttatched * lengthAxleToCFSAttatched
                 - lengthCFSToAxle * lengthCFSToAxle) / (2 * lengthAxleToCFSAttatched * lengthCFSToAxle);
 
-        double CFSFF = cosAngleCFS * ArmConstants.stowedkG *0.3;
+        double CFSFF = cosAngleCFS * ArmConstants.stowedkG * 0.3;
         double armFF;
         if (deployedMode) {
             armFF = deployedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
@@ -208,7 +208,7 @@ public class Arm extends SubsystemBase {
 
             armFF = stowedFeedforward.calculate(currentPositionRad, setpointVelocityRadPerSec,
                     accelerationSetpoint);
-                }
+        }
 
         return armFF + CFSFF;
     }
@@ -277,15 +277,15 @@ public class Arm extends SubsystemBase {
         setpointVelocityLog.set(Units.radiansToDegrees(feedback.getSetpoint().velocity));
         setpointAccelerationLog.set(Units.radiansToDegrees(accelerationSetpoint));
 
-        // boolean driverStationStatus = DriverStation.isEnabled();
-        // if (driverStationStatus && !isEnabled) {
-        // isEnabled = driverStationStatus;
-        armIO.setBreakMode();
-        // }
-        // if (!driverStationStatus && isEnabled) {
-        // armIO.setCoastMode();
-        // isEnabled = driverStationStatus;
-        // }
+        boolean driverStationStatus = DriverStation.isEnabled();
+        if (driverStationStatus && !isEnabled) {
+            isEnabled = driverStationStatus;
+            armIO.setBreakMode();
+        }
+        if (!driverStationStatus && isEnabled) {
+            armIO.setCoastMode();
+            isEnabled = driverStationStatus;
+        }
 
     }
 

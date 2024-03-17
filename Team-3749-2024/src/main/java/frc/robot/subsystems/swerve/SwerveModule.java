@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
+import frc.robot.Robot;
 import frc.robot.subsystems.swerve.SwerveConstants.ModuleConstants;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
 import frc.robot.utils.ShuffleData;
@@ -123,6 +124,8 @@ public class SwerveModule {
 
         // SmartDashboard.putNumber("acceleration", (speedMetersPerSecond -
         // previousSetpointVelocity) / 0.02);
+
+     
         setDriveVoltage(drive_volts);
 
     }

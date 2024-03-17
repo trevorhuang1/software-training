@@ -68,9 +68,9 @@ public class SwerveConstants {
 
                 public static final boolean[] driveMotorReversed = {
                                 false,
-                                true,
                                 false,
-                                true
+                                false,
+                                false
                 };
                 public static final boolean[] turningMotorReversed = {
                                 false,
@@ -85,10 +85,10 @@ public class SwerveConstants {
                                 false
                 };
                 public static final double[] absoluteEncoderOffsetDeg = {
-                                517.148,
-                                291.973,
-                                843.662,
-                                667.617
+                                323.806,
+                                137.594,
+                                71.455,
+                                186.943
                 };
 
                 // public static final double[] absoluteEncoderOffsetDeg = { -275, -48, 0, 263
@@ -99,11 +99,17 @@ public class SwerveConstants {
                 public static final int turnMotorStallLimit = 25;
                 public static final int turnMotorFreeLimit = 40;
 
-                private static final double realMaxSpeedMetersPerSecond = 3.48; // 3.48
-                private static final double realMaxAccelerationMetersPerSecondSquared = 1.92; // 1.92
-                
-                public static final double teleopMaxSpeedMetersPerSecond = 3.9; // 3.48
-                public static final double teleopMaxAccelerationMetersPerSecondSquared = 2.4; // 1.92
+                private static final double realMaxSpeedMetersPerSecond = 4.3; // This is our actual top speed
+                private static final double realMaxAccelerationMetersPerSecondSquared = 5.5; // the actual top acc is
+                                                                                             // 5.75, but its non-linear
+                                                                                             // at the end and so this
+                                                                                             // is a more balanced value
+                                                                                             // for that
+
+                public static final double teleopMaxSpeedMetersPerSecond = 4.5; // This will send any additional voltage
+                                                                                // availible to the motors, making us a
+                                                                                // bit faster if we have an extra good
+                                                                                // battery charge
 
                 private static final double realMaxAngularSpeedRadiansPerSecond = 6.5;// these should be different from
                                                                                       // the teleop ones

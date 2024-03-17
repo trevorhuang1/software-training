@@ -327,7 +327,7 @@ public class Limelight extends SubsystemBase {
             if (multiResultLeft.estimatedPose.isPresent) {
                 try {
                     SmartDashboard.putNumber("left ambiguity", multiResultLeft.estimatedPose.ambiguity);
-                    
+
                     if (multiResultLeft.estimatedPose.ambiguity <= 0.2) {
                         estimatedPose2dLeft = new Pose2d(multiResultLeft.estimatedPose.best.getX(),
                                 multiResultLeft.estimatedPose.best.getY(),
@@ -355,7 +355,7 @@ public class Limelight extends SubsystemBase {
 
                 double imageCaptureTime = latestResultLeft.getTimestampSeconds();
                 PhotonTrackedTarget bestTarget = latestResultLeft.getBestTarget();
-                
+
                 if (bestTarget.getPoseAmbiguity() <= 0.2) {
 
                     int targetID = bestTarget.getFiducialId();
@@ -366,6 +366,11 @@ public class Limelight extends SubsystemBase {
                         Pose2d robotPoseEstimate = camPose.transformBy(VisionConstants.LEFT_CAM_TO_ROBOT).toPose2d();
                         Robot.swerve.visionUpdateOdometry(
                                 new LimelightHelpers.LimelightPose(robotPoseEstimate, imageCaptureTime));
+                        SmartDashboard.putNumberArray("Left Limelight Odometry",
+                                new double[] { robotPoseEstimate.getX(),
+                                        robotPoseEstimate.getY(),
+                                        robotPoseEstimate.getRotation().getRadians() });
+
                     }
                 }
             }
@@ -409,7 +414,6 @@ public class Limelight extends SubsystemBase {
 
                 }
             } else {
-                System.out.println("single target right");
                 double imageCaptureTime = latestResultRight.getTimestampSeconds();
                 PhotonTrackedTarget bestTarget = latestResultRight.getBestTarget();
                 if (bestTarget.getPoseAmbiguity() <= 0.2) {

@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -48,7 +49,7 @@ public class RobotContainer {
 
 
     RobotController.setBrownoutVoltage(7.0);
-    // Robot.swerve.resetOdometry(new Pose2d(-0.04, 5.55));
+    Robot.swerve.resetOdometry(new Pose2d(14.6, 5.1, new Rotation2d(Math.PI)));
     // Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY,
     // pilot::getRightX, pilot::getRightY));
   }
