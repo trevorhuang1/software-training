@@ -105,7 +105,9 @@ public final class ArmConstants {
                                                            // parameter
 
         // Field Parameters
-        public static final double speakerHeight = 2.05; // likely thing you'll need to tune
+        public static final double speakerHeight = Units.inchesToMeters(78.13); // likely thing you'll need to tune
+        // public static final double speakerLength = Units.inchesToMeters(18.11/4); // likely thing you'll need to tune
+
         public static final double minDistance = 0.9; // / NOTE: Not percise, please check
 
         // Calcuation stuff
