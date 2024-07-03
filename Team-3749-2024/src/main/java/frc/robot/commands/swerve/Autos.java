@@ -104,6 +104,9 @@ public class Autos {
     public static Command getTestPath() {
         return AutoUtils.getChoreoAutoPath("testPath", new Pose2d());
     }
+    public static Command getSchizoPath() {
+        return AutoUtils.getChoreoAutoPath("schizopath", new Pose2d());
+    }
 }
 // public static Command getSide() {
 // // return AutoUtils.getCycle(0);

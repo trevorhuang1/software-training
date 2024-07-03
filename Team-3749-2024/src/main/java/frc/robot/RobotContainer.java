@@ -67,7 +67,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Autos.get4Piece();
+    return Autos.getSchizoPath();
 
   }
 }
